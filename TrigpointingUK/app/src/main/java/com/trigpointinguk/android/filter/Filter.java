@@ -80,8 +80,8 @@ public class Filter {
 		
 		
 		// Deal with RADIO
-		switch (mPrefs.getInt(FILTERRADIO, R.id.filterAll)) {
-		case R.id.filterLogged:
+		int filterRadio = mPrefs.getInt(FILTERRADIO, 0); // 0 = filterAll
+		if (filterRadio == 1) { // filterLogged
 			sql.append(tok).append("(")
 			   .append(DbHelper.TRIG_TABLE).append(".").append(DbHelper.TRIG_LOGGED)
 			   .append(" <> '").append(Condition.TRIGNOTLOGGED.code()).append("' ")
@@ -89,8 +89,7 @@ public class Filter {
 			   .append(DbHelper.LOG_TABLE).append(".").append(DbHelper.LOG_ID).append(" IS NOT NULL")
 			   .append(")");
 			tok=" AND ";
-			break;
-		case R.id.filterNotLogged:
+		} else if (filterRadio == 2) { // filterNotLogged
 			sql.append(tok).append("(")
 			   .append(DbHelper.TRIG_TABLE).append(".").append(DbHelper.TRIG_LOGGED)
 			   .append(" = '").append(Condition.TRIGNOTLOGGED.code()).append("' ")
@@ -98,17 +97,14 @@ public class Filter {
 			   .append(DbHelper.LOG_TABLE).append(".").append(DbHelper.LOG_ID).append(" IS NULL")
 			   .append(")");
 			tok=" AND ";
-			break;
-		case R.id.filterMarked:
+		} else if (filterRadio == 3) { // filterMarked
 			sql.append(tok)
 			   .append(DbHelper.MARK_TABLE).append(".").append(DbHelper.MARK_ID).append(" IS NOT NULL");
 			tok=" AND ";
-			break;
-		case R.id.filterUnsynced:
+		} else if (filterRadio == 4) { // filterUnsynced
 			sql.append(tok)
 			   .append(DbHelper.LOG_TABLE).append(".").append(DbHelper.MARK_ID).append(" IS NOT NULL");
 			tok=" AND ";
-			break;
 		}
 
 

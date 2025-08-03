@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace 'com.trigpointinguk.android'
-    compileSdk 34
+    namespace = 'com.trigpointinguk.android'
+    compileSdk = 36
 
     defaultConfig {
         applicationId "com.trigpointinguk.android"
-        minSdk 21
-        targetSdk 34
+        minSdk = 21
+        targetSdk = 34
         versionCode 10
         versionName "v1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,6 +29,14 @@ android {
     
     lint {
         disable 'MissingTranslation'
+    }
+    
+    packaging {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
     }
 }
 

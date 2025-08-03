@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/filterType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/filterRadio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/filterAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All" />
+
+        <RadioButton
+            android:id="@+id/filterLogged"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logged" />
+
+        <RadioButton
+            android:id="@+id/filterNotLogged"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not Logged" />
+
+        <RadioButton
+            android:id="@+id/filterMarked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marked" />
+
+        <RadioButton
+            android:id="@+id/filterUnsynced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unsynced" />
+
+    </RadioGroup>
+
+</LinearLayout> 

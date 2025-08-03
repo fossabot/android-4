@@ -358,11 +358,11 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 				Utils.saveBitmapToFile(photoPath, bPhoto, 50);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-				ErrorReporter.getInstance().handleSilentException(e);
+				// ErrorReporter.getInstance().handleSilentException(e);
 				return;
 			} catch (IOException e) {
 				e.printStackTrace();
-				ErrorReporter.getInstance().handleSilentException(e);
+				// ErrorReporter.getInstance().handleSilentException(e);
 				return;
 			}
     		

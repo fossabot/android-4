@@ -1,11 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="map_type_values">
+        <item>osm</item>
+        <item>bing</item>
+        <item>cloudmade</item>
+    </string-array>
+    <string-array name="map_types">
+        <item>OpenStreetMap</item>
+        <item>Bing Maps</item>
+        <item>CloudMade</item>
+    </string-array>
+    <color name="black">#FF000000</color>
+    <color name="errorcolour">#FF0000</color>
+    <color name="nearestMarkedColour">#FF0000</color>
+    <color name="nearestUnmarkedColour">#000000</color>
+    <color name="okcolour">#00FF00</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="addLog">Add Log</string>
     <string name="app_name">TrigpointingUK</string>
     <string name="btnCancel">Cancel</string>
     <string name="btnDownload">Download</string>
     <string name="btnDownloadFinished">Download Complete</string>
+    <string name="displaybitmap">Display Bitmap</string>
     <string name="dlgNoTrigs">No trig points found</string>
     <string name="downloadIdleStatus">Ready to download</string>
     <string name="downloadInsertStatus">Downloading...</string>
+    <string name="errorcolour">Error</string>
+    <string name="filter">Filter</string>
+    <string name="filterAll">All</string>
+    <string name="filterLogged">Logged</string>
+    <string name="filterMarked">Marked</string>
+    <string name="filterNotLogged">Not Logged</string>
+    <string name="filterRadio">Filter Radio</string>
+    <string name="filterType">Filter Type</string>
+    <string name="filterUnsynced">Unsynced</string>
+    <string name="locationError">Location Error</string>
+    <string name="logAddPhoto">Add Photo</string>
+    <string name="logAdminFlag">Admin Flag</string>
+    <string name="logComment">Comment</string>
+    <string name="logCondition">Condition</string>
+    <string name="logDate">Log Date</string>
+    <string name="logDelete">Delete Log</string>
+    <string name="logFB">Found By</string>
+    <string name="logGallery">Gallery</string>
+    <string name="logGetLocation">Get Location</string>
+    <string name="logGridref">Grid Reference</string>
+    <string name="logScore">Score</string>
+    <string name="logSyncLater">Sync Later</string>
+    <string name="logTime">Log Time</string>
+    <string name="logUploadNow">Upload Now</string>
+    <string name="logUserFlag">User Flag</string>
+    <string name="logphoto">Log Photo</string>
+    <string name="logswitcher">Log Switcher</string>
+    <string name="logtrig">Log Trig</string>
+    <string name="mapview">Map View</string>
     <string name="noUser">No user set</string>
+    <string name="okcolour">OK</string>
+    <string name="photoDescr">Photo Description</string>
+    <string name="photoIsPublic">Public Photo</string>
+    <string name="photoName">Photo Name</string>
+    <string name="photoRemove">Remove Photo</string>
+    <string name="photoSave">Save Photo</string>
+    <string name="photoSubject">Photo Subject</string>
+    <string name="photoThumb">Photo Thumbnail</string>
+    <string name="reset">Reset</string>
+    <string name="sendTime">Send Time</string>
+    <string name="syncLogsFromTUK">Syncing logs from TUK...</string>
+    <string name="syncPhotosToTUK">Syncing photos to TUK...</string>
+    <string name="syncToTUK">Syncing to TUK...</string>
+    <string name="toastAddPassword">Please add password in preferences</string>
+    <string name="toastAddUsername">Please add username in preferences</string>
+    <string name="zoomview">Zoom View</string>
+    <declare-styleable name="TrigpointingUK">
+        <attr format="reference" name="android:galleryItemBackground"/>
+    </declare-styleable>
 </resources>

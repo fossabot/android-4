@@ -8,4 +8,69 @@
     <string name="btnDownloadFinished">Download Complete</string>
     <string name="noUser">No user set</string>
     <string name="dlgNoTrigs">No trig points found</string>
+    
+    <!-- Missing string resources -->
+    <string name="reset">Reset</string>
+    <string name="errorcolour">Error</string>
+    <string name="okcolour">OK</string>
+    <string name="syncToTUK">Syncing to TUK...</string>
+    <string name="syncPhotosToTUK">Syncing photos to TUK...</string>
+    <string name="syncLogsFromTUK">Syncing logs from TUK...</string>
+    <string name="toastAddUsername">Please add username in preferences</string>
+    <string name="toastAddPassword">Please add password in preferences</string>
+    
+    <!-- Filter related strings -->
+    <string name="filterAll">All</string>
+    <string name="filterLogged">Logged</string>
+    <string name="filterNotLogged">Not Logged</string>
+    <string name="filterMarked">Marked</string>
+    <string name="filterUnsynced">Unsynced</string>
+    
+    <!-- Photo related strings -->
+    <string name="photoThumb">Photo Thumbnail</string>
+    <string name="photoName">Photo Name</string>
+    <string name="photoDescr">Photo Description</string>
+    <string name="photoSubject">Photo Subject</string>
+    <string name="photoIsPublic">Public Photo</string>
+    <string name="photoSave">Save Photo</string>
+    <string name="photoRemove">Remove Photo</string>
+    
+    <!-- Log related strings -->
+    <string name="logswitcher">Log Switcher</string>
+    <string name="sendTime">Send Time</string>
+    <string name="logTime">Log Time</string>
+    <string name="logDate">Log Date</string>
+    <string name="logGridref">Grid Reference</string>
+    <string name="locationError">Location Error</string>
+    <string name="logFB">Found By</string>
+    <string name="logCondition">Condition</string>
+    <string name="logScore">Score</string>
+    <string name="logComment">Comment</string>
+    <string name="logAdminFlag">Admin Flag</string>
+    <string name="logUserFlag">User Flag</string>
+    <string name="logGallery">Gallery</string>
+    <string name="logAddPhoto">Add Photo</string>
+    <string name="addLog">Add Log</string>
+    <string name="logDelete">Delete Log</string>
+    <string name="logGetLocation">Get Location</string>
+    <string name="logUploadNow">Upload Now</string>
+    <string name="logSyncLater">Sync Later</string>
+    
+    <!-- Map related strings -->
+    <string name="mapview">Map View</string>
+    
+    <!-- Display bitmap related strings -->
+    <string name="displaybitmap">Display Bitmap</string>
+    <string name="zoomview">Zoom View</string>
+    
+    <!-- Filter layout strings -->
+    <string name="filter">Filter</string>
+    <string name="filterType">Filter Type</string>
+    <string name="filterRadio">Filter Radio</string>
+    
+    <!-- Log photo layout strings -->
+    <string name="logphoto">Log Photo</string>
+    
+    <!-- Log trig layout strings -->
+    <string name="logtrig">Log Trig</string>
 </resources>

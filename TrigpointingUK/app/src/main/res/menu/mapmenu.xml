@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <group android:id="@+id/filterGroup">
+        <item android:id="@+id/byCondition" android:title="By Condition" android:checkable="true" />
+        <item android:id="@+id/byLogged" android:title="By Logged" android:checkable="true" />
+        <item android:id="@+id/none" android:title="None" android:checkable="true" />
+    </group>
+    
+    <group android:id="@+id/mapTypeGroup">
+        <item android:id="@+id/mapnik" android:title="Mapnik" android:checkable="true" />
+        <item android:id="@+id/mapquest" android:title="MapQuest" android:checkable="true" />
+        <item android:id="@+id/cloudmade" android:title="CloudMade" android:checkable="true" />
+        <item android:id="@+id/cyclemap" android:title="CycleMap" android:checkable="true" />
+        <item android:id="@+id/bingaerial" android:title="Bing Aerial" android:checkable="true" />
+        <item android:id="@+id/bingaeriallabels" android:title="Bing Aerial with Labels" android:checkable="true" />
+        <item android:id="@+id/bingroad" android:title="Bing Road" android:checkable="true" />
+        <item android:id="@+id/bingosgb" android:title="Bing OSGB" android:checkable="true" />
+    </group>
+    
+</menu> 
