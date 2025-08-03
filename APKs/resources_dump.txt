@@ -1,0 +1,1429 @@
+Package Groups (1)
+Package Group 0 id=0x7f packageCount=1 name=com.trigpointinguk.android
+  Package 0 id=0x7f name=com.trigpointinguk.android
+    type 1 configCount=2 entryCount=116
+      spec resource 0x7f020000 com.trigpointinguk.android:drawable/arrow_00_n: flags=0x00000000
+      spec resource 0x7f020001 com.trigpointinguk.android:drawable/arrow_01_nne: flags=0x00000000
+      spec resource 0x7f020002 com.trigpointinguk.android:drawable/arrow_02_ne: flags=0x00000000
+      spec resource 0x7f020003 com.trigpointinguk.android:drawable/arrow_03_ene: flags=0x00000000
+      spec resource 0x7f020004 com.trigpointinguk.android:drawable/arrow_04_e: flags=0x00000000
+      spec resource 0x7f020005 com.trigpointinguk.android:drawable/arrow_05_ese: flags=0x00000000
+      spec resource 0x7f020006 com.trigpointinguk.android:drawable/arrow_06_se: flags=0x00000000
+      spec resource 0x7f020007 com.trigpointinguk.android:drawable/arrow_07_sse: flags=0x00000000
+      spec resource 0x7f020008 com.trigpointinguk.android:drawable/arrow_08_s: flags=0x00000000
+      spec resource 0x7f020009 com.trigpointinguk.android:drawable/arrow_09_sse: flags=0x00000000
+      spec resource 0x7f02000a com.trigpointinguk.android:drawable/arrow_10_sw: flags=0x00000000
+      spec resource 0x7f02000b com.trigpointinguk.android:drawable/arrow_11_wsw: flags=0x00000000
+      spec resource 0x7f02000c com.trigpointinguk.android:drawable/arrow_12_w: flags=0x00000000
+      spec resource 0x7f02000d com.trigpointinguk.android:drawable/arrow_13_wnw: flags=0x00000000
+      spec resource 0x7f02000e com.trigpointinguk.android:drawable/arrow_14_nw: flags=0x00000000
+      spec resource 0x7f02000f com.trigpointinguk.android:drawable/arrow_15_nnw: flags=0x00000000
+      spec resource 0x7f020010 com.trigpointinguk.android:drawable/arrow_x: flags=0x00000000
+      spec resource 0x7f020011 com.trigpointinguk.android:drawable/banner_logo: flags=0x00000000
+      spec resource 0x7f020012 com.trigpointinguk.android:drawable/c_damaged: flags=0x00000000
+      spec resource 0x7f020013 com.trigpointinguk.android:drawable/c_definitelymissing: flags=0x00000000
+      spec resource 0x7f020014 com.trigpointinguk.android:drawable/c_good: flags=0x00000000
+      spec resource 0x7f020015 com.trigpointinguk.android:drawable/c_nolog: flags=0x00000000
+      spec resource 0x7f020016 com.trigpointinguk.android:drawable/c_possiblymissing: flags=0x00000000
+      spec resource 0x7f020017 com.trigpointinguk.android:drawable/c_slightlydamaged: flags=0x00000000
+      spec resource 0x7f020018 com.trigpointinguk.android:drawable/c_toppled: flags=0x00000000
+      spec resource 0x7f020019 com.trigpointinguk.android:drawable/c_unknown: flags=0x00000000
+      spec resource 0x7f02001a com.trigpointinguk.android:drawable/c_unreachablebutvisible: flags=0x00000000
+      spec resource 0x7f02001b com.trigpointinguk.android:drawable/center: flags=0x00000000
+      spec resource 0x7f02001c com.trigpointinguk.android:drawable/cs_damaged: flags=0x00000000
+      spec resource 0x7f02001d com.trigpointinguk.android:drawable/cs_definitelymissing: flags=0x00000000
+      spec resource 0x7f02001e com.trigpointinguk.android:drawable/cs_good: flags=0x00000000
+      spec resource 0x7f02001f com.trigpointinguk.android:drawable/cs_nolog: flags=0x00000000
+      spec resource 0x7f020020 com.trigpointinguk.android:drawable/cs_possiblymissing: flags=0x00000000
+      spec resource 0x7f020021 com.trigpointinguk.android:drawable/cs_slightlydamaged: flags=0x00000000
+      spec resource 0x7f020022 com.trigpointinguk.android:drawable/cs_toppled: flags=0x00000000
+      spec resource 0x7f020023 com.trigpointinguk.android:drawable/cs_unknown: flags=0x00000000
+      spec resource 0x7f020024 com.trigpointinguk.android:drawable/cs_unreachablebutvisible: flags=0x00000000
+      spec resource 0x7f020025 com.trigpointinguk.android:drawable/direction_arrow: flags=0x00000000
+      spec resource 0x7f020026 com.trigpointinguk.android:drawable/gpsstatus: flags=0x00000000
+      spec resource 0x7f020027 com.trigpointinguk.android:drawable/ic_menu_add: flags=0x00000000
+      spec resource 0x7f020028 com.trigpointinguk.android:drawable/ic_menu_camera: flags=0x00000000
+      spec resource 0x7f020029 com.trigpointinguk.android:drawable/ic_menu_camera_h: flags=0x00000000
+      spec resource 0x7f02002a com.trigpointinguk.android:drawable/ic_menu_compass: flags=0x00000000
+      spec resource 0x7f02002b com.trigpointinguk.android:drawable/ic_menu_delete: flags=0x00000000
+      spec resource 0x7f02002c com.trigpointinguk.android:drawable/ic_menu_directions: flags=0x00000000
+      spec resource 0x7f02002d com.trigpointinguk.android:drawable/ic_menu_gallery: flags=0x00000000
+      spec resource 0x7f02002e com.trigpointinguk.android:drawable/ic_menu_goto: flags=0x00000000
+      spec resource 0x7f02002f com.trigpointinguk.android:drawable/ic_menu_help: flags=0x00000000
+      spec resource 0x7f020030 com.trigpointinguk.android:drawable/ic_menu_info_details: flags=0x00000000
+      spec resource 0x7f020031 com.trigpointinguk.android:drawable/ic_menu_mapmode: flags=0x00000000
+      spec resource 0x7f020032 com.trigpointinguk.android:drawable/ic_menu_mapstyle: flags=0x00000000
+      spec resource 0x7f020033 com.trigpointinguk.android:drawable/ic_menu_more: flags=0x00000000
+      spec resource 0x7f020034 com.trigpointinguk.android:drawable/ic_menu_mylocation: flags=0x00000000
+      spec resource 0x7f020035 com.trigpointinguk.android:drawable/ic_menu_myplaces: flags=0x00000000
+      spec resource 0x7f020036 com.trigpointinguk.android:drawable/ic_menu_offline: flags=0x00000000
+      spec resource 0x7f020037 com.trigpointinguk.android:drawable/ic_menu_preferences: flags=0x00000000
+      spec resource 0x7f020038 com.trigpointinguk.android:drawable/ic_menu_refresh: flags=0x00000000
+      spec resource 0x7f020039 com.trigpointinguk.android:drawable/ic_menu_save: flags=0x00000000
+      spec resource 0x7f02003a com.trigpointinguk.android:drawable/ic_menu_search: flags=0x00000000
+      spec resource 0x7f02003b com.trigpointinguk.android:drawable/ic_menu_star: flags=0x00000000
+      spec resource 0x7f02003c com.trigpointinguk.android:drawable/ic_menu_trigonmap: flags=0x00000000
+      spec resource 0x7f02003d com.trigpointinguk.android:drawable/ic_menu_view: flags=0x00000000
+      spec resource 0x7f02003e com.trigpointinguk.android:drawable/icon: flags=0x00000000
+      spec resource 0x7f02003f com.trigpointinguk.android:drawable/imageloading: flags=0x00000000
+      spec resource 0x7f020040 com.trigpointinguk.android:drawable/mapicon_fbm_green: flags=0x00000500
+      spec resource 0x7f020041 com.trigpointinguk.android:drawable/mapicon_fbm_green_h: flags=0x00000500
+      spec resource 0x7f020042 com.trigpointinguk.android:drawable/mapicon_fbm_grey: flags=0x00000500
+      spec resource 0x7f020043 com.trigpointinguk.android:drawable/mapicon_fbm_grey_h: flags=0x00000500
+      spec resource 0x7f020044 com.trigpointinguk.android:drawable/mapicon_fbm_red: flags=0x00000500
+      spec resource 0x7f020045 com.trigpointinguk.android:drawable/mapicon_fbm_red_h: flags=0x00000500
+      spec resource 0x7f020046 com.trigpointinguk.android:drawable/mapicon_fbm_yellow: flags=0x00000500
+      spec resource 0x7f020047 com.trigpointinguk.android:drawable/mapicon_fbm_yellow_h: flags=0x00000500
+      spec resource 0x7f020048 com.trigpointinguk.android:drawable/mapicon_intersected_green: flags=0x00000500
+      spec resource 0x7f020049 com.trigpointinguk.android:drawable/mapicon_intersected_green_h: flags=0x00000500
+      spec resource 0x7f02004a com.trigpointinguk.android:drawable/mapicon_intersected_grey: flags=0x00000500
+      spec resource 0x7f02004b com.trigpointinguk.android:drawable/mapicon_intersected_grey_h: flags=0x00000500
+      spec resource 0x7f02004c com.trigpointinguk.android:drawable/mapicon_intersected_red: flags=0x00000500
+      spec resource 0x7f02004d com.trigpointinguk.android:drawable/mapicon_intersected_red_h: flags=0x00000500
+      spec resource 0x7f02004e com.trigpointinguk.android:drawable/mapicon_intersected_yellow: flags=0x00000500
+      spec resource 0x7f02004f com.trigpointinguk.android:drawable/mapicon_intersected_yellow_h: flags=0x00000500
+      spec resource 0x7f020050 com.trigpointinguk.android:drawable/mapicon_passive_green: flags=0x00000500
+      spec resource 0x7f020051 com.trigpointinguk.android:drawable/mapicon_passive_green_h: flags=0x00000500
+      spec resource 0x7f020052 com.trigpointinguk.android:drawable/mapicon_passive_grey: flags=0x00000500
+      spec resource 0x7f020053 com.trigpointinguk.android:drawable/mapicon_passive_grey_h: flags=0x00000500
+      spec resource 0x7f020054 com.trigpointinguk.android:drawable/mapicon_passive_red: flags=0x00000500
+      spec resource 0x7f020055 com.trigpointinguk.android:drawable/mapicon_passive_red_h: flags=0x00000500
+      spec resource 0x7f020056 com.trigpointinguk.android:drawable/mapicon_passive_yellow: flags=0x00000500
+      spec resource 0x7f020057 com.trigpointinguk.android:drawable/mapicon_passive_yellow_h: flags=0x00000500
+      spec resource 0x7f020058 com.trigpointinguk.android:drawable/mapicon_pillar_green: flags=0x00000500
+      spec resource 0x7f020059 com.trigpointinguk.android:drawable/mapicon_pillar_green_h: flags=0x00000500
+      spec resource 0x7f02005a com.trigpointinguk.android:drawable/mapicon_pillar_grey: flags=0x00000500
+      spec resource 0x7f02005b com.trigpointinguk.android:drawable/mapicon_pillar_grey_h: flags=0x00000500
+      spec resource 0x7f02005c com.trigpointinguk.android:drawable/mapicon_pillar_red: flags=0x00000500
+      spec resource 0x7f02005d com.trigpointinguk.android:drawable/mapicon_pillar_red_h: flags=0x00000500
+      spec resource 0x7f02005e com.trigpointinguk.android:drawable/mapicon_pillar_yellow: flags=0x00000500
+      spec resource 0x7f02005f com.trigpointinguk.android:drawable/mapicon_pillar_yellow_h: flags=0x00000500
+      spec resource 0x7f020060 com.trigpointinguk.android:drawable/marker_default: flags=0x00000000
+      spec resource 0x7f020061 com.trigpointinguk.android:drawable/marker_default_focused_base: flags=0x00000000
+      spec resource 0x7f020062 com.trigpointinguk.android:drawable/navto_small: flags=0x00000000
+      spec resource 0x7f020063 com.trigpointinguk.android:drawable/next: flags=0x00000000
+      spec resource 0x7f020064 com.trigpointinguk.android:drawable/person: flags=0x00000000
+      spec resource 0x7f020065 com.trigpointinguk.android:drawable/previous: flags=0x00000000
+      spec resource 0x7f020066 com.trigpointinguk.android:drawable/ratingpillar: flags=0x00000000
+      spec resource 0x7f020067 com.trigpointinguk.android:drawable/t_fbm: flags=0x00000000
+      spec resource 0x7f020068 com.trigpointinguk.android:drawable/t_intersected: flags=0x00000000
+      spec resource 0x7f020069 com.trigpointinguk.android:drawable/t_passive: flags=0x00000000
+      spec resource 0x7f02006a com.trigpointinguk.android:drawable/t_pillar: flags=0x00000000
+      spec resource 0x7f02006b com.trigpointinguk.android:drawable/trig_pillar: flags=0x00000000
+      spec resource 0x7f02006c com.trigpointinguk.android:drawable/trig_pillar_fill: flags=0x00000000
+      spec resource 0x7f02006d com.trigpointinguk.android:drawable/ts_fbm: flags=0x00000000
+      spec resource 0x7f02006e com.trigpointinguk.android:drawable/ts_intersected: flags=0x00000000
+      spec resource 0x7f02006f com.trigpointinguk.android:drawable/ts_passive: flags=0x00000000
+      spec resource 0x7f020070 com.trigpointinguk.android:drawable/ts_pillar: flags=0x00000000
+      spec resource 0x7f020071 com.trigpointinguk.android:drawable/tuk_logo: flags=0x00000000
+      spec resource 0x7f020072 com.trigpointinguk.android:drawable/zoom_in: flags=0x00000000
+      spec resource 0x7f020073 com.trigpointinguk.android:drawable/zoom_out: flags=0x00000000
+      config (default):
+        resource 0x7f020000 com.trigpointinguk.android:drawable/arrow_00_n: t=0x03 d=0x00000000 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_00_n.png"
+        resource 0x7f020001 com.trigpointinguk.android:drawable/arrow_01_nne: t=0x03 d=0x00000001 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_01_nne.png"
+        resource 0x7f020002 com.trigpointinguk.android:drawable/arrow_02_ne: t=0x03 d=0x00000002 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_02_ne.png"
+        resource 0x7f020003 com.trigpointinguk.android:drawable/arrow_03_ene: t=0x03 d=0x00000003 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_03_ene.png"
+        resource 0x7f020004 com.trigpointinguk.android:drawable/arrow_04_e: t=0x03 d=0x00000004 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_04_e.png"
+        resource 0x7f020005 com.trigpointinguk.android:drawable/arrow_05_ese: t=0x03 d=0x00000005 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_05_ese.png"
+        resource 0x7f020006 com.trigpointinguk.android:drawable/arrow_06_se: t=0x03 d=0x00000006 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_06_se.png"
+        resource 0x7f020007 com.trigpointinguk.android:drawable/arrow_07_sse: t=0x03 d=0x00000007 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_07_sse.png"
+        resource 0x7f020008 com.trigpointinguk.android:drawable/arrow_08_s: t=0x03 d=0x00000008 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_08_s.png"
+        resource 0x7f020009 com.trigpointinguk.android:drawable/arrow_09_sse: t=0x03 d=0x00000009 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_09_sse.png"
+        resource 0x7f02000a com.trigpointinguk.android:drawable/arrow_10_sw: t=0x03 d=0x0000000a (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_10_sw.png"
+        resource 0x7f02000b com.trigpointinguk.android:drawable/arrow_11_wsw: t=0x03 d=0x0000000b (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_11_wsw.png"
+        resource 0x7f02000c com.trigpointinguk.android:drawable/arrow_12_w: t=0x03 d=0x0000000c (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_12_w.png"
+        resource 0x7f02000d com.trigpointinguk.android:drawable/arrow_13_wnw: t=0x03 d=0x0000000d (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_13_wnw.png"
+        resource 0x7f02000e com.trigpointinguk.android:drawable/arrow_14_nw: t=0x03 d=0x0000000e (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_14_nw.png"
+        resource 0x7f02000f com.trigpointinguk.android:drawable/arrow_15_nnw: t=0x03 d=0x0000000f (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_15_nnw.png"
+        resource 0x7f020010 com.trigpointinguk.android:drawable/arrow_x: t=0x03 d=0x00000010 (s=0x0008 r=0x00)
+          (string16) "res/drawable/arrow_x.png"
+        resource 0x7f020011 com.trigpointinguk.android:drawable/banner_logo: t=0x03 d=0x00000011 (s=0x0008 r=0x00)
+          (string16) "res/drawable/banner_logo.png"
+        resource 0x7f020012 com.trigpointinguk.android:drawable/c_damaged: t=0x03 d=0x00000012 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_damaged.png"
+        resource 0x7f020013 com.trigpointinguk.android:drawable/c_definitelymissing: t=0x03 d=0x00000013 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_definitelymissing.png"
+        resource 0x7f020014 com.trigpointinguk.android:drawable/c_good: t=0x03 d=0x00000014 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_good.png"
+        resource 0x7f020015 com.trigpointinguk.android:drawable/c_nolog: t=0x03 d=0x00000015 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_nolog.png"
+        resource 0x7f020016 com.trigpointinguk.android:drawable/c_possiblymissing: t=0x03 d=0x00000016 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_possiblymissing.png"
+        resource 0x7f020017 com.trigpointinguk.android:drawable/c_slightlydamaged: t=0x03 d=0x00000017 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_slightlydamaged.png"
+        resource 0x7f020018 com.trigpointinguk.android:drawable/c_toppled: t=0x03 d=0x00000018 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_toppled.png"
+        resource 0x7f020019 com.trigpointinguk.android:drawable/c_unknown: t=0x03 d=0x00000019 (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_unknown.png"
+        resource 0x7f02001a com.trigpointinguk.android:drawable/c_unreachablebutvisible: t=0x03 d=0x0000001a (s=0x0008 r=0x00)
+          (string16) "res/drawable/c_unreachablebutvisible.png"
+        resource 0x7f02001b com.trigpointinguk.android:drawable/center: t=0x03 d=0x0000001b (s=0x0008 r=0x00)
+          (string16) "res/drawable/center.png"
+        resource 0x7f02001c com.trigpointinguk.android:drawable/cs_damaged: t=0x03 d=0x0000001c (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_damaged.png"
+        resource 0x7f02001d com.trigpointinguk.android:drawable/cs_definitelymissing: t=0x03 d=0x0000001d (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_definitelymissing.png"
+        resource 0x7f02001e com.trigpointinguk.android:drawable/cs_good: t=0x03 d=0x0000001e (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_good.png"
+        resource 0x7f02001f com.trigpointinguk.android:drawable/cs_nolog: t=0x03 d=0x0000001f (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_nolog.png"
+        resource 0x7f020020 com.trigpointinguk.android:drawable/cs_possiblymissing: t=0x03 d=0x00000020 (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_possiblymissing.png"
+        resource 0x7f020021 com.trigpointinguk.android:drawable/cs_slightlydamaged: t=0x03 d=0x00000021 (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_slightlydamaged.png"
+        resource 0x7f020022 com.trigpointinguk.android:drawable/cs_toppled: t=0x03 d=0x00000022 (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_toppled.png"
+        resource 0x7f020023 com.trigpointinguk.android:drawable/cs_unknown: t=0x03 d=0x00000023 (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_unknown.png"
+        resource 0x7f020024 com.trigpointinguk.android:drawable/cs_unreachablebutvisible: t=0x03 d=0x00000024 (s=0x0008 r=0x00)
+          (string16) "res/drawable/cs_unreachablebutvisible.png"
+        resource 0x7f020025 com.trigpointinguk.android:drawable/direction_arrow: t=0x03 d=0x00000025 (s=0x0008 r=0x00)
+          (string16) "res/drawable/direction_arrow.png"
+        resource 0x7f020026 com.trigpointinguk.android:drawable/gpsstatus: t=0x03 d=0x00000026 (s=0x0008 r=0x00)
+          (string16) "res/drawable/gpsstatus.png"
+        resource 0x7f020027 com.trigpointinguk.android:drawable/ic_menu_add: t=0x03 d=0x00000027 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_add.png"
+        resource 0x7f020028 com.trigpointinguk.android:drawable/ic_menu_camera: t=0x03 d=0x00000028 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_camera.png"
+        resource 0x7f020029 com.trigpointinguk.android:drawable/ic_menu_camera_h: t=0x03 d=0x00000029 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_camera_h.png"
+        resource 0x7f02002a com.trigpointinguk.android:drawable/ic_menu_compass: t=0x03 d=0x0000002a (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_compass.png"
+        resource 0x7f02002b com.trigpointinguk.android:drawable/ic_menu_delete: t=0x03 d=0x0000002b (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_delete.png"
+        resource 0x7f02002c com.trigpointinguk.android:drawable/ic_menu_directions: t=0x03 d=0x0000002c (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_directions.png"
+        resource 0x7f02002d com.trigpointinguk.android:drawable/ic_menu_gallery: t=0x03 d=0x0000002d (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_gallery.png"
+        resource 0x7f02002e com.trigpointinguk.android:drawable/ic_menu_goto: t=0x03 d=0x0000002e (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_goto.png"
+        resource 0x7f02002f com.trigpointinguk.android:drawable/ic_menu_help: t=0x03 d=0x0000002f (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_help.png"
+        resource 0x7f020030 com.trigpointinguk.android:drawable/ic_menu_info_details: t=0x03 d=0x00000030 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_info_details.png"
+        resource 0x7f020031 com.trigpointinguk.android:drawable/ic_menu_mapmode: t=0x03 d=0x00000031 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_mapmode.png"
+        resource 0x7f020032 com.trigpointinguk.android:drawable/ic_menu_mapstyle: t=0x03 d=0x00000032 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_mapstyle.png"
+        resource 0x7f020033 com.trigpointinguk.android:drawable/ic_menu_more: t=0x03 d=0x00000033 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_more.png"
+        resource 0x7f020034 com.trigpointinguk.android:drawable/ic_menu_mylocation: t=0x03 d=0x00000034 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_mylocation.png"
+        resource 0x7f020035 com.trigpointinguk.android:drawable/ic_menu_myplaces: t=0x03 d=0x00000035 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_myplaces.png"
+        resource 0x7f020036 com.trigpointinguk.android:drawable/ic_menu_offline: t=0x03 d=0x00000036 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_offline.png"
+        resource 0x7f020037 com.trigpointinguk.android:drawable/ic_menu_preferences: t=0x03 d=0x00000037 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_preferences.png"
+        resource 0x7f020038 com.trigpointinguk.android:drawable/ic_menu_refresh: t=0x03 d=0x00000038 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_refresh.png"
+        resource 0x7f020039 com.trigpointinguk.android:drawable/ic_menu_save: t=0x03 d=0x00000039 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_save.png"
+        resource 0x7f02003a com.trigpointinguk.android:drawable/ic_menu_search: t=0x03 d=0x0000003a (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_search.png"
+        resource 0x7f02003b com.trigpointinguk.android:drawable/ic_menu_star: t=0x03 d=0x0000003b (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_star.png"
+        resource 0x7f02003c com.trigpointinguk.android:drawable/ic_menu_trigonmap: t=0x03 d=0x0000003c (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_trigonmap.png"
+        resource 0x7f02003d com.trigpointinguk.android:drawable/ic_menu_view: t=0x03 d=0x0000003d (s=0x0008 r=0x00)
+          (string16) "res/drawable/ic_menu_view.png"
+        resource 0x7f02003e com.trigpointinguk.android:drawable/icon: t=0x03 d=0x0000003e (s=0x0008 r=0x00)
+          (string16) "res/drawable/icon.png"
+        resource 0x7f02003f com.trigpointinguk.android:drawable/imageloading: t=0x03 d=0x0000003f (s=0x0008 r=0x00)
+          (string16) "res/drawable/imageloading.png"
+        resource 0x7f020040 com.trigpointinguk.android:drawable/mapicon_fbm_green: t=0x03 d=0x00000040 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_green.png"
+        resource 0x7f020041 com.trigpointinguk.android:drawable/mapicon_fbm_green_h: t=0x03 d=0x00000041 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_green_h.png"
+        resource 0x7f020042 com.trigpointinguk.android:drawable/mapicon_fbm_grey: t=0x03 d=0x00000042 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_grey.png"
+        resource 0x7f020043 com.trigpointinguk.android:drawable/mapicon_fbm_grey_h: t=0x03 d=0x00000043 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_grey_h.png"
+        resource 0x7f020044 com.trigpointinguk.android:drawable/mapicon_fbm_red: t=0x03 d=0x00000044 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_red.png"
+        resource 0x7f020045 com.trigpointinguk.android:drawable/mapicon_fbm_red_h: t=0x03 d=0x00000045 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_red_h.png"
+        resource 0x7f020046 com.trigpointinguk.android:drawable/mapicon_fbm_yellow: t=0x03 d=0x00000046 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_yellow.png"
+        resource 0x7f020047 com.trigpointinguk.android:drawable/mapicon_fbm_yellow_h: t=0x03 d=0x00000047 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_fbm_yellow_h.png"
+        resource 0x7f020048 com.trigpointinguk.android:drawable/mapicon_intersected_green: t=0x03 d=0x00000048 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_green.png"
+        resource 0x7f020049 com.trigpointinguk.android:drawable/mapicon_intersected_green_h: t=0x03 d=0x00000049 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_green_h.png"
+        resource 0x7f02004a com.trigpointinguk.android:drawable/mapicon_intersected_grey: t=0x03 d=0x0000004a (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_grey.png"
+        resource 0x7f02004b com.trigpointinguk.android:drawable/mapicon_intersected_grey_h: t=0x03 d=0x0000004b (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_grey_h.png"
+        resource 0x7f02004c com.trigpointinguk.android:drawable/mapicon_intersected_red: t=0x03 d=0x0000004c (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_red.png"
+        resource 0x7f02004d com.trigpointinguk.android:drawable/mapicon_intersected_red_h: t=0x03 d=0x0000004d (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_red_h.png"
+        resource 0x7f02004e com.trigpointinguk.android:drawable/mapicon_intersected_yellow: t=0x03 d=0x0000004e (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_yellow.png"
+        resource 0x7f02004f com.trigpointinguk.android:drawable/mapicon_intersected_yellow_h: t=0x03 d=0x0000004f (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_intersected_yellow_h.png"
+        resource 0x7f020050 com.trigpointinguk.android:drawable/mapicon_passive_green: t=0x03 d=0x00000050 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_green.png"
+        resource 0x7f020051 com.trigpointinguk.android:drawable/mapicon_passive_green_h: t=0x03 d=0x00000051 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_green_h.png"
+        resource 0x7f020052 com.trigpointinguk.android:drawable/mapicon_passive_grey: t=0x03 d=0x00000052 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_grey.png"
+        resource 0x7f020053 com.trigpointinguk.android:drawable/mapicon_passive_grey_h: t=0x03 d=0x00000053 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_grey_h.png"
+        resource 0x7f020054 com.trigpointinguk.android:drawable/mapicon_passive_red: t=0x03 d=0x00000054 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_red.png"
+        resource 0x7f020055 com.trigpointinguk.android:drawable/mapicon_passive_red_h: t=0x03 d=0x00000055 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_red_h.png"
+        resource 0x7f020056 com.trigpointinguk.android:drawable/mapicon_passive_yellow: t=0x03 d=0x00000056 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_yellow.png"
+        resource 0x7f020057 com.trigpointinguk.android:drawable/mapicon_passive_yellow_h: t=0x03 d=0x00000057 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_passive_yellow_h.png"
+        resource 0x7f020058 com.trigpointinguk.android:drawable/mapicon_pillar_green: t=0x03 d=0x00000058 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_green.png"
+        resource 0x7f020059 com.trigpointinguk.android:drawable/mapicon_pillar_green_h: t=0x03 d=0x00000059 (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_green_h.png"
+        resource 0x7f02005a com.trigpointinguk.android:drawable/mapicon_pillar_grey: t=0x03 d=0x0000005a (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_grey.png"
+        resource 0x7f02005b com.trigpointinguk.android:drawable/mapicon_pillar_grey_h: t=0x03 d=0x0000005b (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_grey_h.png"
+        resource 0x7f02005c com.trigpointinguk.android:drawable/mapicon_pillar_red: t=0x03 d=0x0000005c (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_red.png"
+        resource 0x7f02005d com.trigpointinguk.android:drawable/mapicon_pillar_red_h: t=0x03 d=0x0000005d (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_red_h.png"
+        resource 0x7f02005e com.trigpointinguk.android:drawable/mapicon_pillar_yellow: t=0x03 d=0x0000005e (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_yellow.png"
+        resource 0x7f02005f com.trigpointinguk.android:drawable/mapicon_pillar_yellow_h: t=0x03 d=0x0000005f (s=0x0008 r=0x00)
+          (string16) "res/drawable/mapicon_pillar_yellow_h.png"
+        resource 0x7f020060 com.trigpointinguk.android:drawable/marker_default: t=0x03 d=0x00000060 (s=0x0008 r=0x00)
+          (string16) "res/drawable/marker_default.png"
+        resource 0x7f020061 com.trigpointinguk.android:drawable/marker_default_focused_base: t=0x03 d=0x00000061 (s=0x0008 r=0x00)
+          (string16) "res/drawable/marker_default_focused_base.png"
+        resource 0x7f020062 com.trigpointinguk.android:drawable/navto_small: t=0x03 d=0x00000062 (s=0x0008 r=0x00)
+          (string16) "res/drawable/navto_small.png"
+        resource 0x7f020063 com.trigpointinguk.android:drawable/next: t=0x03 d=0x00000063 (s=0x0008 r=0x00)
+          (string16) "res/drawable/next.png"
+        resource 0x7f020064 com.trigpointinguk.android:drawable/person: t=0x03 d=0x00000064 (s=0x0008 r=0x00)
+          (string16) "res/drawable/person.png"
+        resource 0x7f020065 com.trigpointinguk.android:drawable/previous: t=0x03 d=0x00000065 (s=0x0008 r=0x00)
+          (string16) "res/drawable/previous.png"
+        resource 0x7f020066 com.trigpointinguk.android:drawable/ratingpillar: t=0x03 d=0x00000066 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ratingpillar.xml"
+        resource 0x7f020067 com.trigpointinguk.android:drawable/t_fbm: t=0x03 d=0x00000067 (s=0x0008 r=0x00)
+          (string16) "res/drawable/t_fbm.png"
+        resource 0x7f020068 com.trigpointinguk.android:drawable/t_intersected: t=0x03 d=0x00000068 (s=0x0008 r=0x00)
+          (string16) "res/drawable/t_intersected.png"
+        resource 0x7f020069 com.trigpointinguk.android:drawable/t_passive: t=0x03 d=0x00000069 (s=0x0008 r=0x00)
+          (string16) "res/drawable/t_passive.png"
+        resource 0x7f02006a com.trigpointinguk.android:drawable/t_pillar: t=0x03 d=0x0000006a (s=0x0008 r=0x00)
+          (string16) "res/drawable/t_pillar.png"
+        resource 0x7f02006b com.trigpointinguk.android:drawable/trig_pillar: t=0x03 d=0x0000006b (s=0x0008 r=0x00)
+          (string16) "res/drawable/trig_pillar.png"
+        resource 0x7f02006c com.trigpointinguk.android:drawable/trig_pillar_fill: t=0x03 d=0x0000006c (s=0x0008 r=0x00)
+          (string16) "res/drawable/trig_pillar_fill.png"
+        resource 0x7f02006d com.trigpointinguk.android:drawable/ts_fbm: t=0x03 d=0x0000006d (s=0x0008 r=0x00)
+          (string16) "res/drawable/ts_fbm.png"
+        resource 0x7f02006e com.trigpointinguk.android:drawable/ts_intersected: t=0x03 d=0x0000006e (s=0x0008 r=0x00)
+          (string16) "res/drawable/ts_intersected.png"
+        resource 0x7f02006f com.trigpointinguk.android:drawable/ts_passive: t=0x03 d=0x0000006f (s=0x0008 r=0x00)
+          (string16) "res/drawable/ts_passive.png"
+        resource 0x7f020070 com.trigpointinguk.android:drawable/ts_pillar: t=0x03 d=0x00000070 (s=0x0008 r=0x00)
+          (string16) "res/drawable/ts_pillar.png"
+        resource 0x7f020071 com.trigpointinguk.android:drawable/tuk_logo: t=0x03 d=0x00000071 (s=0x0008 r=0x00)
+          (string16) "res/drawable/tuk_logo.png"
+        resource 0x7f020072 com.trigpointinguk.android:drawable/zoom_in: t=0x03 d=0x00000072 (s=0x0008 r=0x00)
+          (string16) "res/drawable/zoom_in.png"
+        resource 0x7f020073 com.trigpointinguk.android:drawable/zoom_out: t=0x03 d=0x00000073 (s=0x0008 r=0x00)
+          (string16) "res/drawable/zoom_out.png"
+      config hdpi-v4:
+        resource 0x7f020040 com.trigpointinguk.android:drawable/mapicon_fbm_green: t=0x03 d=0x0000008d (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_green.png"
+        resource 0x7f020041 com.trigpointinguk.android:drawable/mapicon_fbm_green_h: t=0x03 d=0x0000008e (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_green_h.png"
+        resource 0x7f020042 com.trigpointinguk.android:drawable/mapicon_fbm_grey: t=0x03 d=0x0000008f (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_grey.png"
+        resource 0x7f020043 com.trigpointinguk.android:drawable/mapicon_fbm_grey_h: t=0x03 d=0x00000090 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_grey_h.png"
+        resource 0x7f020044 com.trigpointinguk.android:drawable/mapicon_fbm_red: t=0x03 d=0x00000091 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_red.png"
+        resource 0x7f020045 com.trigpointinguk.android:drawable/mapicon_fbm_red_h: t=0x03 d=0x00000092 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_red_h.png"
+        resource 0x7f020046 com.trigpointinguk.android:drawable/mapicon_fbm_yellow: t=0x03 d=0x00000093 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_yellow.png"
+        resource 0x7f020047 com.trigpointinguk.android:drawable/mapicon_fbm_yellow_h: t=0x03 d=0x00000094 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_fbm_yellow_h.png"
+        resource 0x7f020048 com.trigpointinguk.android:drawable/mapicon_intersected_green: t=0x03 d=0x00000095 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_green.png"
+        resource 0x7f020049 com.trigpointinguk.android:drawable/mapicon_intersected_green_h: t=0x03 d=0x00000096 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_green_h.png"
+        resource 0x7f02004a com.trigpointinguk.android:drawable/mapicon_intersected_grey: t=0x03 d=0x00000097 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_grey.png"
+        resource 0x7f02004b com.trigpointinguk.android:drawable/mapicon_intersected_grey_h: t=0x03 d=0x00000098 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_grey_h.png"
+        resource 0x7f02004c com.trigpointinguk.android:drawable/mapicon_intersected_red: t=0x03 d=0x00000099 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_red.png"
+        resource 0x7f02004d com.trigpointinguk.android:drawable/mapicon_intersected_red_h: t=0x03 d=0x0000009a (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_red_h.png"
+        resource 0x7f02004e com.trigpointinguk.android:drawable/mapicon_intersected_yellow: t=0x03 d=0x0000009b (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_yellow.png"
+        resource 0x7f02004f com.trigpointinguk.android:drawable/mapicon_intersected_yellow_h: t=0x03 d=0x0000009c (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_intersected_yellow_h.png"
+        resource 0x7f020050 com.trigpointinguk.android:drawable/mapicon_passive_green: t=0x03 d=0x0000009d (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_green.png"
+        resource 0x7f020051 com.trigpointinguk.android:drawable/mapicon_passive_green_h: t=0x03 d=0x0000009e (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_green_h.png"
+        resource 0x7f020052 com.trigpointinguk.android:drawable/mapicon_passive_grey: t=0x03 d=0x0000009f (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_grey.png"
+        resource 0x7f020053 com.trigpointinguk.android:drawable/mapicon_passive_grey_h: t=0x03 d=0x000000a0 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_grey_h.png"
+        resource 0x7f020054 com.trigpointinguk.android:drawable/mapicon_passive_red: t=0x03 d=0x000000a1 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_red.png"
+        resource 0x7f020055 com.trigpointinguk.android:drawable/mapicon_passive_red_h: t=0x03 d=0x000000a2 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_red_h.png"
+        resource 0x7f020056 com.trigpointinguk.android:drawable/mapicon_passive_yellow: t=0x03 d=0x000000a3 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_yellow.png"
+        resource 0x7f020057 com.trigpointinguk.android:drawable/mapicon_passive_yellow_h: t=0x03 d=0x000000a4 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_passive_yellow_h.png"
+        resource 0x7f020058 com.trigpointinguk.android:drawable/mapicon_pillar_green: t=0x03 d=0x000000a5 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_green.png"
+        resource 0x7f020059 com.trigpointinguk.android:drawable/mapicon_pillar_green_h: t=0x03 d=0x000000a6 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_green_h.png"
+        resource 0x7f02005a com.trigpointinguk.android:drawable/mapicon_pillar_grey: t=0x03 d=0x000000a7 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_grey.png"
+        resource 0x7f02005b com.trigpointinguk.android:drawable/mapicon_pillar_grey_h: t=0x03 d=0x000000a8 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_grey_h.png"
+        resource 0x7f02005c com.trigpointinguk.android:drawable/mapicon_pillar_red: t=0x03 d=0x000000a9 (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_red.png"
+        resource 0x7f02005d com.trigpointinguk.android:drawable/mapicon_pillar_red_h: t=0x03 d=0x000000aa (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_red_h.png"
+        resource 0x7f02005e com.trigpointinguk.android:drawable/mapicon_pillar_yellow: t=0x03 d=0x000000ab (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_yellow.png"
+        resource 0x7f02005f com.trigpointinguk.android:drawable/mapicon_pillar_yellow_h: t=0x03 d=0x000000ac (s=0x0008 r=0x00)
+          (string16) "res/drawable-hdpi/mapicon_pillar_yellow_h.png"
+    type 2 configCount=1 entryCount=19
+      spec resource 0x7f030000 com.trigpointinguk.android:layout/displaybitmap: flags=0x00000000
+      spec resource 0x7f030001 com.trigpointinguk.android:layout/download: flags=0x00000000
+      spec resource 0x7f030002 com.trigpointinguk.android:layout/filter: flags=0x00000000
+      spec resource 0x7f030003 com.trigpointinguk.android:layout/helppage: flags=0x00000000
+      spec resource 0x7f030004 com.trigpointinguk.android:layout/logphoto: flags=0x00000000
+      spec resource 0x7f030005 com.trigpointinguk.android:layout/logtrig: flags=0x00000000
+      spec resource 0x7f030006 com.trigpointinguk.android:layout/main: flags=0x00000000
+      spec resource 0x7f030007 com.trigpointinguk.android:layout/mapdownload: flags=0x00000000
+      spec resource 0x7f030008 com.trigpointinguk.android:layout/mapview: flags=0x00000000
+      spec resource 0x7f030009 com.trigpointinguk.android:layout/radardialog: flags=0x00000000
+      spec resource 0x7f03000a com.trigpointinguk.android:layout/trigalbum: flags=0x00000000
+      spec resource 0x7f03000b com.trigpointinguk.android:layout/trigalbumrow: flags=0x00000000
+      spec resource 0x7f03000c com.trigpointinguk.android:layout/trigdetails: flags=0x00000000
+      spec resource 0x7f03000d com.trigpointinguk.android:layout/triginfo: flags=0x00000000
+      spec resource 0x7f03000e com.trigpointinguk.android:layout/triglist: flags=0x00000000
+      spec resource 0x7f03000f com.trigpointinguk.android:layout/triglogrow: flags=0x00000000
+      spec resource 0x7f030010 com.trigpointinguk.android:layout/triglogs: flags=0x00000000
+      spec resource 0x7f030011 com.trigpointinguk.android:layout/trigosmap: flags=0x00000000
+      spec resource 0x7f030012 com.trigpointinguk.android:layout/trigrow: flags=0x00000000
+      config (default):
+        resource 0x7f030000 com.trigpointinguk.android:layout/displaybitmap: t=0x03 d=0x00000074 (s=0x0008 r=0x00)
+          (string16) "res/layout/displaybitmap.xml"
+        resource 0x7f030001 com.trigpointinguk.android:layout/download: t=0x03 d=0x00000075 (s=0x0008 r=0x00)
+          (string16) "res/layout/download.xml"
+        resource 0x7f030002 com.trigpointinguk.android:layout/filter: t=0x03 d=0x00000076 (s=0x0008 r=0x00)
+          (string16) "res/layout/filter.xml"
+        resource 0x7f030003 com.trigpointinguk.android:layout/helppage: t=0x03 d=0x00000077 (s=0x0008 r=0x00)
+          (string16) "res/layout/helppage.xml"
+        resource 0x7f030004 com.trigpointinguk.android:layout/logphoto: t=0x03 d=0x00000078 (s=0x0008 r=0x00)
+          (string16) "res/layout/logphoto.xml"
+        resource 0x7f030005 com.trigpointinguk.android:layout/logtrig: t=0x03 d=0x00000079 (s=0x0008 r=0x00)
+          (string16) "res/layout/logtrig.xml"
+        resource 0x7f030006 com.trigpointinguk.android:layout/main: t=0x03 d=0x0000007a (s=0x0008 r=0x00)
+          (string16) "res/layout/main.xml"
+        resource 0x7f030007 com.trigpointinguk.android:layout/mapdownload: t=0x03 d=0x0000007b (s=0x0008 r=0x00)
+          (string16) "res/layout/mapdownload.xml"
+        resource 0x7f030008 com.trigpointinguk.android:layout/mapview: t=0x03 d=0x0000007c (s=0x0008 r=0x00)
+          (string16) "res/layout/mapview.xml"
+        resource 0x7f030009 com.trigpointinguk.android:layout/radardialog: t=0x03 d=0x0000007d (s=0x0008 r=0x00)
+          (string16) "res/layout/radardialog.xml"
+        resource 0x7f03000a com.trigpointinguk.android:layout/trigalbum: t=0x03 d=0x0000007e (s=0x0008 r=0x00)
+          (string16) "res/layout/trigalbum.xml"
+        resource 0x7f03000b com.trigpointinguk.android:layout/trigalbumrow: t=0x03 d=0x0000007f (s=0x0008 r=0x00)
+          (string16) "res/layout/trigalbumrow.xml"
+        resource 0x7f03000c com.trigpointinguk.android:layout/trigdetails: t=0x03 d=0x00000080 (s=0x0008 r=0x00)
+          (string16) "res/layout/trigdetails.xml"
+        resource 0x7f03000d com.trigpointinguk.android:layout/triginfo: t=0x03 d=0x00000081 (s=0x0008 r=0x00)
+          (string16) "res/layout/triginfo.xml"
+        resource 0x7f03000e com.trigpointinguk.android:layout/triglist: t=0x03 d=0x00000082 (s=0x0008 r=0x00)
+          (string16) "res/layout/triglist.xml"
+        resource 0x7f03000f com.trigpointinguk.android:layout/triglogrow: t=0x03 d=0x00000083 (s=0x0008 r=0x00)
+          (string16) "res/layout/triglogrow.xml"
+        resource 0x7f030010 com.trigpointinguk.android:layout/triglogs: t=0x03 d=0x00000084 (s=0x0008 r=0x00)
+          (string16) "res/layout/triglogs.xml"
+        resource 0x7f030011 com.trigpointinguk.android:layout/trigosmap: t=0x03 d=0x00000085 (s=0x0008 r=0x00)
+          (string16) "res/layout/trigosmap.xml"
+        resource 0x7f030012 com.trigpointinguk.android:layout/trigrow: t=0x03 d=0x00000086 (s=0x0008 r=0x00)
+          (string16) "res/layout/trigrow.xml"
+    type 3 configCount=1 entryCount=1
+      spec resource 0x7f040000 com.trigpointinguk.android:xml/preferences: flags=0x00000000
+      config (default):
+        resource 0x7f040000 com.trigpointinguk.android:xml/preferences: t=0x03 d=0x00000087 (s=0x0008 r=0x00)
+          (string16) "res/xml/preferences.xml"
+    type 4 configCount=1 entryCount=115
+      spec resource 0x7f050000 com.trigpointinguk.android:string/app_name: flags=0x00000000
+      spec resource 0x7f050001 com.trigpointinguk.android:string/dlgNoTrigs: flags=0x00000000
+      spec resource 0x7f050002 com.trigpointinguk.android:string/noUser: flags=0x00000000
+      spec resource 0x7f050003 com.trigpointinguk.android:string/btnNearest: flags=0x00000000
+      spec resource 0x7f050004 com.trigpointinguk.android:string/btnMap: flags=0x00000000
+      spec resource 0x7f050005 com.trigpointinguk.android:string/btnSearch: flags=0x00000000
+      spec resource 0x7f050006 com.trigpointinguk.android:string/noTrigs: flags=0x00000000
+      spec resource 0x7f050007 com.trigpointinguk.android:string/downloadingPhotos: flags=0x00000000
+      spec resource 0x7f050008 com.trigpointinguk.android:string/downloadingLogs: flags=0x00000000
+      spec resource 0x7f050009 com.trigpointinguk.android:string/noPhotos: flags=0x00000000
+      spec resource 0x7f05000a com.trigpointinguk.android:string/noLogs: flags=0x00000000
+      spec resource 0x7f05000b com.trigpointinguk.android:string/reset: flags=0x00000000
+      spec resource 0x7f05000c com.trigpointinguk.android:string/refresh: flags=0x00000000
+      spec resource 0x7f05000d com.trigpointinguk.android:string/directions: flags=0x00000000
+      spec resource 0x7f05000e com.trigpointinguk.android:string/radar: flags=0x00000000
+      spec resource 0x7f05000f com.trigpointinguk.android:string/browser: flags=0x00000000
+      spec resource 0x7f050010 com.trigpointinguk.android:string/siteName: flags=0x00000000
+      spec resource 0x7f050011 com.trigpointinguk.android:string/downTrigs: flags=0x00000000
+      spec resource 0x7f050012 com.trigpointinguk.android:string/syncLogs: flags=0x00000000
+      spec resource 0x7f050013 com.trigpointinguk.android:string/btnSync: flags=0x00000000
+      spec resource 0x7f050014 com.trigpointinguk.android:string/btnCrash: flags=0x00000000
+      spec resource 0x7f050015 com.trigpointinguk.android:string/clearCache: flags=0x00000000
+      spec resource 0x7f050016 com.trigpointinguk.android:string/downloadTitle: flags=0x00000000
+      spec resource 0x7f050017 com.trigpointinguk.android:string/downloadBlurb: flags=0x00000000
+      spec resource 0x7f050018 com.trigpointinguk.android:string/downloadStatus: flags=0x00000000
+      spec resource 0x7f050019 com.trigpointinguk.android:string/downloadIdleStatus: flags=0x00000000
+      spec resource 0x7f05001a com.trigpointinguk.android:string/downloadInsertStatus: flags=0x00000000
+      spec resource 0x7f05001b com.trigpointinguk.android:string/btnDownload: flags=0x00000000
+      spec resource 0x7f05001c com.trigpointinguk.android:string/btnDownloadFinished: flags=0x00000000
+      spec resource 0x7f05001d com.trigpointinguk.android:string/btnCancel: flags=0x00000000
+      spec resource 0x7f05001e com.trigpointinguk.android:string/nearest_all: flags=0x00000000
+      spec resource 0x7f05001f com.trigpointinguk.android:string/help_about: flags=0x00000000
+      spec resource 0x7f050020 com.trigpointinguk.android:string/colourScheme: flags=0x00000000
+      spec resource 0x7f050021 com.trigpointinguk.android:string/downloadMapsTitle: flags=0x00000000
+      spec resource 0x7f050022 com.trigpointinguk.android:string/downloadMapsBlurb: flags=0x00000000
+      spec resource 0x7f050023 com.trigpointinguk.android:string/downMaps: flags=0x00000000
+      spec resource 0x7f050024 com.trigpointinguk.android:string/downloadMapsStatus: flags=0x00000000
+      spec resource 0x7f050025 com.trigpointinguk.android:string/downloadMapsIdleStatus: flags=0x00000000
+      spec resource 0x7f050026 com.trigpointinguk.android:string/downloadMapsInsertStatus: flags=0x00000000
+      spec resource 0x7f050027 com.trigpointinguk.android:string/prefs: flags=0x00000000
+      spec resource 0x7f050028 com.trigpointinguk.android:string/prefsAccount: flags=0x00000000
+      spec resource 0x7f050029 com.trigpointinguk.android:string/prefsUsername: flags=0x00000000
+      spec resource 0x7f05002a com.trigpointinguk.android:string/PrefsUsernameDetails: flags=0x00000000
+      spec resource 0x7f05002b com.trigpointinguk.android:string/prefsPassword: flags=0x00000000
+      spec resource 0x7f05002c com.trigpointinguk.android:string/PrefsPasswordDetails: flags=0x00000000
+      spec resource 0x7f05002d com.trigpointinguk.android:string/prefsAutoSync: flags=0x00000000
+      spec resource 0x7f05002e com.trigpointinguk.android:string/PrefsAutoSyncDetails: flags=0x00000000
+      spec resource 0x7f05002f com.trigpointinguk.android:string/prefsChoose: flags=0x00000000
+      spec resource 0x7f050030 com.trigpointinguk.android:string/prefsCount: flags=0x00000000
+      spec resource 0x7f050031 com.trigpointinguk.android:string/prefsCountDetails: flags=0x00000000
+      spec resource 0x7f050032 com.trigpointinguk.android:string/prefsMapCount: flags=0x00000000
+      spec resource 0x7f050033 com.trigpointinguk.android:string/prefsMapCountDetails: flags=0x00000000
+      spec resource 0x7f050034 com.trigpointinguk.android:string/DefaultName: flags=0x00000000
+      spec resource 0x7f050035 com.trigpointinguk.android:string/logDate: flags=0x00000000
+      spec resource 0x7f050036 com.trigpointinguk.android:string/logTime: flags=0x00000000
+      spec resource 0x7f050037 com.trigpointinguk.android:string/logScore: flags=0x00000000
+      spec resource 0x7f050038 com.trigpointinguk.android:string/logComment: flags=0x00000000
+      spec resource 0x7f050039 com.trigpointinguk.android:string/logCondition: flags=0x00000000
+      spec resource 0x7f05003a com.trigpointinguk.android:string/logGridref: flags=0x00000000
+      spec resource 0x7f05003b com.trigpointinguk.android:string/logFB: flags=0x00000000
+      spec resource 0x7f05003c com.trigpointinguk.android:string/logFlag: flags=0x00000000
+      spec resource 0x7f05003d com.trigpointinguk.android:string/logGetLocation: flags=0x00000000
+      spec resource 0x7f05003e com.trigpointinguk.android:string/logPhotos: flags=0x00000000
+      spec resource 0x7f05003f com.trigpointinguk.android:string/logAddPhoto: flags=0x00000000
+      spec resource 0x7f050040 com.trigpointinguk.android:string/logUploadNow: flags=0x00000000
+      spec resource 0x7f050041 com.trigpointinguk.android:string/logSyncLater: flags=0x00000000
+      spec resource 0x7f050042 com.trigpointinguk.android:string/logDelete: flags=0x00000000
+      spec resource 0x7f050043 com.trigpointinguk.android:string/logUserFlag: flags=0x00000000
+      spec resource 0x7f050044 com.trigpointinguk.android:string/logTimeYes: flags=0x00000000
+      spec resource 0x7f050045 com.trigpointinguk.android:string/logTimeNo: flags=0x00000000
+      spec resource 0x7f050046 com.trigpointinguk.android:string/photoName: flags=0x00000000
+      spec resource 0x7f050047 com.trigpointinguk.android:string/photoDescr: flags=0x00000000
+      spec resource 0x7f050048 com.trigpointinguk.android:string/photoSubject: flags=0x00000000
+      spec resource 0x7f050049 com.trigpointinguk.android:string/photoIsPublic: flags=0x00000000
+      spec resource 0x7f05004a com.trigpointinguk.android:string/photoSave: flags=0x00000000
+      spec resource 0x7f05004b com.trigpointinguk.android:string/photoRemove: flags=0x00000000
+      spec resource 0x7f05004c com.trigpointinguk.android:string/photoThumbnail: flags=0x00000000
+      spec resource 0x7f05004d com.trigpointinguk.android:string/addLog: flags=0x00000000
+      spec resource 0x7f05004e com.trigpointinguk.android:string/prefsExperimental: flags=0x00000000
+      spec resource 0x7f05004f com.trigpointinguk.android:string/prefsExperimentalDetails: flags=0x00000000
+      spec resource 0x7f050050 com.trigpointinguk.android:string/prefsBehaviour: flags=0x00000000
+      spec resource 0x7f050051 com.trigpointinguk.android:string/prefsDevelopment: flags=0x00000000
+      spec resource 0x7f050052 com.trigpointinguk.android:string/prefsAcra: flags=0x00000000
+      spec resource 0x7f050053 com.trigpointinguk.android:string/prefsAcraEnabled: flags=0x00000000
+      spec resource 0x7f050054 com.trigpointinguk.android:string/prefsAcraDisabled: flags=0x00000000
+      spec resource 0x7f050055 com.trigpointinguk.android:string/syncToTUK: flags=0x00000000
+      spec resource 0x7f050056 com.trigpointinguk.android:string/syncPhotosToTUK: flags=0x00000000
+      spec resource 0x7f050057 com.trigpointinguk.android:string/syncLogsFromTUK: flags=0x00000000
+      spec resource 0x7f050058 com.trigpointinguk.android:string/toastAddUsername: flags=0x00000000
+      spec resource 0x7f050059 com.trigpointinguk.android:string/toastAddPassword: flags=0x00000000
+      spec resource 0x7f05005a com.trigpointinguk.android:string/radarexplain: flags=0x00000000
+      spec resource 0x7f05005b com.trigpointinguk.android:string/yesplease: flags=0x00000000
+      spec resource 0x7f05005c com.trigpointinguk.android:string/nothanks: flags=0x00000000
+      spec resource 0x7f05005d com.trigpointinguk.android:string/radartitle: flags=0x00000000
+      spec resource 0x7f05005e com.trigpointinguk.android:string/markTrig: flags=0x00000000
+      spec resource 0x7f05005f com.trigpointinguk.android:string/map: flags=0x00000000
+      spec resource 0x7f050060 com.trigpointinguk.android:string/filterAll: flags=0x00000000
+      spec resource 0x7f050061 com.trigpointinguk.android:string/filterMarked: flags=0x00000000
+      spec resource 0x7f050062 com.trigpointinguk.android:string/filterUnsynced: flags=0x00000000
+      spec resource 0x7f050063 com.trigpointinguk.android:string/filterLogged: flags=0x00000000
+      spec resource 0x7f050064 com.trigpointinguk.android:string/filterNotLogged: flags=0x00000000
+      spec resource 0x7f050065 com.trigpointinguk.android:string/filterTypes: flags=0x00000000
+      spec resource 0x7f050066 com.trigpointinguk.android:string/filterTypesDetails: flags=0x00000000
+      spec resource 0x7f050067 com.trigpointinguk.android:string/prefsUnits: flags=0x00000000
+      spec resource 0x7f050068 com.trigpointinguk.android:string/prefsUnitsDetails: flags=0x00000000
+      spec resource 0x7f050069 com.trigpointinguk.android:string/heading: flags=0x00000000
+      spec resource 0x7f05006a com.trigpointinguk.android:string/sendLogEmails: flags=0x00000000
+      spec resource 0x7f05006b com.trigpointinguk.android:string/sendLogEmailsYes: flags=0x00000000
+      spec resource 0x7f05006c com.trigpointinguk.android:string/sendLogEmailsNo: flags=0x00000000
+      spec resource 0x7f05006d com.trigpointinguk.android:string/textPillar: flags=0x00000000
+      spec resource 0x7f05006e com.trigpointinguk.android:string/textFBM: flags=0x00000000
+      spec resource 0x7f05006f com.trigpointinguk.android:string/textPassive: flags=0x00000000
+      spec resource 0x7f050070 com.trigpointinguk.android:string/textIntersected: flags=0x00000000
+      spec resource 0x7f050071 com.trigpointinguk.android:string/textLogo: flags=0x00000000
+      spec resource 0x7f050072 com.trigpointinguk.android:string/textUnsynced: flags=0x00000000
+      config (default):
+        resource 0x7f050000 com.trigpointinguk.android:string/app_name: t=0x03 d=0x000000ad (s=0x0008 r=0x00)
+          (string16) "TrigpointingUK"
+        resource 0x7f050001 com.trigpointinguk.android:string/dlgNoTrigs: t=0x03 d=0x000000ae (s=0x0008 r=0x00)
+          (string16) "No trigpoint database! Download now?"
+        resource 0x7f050002 com.trigpointinguk.android:string/noUser: t=0x03 d=0x000000af (s=0x0008 r=0x00)
+          (string16) "Please set username in preferences"
+        resource 0x7f050003 com.trigpointinguk.android:string/btnNearest: t=0x03 d=0x000000b0 (s=0x0008 r=0x00)
+          (string16) "Nearest"
+        resource 0x7f050004 com.trigpointinguk.android:string/btnMap: t=0x03 d=0x000000b1 (s=0x0008 r=0x00)
+          (string16) "Map"
+        resource 0x7f050005 com.trigpointinguk.android:string/btnSearch: t=0x03 d=0x000000b2 (s=0x0008 r=0x00)
+          (string16) ""
+        resource 0x7f050006 com.trigpointinguk.android:string/noTrigs: t=0x03 d=0x000000b3 (s=0x0008 r=0x00)
+          (string16) "Searching for nearby trigpoints"
+        resource 0x7f050007 com.trigpointinguk.android:string/downloadingPhotos: t=0x03 d=0x000000b4 (s=0x0008 r=0x00)
+          (string16) "Downloading photo album"
+        resource 0x7f050008 com.trigpointinguk.android:string/downloadingLogs: t=0x03 d=0x000000b5 (s=0x0008 r=0x00)
+          (string16) "Downloading logs"
+        resource 0x7f050009 com.trigpointinguk.android:string/noPhotos: t=0x03 d=0x000000b6 (s=0x0008 r=0x00)
+          (string16) "No photos for this trigpoint"
+        resource 0x7f05000a com.trigpointinguk.android:string/noLogs: t=0x03 d=0x000000b7 (s=0x0008 r=0x00)
+          (string16) "No logs for this trigpoint"
+        resource 0x7f05000b com.trigpointinguk.android:string/reset: t=0x03 d=0x000000b8 (s=0x0008 r=0x00)
+          (string16) "Reset"
+        resource 0x7f05000c com.trigpointinguk.android:string/refresh: t=0x03 d=0x000000b9 (s=0x0008 r=0x00)
+          (string16) "Refresh"
+        resource 0x7f05000d com.trigpointinguk.android:string/directions: t=0x03 d=0x000000ba (s=0x0008 r=0x00)
+          (string16) "Get Directions"
+        resource 0x7f05000e com.trigpointinguk.android:string/radar: t=0x03 d=0x000000bb (s=0x0008 r=0x00)
+          (string16) "Radar Mode"
+        resource 0x7f05000f com.trigpointinguk.android:string/browser: t=0x03 d=0x000000bc (s=0x0008 r=0x00)
+          (string16) "Open in Browser"
+        resource 0x7f050010 com.trigpointinguk.android:string/siteName: t=0x03 d=0x000000ad (s=0x0008 r=0x00)
+          (string16) "TrigpointingUK"
+        resource 0x7f050011 com.trigpointinguk.android:string/downTrigs: t=0x03 d=0x000000bd (s=0x0008 r=0x00)
+          (string16) "Download Trig Database"
+        resource 0x7f050012 com.trigpointinguk.android:string/syncLogs: t=0x03 d=0x000000be (s=0x0008 r=0x00)
+          (string16) "Sync Logs"
+        resource 0x7f050013 com.trigpointinguk.android:string/btnSync: t=0x03 d=0x000000be (s=0x0008 r=0x00)
+          (string16) "Sync Logs"
+        resource 0x7f050014 com.trigpointinguk.android:string/btnCrash: t=0x03 d=0x000000bf (s=0x0008 r=0x00)
+          (string16) "Crash"
+        resource 0x7f050015 com.trigpointinguk.android:string/clearCache: t=0x03 d=0x000000c0 (s=0x0008 r=0x00)
+          (string16) "Clear Cache"
+        resource 0x7f050016 com.trigpointinguk.android:string/downloadTitle: t=0x03 d=0x000000c1 (s=0x0008 r=0x00)
+          (string16) "Download Trigpoint Database"
+        resource 0x7f050017 com.trigpointinguk.android:string/downloadBlurb: t=0x03 d=0x000000c2 (s=0x0008 r=0x00)
+          (string16) "When you first install this app, and every now and then afterwards, you need to download a full set of trigpoint data from the TrigpointingUK.com server. This data is stored on your phone, so that you can search for trigpoints even when out of phone reception."
+        resource 0x7f050018 com.trigpointinguk.android:string/downloadStatus: t=0x03 d=0x000000c3 (s=0x0008 r=0x00)
+          (string16) "Status:"
+        resource 0x7f050019 com.trigpointinguk.android:string/downloadIdleStatus: t=0x03 d=0x000000c4 (s=0x0008 r=0x00)
+          (string16) "idle"
+        resource 0x7f05001a com.trigpointinguk.android:string/downloadInsertStatus: t=0x03 d=0x000000c5 (s=0x0008 r=0x00)
+          (string16) "Connecting to T:UK"
+        resource 0x7f05001b com.trigpointinguk.android:string/btnDownload: t=0x03 d=0x000000c6 (s=0x0008 r=0x00)
+          (string16) "Download"
+        resource 0x7f05001c com.trigpointinguk.android:string/btnDownloadFinished: t=0x03 d=0x000000c7 (s=0x0008 r=0x00)
+          (string16) "Done"
+        resource 0x7f05001d com.trigpointinguk.android:string/btnCancel: t=0x03 d=0x000000c8 (s=0x0008 r=0x00)
+          (string16) "Cancel"
+        resource 0x7f05001e com.trigpointinguk.android:string/nearest_all: t=0x03 d=0x000000c9 (s=0x0008 r=0x00)
+          (string16) "All"
+        resource 0x7f05001f com.trigpointinguk.android:string/help_about: t=0x03 d=0x000000ca (s=0x0008 r=0x00)
+          (string16) "About"
+        resource 0x7f050020 com.trigpointinguk.android:string/colourScheme: t=0x03 d=0x000000cb (s=0x0008 r=0x00)
+          (string16) "Icon colourscheme"
+        resource 0x7f050021 com.trigpointinguk.android:string/downloadMapsTitle: t=0x03 d=0x000000cc (s=0x0008 r=0x00)
+          (string16) "Download Offline Maps"
+        resource 0x7f050022 com.trigpointinguk.android:string/downloadMapsBlurb: t=0x03 d=0x000000cd (s=0x0008 r=0x00)
+          (string16) "If you have a slow or expensive mobile internet connection, you may download a set of maps for the whole of the UK when convenient, to minimise the amount of map downloads in the field. These are large files, so please ensure you have enough space on your SD card, and that you have a fast, cheap internet connection."
+        resource 0x7f050023 com.trigpointinguk.android:string/downMaps: t=0x03 d=0x000000cc (s=0x0008 r=0x00)
+          (string16) "Download Offline Maps"
+        resource 0x7f050024 com.trigpointinguk.android:string/downloadMapsStatus: t=0x03 d=0x000000c3 (s=0x0008 r=0x00)
+          (string16) "Status:"
+        resource 0x7f050025 com.trigpointinguk.android:string/downloadMapsIdleStatus: t=0x03 d=0x000000c4 (s=0x0008 r=0x00)
+          (string16) "idle"
+        resource 0x7f050026 com.trigpointinguk.android:string/downloadMapsInsertStatus: t=0x03 d=0x000000ce (s=0x0008 r=0x00)
+          (string16) "saving to SD card"
+        resource 0x7f050027 com.trigpointinguk.android:string/prefs: t=0x03 d=0x000000cf (s=0x0008 r=0x00)
+          (string16) "Preferences"
+        resource 0x7f050028 com.trigpointinguk.android:string/prefsAccount: t=0x03 d=0x000000d0 (s=0x0008 r=0x00)
+          (string16) "Account Details"
+        resource 0x7f050029 com.trigpointinguk.android:string/prefsUsername: t=0x03 d=0x000000d1 (s=0x0008 r=0x00)
+          (string16) "Username"
+        resource 0x7f05002a com.trigpointinguk.android:string/PrefsUsernameDetails: t=0x03 d=0x000000d2 (s=0x0008 r=0x00)
+          (string16) "Your username on TrigpointingUK"
+        resource 0x7f05002b com.trigpointinguk.android:string/prefsPassword: t=0x03 d=0x000000d3 (s=0x0008 r=0x00)
+          (string16) "Password"
+        resource 0x7f05002c com.trigpointinguk.android:string/PrefsPasswordDetails: t=0x03 d=0x000000d4 (s=0x0008 r=0x00)
+          (string16) "Your password on TrigpointingUK"
+        resource 0x7f05002d com.trigpointinguk.android:string/prefsAutoSync: t=0x03 d=0x000000d5 (s=0x0008 r=0x00)
+          (string16) "AutoSync"
+        resource 0x7f05002e com.trigpointinguk.android:string/PrefsAutoSyncDetails: t=0x03 d=0x000000d6 (s=0x0008 r=0x00)
+          (string16) "Sync logs on app startup?"
+        resource 0x7f05002f com.trigpointinguk.android:string/prefsChoose: t=0x03 d=0x000000d7 (s=0x0008 r=0x00)
+          (string16) "Please chose"
+        resource 0x7f050030 com.trigpointinguk.android:string/prefsCount: t=0x03 d=0x000000d8 (s=0x0008 r=0x00)
+          (string16) "List size"
+        resource 0x7f050031 com.trigpointinguk.android:string/prefsCountDetails: t=0x03 d=0x000000d9 (s=0x0008 r=0x00)
+          (string16) "Number of items in Nearest Trigs list"
+        resource 0x7f050032 com.trigpointinguk.android:string/prefsMapCount: t=0x03 d=0x000000da (s=0x0008 r=0x00)
+          (string16) "Map icons"
+        resource 0x7f050033 com.trigpointinguk.android:string/prefsMapCountDetails: t=0x03 d=0x000000db (s=0x0008 r=0x00)
+          (string16) "Approx number of icons shown on map"
+        resource 0x7f050034 com.trigpointinguk.android:string/DefaultName: t=0x03 d=0x000000d1 (s=0x0008 r=0x00)
+          (string16) "Username"
+        resource 0x7f050035 com.trigpointinguk.android:string/logDate: t=0x03 d=0x000000dc (s=0x0008 r=0x00)
+          (string16) "Date:"
+        resource 0x7f050036 com.trigpointinguk.android:string/logTime: t=0x03 d=0x000000dd (s=0x0008 r=0x00)
+          (string16) "Time:"
+        resource 0x7f050037 com.trigpointinguk.android:string/logScore: t=0x03 d=0x000000de (s=0x0008 r=0x00)
+          (string16) "Score:"
+        resource 0x7f050038 com.trigpointinguk.android:string/logComment: t=0x03 d=0x000000df (s=0x0008 r=0x00)
+          (string16) "Comment:"
+        resource 0x7f050039 com.trigpointinguk.android:string/logCondition: t=0x03 d=0x000000e0 (s=0x0008 r=0x00)
+          (string16) "Condition:"
+        resource 0x7f05003a com.trigpointinguk.android:string/logGridref: t=0x03 d=0x000000e1 (s=0x0008 r=0x00)
+          (string16) "Logged Grid Reference:"
+        resource 0x7f05003b com.trigpointinguk.android:string/logFB: t=0x03 d=0x000000e2 (s=0x0008 r=0x00)
+          (string16) "Flush Bracket:"
+        resource 0x7f05003c com.trigpointinguk.android:string/logFlag: t=0x03 d=0x000000e3 (s=0x0008 r=0x00)
+          (string16) "Flag log for action by Site Admins"
+        resource 0x7f05003d com.trigpointinguk.android:string/logGetLocation: t=0x03 d=0x000000e4 (s=0x0008 r=0x00)
+          (string16) "Get location"
+        resource 0x7f05003e com.trigpointinguk.android:string/logPhotos: t=0x03 d=0x000000e5 (s=0x0008 r=0x00)
+          (string16) "Photos:"
+        resource 0x7f05003f com.trigpointinguk.android:string/logAddPhoto: t=0x03 d=0x000000e6 (s=0x0008 r=0x00)
+          (string16) "Add Photo"
+        resource 0x7f050040 com.trigpointinguk.android:string/logUploadNow: t=0x03 d=0x000000e7 (s=0x0008 r=0x00)
+          (string16) "Sync Now"
+        resource 0x7f050041 com.trigpointinguk.android:string/logSyncLater: t=0x03 d=0x000000e8 (s=0x0008 r=0x00)
+          (string16) "Sync Later"
+        resource 0x7f050042 com.trigpointinguk.android:string/logDelete: t=0x03 d=0x000000e9 (s=0x0008 r=0x00)
+          (string16) "Delete Log"
+        resource 0x7f050043 com.trigpointinguk.android:string/logUserFlag: t=0x03 d=0x000000ea (s=0x0008 r=0x00)
+          (string16) "Flag log to warn other T:UK users"
+        resource 0x7f050044 com.trigpointinguk.android:string/logTimeYes: t=0x03 d=0x000000eb (s=0x0008 r=0x00)
+          (string16) "Log time"
+        resource 0x7f050045 com.trigpointinguk.android:string/logTimeNo: t=0x03 d=0x000000ec (s=0x0008 r=0x00)
+          (string16) "No time"
+        resource 0x7f050046 com.trigpointinguk.android:string/photoName: t=0x03 d=0x000000ed (s=0x0008 r=0x00)
+          (string16) "Caption:"
+        resource 0x7f050047 com.trigpointinguk.android:string/photoDescr: t=0x03 d=0x000000ee (s=0x0008 r=0x00)
+          (string16) "Description:"
+        resource 0x7f050048 com.trigpointinguk.android:string/photoSubject: t=0x03 d=0x000000ef (s=0x0008 r=0x00)
+          (string16) "Subject:"
+        resource 0x7f050049 com.trigpointinguk.android:string/photoIsPublic: t=0x03 d=0x000000f0 (s=0x0008 r=0x00)
+          (string16) "Place in public domain?"
+        resource 0x7f05004a com.trigpointinguk.android:string/photoSave: t=0x03 d=0x000000f1 (s=0x0008 r=0x00)
+          (string16) "Save"
+        resource 0x7f05004b com.trigpointinguk.android:string/photoRemove: t=0x03 d=0x000000f2 (s=0x0008 r=0x00)
+          (string16) "Remove"
+        resource 0x7f05004c com.trigpointinguk.android:string/photoThumbnail: t=0x03 d=0x000000f3 (s=0x0008 r=0x00)
+          (string16) "Thumbnail"
+        resource 0x7f05004d com.trigpointinguk.android:string/addLog: t=0x03 d=0x000000f4 (s=0x0008 r=0x00)
+          (string16) "Log this trigpoint"
+        resource 0x7f05004e com.trigpointinguk.android:string/prefsExperimental: t=0x03 d=0x000000f5 (s=0x0008 r=0x00)
+          (string16) "Developer mode"
+        resource 0x7f05004f com.trigpointinguk.android:string/prefsExperimentalDetails: t=0x03 d=0x000000f6 (s=0x0008 r=0x00)
+          (string16) "Access code under development (unstable, requires restart)"
+        resource 0x7f050050 com.trigpointinguk.android:string/prefsBehaviour: t=0x03 d=0x000000f7 (s=0x0008 r=0x00)
+          (string16) "Application preferences"
+        resource 0x7f050051 com.trigpointinguk.android:string/prefsDevelopment: t=0x03 d=0x000000f8 (s=0x0008 r=0x00)
+          (string16) "Development options"
+        resource 0x7f050052 com.trigpointinguk.android:string/prefsAcra: t=0x03 d=0x000000f9 (s=0x0008 r=0x00)
+          (string16) "Crash reports"
+        resource 0x7f050053 com.trigpointinguk.android:string/prefsAcraEnabled: t=0x03 d=0x000000fa (s=0x0008 r=0x00)
+          (string16) "Send crash reports to T:UK"
+        resource 0x7f050054 com.trigpointinguk.android:string/prefsAcraDisabled: t=0x03 d=0x000000fb (s=0x0008 r=0x00)
+          (string16) "Do not send crash reports to T:UK"
+        resource 0x7f050055 com.trigpointinguk.android:string/syncToTUK: t=0x03 d=0x000000fc (s=0x0008 r=0x00)
+          (string16) "Sending logs to T:UK"
+        resource 0x7f050056 com.trigpointinguk.android:string/syncPhotosToTUK: t=0x03 d=0x000000fd (s=0x0008 r=0x00)
+          (string16) "Sending photos to T:UK"
+        resource 0x7f050057 com.trigpointinguk.android:string/syncLogsFromTUK: t=0x03 d=0x000000fe (s=0x0008 r=0x00)
+          (string16) "Downloading logs from T:UK"
+        resource 0x7f050058 com.trigpointinguk.android:string/toastAddUsername: t=0x03 d=0x000000ff (s=0x0008 r=0x00)
+          (string16) "Please add username to preferences!"
+        resource 0x7f050059 com.trigpointinguk.android:string/toastAddPassword: t=0x03 d=0x00000100 (s=0x0008 r=0x00)
+          (string16) "Please add password to preferences!"
+        resource 0x7f05005a com.trigpointinguk.android:string/radarexplain: t=0x03 d=0x00000101 (s=0x0008 r=0x00)
+          (string16) "In order to use the radar mode, you need to install an app called Gps Status. Would you like to go to the app's Google Play page?"
+        resource 0x7f05005b com.trigpointinguk.android:string/yesplease: t=0x03 d=0x00000102 (s=0x0008 r=0x00)
+          (string16) "Yes please"
+        resource 0x7f05005c com.trigpointinguk.android:string/nothanks: t=0x03 d=0x00000103 (s=0x0008 r=0x00)
+          (string16) "No thanks"
+        resource 0x7f05005d com.trigpointinguk.android:string/radartitle: t=0x03 d=0x00000104 (s=0x0008 r=0x00)
+          (string16) "Cannot launch radar"
+        resource 0x7f05005e com.trigpointinguk.android:string/markTrig: t=0x03 d=0x00000105 (s=0x0008 r=0x00)
+          (string16) "Mark"
+        resource 0x7f05005f com.trigpointinguk.android:string/map: t=0x03 d=0x00000106 (s=0x0008 r=0x00)
+          (string16) "View on map"
+        resource 0x7f050060 com.trigpointinguk.android:string/filterAll: t=0x03 d=0x000000c9 (s=0x0008 r=0x00)
+          (string16) "All"
+        resource 0x7f050061 com.trigpointinguk.android:string/filterMarked: t=0x03 d=0x00000107 (s=0x0008 r=0x00)
+          (string16) "Marked"
+        resource 0x7f050062 com.trigpointinguk.android:string/filterUnsynced: t=0x03 d=0x00000108 (s=0x0008 r=0x00)
+          (string16) "Unsynced"
+        resource 0x7f050063 com.trigpointinguk.android:string/filterLogged: t=0x03 d=0x00000109 (s=0x0008 r=0x00)
+          (string16) "Logged"
+        resource 0x7f050064 com.trigpointinguk.android:string/filterNotLogged: t=0x03 d=0x0000010a (s=0x0008 r=0x00)
+          (string16) "Not logged"
+        resource 0x7f050065 com.trigpointinguk.android:string/filterTypes: t=0x03 d=0x0000010b (s=0x0008 r=0x00)
+          (string16) "Types"
+        resource 0x7f050066 com.trigpointinguk.android:string/filterTypesDetails: t=0x03 d=0x0000010c (s=0x0008 r=0x00)
+          (string16) "Physical types of trigpoints to display"
+        resource 0x7f050067 com.trigpointinguk.android:string/prefsUnits: t=0x03 d=0x0000010d (s=0x0008 r=0x00)
+          (string16) "Units"
+        resource 0x7f050068 com.trigpointinguk.android:string/prefsUnitsDetails: t=0x03 d=0x0000010e (s=0x0008 r=0x00)
+          (string16) "Show distances in metric or imperial"
+        resource 0x7f050069 com.trigpointinguk.android:string/heading: t=0x03 d=0x0000010f (s=0x0008 r=0x00)
+          (string16) "Live compass"
+        resource 0x7f05006a com.trigpointinguk.android:string/sendLogEmails: t=0x03 d=0x00000110 (s=0x0008 r=0x00)
+          (string16) "Email logs"
+        resource 0x7f05006b com.trigpointinguk.android:string/sendLogEmailsYes: t=0x03 d=0x00000111 (s=0x0008 r=0x00)
+          (string16) "Send me email reminders of logs"
+        resource 0x7f05006c com.trigpointinguk.android:string/sendLogEmailsNo: t=0x03 d=0x00000112 (s=0x0008 r=0x00)
+          (string16) "Do not send me emails"
+        resource 0x7f05006d com.trigpointinguk.android:string/textPillar: t=0x03 d=0x00000113 (s=0x0008 r=0x00)
+          (string16) "Pillar"
+        resource 0x7f05006e com.trigpointinguk.android:string/textFBM: t=0x03 d=0x00000114 (s=0x0008 r=0x00)
+          (string16) "FBM"
+        resource 0x7f05006f com.trigpointinguk.android:string/textPassive: t=0x03 d=0x00000115 (s=0x0008 r=0x00)
+          (string16) "Passive"
+        resource 0x7f050070 com.trigpointinguk.android:string/textIntersected: t=0x03 d=0x00000116 (s=0x0008 r=0x00)
+          (string16) "Intersected"
+        resource 0x7f050071 com.trigpointinguk.android:string/textLogo: t=0x03 d=0x00000117 (s=0x0008 r=0x00)
+          (string16) "Logo"
+        resource 0x7f050072 com.trigpointinguk.android:string/textUnsynced: t=0x03 d=0x00000108 (s=0x0008 r=0x00)
+          (string16) "Unsynced"
+    type 5 configCount=1 entryCount=10
+      spec resource 0x7f060000 com.trigpointinguk.android:array/downloadMapsArray: flags=0x00000000
+      spec resource 0x7f060001 com.trigpointinguk.android:array/downloadMapsArrayValues: flags=0x00000000
+      spec resource 0x7f060002 com.trigpointinguk.android:array/downloadMapsArrayTiles: flags=0x00000000
+      spec resource 0x7f060003 com.trigpointinguk.android:array/prefsCountArray: flags=0x00000000
+      spec resource 0x7f060004 com.trigpointinguk.android:array/prefsCountArrayValues: flags=0x00000000
+      spec resource 0x7f060005 com.trigpointinguk.android:array/prefsMapCountArray: flags=0x00000000
+      spec resource 0x7f060006 com.trigpointinguk.android:array/prefsMapCountArrayValues: flags=0x00000000
+      spec resource 0x7f060007 com.trigpointinguk.android:array/filterTypesArray: flags=0x00000000
+      spec resource 0x7f060008 com.trigpointinguk.android:array/prefsUnitsArray: flags=0x00000000
+      spec resource 0x7f060009 com.trigpointinguk.android:array/prefsUnitsArrayValues: flags=0x00000000
+      config (default):
+        resource 0x7f060000 com.trigpointinguk.android:array/downloadMapsArray: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=6
+          #0 (Key=0x02000000): (string16) "Mapnik - E+W (90MB)"
+          #1 (Key=0x02000001): (string16) "MapQuest - E+W (387MB)"
+          #2 (Key=0x02000002): (string16) "Cloudmade - E+W (78MB)"
+          #3 (Key=0x02000003): (string16) "Mapnik - Scot (32MB)"
+          #4 (Key=0x02000004): (string16) "MapQuest - Scot (310MB)"
+          #5 (Key=0x02000005): (string16) "Cloudmade - Scot (29MB)"
+        resource 0x7f060001 com.trigpointinguk.android:array/downloadMapsArrayValues: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=6
+          #0 (Key=0x02000000): (string16) "http://trigpointinguk.googlecode.com/files/mapnik_ew_f01_z12_v01.zip"
+          #1 (Key=0x02000001): (string16) "http://trigpointinguk.googlecode.com/files/mapquest_ew_f01_z10_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_ew_f02_z11_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_ew_f03_z12_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_ew_f04_z12_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_ew_f05_z12_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_ew_f06_z12_v01.zip"
+          #2 (Key=0x02000002): (string16) "http://trigpointinguk.googlecode.com/files/cloudmade_ew_f01_z12_v01.zip"
+          #3 (Key=0x02000003): (string16) "http://trigpointinguk.googlecode.com/files/mapnik_s_f01_z12_v01.zip"
+          #4 (Key=0x02000004): (string16) "http://trigpointinguk.googlecode.com/files/mapquest_s_f01_z11_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_s_f02_z12_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_s_f03_z12_v01.zip,http://trigpointinguk.googlecode.com/files/mapquest_s_f04_z12_v01.zip"
+          #5 (Key=0x02000005): (string16) "http://trigpointinguk.googlecode.com/files/cloudmade_s_f01_z12_v01.zip"
+        resource 0x7f060002 com.trigpointinguk.android:array/downloadMapsArrayTiles: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=6
+          #0 (Key=0x02000000): (int) 0x00001d32 or 7474
+          #1 (Key=0x02000001): (int) 0x00001d2f or 7471
+          #2 (Key=0x02000002): (int) 0x00001d2f or 7471
+          #3 (Key=0x02000003): (int) 0x00001ad6 or 6870
+          #4 (Key=0x02000004): (int) 0x00001ad6 or 6870
+          #5 (Key=0x02000005): (int) 0x00001ad6 or 6870
+        resource 0x7f060003 com.trigpointinguk.android:array/prefsCountArray: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=4
+          #0 (Key=0x02000000): (string16) "10"
+          #1 (Key=0x02000001): (string16) "100"
+          #2 (Key=0x02000002): (string16) "1000"
+          #3 (Key=0x02000003): (string16) "All"
+        resource 0x7f060004 com.trigpointinguk.android:array/prefsCountArrayValues: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=4
+          #0 (Key=0x02000000): (string16) "10"
+          #1 (Key=0x02000001): (string16) "100"
+          #2 (Key=0x02000002): (string16) "1000"
+          #3 (Key=0x02000003): (string16) "20000"
+        resource 0x7f060005 com.trigpointinguk.android:array/prefsMapCountArray: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=5
+          #0 (Key=0x02000000): (string16) "10"
+          #1 (Key=0x02000001): (string16) "20"
+          #2 (Key=0x02000002): (string16) "100"
+          #3 (Key=0x02000003): (string16) "1000"
+          #4 (Key=0x02000004): (string16) "All"
+        resource 0x7f060006 com.trigpointinguk.android:array/prefsMapCountArrayValues: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=5
+          #0 (Key=0x02000000): (string16) "40"
+          #1 (Key=0x02000001): (string16) "80"
+          #2 (Key=0x02000002): (string16) "400"
+          #3 (Key=0x02000003): (string16) "4000"
+          #4 (Key=0x02000004): (string16) "10000"
+        resource 0x7f060007 com.trigpointinguk.android:array/filterTypesArray: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=7
+          #0 (Key=0x02000000): (string16) "Pillars only"
+          #1 (Key=0x02000001): (string16) "Pillars and FBMs"
+          #2 (Key=0x02000002): (string16) "FBMs only"
+          #3 (Key=0x02000003): (string16) "Passive types only"
+          #4 (Key=0x02000004): (string16) "Intersected stations only"
+          #5 (Key=0x02000005): (string16) "Exclude intersected stations"
+          #6 (Key=0x02000006): (string16) "All"
+        resource 0x7f060008 com.trigpointinguk.android:array/prefsUnitsArray: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=2
+          #0 (Key=0x02000000): (string16) "Metric"
+          #1 (Key=0x02000001): (string16) "Imperial"
+        resource 0x7f060009 com.trigpointinguk.android:array/prefsUnitsArrayValues: <bag>
+          Parent=0x00000000(Resolved=0x00000000), Count=2
+          #0 (Key=0x02000000): (string16) "metric"
+          #1 (Key=0x02000001): (string16) "imperial"
+    type 6 configCount=1 entryCount=7
+      spec resource 0x7f070000 com.trigpointinguk.android:color/errorcolour: flags=0x00000000
+      spec resource 0x7f070001 com.trigpointinguk.android:color/okcolour: flags=0x00000000
+      spec resource 0x7f070002 com.trigpointinguk.android:color/compassEnabled: flags=0x00000000
+      spec resource 0x7f070003 com.trigpointinguk.android:color/compassDisabled: flags=0x00000000
+      spec resource 0x7f070004 com.trigpointinguk.android:color/syncNow: flags=0x00000000
+      spec resource 0x7f070005 com.trigpointinguk.android:color/nearestMarkedColour: flags=0x00000000
+      spec resource 0x7f070006 com.trigpointinguk.android:color/nearestUnmarkedColour: flags=0x00000000
+      config (default):
+        resource 0x7f070000 com.trigpointinguk.android:color/errorcolour: t=0x1d d=0xfff00000 (s=0x0008 r=0x00)
+          (color) #fff00000
+        resource 0x7f070001 com.trigpointinguk.android:color/okcolour: t=0x1d d=0xff00f000 (s=0x0008 r=0x00)
+          (color) #ff00f000
+        resource 0x7f070002 com.trigpointinguk.android:color/compassEnabled: t=0x1d d=0xffff0000 (s=0x0008 r=0x00)
+          (color) #ffff0000
+        resource 0x7f070003 com.trigpointinguk.android:color/compassDisabled: t=0x1d d=0xffa0a0a0 (s=0x0008 r=0x00)
+          (color) #ffa0a0a0
+        resource 0x7f070004 com.trigpointinguk.android:color/syncNow: t=0x1d d=0xffff0000 (s=0x0008 r=0x00)
+          (color) #ffff0000
+        resource 0x7f070005 com.trigpointinguk.android:color/nearestMarkedColour: t=0x1d d=0xffffff88 (s=0x0008 r=0x00)
+          (color) #ffffff88
+        resource 0x7f070006 com.trigpointinguk.android:color/nearestUnmarkedColour: t=0x1d d=0xffffffff (s=0x0008 r=0x00)
+          (color) #ffffffff
+    type 7 configCount=1 entryCount=1
+      spec resource 0x7f080000 com.trigpointinguk.android:style/trigRatingBar: flags=0x00000000
+      config (default):
+        resource 0x7f080000 com.trigpointinguk.android:style/trigRatingBar: <bag>
+          Parent=0x01030021(Resolved=0x01030021), Count=3
+          #0 (Key=0x01010120): (dimension) 35.000000dp
+          #1 (Key=0x0101013c): (reference) 0x7f020066
+          #2 (Key=0x01010140): (dimension) 35.000000dp
+    type 8 configCount=1 entryCount=5
+      spec resource 0x7f090000 com.trigpointinguk.android:menu/mainmenu: flags=0x00000000
+      spec resource 0x7f090001 com.trigpointinguk.android:menu/mapmenu: flags=0x00000000
+      spec resource 0x7f090002 com.trigpointinguk.android:menu/nearestmenu: flags=0x00000000
+      spec resource 0x7f090003 com.trigpointinguk.android:menu/trigdetailsinfomenu: flags=0x00000000
+      spec resource 0x7f090004 com.trigpointinguk.android:menu/trigdetailsmenu: flags=0x00000000
+      config (default):
+        resource 0x7f090000 com.trigpointinguk.android:menu/mainmenu: t=0x03 d=0x00000088 (s=0x0008 r=0x00)
+          (string16) "res/menu/mainmenu.xml"
+        resource 0x7f090001 com.trigpointinguk.android:menu/mapmenu: t=0x03 d=0x00000089 (s=0x0008 r=0x00)
+          (string16) "res/menu/mapmenu.xml"
+        resource 0x7f090002 com.trigpointinguk.android:menu/nearestmenu: t=0x03 d=0x0000008a (s=0x0008 r=0x00)
+          (string16) "res/menu/nearestmenu.xml"
+        resource 0x7f090003 com.trigpointinguk.android:menu/trigdetailsinfomenu: t=0x03 d=0x0000008b (s=0x0008 r=0x00)
+          (string16) "res/menu/trigdetailsinfomenu.xml"
+        resource 0x7f090004 com.trigpointinguk.android:menu/trigdetailsmenu: t=0x03 d=0x0000008c (s=0x0008 r=0x00)
+          (string16) "res/menu/trigdetailsmenu.xml"
+    type 9 configCount=1 entryCount=157
+      spec resource 0x7f0a0000 com.trigpointinguk.android:id/zoomview: flags=0x00000000
+      spec resource 0x7f0a0001 com.trigpointinguk.android:id/textView1: flags=0x00000000
+      spec resource 0x7f0a0002 com.trigpointinguk.android:id/textView2: flags=0x00000000
+      spec resource 0x7f0a0003 com.trigpointinguk.android:id/downloadProgress: flags=0x00000000
+      spec resource 0x7f0a0004 com.trigpointinguk.android:id/StatusLayout: flags=0x00000000
+      spec resource 0x7f0a0005 com.trigpointinguk.android:id/textView3: flags=0x00000000
+      spec resource 0x7f0a0006 com.trigpointinguk.android:id/downloadStatus: flags=0x00000000
+      spec resource 0x7f0a0007 com.trigpointinguk.android:id/btnDownload: flags=0x00000000
+      spec resource 0x7f0a0008 com.trigpointinguk.android:id/filterRadio: flags=0x00000000
+      spec resource 0x7f0a0009 com.trigpointinguk.android:id/filterAll: flags=0x00000000
+      spec resource 0x7f0a000a com.trigpointinguk.android:id/filterMarked: flags=0x00000000
+      spec resource 0x7f0a000b com.trigpointinguk.android:id/filterNotLogged: flags=0x00000000
+      spec resource 0x7f0a000c com.trigpointinguk.android:id/filterLogged: flags=0x00000000
+      spec resource 0x7f0a000d com.trigpointinguk.android:id/filterUnsynced: flags=0x00000000
+      spec resource 0x7f0a000e com.trigpointinguk.android:id/filterType: flags=0x00000000
+      spec resource 0x7f0a000f com.trigpointinguk.android:id/helppage: flags=0x00000000
+      spec resource 0x7f0a0010 com.trigpointinguk.android:id/svlp1: flags=0x00000000
+      spec resource 0x7f0a0011 com.trigpointinguk.android:id/logphoto: flags=0x00000000
+      spec resource 0x7f0a0012 com.trigpointinguk.android:id/photoThumb: flags=0x00000000
+      spec resource 0x7f0a0013 com.trigpointinguk.android:id/textViewlp1: flags=0x00000000
+      spec resource 0x7f0a0014 com.trigpointinguk.android:id/photoName: flags=0x00000000
+      spec resource 0x7f0a0015 com.trigpointinguk.android:id/textViewlp2: flags=0x00000000
+      spec resource 0x7f0a0016 com.trigpointinguk.android:id/photoDescr: flags=0x00000000
+      spec resource 0x7f0a0017 com.trigpointinguk.android:id/textViewlp3: flags=0x00000000
+      spec resource 0x7f0a0018 com.trigpointinguk.android:id/photoSubject: flags=0x00000000
+      spec resource 0x7f0a0019 com.trigpointinguk.android:id/photoIsPublic: flags=0x00000000
+      spec resource 0x7f0a001a com.trigpointinguk.android:id/ll7: flags=0x00000000
+      spec resource 0x7f0a001b com.trigpointinguk.android:id/photoSave: flags=0x00000000
+      spec resource 0x7f0a001c com.trigpointinguk.android:id/photoRemove: flags=0x00000000
+      spec resource 0x7f0a001d com.trigpointinguk.android:id/logswitcher: flags=0x00000000
+      spec resource 0x7f0a001e com.trigpointinguk.android:id/sv1: flags=0x00000000
+      spec resource 0x7f0a001f com.trigpointinguk.android:id/trigloglayout: flags=0x00000000
+      spec resource 0x7f0a0020 com.trigpointinguk.android:id/logDate: flags=0x00000000
+      spec resource 0x7f0a0021 com.trigpointinguk.android:id/ll6a: flags=0x00000000
+      spec resource 0x7f0a0022 com.trigpointinguk.android:id/logTime: flags=0x00000000
+      spec resource 0x7f0a0023 com.trigpointinguk.android:id/sendTime: flags=0x00000000
+      spec resource 0x7f0a0024 com.trigpointinguk.android:id/textView6: flags=0x00000000
+      spec resource 0x7f0a0025 com.trigpointinguk.android:id/ll6: flags=0x00000000
+      spec resource 0x7f0a0026 com.trigpointinguk.android:id/logGridref: flags=0x00000000
+      spec resource 0x7f0a0027 com.trigpointinguk.android:id/logGetLocation: flags=0x00000000
+      spec resource 0x7f0a0028 com.trigpointinguk.android:id/locationError: flags=0x00000000
+      spec resource 0x7f0a0029 com.trigpointinguk.android:id/textView7: flags=0x00000000
+      spec resource 0x7f0a002a com.trigpointinguk.android:id/logFB: flags=0x00000000
+      spec resource 0x7f0a002b com.trigpointinguk.android:id/textView5: flags=0x00000000
+      spec resource 0x7f0a002c com.trigpointinguk.android:id/logCondition: flags=0x00000000
+      spec resource 0x7f0a002d com.trigpointinguk.android:id/logScore: flags=0x00000000
+      spec resource 0x7f0a002e com.trigpointinguk.android:id/textView4: flags=0x00000000
+      spec resource 0x7f0a002f com.trigpointinguk.android:id/logComment: flags=0x00000000
+      spec resource 0x7f0a0030 com.trigpointinguk.android:id/textView8: flags=0x00000000
+      spec resource 0x7f0a0031 com.trigpointinguk.android:id/logGallery: flags=0x00000000
+      spec resource 0x7f0a0032 com.trigpointinguk.android:id/logAddPhoto: flags=0x00000000
+      spec resource 0x7f0a0033 com.trigpointinguk.android:id/logAdminFlag: flags=0x00000000
+      spec resource 0x7f0a0034 com.trigpointinguk.android:id/logUserFlag: flags=0x00000000
+      spec resource 0x7f0a0035 com.trigpointinguk.android:id/logUploadNow: flags=0x00000000
+      spec resource 0x7f0a0036 com.trigpointinguk.android:id/logSyncLater: flags=0x00000000
+      spec resource 0x7f0a0037 com.trigpointinguk.android:id/logDelete: flags=0x00000000
+      spec resource 0x7f0a0038 com.trigpointinguk.android:id/ll8: flags=0x00000000
+      spec resource 0x7f0a0039 com.trigpointinguk.android:id/addLog: flags=0x00000000
+      spec resource 0x7f0a003a com.trigpointinguk.android:id/ll1: flags=0x00000000
+      spec resource 0x7f0a003b com.trigpointinguk.android:id/ll2: flags=0x00000000
+      spec resource 0x7f0a003c com.trigpointinguk.android:id/imageView1: flags=0x00000000
+      spec resource 0x7f0a003d com.trigpointinguk.android:id/ll3: flags=0x00000000
+      spec resource 0x7f0a003e com.trigpointinguk.android:id/txtUserName: flags=0x00000000
+      spec resource 0x7f0a003f com.trigpointinguk.android:id/countLayout: flags=0x00000000
+      spec resource 0x7f0a0040 com.trigpointinguk.android:id/countPillarImage: flags=0x00000000
+      spec resource 0x7f0a0041 com.trigpointinguk.android:id/countPillarText: flags=0x00000000
+      spec resource 0x7f0a0042 com.trigpointinguk.android:id/countFbmImage: flags=0x00000000
+      spec resource 0x7f0a0043 com.trigpointinguk.android:id/countFbmText: flags=0x00000000
+      spec resource 0x7f0a0044 com.trigpointinguk.android:id/countPassiveImage: flags=0x00000000
+      spec resource 0x7f0a0045 com.trigpointinguk.android:id/countPassiveText: flags=0x00000000
+      spec resource 0x7f0a0046 com.trigpointinguk.android:id/countIntersectedImage: flags=0x00000000
+      spec resource 0x7f0a0047 com.trigpointinguk.android:id/countIntersectedText: flags=0x00000000
+      spec resource 0x7f0a0048 com.trigpointinguk.android:id/syncLayout: flags=0x00000000
+      spec resource 0x7f0a0049 com.trigpointinguk.android:id/countUnsyncedImage: flags=0x00000000
+      spec resource 0x7f0a004a com.trigpointinguk.android:id/countUnsyncedText: flags=0x00000000
+      spec resource 0x7f0a004b com.trigpointinguk.android:id/countPhotosImage: flags=0x00000000
+      spec resource 0x7f0a004c com.trigpointinguk.android:id/countPhotosText: flags=0x00000000
+      spec resource 0x7f0a004d com.trigpointinguk.android:id/linearLayout1: flags=0x00000000
+      spec resource 0x7f0a004e com.trigpointinguk.android:id/btnNearest: flags=0x00000000
+      spec resource 0x7f0a004f com.trigpointinguk.android:id/btnMap: flags=0x00000000
+      spec resource 0x7f0a0050 com.trigpointinguk.android:id/btnSearch: flags=0x00000000
+      spec resource 0x7f0a0051 com.trigpointinguk.android:id/linearLayout2: flags=0x00000000
+      spec resource 0x7f0a0052 com.trigpointinguk.android:id/btnSync: flags=0x00000000
+      spec resource 0x7f0a0053 com.trigpointinguk.android:id/btnCrash: flags=0x00000000
+      spec resource 0x7f0a0054 com.trigpointinguk.android:id/downloadMapsProgress: flags=0x00000000
+      spec resource 0x7f0a0055 com.trigpointinguk.android:id/downloadMapsStatus: flags=0x00000000
+      spec resource 0x7f0a0056 com.trigpointinguk.android:id/downloadMapsTileSource: flags=0x00000000
+      spec resource 0x7f0a0057 com.trigpointinguk.android:id/btnDownloadMaps: flags=0x00000000
+      spec resource 0x7f0a0058 com.trigpointinguk.android:id/mapview: flags=0x00000000
+      spec resource 0x7f0a0059 com.trigpointinguk.android:id/no: flags=0x00000000
+      spec resource 0x7f0a005a com.trigpointinguk.android:id/yes: flags=0x00000000
+      spec resource 0x7f0a005b com.trigpointinguk.android:id/photoIcon: flags=0x00000000
+      spec resource 0x7f0a005c com.trigpointinguk.android:id/ll4: flags=0x00000000
+      spec resource 0x7f0a005d com.trigpointinguk.android:id/photoDateUser: flags=0x00000000
+      spec resource 0x7f0a005e com.trigpointinguk.android:id/scroll1: flags=0x00000000
+      spec resource 0x7f0a005f com.trigpointinguk.android:id/triginfo_name: flags=0x00000000
+      spec resource 0x7f0a0060 com.trigpointinguk.android:id/triginfo_waypoint: flags=0x00000000
+      spec resource 0x7f0a0061 com.trigpointinguk.android:id/triginfo_gridref: flags=0x00000000
+      spec resource 0x7f0a0062 com.trigpointinguk.android:id/triginfo_wgs84: flags=0x00000000
+      spec resource 0x7f0a0063 com.trigpointinguk.android:id/triginfo_type: flags=0x00000000
+      spec resource 0x7f0a0064 com.trigpointinguk.android:id/condll: flags=0x00000000
+      spec resource 0x7f0a0065 com.trigpointinguk.android:id/triginfo_condition_icon: flags=0x00000000
+      spec resource 0x7f0a0066 com.trigpointinguk.android:id/triginfo_condition: flags=0x00000000
+      spec resource 0x7f0a0067 com.trigpointinguk.android:id/triginfo_current: flags=0x00000000
+      spec resource 0x7f0a0068 com.trigpointinguk.android:id/triginfo_historic: flags=0x00000000
+      spec resource 0x7f0a0069 com.trigpointinguk.android:id/triginfo_fb: flags=0x00000000
+      spec resource 0x7f0a006a com.trigpointinguk.android:id/mark: flags=0x00000000
+      spec resource 0x7f0a006b com.trigpointinguk.android:id/ll9: flags=0x00000000
+      spec resource 0x7f0a006c com.trigpointinguk.android:id/trigListHeader: flags=0x00000000
+      spec resource 0x7f0a006d com.trigpointinguk.android:id/filterPillar: flags=0x00000000
+      spec resource 0x7f0a006e com.trigpointinguk.android:id/filterFbm: flags=0x00000000
+      spec resource 0x7f0a006f com.trigpointinguk.android:id/filterPassive: flags=0x00000000
+      spec resource 0x7f0a0070 com.trigpointinguk.android:id/filterIntersected: flags=0x00000000
+      spec resource 0x7f0a0071 com.trigpointinguk.android:id/ll10: flags=0x00000000
+      spec resource 0x7f0a0072 com.trigpointinguk.android:id/trigListLocation: flags=0x00000000
+      spec resource 0x7f0a0073 com.trigpointinguk.android:id/north: flags=0x00000000
+      spec resource 0x7f0a0074 com.trigpointinguk.android:id/compassArrow: flags=0x00000000
+      spec resource 0x7f0a0075 com.trigpointinguk.android:id/ll5: flags=0x00000000
+      spec resource 0x7f0a0076 com.trigpointinguk.android:id/trigLogCondition: flags=0x00000000
+      spec resource 0x7f0a0077 com.trigpointinguk.android:id/logDateUser: flags=0x00000000
+      spec resource 0x7f0a0078 com.trigpointinguk.android:id/logText: flags=0x00000000
+      spec resource 0x7f0a0079 com.trigpointinguk.android:id/trigosgallery: flags=0x00000000
+      spec resource 0x7f0a007a com.trigpointinguk.android:id/trigCondition: flags=0x00000000
+      spec resource 0x7f0a007b com.trigpointinguk.android:id/trigType: flags=0x00000000
+      spec resource 0x7f0a007c com.trigpointinguk.android:id/trigName: flags=0x00000000
+      spec resource 0x7f0a007d com.trigpointinguk.android:id/trigDistance: flags=0x00000000
+      spec resource 0x7f0a007e com.trigpointinguk.android:id/trigArrow: flags=0x00000000
+      spec resource 0x7f0a007f com.trigpointinguk.android:id/trigLogged: flags=0x00000000
+      spec resource 0x7f0a0080 com.trigpointinguk.android:id/downloadtrigs: flags=0x00000000
+      spec resource 0x7f0a0081 com.trigpointinguk.android:id/downloadmaps: flags=0x00000000
+      spec resource 0x7f0a0082 com.trigpointinguk.android:id/prefs: flags=0x00000000
+      spec resource 0x7f0a0083 com.trigpointinguk.android:id/about: flags=0x00000000
+      spec resource 0x7f0a0084 com.trigpointinguk.android:id/clearcache: flags=0x00000000
+      spec resource 0x7f0a0085 com.trigpointinguk.android:id/MapStyle: flags=0x00000000
+      spec resource 0x7f0a0086 com.trigpointinguk.android:id/TileSource: flags=0x00000000
+      spec resource 0x7f0a0087 com.trigpointinguk.android:id/cloudmade: flags=0x00000000
+      spec resource 0x7f0a0088 com.trigpointinguk.android:id/mapnik: flags=0x00000000
+      spec resource 0x7f0a0089 com.trigpointinguk.android:id/mapquest: flags=0x00000000
+      spec resource 0x7f0a008a com.trigpointinguk.android:id/cyclemap: flags=0x00000000
+      spec resource 0x7f0a008b com.trigpointinguk.android:id/bingaerial: flags=0x00000000
+      spec resource 0x7f0a008c com.trigpointinguk.android:id/bingaeriallabels: flags=0x00000000
+      spec resource 0x7f0a008d com.trigpointinguk.android:id/bingroad: flags=0x00000000
+      spec resource 0x7f0a008e com.trigpointinguk.android:id/bingosgb: flags=0x00000000
+      spec resource 0x7f0a008f com.trigpointinguk.android:id/IconColouring: flags=0x00000000
+      spec resource 0x7f0a0090 com.trigpointinguk.android:id/group2: flags=0x00000000
+      spec resource 0x7f0a0091 com.trigpointinguk.android:id/none: flags=0x00000000
+      spec resource 0x7f0a0092 com.trigpointinguk.android:id/byCondition: flags=0x00000000
+      spec resource 0x7f0a0093 com.trigpointinguk.android:id/byLogged: flags=0x00000000
+      spec resource 0x7f0a0094 com.trigpointinguk.android:id/location: flags=0x00000000
+      spec resource 0x7f0a0095 com.trigpointinguk.android:id/compass: flags=0x00000000
+      spec resource 0x7f0a0096 com.trigpointinguk.android:id/filter: flags=0x00000000
+      spec resource 0x7f0a0097 com.trigpointinguk.android:id/heading: flags=0x00000000
+      spec resource 0x7f0a0098 com.trigpointinguk.android:id/browser: flags=0x00000000
+      spec resource 0x7f0a0099 com.trigpointinguk.android:id/radar: flags=0x00000000
+      spec resource 0x7f0a009a com.trigpointinguk.android:id/directions: flags=0x00000000
+      spec resource 0x7f0a009b com.trigpointinguk.android:id/map: flags=0x00000000
+      spec resource 0x7f0a009c com.trigpointinguk.android:id/refresh: flags=0x00000000
+      config (default):
+        resource 0x7f0a0000 com.trigpointinguk.android:id/zoomview: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0001 com.trigpointinguk.android:id/textView1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0002 com.trigpointinguk.android:id/textView2: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0003 com.trigpointinguk.android:id/downloadProgress: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0004 com.trigpointinguk.android:id/StatusLayout: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0005 com.trigpointinguk.android:id/textView3: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0006 com.trigpointinguk.android:id/downloadStatus: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0007 com.trigpointinguk.android:id/btnDownload: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0008 com.trigpointinguk.android:id/filterRadio: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0009 com.trigpointinguk.android:id/filterAll: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a000a com.trigpointinguk.android:id/filterMarked: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a000b com.trigpointinguk.android:id/filterNotLogged: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a000c com.trigpointinguk.android:id/filterLogged: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a000d com.trigpointinguk.android:id/filterUnsynced: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a000e com.trigpointinguk.android:id/filterType: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a000f com.trigpointinguk.android:id/helppage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0010 com.trigpointinguk.android:id/svlp1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0011 com.trigpointinguk.android:id/logphoto: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0012 com.trigpointinguk.android:id/photoThumb: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0013 com.trigpointinguk.android:id/textViewlp1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0014 com.trigpointinguk.android:id/photoName: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0015 com.trigpointinguk.android:id/textViewlp2: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0016 com.trigpointinguk.android:id/photoDescr: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0017 com.trigpointinguk.android:id/textViewlp3: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0018 com.trigpointinguk.android:id/photoSubject: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0019 com.trigpointinguk.android:id/photoIsPublic: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a001a com.trigpointinguk.android:id/ll7: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a001b com.trigpointinguk.android:id/photoSave: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a001c com.trigpointinguk.android:id/photoRemove: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a001d com.trigpointinguk.android:id/logswitcher: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a001e com.trigpointinguk.android:id/sv1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a001f com.trigpointinguk.android:id/trigloglayout: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0020 com.trigpointinguk.android:id/logDate: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0021 com.trigpointinguk.android:id/ll6a: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0022 com.trigpointinguk.android:id/logTime: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0023 com.trigpointinguk.android:id/sendTime: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0024 com.trigpointinguk.android:id/textView6: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0025 com.trigpointinguk.android:id/ll6: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0026 com.trigpointinguk.android:id/logGridref: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0027 com.trigpointinguk.android:id/logGetLocation: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0028 com.trigpointinguk.android:id/locationError: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0029 com.trigpointinguk.android:id/textView7: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a002a com.trigpointinguk.android:id/logFB: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a002b com.trigpointinguk.android:id/textView5: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a002c com.trigpointinguk.android:id/logCondition: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a002d com.trigpointinguk.android:id/logScore: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a002e com.trigpointinguk.android:id/textView4: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a002f com.trigpointinguk.android:id/logComment: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0030 com.trigpointinguk.android:id/textView8: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0031 com.trigpointinguk.android:id/logGallery: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0032 com.trigpointinguk.android:id/logAddPhoto: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0033 com.trigpointinguk.android:id/logAdminFlag: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0034 com.trigpointinguk.android:id/logUserFlag: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0035 com.trigpointinguk.android:id/logUploadNow: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0036 com.trigpointinguk.android:id/logSyncLater: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0037 com.trigpointinguk.android:id/logDelete: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0038 com.trigpointinguk.android:id/ll8: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0039 com.trigpointinguk.android:id/addLog: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a003a com.trigpointinguk.android:id/ll1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a003b com.trigpointinguk.android:id/ll2: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a003c com.trigpointinguk.android:id/imageView1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a003d com.trigpointinguk.android:id/ll3: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a003e com.trigpointinguk.android:id/txtUserName: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a003f com.trigpointinguk.android:id/countLayout: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0040 com.trigpointinguk.android:id/countPillarImage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0041 com.trigpointinguk.android:id/countPillarText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0042 com.trigpointinguk.android:id/countFbmImage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0043 com.trigpointinguk.android:id/countFbmText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0044 com.trigpointinguk.android:id/countPassiveImage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0045 com.trigpointinguk.android:id/countPassiveText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0046 com.trigpointinguk.android:id/countIntersectedImage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0047 com.trigpointinguk.android:id/countIntersectedText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0048 com.trigpointinguk.android:id/syncLayout: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0049 com.trigpointinguk.android:id/countUnsyncedImage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a004a com.trigpointinguk.android:id/countUnsyncedText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a004b com.trigpointinguk.android:id/countPhotosImage: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a004c com.trigpointinguk.android:id/countPhotosText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a004d com.trigpointinguk.android:id/linearLayout1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a004e com.trigpointinguk.android:id/btnNearest: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a004f com.trigpointinguk.android:id/btnMap: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0050 com.trigpointinguk.android:id/btnSearch: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0051 com.trigpointinguk.android:id/linearLayout2: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0052 com.trigpointinguk.android:id/btnSync: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0053 com.trigpointinguk.android:id/btnCrash: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0054 com.trigpointinguk.android:id/downloadMapsProgress: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0055 com.trigpointinguk.android:id/downloadMapsStatus: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0056 com.trigpointinguk.android:id/downloadMapsTileSource: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0057 com.trigpointinguk.android:id/btnDownloadMaps: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0058 com.trigpointinguk.android:id/mapview: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0059 com.trigpointinguk.android:id/no: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a005a com.trigpointinguk.android:id/yes: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a005b com.trigpointinguk.android:id/photoIcon: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a005c com.trigpointinguk.android:id/ll4: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a005d com.trigpointinguk.android:id/photoDateUser: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a005e com.trigpointinguk.android:id/scroll1: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a005f com.trigpointinguk.android:id/triginfo_name: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0060 com.trigpointinguk.android:id/triginfo_waypoint: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0061 com.trigpointinguk.android:id/triginfo_gridref: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0062 com.trigpointinguk.android:id/triginfo_wgs84: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0063 com.trigpointinguk.android:id/triginfo_type: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0064 com.trigpointinguk.android:id/condll: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0065 com.trigpointinguk.android:id/triginfo_condition_icon: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0066 com.trigpointinguk.android:id/triginfo_condition: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0067 com.trigpointinguk.android:id/triginfo_current: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0068 com.trigpointinguk.android:id/triginfo_historic: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0069 com.trigpointinguk.android:id/triginfo_fb: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a006a com.trigpointinguk.android:id/mark: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a006b com.trigpointinguk.android:id/ll9: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a006c com.trigpointinguk.android:id/trigListHeader: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a006d com.trigpointinguk.android:id/filterPillar: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a006e com.trigpointinguk.android:id/filterFbm: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a006f com.trigpointinguk.android:id/filterPassive: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0070 com.trigpointinguk.android:id/filterIntersected: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0071 com.trigpointinguk.android:id/ll10: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0072 com.trigpointinguk.android:id/trigListLocation: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0073 com.trigpointinguk.android:id/north: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0074 com.trigpointinguk.android:id/compassArrow: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0075 com.trigpointinguk.android:id/ll5: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0076 com.trigpointinguk.android:id/trigLogCondition: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0077 com.trigpointinguk.android:id/logDateUser: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0078 com.trigpointinguk.android:id/logText: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0079 com.trigpointinguk.android:id/trigosgallery: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a007a com.trigpointinguk.android:id/trigCondition: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a007b com.trigpointinguk.android:id/trigType: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a007c com.trigpointinguk.android:id/trigName: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a007d com.trigpointinguk.android:id/trigDistance: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a007e com.trigpointinguk.android:id/trigArrow: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a007f com.trigpointinguk.android:id/trigLogged: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0080 com.trigpointinguk.android:id/downloadtrigs: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0081 com.trigpointinguk.android:id/downloadmaps: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0082 com.trigpointinguk.android:id/prefs: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0083 com.trigpointinguk.android:id/about: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0084 com.trigpointinguk.android:id/clearcache: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0085 com.trigpointinguk.android:id/MapStyle: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0086 com.trigpointinguk.android:id/TileSource: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0087 com.trigpointinguk.android:id/cloudmade: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0088 com.trigpointinguk.android:id/mapnik: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0089 com.trigpointinguk.android:id/mapquest: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a008a com.trigpointinguk.android:id/cyclemap: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a008b com.trigpointinguk.android:id/bingaerial: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a008c com.trigpointinguk.android:id/bingaeriallabels: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a008d com.trigpointinguk.android:id/bingroad: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a008e com.trigpointinguk.android:id/bingosgb: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a008f com.trigpointinguk.android:id/IconColouring: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0090 com.trigpointinguk.android:id/group2: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0091 com.trigpointinguk.android:id/none: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0092 com.trigpointinguk.android:id/byCondition: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0093 com.trigpointinguk.android:id/byLogged: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0094 com.trigpointinguk.android:id/location: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0095 com.trigpointinguk.android:id/compass: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0096 com.trigpointinguk.android:id/filter: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0097 com.trigpointinguk.android:id/heading: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0098 com.trigpointinguk.android:id/browser: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a0099 com.trigpointinguk.android:id/radar: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a009a com.trigpointinguk.android:id/directions: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a009b com.trigpointinguk.android:id/map: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
+        resource 0x7f0a009c com.trigpointinguk.android:id/refresh: t=0x12 d=0x00000000 (s=0x0008 r=0x00)
+          (boolean) false
