@@ -1,6 +1,6 @@
 package com.trigpointinguk.android;
 
-import org.acra.ErrorReporter;
+// import org.acra.ErrorReporter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
         user.setText(mPrefs.getString("username", getResources().getText(R.string.noUser).toString()));
         
         // Add user info to ACRA
-        ErrorReporter.getInstance().putCustomData("username", mPrefs.getString("username", ""));
+        // ErrorReporter.getInstance().putCustomData("username", mPrefs.getString("username", ""));
 
         // check for empty trig database
         try {
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
                     user.setText(mPrefs.getString("username", ""));
                     
                     // Add user details to ACRA
-                    ErrorReporter.getInstance().putCustomData("username", mPrefs.getString("username", ""));
+                    // ErrorReporter.getInstance().putCustomData("username", mPrefs.getString("username", ""));
                     
                     populateCounts();
                 }

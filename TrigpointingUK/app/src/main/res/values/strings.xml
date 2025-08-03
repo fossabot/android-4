@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TrigpointingUK</string>
+    <string name="downloadIdleStatus">Ready to download</string>
+    <string name="downloadInsertStatus">Downloading...</string>
+    <string name="btnDownload">Download</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="btnDownloadFinished">Download Complete</string>
+    <string name="noUser">No user set</string>
+    <string name="dlgNoTrigs">No trig points found</string>
+</resources>

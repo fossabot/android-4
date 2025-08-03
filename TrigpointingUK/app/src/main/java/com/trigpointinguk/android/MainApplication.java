@@ -1,9 +1,9 @@
 package com.trigpointinguk.android;
 
-import org.acra.ACRA;
-import org.acra.config.CoreConfigurationBuilder;
-import org.acra.config.MailSenderConfigurationBuilder;
-import org.acra.data.StringFormat;
+// import org.acra.ACRA;
+// import org.acra.config.CoreConfigurationBuilder;
+// import org.acra.config.MailSenderConfigurationBuilder;
+// import org.acra.data.StringFormat;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -25,13 +25,13 @@ public class MainApplication extends Application {
 		editor.apply();  
         
         // Configure ACRA for modern Android
-        ACRA.init(this, new CoreConfigurationBuilder(this)
-            .setBuildConfigClass(BuildConfig.class)
-            .setReportFormat(StringFormat.JSON)
-            .setLogcatArguments("-t", "200", "-v", "time")
-            .setEnabled(true)
-        );
+        // ACRA.init(this, new CoreConfigurationBuilder(this)
+//             .setBuildConfigClass(BuildConfig.class)
+//             .setReportFormat(StringFormat.JSON)
+//             .setLogcatArguments("-t", "200", "-v", "time")
+//             .setEnabled(true)
+//         );
         
-        Log.i(TAG, "ACRA enabled");
+        // Log.i(TAG, "ACRA enabled");
     }
 }

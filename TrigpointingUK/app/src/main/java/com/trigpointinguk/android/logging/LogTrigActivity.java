@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import org.acra.ErrorReporter;
+// import org.acra.ErrorReporter;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

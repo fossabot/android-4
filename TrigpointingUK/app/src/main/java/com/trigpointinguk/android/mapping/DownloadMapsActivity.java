@@ -11,7 +11,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
-import org.acra.ErrorReporter;
+// import org.acra.ErrorReporter;
 
 import android.app.Activity;
 import android.os.AsyncTask;
