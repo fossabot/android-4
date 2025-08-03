@@ -5,245 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="989167f2-b309-46ae-90a5-54eb96d7f586" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/about.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/sonytnc.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/tuk_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/acra-4.2.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/android-support-v4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/httpmime-4.2.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/maps.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/slf4j-android-1.6.1-RC1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lint.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/proguard.cfg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_fbm_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_intersected_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_passive_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable-hdpi/mapicon_pillar_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_00_n.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_01_nne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_02_ne.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_03_ene.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_04_e.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_05_ese.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_06_se.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_07_sse.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_08_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_09_sse.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_10_sw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_11_wsw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_12_w.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_13_wnw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_14_nw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_15_nnw.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/arrow_x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/banner_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_damaged.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_definitelymissing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_good.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_nolog.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_possiblymissing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_slightlydamaged.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_toppled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_unknown.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/c_unreachablebutvisible.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/center.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_damaged.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_definitelymissing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_good.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_nolog.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_possiblymissing.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_slightlydamaged.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_toppled.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_unknown.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/cs_unreachablebutvisible.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/direction_arrow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/gpsstatus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_add.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_camera.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_camera_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_compass.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_delete.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_directions.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_gallery.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_goto.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_help.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_info_details.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_mapmode.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_mapstyle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_more.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_mylocation.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_myplaces.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_offline.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_preferences.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_refresh.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_save.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_search.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_star.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_trigonmap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ic_menu_view.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/imageloading.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_fbm_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_intersected_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_passive_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_green.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_green_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_grey.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_grey_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_red_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_yellow.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/mapicon_pillar_yellow_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/marker_default.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/marker_default_focused_base.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/navto_small.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/next.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/person.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/previous.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ratingpillar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/t_fbm.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/t_intersected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/t_passive.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/t_pillar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/trig_pillar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/trig_pillar_fill.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ts_fbm.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ts_intersected.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ts_passive.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/ts_pillar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/tuk_logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/zoom_in.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/drawable/zoom_out.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/displaybitmap.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/download.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/filter.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/helppage.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/logphoto.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/logtrig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/mapdownload.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/mapview.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/radardialog.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/trigalbum.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/trigalbumrow.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/trigdetails.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/triginfo.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/triglist.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/triglogrow.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/triglogs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/trigosmap.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/layout/trigrow.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/menu/mainmenu.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/menu/mapmenu.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/menu/nearestmenu.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/menu/trigdetailsinfomenu.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/menu/trigdetailsmenu.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/values/attrs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/values/strings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/values/styles.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/xml/preferences.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/util/Dynamics.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/util/SpringDynamics.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/zoom/AspectQuotient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/zoom/DynamicZoomControl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/zoom/ImageZoomView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/zoom/LongPressZoomListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/sonyericsson/zoom/ZoomState.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/DbHelper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/DownloadTrigsActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/HelpPageActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/MainApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/PreferencesActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/BitmapLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/ClearCacheTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/CountingMultipartEntity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/DisplayBitmapActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/FileCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/LazyImageLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/MemoryCache.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/StringLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/common/Utils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/filter/Filter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/filter/FilterActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/logging/LogPhotoActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/logging/LogTrigActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/logging/LogTrigGalleryAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/logging/SyncListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/logging/SyncTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/mapping/DownloadMapsActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/mapping/MapActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/mapping/MapIcon.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/mapping/ResourceProxyImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/nearest/NearestActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/nearest/NearestCursorAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsAlbumAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsAlbumTab.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsInfoTab.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsLoglistAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsLoglistTab.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsOSMapAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/trigdetails/TrigDetailsOSMapTab.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/types/Condition.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/types/LatLon.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/types/PhotoSubject.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/types/Trig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/types/TrigLog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/trigpointinguk/android/types/TrigPhoto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,6 +16,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/home/ianh/.android/avd/Medium_Phone.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -271,15 +35,16 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "android.gradle.sync.needed": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "first-clean-build",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/ianh/dev/android/TrigpointingUK",
     "project.structure.last.edited": "Project",
