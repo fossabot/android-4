@@ -124,10 +124,11 @@ public class TrigDetailsAlbumTab extends ListActivity {
 								csv[0],		//icon
 								csv[5],		//user
 								csv[4]);	//date
+						Log.d(TAG, "Photo URL: " + csv[1] + ", Icon URL: " + csv[0]);
 						mTrigPhotos.add(tp);
 						count++;
 					} catch (Exception e) {
-						System.out.println(e);
+						Log.e(TAG, "Error parsing photo line: " + line, e);
 					}
 				}
 			}
