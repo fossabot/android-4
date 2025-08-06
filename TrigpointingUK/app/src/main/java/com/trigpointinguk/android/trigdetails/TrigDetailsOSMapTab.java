@@ -80,49 +80,56 @@ public class TrigDetailsOSMapTab extends Activity {
 		Double lat = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
 		Double lon = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
 
-		// OS 1:25000 maps
+		Log.d(TAG, "Generating map URLs for lat: " + lat + ", lon: " + lon);
+
+		// OS 1:25000 maps - Updated to HTTPS
 		url = String.format("%s/%s/%s,%s/%d?key=%s",
-				"http://dev.virtualearth.net/REST/v1/Imagery/Map",
+				"https://dev.virtualearth.net/REST/v1/Imagery/Map",
 				"OrdnanceSurvey",
 				lat, lon,
 				13,
 				"AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5");
+		Log.d(TAG, "OS Map URL 1: " + url);
 		URLs.add(url);
 
 		url = String.format("%s/%s/%s,%s/%d?key=%s",
-				"http://dev.virtualearth.net/REST/v1/Imagery/Map",
+				"https://dev.virtualearth.net/REST/v1/Imagery/Map",
 				"OrdnanceSurvey",
 				lat, lon,
 				15,
 				"AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5");
+		Log.d(TAG, "OS Map URL 2: " + url);
 		URLs.add(url);
 
-		// Aerial photos
+		// Aerial photos - Updated to HTTPS
 		url = String.format("%s/%s/%s,%s/%d?key=%s",
-				"http://dev.virtualearth.net/REST/v1/Imagery/Map",
+				"https://dev.virtualearth.net/REST/v1/Imagery/Map",
 				"Aerial",
 				lat, lon,
 				14,
 				"AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5");
+		Log.d(TAG, "Aerial URL 1: " + url);
 		URLs.add(url);
 
 		url = String.format("%s/%s/%s,%s/%d?key=%s",
-				"http://dev.virtualearth.net/REST/v1/Imagery/Map",
+				"https://dev.virtualearth.net/REST/v1/Imagery/Map",
 				"Aerial",
 				lat, lon,
 				17,
 				"AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5");
+		Log.d(TAG, "Aerial URL 2: " + url);
 		URLs.add(url);
 
 		url = String.format("%s/%s/%s,%s/%d?key=%s",
-				"http://dev.virtualearth.net/REST/v1/Imagery/Map",
+				"https://dev.virtualearth.net/REST/v1/Imagery/Map",
 				"Aerial",
 				lat, lon,
 				19,
 				"AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5");
+		Log.d(TAG, "Aerial URL 3: " + url);
 		URLs.add(url);
 
-		
+		Log.d(TAG, "Generated " + URLs.size() + " map URLs");
 		return URLs.toArray(new String[URLs.size()]);
 	}
 	

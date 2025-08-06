@@ -99,12 +99,20 @@ public class LazyImageLoader {
             return bitmap;
         } catch (Exception ex){
            Log.e(TAG, "Error loading image from URL: " + url, ex);
+           // Clean up the failed download file
+           if (f.exists()) {
+               f.delete();
+           }
            return null;
         }
     }
 
     //decodes image and scales it to reduce memory consumption
     private Bitmap decodeFile(File f){
+        if (!f.exists()) {
+            return null; // File doesn't exist, no need to log error
+        }
+        
         try {
             //decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -128,7 +136,7 @@ public class LazyImageLoader {
             o2.inSampleSize=scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "File not found: " + f.getAbsolutePath(), e);
+            Log.d(TAG, "File not found: " + f.getAbsolutePath()); // Changed to debug level
         } catch (Exception e) {
             Log.e(TAG, "Error decoding file: " + f.getAbsolutePath(), e);
         }
