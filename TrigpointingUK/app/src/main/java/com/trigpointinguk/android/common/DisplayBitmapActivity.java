@@ -3,11 +3,16 @@ package com.trigpointinguk.android.common;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.sonyericsson.zoom.DynamicZoomControl;
 import com.sonyericsson.zoom.ImageZoomView;
@@ -51,7 +56,7 @@ public class DisplayBitmapActivity extends Activity {
         resetZoomState();
 
 		mBitmapLoader = new BitmapLoader(this);
-		new DisplayBitmapTask().execute();
+		loadBitmap();
     
     }
 
@@ -94,20 +99,19 @@ public class DisplayBitmapActivity extends Activity {
     
     
     
-	private class DisplayBitmapTask extends AsyncTask<Void, Integer, Integer> {
-		protected Integer doInBackground(Void... arg0) {
-	        // download photo, or obtain from cache
-	        mBitmap = mBitmapLoader.getBitmap(mUrl, false);
-			return null;
-		}
-		protected void onPreExecute() {
-		}
-		protected void onProgressUpdate(Integer... progress) {
-		}
-		protected void onPostExecute(Integer arg0) {
-	        mZoomView.setImage(mBitmap);
-	        resetZoomState();
-		}
+	private void loadBitmap() {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		Handler mainHandler = new Handler(Looper.getMainLooper());
+		
+		CompletableFuture.supplyAsync(() -> {
+			// download photo, or obtain from cache
+			return mBitmapLoader.getBitmap(mUrl, false);
+		}, executor)
+		.thenAcceptAsync(bitmap -> {
+			mBitmap = bitmap;
+			mZoomView.setImage(mBitmap);
+			resetZoomState();
+		}, mainHandler::post);
 	}    
     
     
