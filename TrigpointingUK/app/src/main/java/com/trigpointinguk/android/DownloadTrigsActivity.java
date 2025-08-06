@@ -11,14 +11,19 @@ import java.util.zip.GZIPInputStream;
 
 import android.app.Activity;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
@@ -36,7 +41,7 @@ public class DownloadTrigsActivity extends Activity {
 	private static final String TAG = "DownloadTrigsActivity";
 	private enum DownloadStatus {OK, CANCELLED, ERROR};
 	private enum ProgressType 	{UPDATE, NEWMAX};
-	private AsyncTask<Void, ProgressType, DownloadStatus> mTask;
+	private CompletableFuture<DownloadStatus> mTask;
 
 	
 	@Override
@@ -62,7 +67,7 @@ public class DownloadTrigsActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				if (mRunning == false) {
-					mTask = new PopulateTrigsTask().execute();
+					mTask = downloadTrigs();
 				} else {
 					mTask.cancel(true);
 				}
@@ -72,9 +77,17 @@ public class DownloadTrigsActivity extends Activity {
 	}
 
 
-	private class PopulateTrigsTask extends AsyncTask<Void, ProgressType, DownloadStatus> {
-		@Override
-		protected DownloadStatus doInBackground(Void... arg0) {
+	private CompletableFuture<DownloadStatus> downloadTrigs() {
+		// Setup UI on main thread
+		mDownloadCount = 0;
+		mStatus.setText(R.string.downloadInsertStatus);
+		mDownloadBtn.setText(R.string.btnCancel);
+		mRunning = true;
+		
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		Handler mainHandler = new Handler(Looper.getMainLooper());
+		
+		return CompletableFuture.supplyAsync(() -> {
 			Log.i(TAG, "PopulateTrigsTask: Starting download");
 
 			DbHelper db = new DbHelper(DownloadTrigsActivity.this);
@@ -103,7 +116,10 @@ public class DownloadTrigsActivity extends Activity {
 				if ((strLine = br.readLine()) != null) {
 					mProgressMax = Integer.valueOf(strLine);
 					Log.i(TAG, "PopulateTrigsTask: Downloading " + mProgressMax + " trigs");
-					publishProgress(ProgressType.NEWMAX);
+					// Update progress on main thread
+					mainHandler.post(() -> {
+						mProgress.setMax(mProgressMax);
+					});
 				}
 				
 				Log.i(TAG, "PopulateTrigsTask: Deleting all existing data");
@@ -140,13 +156,14 @@ public class DownloadTrigsActivity extends Activity {
 						Trig.Historic historic		= Trig.Historic.fromCode(csv[9]);
 						db.createTrig(id, name, waypoint, lat, lon, type, condition, logged, current, historic, fb);
 						
-												if (i++%10==9){
+						if (i++%10==9){
 							mDownloadCount=i;
-							if (isCancelled()) {
-								return DownloadStatus.CANCELLED;
-							} else {
-								publishProgress(ProgressType.UPDATE);
-							}
+							// Update progress on main thread
+							final int progress = i;
+							mainHandler.post(() -> {
+								mProgress.setProgress(progress);
+								mStatus.setText("Inserted " + progress + " trigs");
+							});
 						}
 					} catch (NumberFormatException e) {
 						Log.w(TAG, "Skipping line with invalid number format: " + strLine + " - " + e.getMessage());
@@ -170,29 +187,9 @@ public class DownloadTrigsActivity extends Activity {
 				mDownloadCount = i;
 			}
 			return DownloadStatus.OK;
-		}
-		@Override
-		protected void onPreExecute() {
-			mDownloadCount = 0;
-			mStatus.setText(R.string.downloadInsertStatus);
-			mDownloadBtn.setText(R.string.btnCancel);
-			mRunning = true;
-		}
-		@Override
-		protected void onProgressUpdate(ProgressType... progress) {
-			switch (progress[0]) {
-			case UPDATE:
-				mProgress.setProgress(mDownloadCount);
-				mStatus.setText("Inserted " + mDownloadCount + " trigs");
-				break;
-			case NEWMAX:
-				mProgress.setMax(mProgressMax);
-				break;
-			}
-		}
-		@Override
-		protected void onPostExecute(DownloadStatus arg0) {
-			switch (arg0) {
+		}, executor)
+		.thenApplyAsync(result -> {
+			switch (result) {
 			case OK:
 				mStatus.setText("Finished downloading " + mDownloadCount +" trigs");
 				mDownloadBtn.setText(R.string.btnDownloadFinished);
@@ -216,15 +213,7 @@ public class DownloadTrigsActivity extends Activity {
 				break;
 			}
 			mRunning = false;
-		}
-		@Override
-		protected void onCancelled() {
-			mProgress.setProgress(0);
-			mStatus.setText("Download Cancelled");
-			mDownloadBtn.setText(R.string.btnDownload);
-			mRunning = false;
-			super.onCancelled();
-		}
-
+			return result;
+		}, mainHandler::post);
 	}
 }

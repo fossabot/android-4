@@ -14,9 +14,10 @@ import java.util.zip.ZipInputStream;
 // import org.acra.ErrorReporter;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +25,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.R;
 
@@ -42,7 +47,7 @@ public class DownloadMapsActivity extends Activity {
 	private static final int STATUS_NOTFOUND	= 3;
 	private static final int STATUS_NOSPACE		= 4;
 	private static final int STATUS_IOERROR		= 5;
-	private AsyncTask <String, Integer, Integer> mTask;
+	private CompletableFuture<Integer> mTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class DownloadMapsActivity extends Activity {
 					mProgressMax = getResources().getIntArray(R.array.downloadMapsArrayTiles)[tilePos];
 					Log.i(TAG, tileURL);
 					Log.i(TAG, mProgressMax + " Tiles");
-					mTask = new PopulateMapsTask().execute(tileURL);
+					mTask = downloadMaps(tileURL);
 				} else {
 					mTask.cancel(true);
 				}
@@ -84,7 +89,7 @@ public class DownloadMapsActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		Log.i(TAG, "Destroyed");
-		if (mTask != null) {
+		if (mTask != null && !mTask.isDone()) {
 			mTask.cancel(true);
 		}
 		super.onDestroy();
@@ -94,13 +99,25 @@ public class DownloadMapsActivity extends Activity {
 
 
 
-	private class PopulateMapsTask extends AsyncTask<String, Integer, Integer> {
-		protected Integer doInBackground(String... arg) {
+	private CompletableFuture<Integer> downloadMaps(String tileURL) {
+		// Setup UI on main thread
+		mStatus.setText(R.string.downloadMapsInsertStatus);
+		mDownloadBtn.setText(R.string.btnCancel);
+		mTileSource.setEnabled(false);
+		mProgress.setMax(mProgressMax);
+		mProgress.setProgress(0);
+		mDownloadCount = 0;
+		mRunning = true;
+		
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		Handler mainHandler = new Handler(Looper.getMainLooper());
+		
+		return CompletableFuture.supplyAsync(() -> {
 			String cacheDir = Environment.getExternalStorageDirectory().getPath() + "/osmdroid/tiles/";
 			Log.d(TAG, cacheDir);
 			int i=0; // not using mDownloadcount in loop for performance reasons
 
-			String[] files = arg[0].split(",");
+			String[] files = tileURL.split(",");
 			for (String file : files) {
 				try {
 					Log.i(TAG, "Getting : " + file);
@@ -128,13 +145,12 @@ public class DownloadMapsActivity extends Activity {
 							i++;
 						} 
 						if (i % 10 == 0) {
-							if (isCancelled()) {
-								zis.close();
-								mDownloadCount=i;
-								return STATUS_CANCELLED;
-							} else {
-								publishProgress(i);
-							}
+							// Update progress on main thread
+							final int progress = i;
+							mainHandler.post(() -> {
+								mProgress.setProgress(progress);
+								mStatus.setText("Downloaded " + progress + " tiles");
+							});
 						}
 					} 
 					zis.close(); 
@@ -165,33 +181,10 @@ public class DownloadMapsActivity extends Activity {
 				}
 			}
 			return STATUS_OK;
-		}
-		private void dirChecker(String dir) { 
-			File f = new File(dir); 
-			if(!f.isDirectory()) { 
-				f.mkdirs(); 
-			} 
-		}
-		
-		@Override
-		protected void onPreExecute() {
-			mStatus.setText(R.string.downloadMapsInsertStatus);
-			mDownloadBtn.setText(R.string.btnCancel);
-			mTileSource.setEnabled(false);
-			mProgress.setMax(mProgressMax);
-			mProgress.setProgress(0);
-			mDownloadCount = 0;
-			mRunning = true;
-		}
-		@Override
-		protected void onProgressUpdate(Integer... progress) {
-			mProgress.setProgress(progress[0]);
-			mStatus.setText("Downloaded " + progress[0] + " tiles");
-		}
-		@Override
-		protected void onPostExecute(Integer arg0) {
+		}, executor)
+		.thenApplyAsync(result -> {
 			mProgress.setProgress(mDownloadCount);
-			switch (arg0) {
+			switch (result) {
 			case STATUS_OK:
 				mStatus.setText("Finished downloading " + mDownloadCount +" tiles");
 				break;
@@ -216,17 +209,15 @@ public class DownloadMapsActivity extends Activity {
 			mDownloadBtn.setText(R.string.btnDownload);
 			mTileSource.setEnabled(true);
 			mRunning = false;
-		}
-		@Override
-		protected void onCancelled() {
-			mProgress.setProgress(mDownloadCount);
-			mStatus.setText("Download Cancelled");
-			mDownloadBtn.setText(R.string.btnDownload);
-			mTileSource.setEnabled(true);
-			mRunning = false;
-			super.onCancelled();
-		}
-
+			return result;
+		}, mainHandler::post);
+	}
+	
+	private void dirChecker(String dir) { 
+		File f = new File(dir); 
+		if(!f.isDirectory()) { 
+			f.mkdirs(); 
+		} 
 	}
 
 }
