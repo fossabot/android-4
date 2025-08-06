@@ -3468,6 +3468,7 @@ id clockwise
 id closest
 id cloudmade
 id collapseActionView
+id compass
 id compassArrow
 id compress
 id confirm_button
@@ -3628,6 +3629,7 @@ id linear
 id listMode
 id list_item
 id locale
+id location
 id locationError
 id logAddPhoto
 id logAdminFlag

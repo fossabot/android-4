@@ -146,6 +146,7 @@ id byCondition
 id byLogged
 id clearcache
 id cloudmade
+id compass
 id compassArrow
 id countFbmImage
 id countFbmText
@@ -183,6 +184,7 @@ id filterType
 id filterUnsynced
 id heading
 id helppage
+id location
 id locationError
 id logAddPhoto
 id logAdminFlag
@@ -355,5 +357,5 @@ string toastAddPassword
 string toastAddUsername
 string yes
 string zoomview
-styleable TrigpointingUK android_galleryItemBackground
+styleable TrigpointingUK android:galleryItemBackground
 xml preferences

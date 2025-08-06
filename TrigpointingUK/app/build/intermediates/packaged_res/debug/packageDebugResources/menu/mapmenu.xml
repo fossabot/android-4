@@ -18,4 +18,9 @@
         <item android:id="@+id/bingosgb" android:title="Bing OSGB" android:checkable="true" />
     </group>
     
+    <item android:id="@+id/downloadmaps" android:title="Download Maps" android:icon="@drawable/ic_menu_mapmode" />
+    <item android:id="@+id/location" android:title="Location" android:icon="@drawable/ic_menu_mylocation" />
+    <item android:id="@+id/compass" android:title="Compass" android:icon="@drawable/ic_menu_compass" />
+    <item android:id="@+id/filter" android:title="Filter" android:icon="@drawable/ic_menu_search" />
+    
 </menu> 

@@ -70,14 +70,14 @@ public class TrigDetailsAlbumTab extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	       switch (item.getItemId()) {
-	        // refresh the trig logs
-	        case R.id.refresh:
-	        	Log.i(TAG, "refresh");
-	            new PopulatePhotosTask().execute(true);
-	            return true;
-	        }
-			return super.onOptionsItemSelected(item);
+		int itemId = item.getItemId();
+		
+		if (itemId == R.id.refresh) {
+			Log.i(TAG, "refresh");
+			new PopulatePhotosTask().execute(true);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
     

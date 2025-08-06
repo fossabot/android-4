@@ -146,53 +146,53 @@ public class TrigDetailsInfoTab extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	       switch (item.getItemId()) {
-	        // refresh the trig logs
-	        case R.id.directions:
-	        	Log.i(TAG, "directions");
-	        	try {
-	        		startActivity( new Intent( Intent.ACTION_VIEW, mNavUrl ) );
-	        	} catch (ActivityNotFoundException e) {
-					Toast.makeText(this, "Unable to launch navigator", Toast.LENGTH_LONG).show();
-	        	} 
-        		return true;
-	        case R.id.browser:
-	        	Log.i(TAG, "browser");
-	        	try {
-	        		startActivity( new Intent( Intent.ACTION_VIEW, mTUKUrl ) );
-	        	} catch (ActivityNotFoundException e) {
-					Toast.makeText(this, "Unable to launch browser", Toast.LENGTH_LONG).show();
-	        	}
-	        	return true;
-	        case R.id.radar:
-	        	Log.i(TAG, "radar");
-	        	try {
-	        		Intent i = new Intent("com.google.android.radar.SHOW_RADAR") ;
-	        		i.putExtra("latitude",  (float) mLatitude);
-	        		i.putExtra("longitude", (float) mLongitude);
-	        		i.putExtra("name", mWaypoint);
-	        		startActivity(i);
-	        	} catch (ActivityNotFoundException e) {
-					showDialog(RADAR);
-	        	} 
-	        	return true;	     
-	        case R.id.map:
-	        	Log.i(TAG, "map");
-	        	// remove existing map bounding box preferences
-	        	Editor editor = mPrefs.edit();
-	        	editor.remove("north");
-	        	editor.remove("south");
-	        	editor.remove("east");
-	        	editor.remove("west");
-	        	editor.putInt("zoomLevel", 12);
-	        	editor.putInt("latitude", (int)(mLatitude * 1E6));
-	        	editor.putInt("longitude", (int)(mLongitude * 1E6));
-	        	editor.commit();
-				Intent i = new Intent(TrigDetailsInfoTab.this, MapActivity.class);
-				startActivityForResult(i, R.id.map);
-	        	return true;	     
-	        }
-			return super.onOptionsItemSelected(item);
+		int itemId = item.getItemId();
+		
+		if (itemId == R.id.directions) {
+			Log.i(TAG, "directions");
+			try {
+				startActivity( new Intent( Intent.ACTION_VIEW, mNavUrl ) );
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(this, "Unable to launch navigator", Toast.LENGTH_LONG).show();
+			} 
+			return true;
+		} else if (itemId == R.id.browser) {
+			Log.i(TAG, "browser");
+			try {
+				startActivity( new Intent( Intent.ACTION_VIEW, mTUKUrl ) );
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(this, "Unable to launch browser", Toast.LENGTH_LONG).show();
+			}
+			return true;
+		} else if (itemId == R.id.radar) {
+			Log.i(TAG, "radar");
+			try {
+				Intent i = new Intent("com.google.android.radar.SHOW_RADAR") ;
+				i.putExtra("latitude",  (float) mLatitude);
+				i.putExtra("longitude", (float) mLongitude);
+				i.putExtra("name", mWaypoint);
+				startActivity(i);
+			} catch (ActivityNotFoundException e) {
+				showDialog(RADAR);
+			} 
+			return true;	     
+		} else if (itemId == R.id.map) {
+			Log.i(TAG, "map");
+			// remove existing map bounding box preferences
+			Editor editor = mPrefs.edit();
+			editor.remove("north");
+			editor.remove("south");
+			editor.remove("east");
+			editor.remove("west");
+			editor.putInt("zoomLevel", 12);
+			editor.putInt("latitude", (int)(mLatitude * 1E6));
+			editor.putInt("longitude", (int)(mLongitude * 1E6));
+			editor.commit();
+			Intent i = new Intent(TrigDetailsInfoTab.this, MapActivity.class);
+			startActivityForResult(i, R.id.map);
+			return true;	     
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
