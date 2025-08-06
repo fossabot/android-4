@@ -62,11 +62,11 @@ public class BitmapLoader {
 			os.close();
 			bResult = BitmapFactory.decodeFile(file.getAbsolutePath());
 			if(bResult != null) {
-				Log.i(TAG, "Got "+url+" from SD cache");
+				Log.i(TAG, "Got "+url+" from web");
 				return bResult;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(TAG, "Error downloading image from URL: " + url, e);
 		}
 
 		Log.i(TAG, "FAILED to get "+url);

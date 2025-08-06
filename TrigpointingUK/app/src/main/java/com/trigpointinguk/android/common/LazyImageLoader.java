@@ -98,7 +98,7 @@ public class LazyImageLoader {
         	Log.i(TAG, "Got "+url+" from network");
             return bitmap;
         } catch (Exception ex){
-           ex.printStackTrace();
+           Log.e(TAG, "Error loading image from URL: " + url, ex);
            return null;
         }
     }
@@ -127,7 +127,11 @@ public class LazyImageLoader {
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize=scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File not found: " + f.getAbsolutePath(), e);
+        } catch (Exception e) {
+            Log.e(TAG, "Error decoding file: " + f.getAbsolutePath(), e);
+        }
         return null;
     }
     
