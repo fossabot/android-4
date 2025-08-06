@@ -75,27 +75,38 @@ public class DownloadTrigsActivity extends Activity {
 	private class PopulateTrigsTask extends AsyncTask<Void, ProgressType, DownloadStatus> {
 		@Override
 		protected DownloadStatus doInBackground(Void... arg0) {
+			Log.i(TAG, "PopulateTrigsTask: Starting download");
 
 			DbHelper db = new DbHelper(DownloadTrigsActivity.this);
 			String strLine;                
 			int i=0;
 
 			try {
+				Log.i(TAG, "PopulateTrigsTask: Opening database");
 				db.open();
 				db.mDb.beginTransaction();
 
-				URL url = new URL("http://www.trigpointinguk.com/trigs/down-android-trigs.php?appversion="+String.valueOf(mAppVersion));
+				String downloadUrl = "http://www.trigpointinguk.com/trigs/down-android-trigs.php?appversion="+String.valueOf(mAppVersion);
+				Log.i(TAG, "PopulateTrigsTask: Downloading from URL: " + downloadUrl);
+				
+				URL url = new URL(downloadUrl);
+				Log.i(TAG, "PopulateTrigsTask: Opening connection");
 				URLConnection ucon = url.openConnection();
+				Log.i(TAG, "PopulateTrigsTask: Getting input stream");
 				InputStream is = ucon.getInputStream();
+				Log.i(TAG, "PopulateTrigsTask: Creating GZIP input stream");
 				GZIPInputStream zis = new GZIPInputStream(new BufferedInputStream(is));
+				Log.i(TAG, "PopulateTrigsTask: Creating buffered reader");
 				BufferedReader br = new BufferedReader(new InputStreamReader(zis));
 
+				Log.i(TAG, "PopulateTrigsTask: Reading first line");
 				if ((strLine = br.readLine()) != null) {
 					mProgressMax = Integer.valueOf(strLine);
-					Log.i(TAG, "Downloading " + mProgressMax + " trigs");
+					Log.i(TAG, "PopulateTrigsTask: Downloading " + mProgressMax + " trigs");
 					publishProgress(ProgressType.NEWMAX);
 				}
 				
+				Log.i(TAG, "PopulateTrigsTask: Deleting all existing data");
 				db.deleteAll();
 
 				while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
@@ -125,7 +136,10 @@ public class DownloadTrigsActivity extends Activity {
 				db.mDb.execSQL("create index if not exists latlon on trig (lat, lon)");
 				db.mDb.setTransactionSuccessful();
 			}catch (IOException e) {
-				Log.e(TAG, "Error: " + e);
+				Log.e(TAG, "Error: " + e.getMessage(), e);
+				return DownloadStatus.ERROR;
+			} catch (Exception e) {
+				Log.e(TAG, "Unexpected error: " + e.getMessage(), e);
 				return DownloadStatus.ERROR;
 			} finally {
 				db.mDb.endTransaction();

@@ -357,5 +357,6 @@ string toastAddPassword
 string toastAddUsername
 string yes
 string zoomview
-styleable TrigpointingUK android:galleryItemBackground
+styleable TrigpointingUK android_galleryItemBackground
+xml network_security_config
 xml preferences

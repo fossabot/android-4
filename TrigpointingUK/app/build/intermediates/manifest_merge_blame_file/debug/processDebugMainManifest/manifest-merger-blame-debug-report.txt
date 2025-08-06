@@ -109,7 +109,7 @@
 60-->[androidx.core:core:1.9.0] /home/ianh/.gradle/caches/8.13/transforms/c78b3d8c1a940b2bc777d584e2f71ec9/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
 61
 62    <application
-62-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:20:5-50:19
+62-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:20:5-51:19
 63        android:name="com.trigpointinguk.android.MainApplication"
 63-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:23:9-39
 64        android:allowBackup="true"
@@ -122,194 +122,196 @@
 68-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:21:9-38
 69        android:label="@string/app_name"
 69-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:22:9-41
-70        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
-70-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:25:9-67
-71        <activity
-71-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:27:9-32:20
-72            android:name="com.trigpointinguk.android.MainActivity"
-72-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:27:52-79
-73            android:exported="true"
-73-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:27:80-103
-74            android:label="@string/app_name" >
-74-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:27:19-51
-75            <intent-filter>
-75-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:28:13-31:29
-76                <action android:name="android.intent.action.MAIN" />
-76-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:29:17-69
-76-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:29:25-66
-77
-78                <category android:name="android.intent.category.LAUNCHER" />
-78-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:30:17-77
-78-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:30:27-74
-79            </intent-filter>
-80        </activity>
-81        <activity android:name="com.trigpointinguk.android.nearest.NearestActivity" />
-81-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:33:9-70
-81-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:33:19-58
-82        <activity
-82-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:34:9-118
-83            android:name="com.trigpointinguk.android.DownloadTrigsActivity"
-83-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:34:70-106
-84            android:configChanges="keyboardHidden|orientation" />
-84-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:34:19-69
-85        <activity android:name="com.trigpointinguk.android.PreferencesActivity" />
-85-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:35:9-65
-85-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:35:19-53
-86        <activity
-86-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:36:9-126
-87            android:name="com.trigpointinguk.android.mapping.DownloadMapsActivity"
-87-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:36:70-114
-88            android:configChanges="keyboardHidden|orientation" />
-88-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:36:19-69
-89        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsActivity" />
-89-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:37:9-78
-89-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:37:19-66
-90        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsAlbumTab" />
+70        android:networkSecurityConfig="@xml/network_security_config"
+70-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:26:9-69
+71        android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+71-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:25:9-67
+72        <activity
+72-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:28:9-33:20
+73            android:name="com.trigpointinguk.android.MainActivity"
+73-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:28:52-79
+74            android:exported="true"
+74-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:28:80-103
+75            android:label="@string/app_name" >
+75-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:28:19-51
+76            <intent-filter>
+76-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:29:13-32:29
+77                <action android:name="android.intent.action.MAIN" />
+77-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:30:17-69
+77-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:30:25-66
+78
+79                <category android:name="android.intent.category.LAUNCHER" />
+79-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:31:17-77
+79-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:31:27-74
+80            </intent-filter>
+81        </activity>
+82        <activity android:name="com.trigpointinguk.android.nearest.NearestActivity" />
+82-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:34:9-70
+82-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:34:19-58
+83        <activity
+83-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:35:9-118
+84            android:name="com.trigpointinguk.android.DownloadTrigsActivity"
+84-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:35:70-106
+85            android:configChanges="keyboardHidden|orientation" />
+85-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:35:19-69
+86        <activity android:name="com.trigpointinguk.android.PreferencesActivity" />
+86-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:36:9-65
+86-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:36:19-53
+87        <activity
+87-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:37:9-126
+88            android:name="com.trigpointinguk.android.mapping.DownloadMapsActivity"
+88-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:37:70-114
+89            android:configChanges="keyboardHidden|orientation" />
+89-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:37:19-69
+90        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsActivity" />
 90-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:38:9-78
 90-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:38:19-66
-91        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsInfoTab" />
-91-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:39:9-77
-91-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:39:19-65
-92        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsLoglistTab" />
-92-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:40:9-80
-92-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:40:19-68
-93        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsOSMapTab" />
-93-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:41:9-78
-93-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:41:19-66
-94        <activity android:name="com.trigpointinguk.android.mapping.MapActivity" />
-94-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:42:9-66
-94-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:42:19-54
-95
-96        <meta-data
-96-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:9-110
-97            android:name="CLOUDMADE_KEY"
-97-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:69-97
-98            android:value="6668b1358f29457b88baf287a692ae97" />
-98-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:20-68
-99        <meta-data
-99-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:9-137
-100            android:name="BING_KEY"
-100-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:101-124
-101            android:value="AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5" />
-101-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:20-100
-102
-103        <activity android:name="com.trigpointinguk.android.HelpPageActivity" />
-103-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:9-62
-103-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:19-50
-104        <activity android:name="com.trigpointinguk.android.common.DisplayBitmapActivity" />
-104-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:9-75
-104-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:19-63
-105        <activity android:name="com.trigpointinguk.android.logging.LogTrigActivity" />
-105-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:9-70
-105-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:19-58
-106        <activity android:name="com.trigpointinguk.android.logging.LogPhotoActivity" />
-106-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:9-71
-106-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:19-59
-107        <activity android:name="com.trigpointinguk.android.filter.FilterActivity" />
-107-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:9-68
-107-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:19-56
-108        <!-- Needs to be explicitly declared on P+ -->
-109        <uses-library
-109-->[com.google.android.gms:play-services-maps:18.2.0] /home/ianh/.gradle/caches/8.13/transforms/5a9ad81ffd2254b760b333e528dd205e/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
-110            android:name="org.apache.http.legacy"
-110-->[com.google.android.gms:play-services-maps:18.2.0] /home/ianh/.gradle/caches/8.13/transforms/5a9ad81ffd2254b760b333e528dd205e/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
-111            android:required="false" />
-111-->[com.google.android.gms:play-services-maps:18.2.0] /home/ianh/.gradle/caches/8.13/transforms/5a9ad81ffd2254b760b333e528dd205e/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
-112
-113        <activity
-113-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
-114            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-114-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
-115            android:exported="false"
-115-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
-116            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-116-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
-117
-118        <meta-data
-118-->[com.google.android.gms:play-services-basement:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/8cb8ca078df1d221e051e4cd461ceca7/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
-119            android:name="com.google.android.gms.version"
-119-->[com.google.android.gms:play-services-basement:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/8cb8ca078df1d221e051e4cd461ceca7/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
-120            android:value="@integer/google_play_services_version" />
-120-->[com.google.android.gms:play-services-basement:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/8cb8ca078df1d221e051e4cd461ceca7/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
-121
-122        <provider
-122-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
-123            android:name="androidx.startup.InitializationProvider"
-123-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
-124            android:authorities="com.trigpointinguk.android.androidx-startup"
-124-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
-125            android:exported="false" >
-125-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
-126            <meta-data
-126-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
-127                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-127-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
-128                android:value="androidx.startup" />
-128-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
-129            <meta-data
-129-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ianh/.gradle/caches/8.13/transforms/2440ef776289670e17f713d40b13b7ae/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
-130                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-130-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ianh/.gradle/caches/8.13/transforms/2440ef776289670e17f713d40b13b7ae/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
-131                android:value="androidx.startup" />
-131-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ianh/.gradle/caches/8.13/transforms/2440ef776289670e17f713d40b13b7ae/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
-132            <meta-data
-132-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
-133                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-133-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
-134                android:value="androidx.startup" />
-134-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
-135        </provider>
-136
-137        <uses-library
-137-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:25:9-27:40
-138            android:name="androidx.window.extensions"
-138-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:26:13-54
-139            android:required="false" />
-139-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:27:13-37
-140        <uses-library
-140-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:28:9-30:40
-141            android:name="androidx.window.sidecar"
-141-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:29:13-51
-142            android:required="false" />
-142-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:30:13-37
-143
-144        <receiver
-144-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
-145            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-145-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
-146            android:directBootAware="false"
-146-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
-147            android:enabled="true"
-147-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
-148            android:exported="true"
-148-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
-149            android:permission="android.permission.DUMP" >
-149-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
-150            <intent-filter>
-150-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
-151                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-151-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
-151-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
-152            </intent-filter>
-153            <intent-filter>
-153-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
-154                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-154-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
-154-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
-155            </intent-filter>
-156            <intent-filter>
-156-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
-157                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-157-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
-157-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
-158            </intent-filter>
-159            <intent-filter>
-159-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
-160                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-160-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
-160-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
-161            </intent-filter>
-162        </receiver>
-163    </application>
-164
-165</manifest>
+91        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsAlbumTab" />
+91-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:39:9-78
+91-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:39:19-66
+92        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsInfoTab" />
+92-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:40:9-77
+92-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:40:19-65
+93        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsLoglistTab" />
+93-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:41:9-80
+93-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:41:19-68
+94        <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsOSMapTab" />
+94-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:42:9-78
+94-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:42:19-66
+95        <activity android:name="com.trigpointinguk.android.mapping.MapActivity" />
+95-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:9-66
+95-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:19-54
+96
+97        <meta-data
+97-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:9-110
+98            android:name="CLOUDMADE_KEY"
+98-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:69-97
+99            android:value="6668b1358f29457b88baf287a692ae97" />
+99-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:20-68
+100        <meta-data
+100-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:9-137
+101            android:name="BING_KEY"
+101-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:101-124
+102            android:value="AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5" />
+102-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:20-100
+103
+104        <activity android:name="com.trigpointinguk.android.HelpPageActivity" />
+104-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:9-62
+104-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:19-50
+105        <activity android:name="com.trigpointinguk.android.common.DisplayBitmapActivity" />
+105-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:9-75
+105-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:19-63
+106        <activity android:name="com.trigpointinguk.android.logging.LogTrigActivity" />
+106-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:9-70
+106-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:19-58
+107        <activity android:name="com.trigpointinguk.android.logging.LogPhotoActivity" />
+107-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:9-71
+107-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:19-59
+108        <activity android:name="com.trigpointinguk.android.filter.FilterActivity" />
+108-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:50:9-68
+108-->/home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:50:19-56
+109        <!-- Needs to be explicitly declared on P+ -->
+110        <uses-library
+110-->[com.google.android.gms:play-services-maps:18.2.0] /home/ianh/.gradle/caches/8.13/transforms/5a9ad81ffd2254b760b333e528dd205e/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
+111            android:name="org.apache.http.legacy"
+111-->[com.google.android.gms:play-services-maps:18.2.0] /home/ianh/.gradle/caches/8.13/transforms/5a9ad81ffd2254b760b333e528dd205e/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
+112            android:required="false" />
+112-->[com.google.android.gms:play-services-maps:18.2.0] /home/ianh/.gradle/caches/8.13/transforms/5a9ad81ffd2254b760b333e528dd205e/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
+113
+114        <activity
+114-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+115            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+115-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+116            android:exported="false"
+116-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+117            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+117-->[com.google.android.gms:play-services-base:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/ec039770709b8f6be18af7f27662e77f/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+118
+119        <meta-data
+119-->[com.google.android.gms:play-services-basement:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/8cb8ca078df1d221e051e4cd461ceca7/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+120            android:name="com.google.android.gms.version"
+120-->[com.google.android.gms:play-services-basement:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/8cb8ca078df1d221e051e4cd461ceca7/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+121            android:value="@integer/google_play_services_version" />
+121-->[com.google.android.gms:play-services-basement:18.1.0] /home/ianh/.gradle/caches/8.13/transforms/8cb8ca078df1d221e051e4cd461ceca7/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+122
+123        <provider
+123-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+124            android:name="androidx.startup.InitializationProvider"
+124-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+125            android:authorities="com.trigpointinguk.android.androidx-startup"
+125-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+126            android:exported="false" >
+126-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+127            <meta-data
+127-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+128                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+128-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+129                android:value="androidx.startup" />
+129-->[androidx.emoji2:emoji2:1.2.0] /home/ianh/.gradle/caches/8.13/transforms/6b93cfe62f82596a55d02366b3b3e581/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+130            <meta-data
+130-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ianh/.gradle/caches/8.13/transforms/2440ef776289670e17f713d40b13b7ae/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+131                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+131-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ianh/.gradle/caches/8.13/transforms/2440ef776289670e17f713d40b13b7ae/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+132                android:value="androidx.startup" />
+132-->[androidx.lifecycle:lifecycle-process:2.6.1] /home/ianh/.gradle/caches/8.13/transforms/2440ef776289670e17f713d40b13b7ae/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+133            <meta-data
+133-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+134                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+134-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+135                android:value="androidx.startup" />
+135-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+136        </provider>
+137
+138        <uses-library
+138-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:25:9-27:40
+139            android:name="androidx.window.extensions"
+139-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:26:13-54
+140            android:required="false" />
+140-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:27:13-37
+141        <uses-library
+141-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:28:9-30:40
+142            android:name="androidx.window.sidecar"
+142-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:29:13-51
+143            android:required="false" />
+143-->[androidx.window:window:1.0.0] /home/ianh/.gradle/caches/8.13/transforms/69e57ea3c1039d676eaebabbaee48e6c/transformed/jetified-window-1.0.0/AndroidManifest.xml:30:13-37
+144
+145        <receiver
+145-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+146            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+146-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+147            android:directBootAware="false"
+147-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+148            android:enabled="true"
+148-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+149            android:exported="true"
+149-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+150            android:permission="android.permission.DUMP" >
+150-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+151            <intent-filter>
+151-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+152                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+152-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+152-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+153            </intent-filter>
+154            <intent-filter>
+154-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+155                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+155-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+155-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+156            </intent-filter>
+157            <intent-filter>
+157-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+158                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+158-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+158-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+159            </intent-filter>
+160            <intent-filter>
+160-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+161                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+161-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+161-->[androidx.profileinstaller:profileinstaller:1.3.0] /home/ianh/.gradle/caches/8.13/transforms/6e3e55971d600bebc298ddd5a9ef359a/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+162            </intent-filter>
+163        </receiver>
+164    </application>
+165
+166</manifest>
