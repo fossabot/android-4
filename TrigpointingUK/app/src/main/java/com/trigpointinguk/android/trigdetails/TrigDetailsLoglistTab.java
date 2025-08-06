@@ -3,12 +3,17 @@ package com.trigpointinguk.android.trigdetails;
 import java.util.ArrayList;
 
 import android.app.ListActivity;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -45,8 +50,8 @@ public class TrigDetailsLoglistTab extends ListActivity {
 		// find view for empty list notification
 		mEmptyView = (TextView) findViewById(android.R.id.empty);
 		
-		// get list of photos
-        new PopulateLogsTask().execute(false);
+		// get list of logs
+        populateLogs(false);
     }
     
     
@@ -64,7 +69,7 @@ public class TrigDetailsLoglistTab extends ListActivity {
 		
 		if (itemId == R.id.refresh) {
 			Log.i(TAG, "refresh");
-			new PopulateLogsTask().execute(true);
+			populateLogs(true);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -73,56 +78,57 @@ public class TrigDetailsLoglistTab extends ListActivity {
 
 
 
-	private class PopulateLogsTask extends AsyncTask<Boolean, Integer, Integer> {
-		protected Integer doInBackground(Boolean... arg0) {
+	private void populateLogs(boolean refresh) {
+		// Show loading message on main thread
+		mEmptyView.setText(R.string.downloadingLogs);
+		// create string loader class
+		mStrLoader = new StringLoader(TrigDetailsLoglistTab.this);
+		
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		Handler mainHandler = new Handler(Looper.getMainLooper());
+		
+		CompletableFuture.supplyAsync(() -> {
 			int count=0;
 			mTrigLogs.clear();
 			
 			// get triglogs from T:UK, refresh if requested
-	        			String url = String.format("https://trigpointing.uk/trigs/down-android-triglogs.php?t=%d", mTrigId);
-	        String list = mStrLoader.getString(url, arg0[0]);
-	        if (list == null || list.trim().length()==0) {
-	    		Log.i(TAG, "No logs for "+mTrigId);        	
-	    		return count;
-	        }
+			String url = String.format("https://trigpointing.uk/trigs/down-android-triglogs.php?t=%d", mTrigId);
+			String list = mStrLoader.getString(url, refresh);
+			if (list == null || list.trim().length()==0) {
+				Log.i(TAG, "No logs for "+mTrigId);        	
+				return count;
+			}
 			//Log.d(TAG,list);        	
 
-	        TrigLog tl;
+			TrigLog tl;
 
-	        String[] lines = list.split("\n");
+			String[] lines = list.split("\n");
 			//System.out.println(java.util.Arrays.toString(lines));
 			Log.i(TAG, "Logs found : "+lines.length);
 			
-	        for (String line : lines) {
-	        	if (!(line.trim().equals(""))) { 
-	        		String[] csv = line.split("\t");
-	        		//System.out.println(java.util.Arrays.toString(csv));
-	        		try {
-	        			tl= new TrigLog(
-	        					csv[3],							//username 
-	        					csv[0], 						//date
-	        					Condition.fromCode(csv[2]), 	//condition
-	        					csv[1]);						//text
-	        			mTrigLogs.add(tl);
-	        			count++;
-	        		} catch (Exception e) {
-	        			System.out.println(e);
-	        		}
-	        	}
-	        }
-	        return count;
-		}
-		protected void onPreExecute() {
-			mEmptyView.setText(R.string.downloadingLogs);
-			// create string loader class
-	        mStrLoader = new StringLoader(TrigDetailsLoglistTab.this);
-		}
-		protected void onProgressUpdate(Integer... progress) {
-		}
-		protected void onPostExecute(Integer arg0) {
+			for (String line : lines) {
+				if (!(line.trim().equals(""))) { 
+					String[] csv = line.split("\t");
+					//System.out.println(java.util.Arrays.toString(csv));
+					try {
+						tl= new TrigLog(
+								csv[3],							//username 
+								csv[0], 						//date
+								Condition.fromCode(csv[2]), 	//condition
+								csv[1]);						//text
+						mTrigLogs.add(tl);
+						count++;
+					} catch (Exception e) {
+						System.out.println(e);
+					}
+				}
+			}
+			return count;
+		}, executor)
+		.thenAcceptAsync(count -> {
 			mEmptyView.setText(R.string.noLogs);
-	        mTrigLogsAdapter.notifyDataSetChanged();
-		}
+			mTrigLogsAdapter.notifyDataSetChanged();
+		}, mainHandler::post);
 	}
 
     
