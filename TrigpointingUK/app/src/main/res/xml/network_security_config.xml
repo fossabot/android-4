@@ -4,5 +4,7 @@
         <domain includeSubdomains="true">trigpointinguk.com</domain>
         <domain includeSubdomains="true">www.trigpointinguk.com</domain>
         <domain includeSubdomains="true">trigpointing.uk</domain>
+        <domain includeSubdomains="true">dev.virtualearth.net</domain>
+        <domain includeSubdomains="true">virtualearth.net</domain>
     </domain-config>
 </network-security-config> 

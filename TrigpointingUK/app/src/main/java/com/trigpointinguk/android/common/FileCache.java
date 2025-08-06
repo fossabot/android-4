@@ -10,7 +10,7 @@ public class FileCache {
 	public FileCache(Context context, String cachedir){
 		//Find the dir to save cached objects
 		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			cacheDir=new File(android.os.Environment.getExternalStorageDirectory() + "/Android/data/com.trigpointinguk/cache/", cachedir);
+			cacheDir=new File(android.os.Environment.getExternalStorageDirectory() + "/Android/data/com.trigpointinguk.android/cache/", cachedir);
 		} else {
 			cacheDir=context.getCacheDir();
 		}
