@@ -32,6 +32,10 @@
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/mapicon_passive_yellow_h.png"
     },
     {
+        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/menu_mainmenu.xml.flat",
+        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/menu/mainmenu.xml"
+    },
+    {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_ic_menu_offline.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/ic_menu_offline.png"
     },
@@ -72,8 +76,8 @@
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/ic_menu_gallery.png"
     },
     {
-        "merged": "com.trigpointinguk.android.app-debug-43:/layout_main.xml.flat",
-        "source": "com.trigpointinguk.android.app-main-45:/layout/main.xml"
+        "merged": "com.trigpointinguk.android.app-debug-43:/menu_mainmenu.xml.flat",
+        "source": "com.trigpointinguk.android.app-main-45:/menu/mainmenu.xml"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/menu_mapmenu.xml.flat",
@@ -206,6 +210,10 @@
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_marker_default_focused_base.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/marker_default_focused_base.png"
+    },
+    {
+        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/layout_triginfo.xml.flat",
+        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/layout/triginfo.xml"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_navto_small.png.flat",
@@ -504,6 +512,10 @@
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/cs_toppled.png"
     },
     {
+        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/layout_trigdetails.xml.flat",
+        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/layout/trigdetails.xml"
+    },
+    {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable-hdpi_mapicon_intersected_red.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable-hdpi/mapicon_intersected_red.png"
     },
@@ -630,10 +642,6 @@
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_ic_menu_compass.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/ic_menu_compass.png"
-    },
-    {
-        "merged": "com.trigpointinguk.android.app-debug-43:/menu_nearestmenu.xml.flat",
-        "source": "com.trigpointinguk.android.app-main-45:/menu/nearestmenu.xml"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable-hdpi_mapicon_pillar_yellow.png.flat",

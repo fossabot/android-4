@@ -194,6 +194,18 @@
             android:layout_height="wrap_content"
             android:text="Test Crash" />
 
+        <Button
+            android:id="@+id/btnNearest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nearest" />
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Map" />
+
     </LinearLayout>
 
 </LinearLayout>

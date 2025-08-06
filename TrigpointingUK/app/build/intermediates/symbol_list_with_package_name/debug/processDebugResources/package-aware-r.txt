@@ -2184,6 +2184,7 @@ color switch_thumb_material_dark
 color switch_thumb_material_light
 color switch_thumb_normal_material_dark
 color switch_thumb_normal_material_light
+color syncNow
 color tooltip_background_dark
 color tooltip_background_light
 color white
@@ -3334,6 +3335,7 @@ id SHOW_PROGRESS
 id SYM
 id TOP_END
 id TOP_START
+id about
 id accelerate
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
@@ -3429,6 +3431,8 @@ id bounceStart
 id btnCrash
 id btnDownload
 id btnDownloadMaps
+id btnMap
+id btnNearest
 id btnSearch
 id btnSync
 id bubble_description
@@ -3456,6 +3460,7 @@ id checked
 id chronometer
 id circle_center
 id clear_text
+id clearcache
 id clip_horizontal
 id clip_vertical
 id clockwise
@@ -3518,6 +3523,8 @@ id downloadMapsStatus
 id downloadMapsTileSource
 id downloadProgress
 id downloadStatus
+id downloadmaps
+id downloadtrigs
 id dragAnticlockwise
 id dragClockwise
 id dragDown
@@ -3642,6 +3649,7 @@ id mapTypeGroup
 id mapnik
 id mapquest
 id mapview
+id mark
 id marquee
 id masked
 id match_constraint
@@ -3763,6 +3771,7 @@ id postLayout
 id preferences_detail
 id preferences_header
 id preferences_sliding_pane_layout
+id prefs
 id pressed
 id progress_circular
 id progress_horizontal
@@ -3901,6 +3910,16 @@ id trigListLocation
 id trigLogged
 id trigName
 id trigType
+id triginfo_condition
+id triginfo_condition_icon
+id triginfo_current
+id triginfo_fb
+id triginfo_gridref
+id triginfo_historic
+id triginfo_name
+id triginfo_type
+id triginfo_waypoint
+id triginfo_wgs84
 id txtUserName
 id unchecked
 id uniform
@@ -4149,8 +4168,11 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
+layout trigdetails
+layout triginfo
 layout triglist
 layout trigrow
+menu mainmenu
 menu mapmenu
 menu nearestmenu
 plurals mtrl_badge_content_description

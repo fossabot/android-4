@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/downloadtrigs"
+        android:title="Download Trigs"
+        android:icon="@drawable/ic_menu_search" />
+    <item
+        android:id="@+id/downloadmaps"
+        android:title="Download Maps"
+        android:icon="@drawable/ic_menu_mapmode" />
+    <item
+        android:id="@+id/prefs"
+        android:title="Preferences"
+        android:icon="@drawable/ic_menu_preferences" />
+    <item
+        android:id="@+id/about"
+        android:title="About"
+        android:icon="@drawable/ic_menu_info_details" />
+    <item
+        android:id="@+id/clearcache"
+        android:title="Clear Cache"
+        android:icon="@drawable/ic_menu_delete" />
+</menu> 

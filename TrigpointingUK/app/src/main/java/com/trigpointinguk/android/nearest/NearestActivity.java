@@ -246,17 +246,16 @@ public class NearestActivity extends ListActivity implements SensorEventListener
     
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i;
-        switch (item.getItemId()) {
-        
-        case R.id.filter:
-            i = new Intent(NearestActivity.this, FilterActivity.class);
-            startActivityForResult(i, R.id.filter);
-            return true;
-        case R.id.heading:
-        	useCompass(!mUsingCompass);
-        	return true;
-        }
+		int itemId = item.getItemId();
+		
+		if (itemId == R.id.filter) {
+			Intent i = new Intent(NearestActivity.this, FilterActivity.class);
+			startActivityForResult(i, R.id.filter);
+			return true;
+		} else if (itemId == R.id.heading) {
+			useCompass(!mUsingCompass);
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
         

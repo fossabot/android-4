@@ -8,4 +8,5 @@
     <color name="nearestUnmarkedColour">#000000</color>
     <color name="compassEnabled">#00FF00</color>
     <color name="compassDisabled">#888888</color>
+    <color name="syncNow">#00FF00</color>
 </resources> 

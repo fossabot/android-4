@@ -11,6 +11,7 @@ color errorcolour
 color nearestMarkedColour
 color nearestUnmarkedColour
 color okcolour
+color syncNow
 color white
 drawable arrow_00_n
 drawable arrow_01_nne
@@ -127,6 +128,7 @@ drawable ts_pillar
 drawable tuk_logo
 drawable zoom_in
 drawable zoom_out
+id about
 id addLog
 id bingaerial
 id bingaeriallabels
@@ -135,10 +137,13 @@ id bingroad
 id btnCrash
 id btnDownload
 id btnDownloadMaps
+id btnMap
+id btnNearest
 id btnSearch
 id btnSync
 id byCondition
 id byLogged
+id clearcache
 id cloudmade
 id compassArrow
 id countFbmImage
@@ -159,6 +164,8 @@ id downloadMapsStatus
 id downloadMapsTileSource
 id downloadProgress
 id downloadStatus
+id downloadmaps
+id downloadtrigs
 id filter
 id filterAll
 id filterFbm
@@ -195,6 +202,7 @@ id mapTypeGroup
 id mapnik
 id mapquest
 id mapview
+id mark
 id none
 id north
 id photoDescr
@@ -204,6 +212,7 @@ id photoRemove
 id photoSave
 id photoSubject
 id photoThumb
+id prefs
 id sendTime
 id trigArrow
 id trigCondition
@@ -213,6 +222,16 @@ id trigListLocation
 id trigLogged
 id trigName
 id trigType
+id triginfo_condition
+id triginfo_condition_icon
+id triginfo_current
+id triginfo_fb
+id triginfo_gridref
+id triginfo_historic
+id triginfo_name
+id triginfo_type
+id triginfo_waypoint
+id triginfo_wgs84
 id txtUserName
 id zoomview
 layout displaybitmap
@@ -224,8 +243,11 @@ layout logtrig
 layout main
 layout mapdownload
 layout mapview
+layout trigdetails
+layout triginfo
 layout triglist
 layout trigrow
+menu mainmenu
 menu mapmenu
 menu nearestmenu
 string addLog

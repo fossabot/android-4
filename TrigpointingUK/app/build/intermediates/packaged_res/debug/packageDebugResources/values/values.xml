@@ -37,6 +37,7 @@
     <color name="nearestMarkedColour">#FF0000</color>
     <color name="nearestUnmarkedColour">#000000</color>
     <color name="okcolour">#00FF00</color>
+    <color name="syncNow">#00FF00</color>
     <color name="white">#FFFFFFFF</color>
     <string name="addLog">Add Log</string>
     <string name="app_name">TrigpointingUK</string>
