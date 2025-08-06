@@ -86,7 +86,7 @@ public class DownloadTrigsActivity extends Activity {
 				db.open();
 				db.mDb.beginTransaction();
 
-				String downloadUrl = "http://www.trigpointinguk.com/trigs/down-android-trigs.php?appversion="+String.valueOf(mAppVersion);
+				String downloadUrl = "https://trigpointing.uk/trigs/down-android-trigs.php?appversion="+String.valueOf(mAppVersion);
 				Log.i(TAG, "PopulateTrigsTask: Downloading from URL: " + downloadUrl);
 				
 				URL url = new URL(downloadUrl);

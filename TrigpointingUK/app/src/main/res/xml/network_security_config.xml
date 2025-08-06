@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">trigpointinguk.com</domain>
         <domain includeSubdomains="true">www.trigpointinguk.com</domain>
+        <domain includeSubdomains="true">trigpointing.uk</domain>
     </domain-config>
 </network-security-config> 

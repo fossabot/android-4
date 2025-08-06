@@ -252,7 +252,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 		try {
 			// Send the request
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost( "http://www.trigpointinguk.com/trigs/android-sync-log.php" );
+			HttpPost post = new HttpPost( "https://trigpointing.uk/trigs/android-sync-log.php" );
 		    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		    Log.d(TAG, nameValuePairs.toString());
 		    HttpResponse response = client.execute(post);
@@ -324,7 +324,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 		try {
 			// Send the request
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost( "http://www.trigpointinguk.com/trigs/android-sync-photo.php" );
+			HttpPost post = new HttpPost( "https://trigpointing.uk/trigs/android-sync-photo.php" );
 		    
 		    //MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 			MultipartEntity entity = new CountingMultipartEntity(this);
@@ -438,7 +438,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 			publishProgress(BLANKPROGRESS);
 			publishProgress(MESSAGE, R.string.syncLogsFromTUK);
 			publishProgress(MAX, mPrefs.getInt(PREFS_LOGCOUNT, 1));
-			URL url = new URL("http://www.trigpointinguk.com/trigs/down-android-mylogs.php?username="+URLEncoder.encode(mUsername)+"&appversion="+mAppVersion);
+			URL url = new URL("https://trigpointing.uk/trigs/down-android-mylogs.php?username="+URLEncoder.encode(mUsername)+"&appversion="+mAppVersion);
 			Log.d(TAG, "Getting " + url);
             URLConnection ucon = url.openConnection();
             InputStream is = ucon.getInputStream();

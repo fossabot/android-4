@@ -88,7 +88,7 @@ public class TrigDetailsAlbumTab extends ListActivity {
 			int count=0;
 			mTrigPhotos.clear();
 			
-	        String url = String.format("http://www.trigpointinguk.com/trigs/down-android-trigphotos.php?t=%d", mTrigId);
+	        String url = String.format("https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d", mTrigId);
 	        String list = mStrLoader.getString(url, arg0[0]);
 	        if (list == null || list.trim().length()==0) {
 	    		Log.i(TAG, "No photos for "+mTrigId);        	

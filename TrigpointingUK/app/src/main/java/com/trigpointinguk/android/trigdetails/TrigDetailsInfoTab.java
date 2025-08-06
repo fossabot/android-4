@@ -90,7 +90,7 @@ public class TrigDetailsInfoTab extends Activity {
 		mLatitude  = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
 		mLongitude = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
 		
-		mTUKUrl   = Uri.parse( "http://www.trigpointinguk.com/trigs/trig-details.php?t="+c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)) );
+		mTUKUrl   = Uri.parse( "https://trigpointing.uk/trigs/trig-details.php?t="+c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)) );
 		mNavUrl   = Uri.parse( String.format("google.navigation:ll=%3.5f,%3.5f",mLatitude, mLongitude)); 
 		mWaypoint = String.format("TP%04d", c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)));
 		

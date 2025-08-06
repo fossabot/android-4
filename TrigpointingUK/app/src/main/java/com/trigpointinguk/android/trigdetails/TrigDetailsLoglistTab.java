@@ -79,7 +79,7 @@ public class TrigDetailsLoglistTab extends ListActivity {
 			mTrigLogs.clear();
 			
 			// get triglogs from T:UK, refresh if requested
-	        String url = String.format("http://www.trigpointinguk.com/trigs/down-android-triglogs.php?t=%d", mTrigId);
+	        			String url = String.format("https://trigpointing.uk/trigs/down-android-triglogs.php?t=%d", mTrigId);
 	        String list = mStrLoader.getString(url, arg0[0]);
 	        if (list == null || list.trim().length()==0) {
 	    		Log.i(TAG, "No logs for "+mTrigId);        	
