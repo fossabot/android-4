@@ -2,6 +2,7 @@ package com.trigpointinguk.android.trigdetails;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -41,6 +42,9 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
     
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(mContext);
+        
+        // Add logging to debug map loading
+        Log.d("TrigDetailsOSMapAdapter", "Loading map image at position " + position + ": " + mUrls[position]);
         imageLoader.DisplayImage(mUrls[position], imageView);
 
         imageView.setLayoutParams(new Gallery.LayoutParams(300, 300));
