@@ -1,20 +1,19 @@
 package com.trigpointinguk.android.trigdetails;
 
+import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TabHost;
 import android.view.KeyEvent;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager2.widget.ViewPager2;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
+import com.trigpointinguk.android.logging.LogTrigActivity;
 
-public class TrigDetailsActivity extends FragmentActivity {
+public class TrigDetailsActivity extends TabActivity {
 
 	private static final String TAG="TrigDetailsActivity";
     //private SharedPreferences mPrefs;
@@ -26,35 +25,49 @@ public class TrigDetailsActivity extends FragmentActivity {
 		Bundle extras = getIntent().getExtras();
         //mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-	    // Setup ViewPager2 and TabLayout
-	    ViewPager2 viewPager = findViewById(R.id.viewPager);
-	    TabLayout tabLayout = findViewById(R.id.tabLayout);
 	    
-	    // Create and set the adapter
-	    TrigDetailsPagerAdapter pagerAdapter = new TrigDetailsPagerAdapter(this, extras);
-	    viewPager.setAdapter(pagerAdapter);
+	    Resources res = getResources();
+	    TabHost tabHost = getTabHost();
+	    TabHost.TabSpec spec;
+	    Intent intent;
 	    
-	    // Connect TabLayout with ViewPager2
-	    new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-	        Resources res = getResources();
-	        switch (position) {
-	            case 0:
-	                tab.setIcon(res.getDrawable(android.R.drawable.ic_menu_info_details));
-	                break;
-	            case 1:
-	                tab.setIcon(res.getDrawable(android.R.drawable.ic_menu_agenda));
-	                break;
-	            case 2:
-	                tab.setIcon(res.getDrawable(android.R.drawable.ic_menu_gallery));
-	                break;
-	            case 3:
-	                tab.setIcon(res.getDrawable(android.R.drawable.ic_menu_mapmode));
-	                break;
-	            case 4:
-	                tab.setIcon(res.getDrawable(android.R.drawable.ic_menu_edit));
-	                break;
-	        }
-	    }).attach();
+
+	    intent = new Intent().setClass(this, TrigDetailsInfoTab.class);
+	    intent.putExtras(extras);
+	    spec = tabHost.newTabSpec("info").setIndicator("",
+	                    res.getDrawable(android.R.drawable.ic_menu_info_details))
+	                    .setContent(intent);
+	    tabHost.addTab(spec);
+
+	    intent = new Intent().setClass(this, TrigDetailsLoglistTab.class);
+	    intent.putExtras(extras);
+	    spec = tabHost.newTabSpec("logs").setIndicator("",
+	                      res.getDrawable(android.R.drawable.ic_menu_agenda))
+	                  .setContent(intent);
+	    tabHost.addTab(spec);
+
+	    intent = new Intent().setClass(this, TrigDetailsAlbumTab.class);
+	    intent.putExtras(extras);
+	    spec = tabHost.newTabSpec("album").setIndicator("",
+	                      res.getDrawable(android.R.drawable.ic_menu_gallery))
+	                  .setContent(intent);
+	    tabHost.addTab(spec);
+
+	    intent = new Intent().setClass(this, TrigDetailsOSMapTab.class);
+	    intent.putExtras(extras);
+	    spec = tabHost.newTabSpec("map").setIndicator("",
+	                      res.getDrawable(android.R.drawable.ic_menu_mapmode))
+	                  .setContent(intent);
+	    tabHost.addTab(spec);
+
+	    intent = new Intent().setClass(this, LogTrigActivity.class);
+	    intent.putExtras(extras);
+	    spec = tabHost.newTabSpec("mylog").setIndicator("",
+	                      res.getDrawable(android.R.drawable.ic_menu_edit))
+	                  .setContent(intent);
+	    tabHost.addTab(spec);
+	    
+	    tabHost.setCurrentTab(0);
 	    
 	    // Change title
 	    // get trig_id from extras
