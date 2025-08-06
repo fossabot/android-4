@@ -4,14 +4,19 @@ import java.util.ArrayList;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -47,7 +52,7 @@ public class TrigDetailsAlbumTab extends ListActivity {
 		mEmptyView = (TextView) findViewById(android.R.id.empty);
 
 		// get list of photos
-        new PopulatePhotosTask().execute(false);	    
+        populatePhotos(false);	    
     }
     
     
@@ -74,7 +79,7 @@ public class TrigDetailsAlbumTab extends ListActivity {
 		
 		if (itemId == R.id.refresh) {
 			Log.i(TAG, "refresh");
-			new PopulatePhotosTask().execute(true);
+			populatePhotos(true);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -83,54 +88,55 @@ public class TrigDetailsAlbumTab extends ListActivity {
     
     
     
-	private class PopulatePhotosTask extends AsyncTask<Boolean, Integer, Integer> {
-		protected Integer doInBackground(Boolean... arg0) {
+	private void populatePhotos(boolean refresh) {
+		// Show loading message on main thread
+		mEmptyView.setText(R.string.downloadingPhotos);
+		// create string loader class
+		mStrLoader = new StringLoader(TrigDetailsAlbumTab.this);
+		
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		Handler mainHandler = new Handler(Looper.getMainLooper());
+		
+		CompletableFuture.supplyAsync(() -> {
 			int count=0;
 			mTrigPhotos.clear();
 			
-	        String url = String.format("https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d", mTrigId);
-	        String list = mStrLoader.getString(url, arg0[0]);
-	        if (list == null || list.trim().length()==0) {
-	    		Log.i(TAG, "No photos for "+mTrigId);        	
-	    		return count;
-	        }
+			String url = String.format("https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d", mTrigId);
+			String list = mStrLoader.getString(url, refresh);
+			if (list == null || list.trim().length()==0) {
+				Log.i(TAG, "No photos for "+mTrigId);        	
+				return count;
+			}
 
-	        TrigPhoto tp;
+			TrigPhoto tp;
 
-	        String[] lines = list.split("\n");
+			String[] lines = list.split("\n");
 			Log.i(TAG, "Photos found : "+lines.length);
 			
-	        for (String line : lines) {
-	        	if (!(line.trim().equals(""))) { 
-	        		String[] csv = line.split("\t");
-	        		try {
-	        			tp = new TrigPhoto(
-	        					csv[2],		//name 
-	        					csv[3], 	//descr
-	        					csv[1],		//photo
-	        					csv[0],		//icon
-	        					csv[5],		//user
-	        					csv[4]);	//date
-	        			mTrigPhotos.add(tp);
-	        			count++;
-	        		} catch (Exception e) {
-	        			System.out.println(e);
-	        		}
-	        	}
-	        }
-	        return count;
-		}
-		protected void onPreExecute() {
-			mEmptyView.setText(R.string.downloadingPhotos);
-			// create string loader class
-	        mStrLoader = new StringLoader(TrigDetailsAlbumTab.this);
-		}
-		protected void onProgressUpdate(Integer... progress) {
-		}
-		protected void onPostExecute(Integer arg0) {
+			for (String line : lines) {
+				if (!(line.trim().equals(""))) { 
+					String[] csv = line.split("\t");
+					try {
+						tp = new TrigPhoto(
+								csv[2],		//name 
+								csv[3], 	//descr
+								csv[1],		//photo
+								csv[0],		//icon
+								csv[5],		//user
+								csv[4]);	//date
+						mTrigPhotos.add(tp);
+						count++;
+					} catch (Exception e) {
+						System.out.println(e);
+					}
+				}
+			}
+			return count;
+		}, executor)
+		.thenAcceptAsync(count -> {
 			mEmptyView.setText(R.string.noPhotos);
-	        mTrigAlbumAdapter.notifyDataSetChanged();
-		}
+			mTrigAlbumAdapter.notifyDataSetChanged();
+		}, mainHandler::post);
 	}
 
     
