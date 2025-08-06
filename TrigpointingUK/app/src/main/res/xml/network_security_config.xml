@@ -6,5 +6,6 @@
         <domain includeSubdomains="true">trigpointing.uk</domain>
         <domain includeSubdomains="true">dev.virtualearth.net</domain>
         <domain includeSubdomains="true">virtualearth.net</domain>
+        <domain includeSubdomains="true">trigpointinguk-photos.s3.amazonaws.com</domain>
     </domain-config>
 </network-security-config> 
