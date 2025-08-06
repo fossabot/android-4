@@ -8,14 +8,12 @@ public class FileCache {
 	private File cacheDir;
 
 	public FileCache(Context context, String cachedir){
-		//Find the dir to save cached objects
-		if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-			cacheDir=new File(android.os.Environment.getExternalStorageDirectory() + "/Android/data/com.trigpointinguk.android/cache/", cachedir);
-		} else {
-			cacheDir=context.getCacheDir();
+		//Use internal cache directory for better reliability
+		cacheDir = new File(context.getCacheDir(), cachedir);
+		if(!cacheDir.exists()) {
+			boolean created = cacheDir.mkdirs();
+			android.util.Log.d("FileCache", "Created cache directory " + cacheDir.getAbsolutePath() + ": " + created);
 		}
-		if(!cacheDir.exists())
-			cacheDir.mkdirs();
 	}
 
 	public File getFile(String url){
