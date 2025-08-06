@@ -21,17 +21,26 @@
         android:orientation="vertical"
         android:layout_marginStart="8dp">
 
+        <!-- Photo name -->
+        <TextView
+            android:id="@+id/photoName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Photo name"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
         <!-- Date and user -->
         <TextView
             android:id="@+id/photoDateUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date by User"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textSize="12sp" />
 
         <!-- Description placeholder -->
         <TextView
+            android:id="@+id/photoDescr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Photo description"

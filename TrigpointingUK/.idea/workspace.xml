@@ -56,6 +56,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
     "git-widget-placeholder": "8.11.1",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/ianh/dev/android/TrigpointingUK",
