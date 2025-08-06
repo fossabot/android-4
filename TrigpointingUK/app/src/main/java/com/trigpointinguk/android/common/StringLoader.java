@@ -68,6 +68,12 @@ public class StringLoader {
 	        conn.setReadTimeout(30000);
 			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	        
+	        // Ensure the directory exists before creating the file
+	        File parentDir = file.getParentFile();
+	        if (parentDir != null && !parentDir.exists()) {
+	        	parentDir.mkdirs();
+	        }
+	        
 	        OutputStream os = new FileOutputStream(file);
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 	        
