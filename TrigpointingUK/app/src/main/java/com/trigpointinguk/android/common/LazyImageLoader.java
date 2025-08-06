@@ -215,10 +215,13 @@ public class LazyImageLoader {
         }
         public void run()
         {
-            if(bitmap!=null)
+            if(bitmap!=null) {
                 imageView.setImageBitmap(bitmap);
-            else
+                Log.d(TAG, "Displayed bitmap successfully");
+            } else {
                 imageView.setImageResource(stub_id);
+                Log.w(TAG, "Bitmap was null, showing placeholder image");
+            }
         }
     }
 
