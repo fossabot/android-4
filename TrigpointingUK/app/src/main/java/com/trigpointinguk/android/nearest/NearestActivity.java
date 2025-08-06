@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.hardware.Sensor;
@@ -100,11 +101,24 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 
 		// Find a cached location
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
-		updateLocationHeader("cached");
-		if (mCurrentLocation != null && !mTaskRunning) {new FindTrigsTask().execute();}
+		
+		// Check for location permissions
+		if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+			checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			// Request location permissions
+			requestPermissions(new String[]{
+				android.Manifest.permission.ACCESS_FINE_LOCATION,
+				android.Manifest.permission.ACCESS_COARSE_LOCATION
+			}, 1);
+			updateLocationHeader("permission_required");
+		} else {
+			// We have permission, proceed with location access
+			mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
+			updateLocationHeader("cached");
+			if (mCurrentLocation != null && !mTaskRunning) {new FindTrigsTask().execute();}
+		}
 		
 		// Define a listener that responds to location updates
 		mLocationListener = new LocationListener() {
@@ -159,8 +173,11 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 	protected void onResume() {
 		super.onResume();
 		// Register the listener with the Location Manager to receive location updates
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*30, 250, mLocationListener);
-		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*300, 250, mLocationListener);
+		if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+			checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*30, 250, mLocationListener);
+			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*300, 250, mLocationListener);
+		}
 		// Decide whether to use the compass
 		useCompass(mPrefs.getBoolean(USECOMPASS, false));
 		// Setup header icons
@@ -285,6 +302,25 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 		Log.i(TAG, "onActivityResult");
 		refreshList();
 		updateFilterHeader();
+	}
+	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if (requestCode == 1) {
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				// Permission granted, proceed with location access
+				mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
+				updateLocationHeader("cached");
+				if (mCurrentLocation != null && !mTaskRunning) {new FindTrigsTask().execute();}
+			} else {
+				// Permission denied
+				updateLocationHeader("permission_denied");
+				Toast.makeText(this, "Location permission is required to find nearest trig points", Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 
 
