@@ -6,4 +6,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="nearestMarkedColour">#FF0000</color>
     <color name="nearestUnmarkedColour">#000000</color>
+    <color name="compassEnabled">#00FF00</color>
+    <color name="compassDisabled">#888888</color>
 </resources> 

@@ -119,7 +119,7 @@ public class MapActivity extends Activity implements MapListener {
 						Toast.makeText(MapActivity.this, item.getSnippet(), Toast.LENGTH_SHORT).show();
 						return false;
 					}
-				}, mResourceProxy);
+				}, this);
 		mMapView.getOverlays().add(mTrigOverlay);
 		mMapView.setMapListener(this);
 		
@@ -224,61 +224,51 @@ public class MapActivity extends Activity implements MapListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		item.setChecked(true);
-		switch (item.getItemId()) {
+		int itemId = item.getItemId();
+		
 		// Tile provider options
-		case R.id.cloudmade:
+		if (itemId == R.id.cloudmade) {
 			setTileProvider(TileSource.CLOUDMADE);
-			break;
-		case R.id.cyclemap:
+		} else if (itemId == R.id.cyclemap) {
 			setTileProvider(TileSource.CYCLEMAP);
-			break;
-		case R.id.mapnik:
+		} else if (itemId == R.id.mapnik) {
 			setTileProvider(TileSource.MAPNIK);
-			break;
-		case R.id.mapquest:
+		} else if (itemId == R.id.mapquest) {
 			setTileProvider(TileSource.MAPQUEST);
-			break;
-		case R.id.bingaerial:
+		} else if (itemId == R.id.bingaerial) {
 			setTileProvider(TileSource.BING_AERIAL);
-			break;
-		case R.id.bingaeriallabels:
+		} else if (itemId == R.id.bingaeriallabels) {
 			setTileProvider(TileSource.BING_AERIAL_LABELS);
-			break;
-		case R.id.bingroad:
+		} else if (itemId == R.id.bingroad) {
 			setTileProvider(TileSource.BING_ROAD);
-			break;
-		case R.id.bingosgb:
+		} else if (itemId == R.id.bingosgb) {
 			setTileProvider(TileSource.BING_OSGB);
-			break;
-
+		}
 		// Icon colouring options
-		case R.id.byCondition:
+		else if (itemId == R.id.byCondition) {
 			mIconColouring = colourScheme.BYCONDITION;
 			refreshMap();
-			break;
-		case R.id.none:
+		} else if (itemId == R.id.none) {
 			mIconColouring = colourScheme.NONE;
 			refreshMap();
-			break;
-		case R.id.byLogged:
+		} else if (itemId == R.id.byLogged) {
 			mIconColouring = colourScheme.BYLOGGED;
 			refreshMap();
-			break;
-			
+		}
 		// Other
-		case R.id.downloadmaps:
+		else if (itemId == R.id.downloadmaps) {
 			Intent i = new Intent(MapActivity.this, DownloadMapsActivity.class);
 			startActivity(i);
 			return true;
-		case R.id.location:
+		} else if (itemId == R.id.location) {
 			mMyLocationOverlay.enableFollowLocation();
             return true;
-		case R.id.compass:
-							// Compass functionality has changed in modern OSMdroid
-				// TODO: Implement compass functionality when needed
+		} else if (itemId == R.id.compass) {
+			// Compass functionality has changed in modern OSMdroid
+			// TODO: Implement compass functionality when needed
 			return true;
-		case R.id.filter:
-            i = new Intent(MapActivity.this, FilterActivity.class);
+		} else if (itemId == R.id.filter) {
+            Intent i = new Intent(MapActivity.this, FilterActivity.class);
             startActivityForResult(i, R.id.filter);
             return true;
 		}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Status text -->
+    <TextView
+        android:id="@+id/downloadMapsStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/downloadMapsIdleStatus"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:padding="8dp" />
+
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/downloadMapsProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Download button -->
+    <Button
+        android:id="@+id/btnDownloadMaps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btnDownload"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Tile source spinner -->
+    <Spinner
+        android:id="@+id/downloadMapsTileSource"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout> 

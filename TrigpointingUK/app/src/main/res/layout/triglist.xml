@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Header section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#CCCCCC">
+
+        <!-- Location text -->
+        <TextView
+            android:id="@+id/trigListLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Location: Unknown"
+            android:textSize="14sp" />
+
+        <!-- Filter text -->
+        <TextView
+            android:id="@+id/trigListHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Filter: All"
+            android:textSize="14sp" />
+
+        <!-- North indicator -->
+        <TextView
+            android:id="@+id/north"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Filter icons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/filterPillar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/t_pillar"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/filterFbm"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/t_fbm"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/filterPassive"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/t_passive"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/filterIntersected"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/t_intersected"
+            android:padding="4dp" />
+
+        <ImageView
+            android:id="@+id/compassArrow"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/arrow_00_n"
+            android:padding="4dp" />
+
+    </LinearLayout>
+
+    <!-- List view for trigs -->
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout> 

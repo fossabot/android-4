@@ -73,4 +73,40 @@
     
     <!-- Log trig layout strings -->
     <string name="logtrig">Log Trig</string>
+    
+    <!-- Missing string resources for various activities -->
+    <string name="downloadingPhotos">Downloading photos...</string>
+    <string name="noPhotos">No photos available</string>
+    <string name="downloadingLogs">Downloading logs...</string>
+    <string name="noLogs">No logs available</string>
+    <string name="radartitle">Radar Dialog</string>
+    <string name="downloadMapsIdleStatus">Ready to download maps</string>
+    <string name="downloadMapsInsertStatus">Downloading maps...</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
+    <!-- Menu item strings -->
+    <string name="refresh">Refresh</string>
+    <string name="directions">Directions</string>
+    <string name="browser">Browser</string>
+    <string name="radar">Radar</string>
+    <string name="map">Map</string>
+    <string name="heading">Heading</string>
+    <string name="downloadmaps">Download Maps</string>
+    <string name="location">Location</string>
+    <string name="compass">Compass</string>
+    
+    <!-- Tile source strings -->
+    <string name="cloudmade">Cloudmade</string>
+    <string name="cyclemap">Cycle Map</string>
+    <string name="mapnik">Mapnik</string>
+    <string name="mapquest">MapQuest</string>
+    <string name="bingaerial">Bing Aerial</string>
+    <string name="bingaeriallabels">Bing Aerial Labels</string>
+    <string name="bingroad">Bing Road</string>
+    <string name="bingosgb">Bing OSGB</string>
+    <string name="byCondition">By Condition</string>
+    <string name="none">None</string>
+    <string name="byLogged">By Logged</string>
+    
 </resources>

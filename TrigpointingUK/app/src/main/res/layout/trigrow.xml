@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Trig name -->
+    <TextView
+        android:id="@+id/trigName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Trig Name"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <!-- Trig distance -->
+    <TextView
+        android:id="@+id/trigDistance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="0.0km"
+        android:textSize="14sp" />
+
+    <!-- Trig arrow -->
+    <ImageView
+        android:id="@+id/trigArrow"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/arrow_00_n" />
+
+    <!-- Trig condition -->
+    <ImageView
+        android:id="@+id/trigCondition"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/c_good" />
+
+    <!-- Trig type -->
+    <ImageView
+        android:id="@+id/trigType"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/t_pillar" />
+
+    <!-- Trig logged status -->
+    <ImageView
+        android:id="@+id/trigLogged"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/c_good" />
+
+</LinearLayout> 
