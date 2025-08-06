@@ -64,73 +64,39 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
     
  	@Override
     public void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate: Starting MainActivity");
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
-
-        // retrieve saved instance state
-        Boolean runbefore = false;
-        if (savedInstanceState != null) {
-        	runbefore = savedInstanceState.getBoolean(RUNBEFORE, false);
-        } 
-        
         setContentView(R.layout.main);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        mPillarIcon 		= (ImageView) 		findViewById(R.id.countPillarImage);
-        mPillarCount		= (TextView)		findViewById(R.id.countPillarText);
-        mFbmIcon 			= (ImageView) 		findViewById(R.id.countFbmImage);
-        mFbmCount			= (TextView)		findViewById(R.id.countFbmText);
-        mPassiveIcon 		= (ImageView) 		findViewById(R.id.countPassiveImage);
-        mPassiveCount		= (TextView)		findViewById(R.id.countPassiveText);
-        mIntersectedIcon 	= (ImageView) 		findViewById(R.id.countIntersectedImage);
-        mIntersectedCount	= (TextView)		findViewById(R.id.countIntersectedText);
-        mUnsyncedCount		= (TextView)		findViewById(R.id.countUnsyncedText);
-        mUnsyncedIcon		= (ImageView) 		findViewById(R.id.countUnsyncedImage);
-        mPhotosCount		= (TextView)		findViewById(R.id.countPhotosText);
-        mPhotosIcon			= (ImageView) 		findViewById(R.id.countPhotosImage);
-        mSyncBtn 			= (Button) 			findViewById(R.id.btnSync);
         
-        // Add user's name to view
-        TextView user = (TextView) findViewById(R.id.txtUserName);
-        user.setText(mPrefs.getString("username", getResources().getText(R.string.noUser).toString()));
+        Log.i(TAG, "onCreate: Setting up UI components");
+        // Set up UI components
+        mPillarIcon = (ImageView) findViewById(R.id.countPillarImage);
+        mPillarCount = (TextView) findViewById(R.id.countPillarText);
+        mFbmIcon = (ImageView) findViewById(R.id.countFbmImage);
+        mFbmCount = (TextView) findViewById(R.id.countFbmText);
+        mPassiveIcon = (ImageView) findViewById(R.id.countPassiveImage);
+        mPassiveCount = (TextView) findViewById(R.id.countPassiveText);
+        mIntersectedIcon = (ImageView) findViewById(R.id.countIntersectedImage);
+        mIntersectedCount = (TextView) findViewById(R.id.countIntersectedText);
+        mUnsyncedIcon = (ImageView) findViewById(R.id.countUnsyncedImage);
+        mUnsyncedCount = (TextView) findViewById(R.id.countUnsyncedText);
+        mPhotosIcon = (ImageView) findViewById(R.id.countPhotosImage);
+        mPhotosCount = (TextView) findViewById(R.id.countPhotosText);
+        mSyncBtn = (Button) findViewById(R.id.btnSync);
         
-        // Add user info to ACRA
-        // ErrorReporter.getInstance().putCustomData("username", mPrefs.getString("username", ""));
-
-        // check for empty trig database
-        try {
-	        DbHelper db = new DbHelper(this);
-	        db.open();
-	        if (! db.isTrigTablePopulated()) {
-	        	showNoTrigsDialog();
-	        }
-	        db.close();
-        } catch (Exception e) {
-        	Log.e(TAG, "Caught exception - " + e.getMessage());
-        }
+        Log.i(TAG, "onCreate: Setting up preferences");
+        mPrefs = getSharedPreferences("TrigpointingUK", MODE_PRIVATE);
         
-        // Setup activity result launchers
+        Log.i(TAG, "onCreate: Setting up activity result launchers");
         setupActivityResultLaunchers();
         
-        // Setup click listeners
+        Log.i(TAG, "onCreate: Setting up click listeners");
         setupClickListeners();
         
-        //autosync
-        if (mPrefs.getBoolean("autosync", false) && !runbefore) {
-			doSync();     	
-        }   
+        Log.i(TAG, "onCreate: Populating counts");
+        populateCounts();
         
-        //Experimental
-        if (mPrefs.getBoolean("experimental", false)) {
-        	Toast.makeText(this, "Running in experimental mode", Toast.LENGTH_LONG).show();
-        } else {
-        	// disable crash button
-        	Button btnCrash = (Button) findViewById(R.id.btnCrash);
-        	btnCrash.setVisibility(View.INVISIBLE);
-        }
-        // disable search button
-        Button btnSearch = (Button) findViewById(R.id.btnSearch);
-        btnSearch.setEnabled(false);
+        Log.i(TAG, "onCreate: MainActivity setup complete");
     }
 
     private void setupActivityResultLaunchers() {
@@ -320,9 +286,11 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	
 	private void populateCounts() {
+		Log.i(TAG, "populateCounts: Starting count population");
 		// Show loading state
 		runOnUiThread(() -> {
 			try {
+				Log.i(TAG, "populateCounts: Setting loading state");
 				mPillarIcon.setImageResource(R.drawable.t_pillar);
 				mPillarCount.setText("");
 				mFbmIcon.setImageResource(R.drawable.t_fbm);
@@ -337,70 +305,83 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 				mPhotosCount.setText("");
 				mSyncBtn.setTextColor(getResources().getColor(android.R.color.primary_text_light));
 			} catch (NotFoundException e) {
+				Log.e(TAG, "populateCounts: Error setting loading state", e);
 				e.printStackTrace();
 			}
 		});
 		
 		// Run database operations in background
 		CompletableFuture.supplyAsync(() -> {
+			Log.i(TAG, "populateCounts: Starting database operations");
 			DbHelper mDb = new DbHelper(MainActivity.this);
 			try {
+				Log.i(TAG, "populateCounts: Opening database");
 				mDb.open();
+				Log.i(TAG, "populateCounts: Counting pillars");
 				int nPillar = mDb.countLoggedPillars();
+				Log.i(TAG, "populateCounts: Counting FBMs");
 				int nFbm = mDb.countLoggedFbms();
+				Log.i(TAG, "populateCounts: Counting passives");
 				int nPassive = mDb.countLoggedPassives();
+				Log.i(TAG, "populateCounts: Counting intersected");
 				int nIntersected = mDb.countLoggedIntersecteds();
+				Log.i(TAG, "populateCounts: Counting unsynced");
 				int nUnsynced = mDb.countUnsynced();
+				Log.i(TAG, "populateCounts: Counting photos");
 				int nPhotos = mDb.countPhotos();
+				Log.i(TAG, "populateCounts: Closing database");
 				mDb.close();
 				
+				Log.i(TAG, "populateCounts: Database counts - Pillars: " + nPillar + ", FBMs: " + nFbm + ", Passives: " + nPassive + ", Intersected: " + nIntersected + ", Unsynced: " + nUnsynced + ", Photos: " + nPhotos);
 				return new int[]{nPillar, nFbm, nPassive, nIntersected, nUnsynced, nPhotos};
 			} catch (SQLException e) {
+				Log.e(TAG, "populateCounts: SQLException during database operations", e);
+				e.printStackTrace();
+				return new int[]{0, 0, 0, 0, 0, 0};
+			} catch (Exception e) {
+				Log.e(TAG, "populateCounts: Unexpected exception during database operations", e);
 				e.printStackTrace();
 				return new int[]{0, 0, 0, 0, 0, 0};
 			}
 		}, executor).thenAcceptAsync(counts -> {
 			// Update UI on main thread
 			runOnUiThread(() -> {
-				int nPillar = counts[0];
-				int nFbm = counts[1];
-				int nPassive = counts[2];
-				int nIntersected = counts[3];
-				int nUnsynced = counts[4];
-				int nPhotos = counts[5];
-				
-				if (nPillar > 0) {
-					mPillarIcon.setImageResource(R.drawable.ts_pillar);
-					mPillarCount.setText(String.valueOf(nPillar));				
-				}
-				if (nFbm > 0) {
-					mFbmIcon.setImageResource(R.drawable.ts_fbm);
-					mFbmCount.setText(String.valueOf(nFbm));				
-				}
-				if (nPassive > 0) {
-					mPassiveIcon.setImageResource(R.drawable.ts_passive);
-					mPassiveCount.setText(String.valueOf(nPassive));				
-				}
-				if (nIntersected > 0) {
-					mIntersectedIcon.setImageResource(R.drawable.ts_intersected);
-					mIntersectedCount.setText(String.valueOf(nIntersected));				
-				}
-				if (nUnsynced > 0) {
-					mUnsyncedIcon.setVisibility(View.VISIBLE);
-					mUnsyncedCount.setText(String.valueOf(nUnsynced));
-				}
-				if (nPhotos > 0) {
-					mPhotosIcon.setVisibility(View.VISIBLE);
-					mPhotosCount.setText(String.valueOf(nPhotos));
-				}
-				
-				if (nUnsynced > 0 || nPhotos > 0) {
-					mSyncBtn.setTextColor(getResources().getColor(R.color.syncNow));
-				} else {
-					mSyncBtn.setTextColor(getResources().getColor(android.R.color.primary_text_light));
+				try {
+					Log.i(TAG, "populateCounts: Updating UI with counts");
+					int nPillar = counts[0];
+					int nFbm = counts[1];
+					int nPassive = counts[2];
+					int nIntersected = counts[3];
+					int nUnsynced = counts[4];
+					int nPhotos = counts[5];
+					
+					mPillarCount.setText(String.valueOf(nPillar));
+					mFbmCount.setText(String.valueOf(nFbm));
+					mPassiveCount.setText(String.valueOf(nPassive));
+					mIntersectedCount.setText(String.valueOf(nIntersected));
+					
+					if (nUnsynced > 0) {
+						mUnsyncedIcon.setVisibility(View.VISIBLE);
+						mUnsyncedCount.setText(String.valueOf(nUnsynced));
+						mSyncBtn.setTextColor(getResources().getColor(R.color.syncNow));
+					}
+					
+					if (nPhotos > 0) {
+						mPhotosIcon.setVisibility(View.VISIBLE);
+						mPhotosCount.setText(String.valueOf(nPhotos));
+					}
+					
+					Log.i(TAG, "populateCounts: UI update complete");
+				} catch (Exception e) {
+					Log.e(TAG, "populateCounts: Error updating UI", e);
+					e.printStackTrace();
 				}
 			});
-		}, executor);
+		}).exceptionally(throwable -> {
+			Log.e(TAG, "populateCounts: Exception in async operation", throwable);
+			throwable.printStackTrace();
+			return null;
+		});
 	}
 
 

@@ -180,15 +180,17 @@ public class DbHelper {
 	 * @throws SQLException if the database could be neither opened or created
 	 */
 	public DbHelper open() throws SQLException {
-		Log.i(TAG, "Opening mDbHelper");
+		Log.i(TAG, "open: Opening database");
 		mDbHelper = new DatabaseHelper(mCtx);
 		mDb = mDbHelper.getWritableDatabase();
+		Log.i(TAG, "open: Database opened successfully");
 		return this;
 	}
 
 	public void close() {
-		Log.i(TAG, "Closing mDbHelper");
+		Log.i(TAG, "close: Closing database");
 		mDbHelper.close();
+		Log.i(TAG, "close: Database closed");
 	}
 
 
@@ -377,11 +379,23 @@ public class DbHelper {
 	 * @return Boolean 
 	 */
 	public Boolean isTrigTablePopulated () {
-		Cursor c =  mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, null, null, null, null, null);
-		if (c.getCount() == 0 ) {
+		Log.i(TAG, "isTrigTablePopulated: Checking if trig table is populated");
+		try {
+			Cursor cursor = mDb.rawQuery("SELECT COUNT(*) FROM " + TRIG_TABLE, null);
+			if (cursor.moveToFirst()) {
+				int count = cursor.getInt(0);
+				Log.i(TAG, "isTrigTablePopulated: Table has " + count + " records");
+				cursor.close();
+				return count > 0;
+			}
+			cursor.close();
+			Log.i(TAG, "isTrigTablePopulated: No results found");
+			return false;
+		} catch (Exception e) {
+			Log.e(TAG, "isTrigTablePopulated: Exception occurred", e);
+			e.printStackTrace();
 			return false;
 		}
-		return true;
 	}
 
 	/**
@@ -390,17 +404,22 @@ public class DbHelper {
 	 * @return int
 	 */
 	public int countLoggedPillars () {
-		Log.i(TAG, "countLoggedPillars");
-		Cursor c = null;
+		Log.i(TAG, "countLoggedPillars: Starting count");
 		try {
-			c =  mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, 
-					TRIG_TYPE + "='" + Trig.Physical.PILLAR.code()+"' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code()+ "'", 
-					null, null, null, null);
-			return c.getCount();
-		} finally {
-			if (c != null) {
-				c.close();
+			Cursor cursor = mDb.rawQuery("SELECT COUNT(*) FROM " + TRIG_TABLE + " WHERE " + TRIG_TYPE + " = " + Trig.Physical.PILLAR.ordinal() + " AND " + TRIG_LOGGED + " != 'U'", null);
+			if (cursor.moveToFirst()) {
+				int count = cursor.getInt(0);
+				Log.i(TAG, "countLoggedPillars: Count = " + count);
+				cursor.close();
+				return count;
 			}
+			cursor.close();
+			Log.i(TAG, "countLoggedPillars: No results found");
+			return 0;
+		} catch (Exception e) {
+			Log.e(TAG, "countLoggedPillars: Exception occurred", e);
+			e.printStackTrace();
+			return 0;
 		}
 	}
 	/**
