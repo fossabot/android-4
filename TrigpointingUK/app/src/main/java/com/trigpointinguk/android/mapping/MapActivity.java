@@ -168,7 +168,7 @@ public class MapActivity extends Activity implements MapListener {
 		// save choice to prefs
 		Editor editor = mPrefs.edit();
 		editor.putString("tileSource", tileSource.toString());
-		editor.commit();	
+		editor.apply();	
 	}
 
 
@@ -293,7 +293,7 @@ public class MapActivity extends Activity implements MapListener {
 		editor.putInt("west", (int)(bb.getLonWest() * 1E6));
 		editor.putString("iconColouring", mIconColouring.toString());
 		editor.putBoolean("compass", false); // Compass functionality not yet implemented
-		editor.commit();
+		editor.apply();
 		super.onPause();
 	}
 

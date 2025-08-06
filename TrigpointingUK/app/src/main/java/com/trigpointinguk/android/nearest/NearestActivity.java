@@ -163,7 +163,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 		// save compass preference
 		Editor editor = mPrefs.edit();
 		editor.putBoolean(USECOMPASS, mUsingCompass);
-		editor.commit();
+		editor.apply();
 		// stop listening to the GPS and compass
 		mLocationManager.removeUpdates(mLocationListener);
 		useCompass(false);

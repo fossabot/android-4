@@ -187,7 +187,7 @@ public class TrigDetailsInfoTab extends Activity {
 			editor.putInt("zoomLevel", 12);
 			editor.putInt("latitude", (int)(mLatitude * 1E6));
 			editor.putInt("longitude", (int)(mLongitude * 1E6));
-			editor.commit();
+			editor.apply();
 			Intent i = new Intent(TrigDetailsInfoTab.this, MapActivity.class);
 			startActivityForResult(i, R.id.map);
 			return true;	     

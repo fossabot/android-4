@@ -42,7 +42,7 @@ public class PreferencesActivity extends PreferenceActivity {
 			Editor editor = prefs.edit();
 			editor.putString("plaintextpassword", plaintext);
 			editor.remove("password");
-			editor.commit();
+			editor.apply();
 		}
 	}
 	

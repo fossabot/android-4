@@ -50,7 +50,7 @@ public class FilterActivity extends Activity {
 		editor.putString(Filter.FILTERRADIOTEXT, btnSelected.getText().toString());
 	
 		// Save to prefs
-		editor.commit();
+		editor.apply();
 		super.onPause();
 	}
 

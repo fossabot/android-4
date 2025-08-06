@@ -480,7 +480,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
         }
 
 		// store the log count to pre-populate the progress bar next time
-		mPrefs.edit().putInt(PREFS_LOGCOUNT,i).commit();
+		mPrefs.edit().putInt(PREFS_LOGCOUNT,i).apply();
         
 		return SUCCESS;		
 	}
