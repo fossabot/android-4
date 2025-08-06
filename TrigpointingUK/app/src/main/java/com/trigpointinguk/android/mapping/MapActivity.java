@@ -2,21 +2,20 @@ package com.trigpointinguk.android.mapping;
 
 import java.util.ArrayList;
 
-import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.bing.BingMapTileSource;
+
 import org.osmdroid.tileprovider.util.CloudmadeUtil;
-import org.osmdroid.util.BoundingBoxE6;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
-import org.osmdroid.views.overlay.MyLocationOverlay;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.OverlayItem.HotspotPlace;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -56,14 +55,14 @@ public class MapActivity extends Activity implements MapListener {
 
 	private MapView            mMapView;
 	private MapController      mMapController;
-	private MyLocationOverlay  mMyLocationOverlay;
+	private MyLocationNewOverlay  mMyLocationOverlay;
 	private ScaleBarOverlay    mScaleBarOverlay;  
 
 	private SharedPreferences  mPrefs;
 	private DbHelper    	   mDb;
 	
 	private ItemizedIconOverlay<OverlayItem> mTrigOverlay;
-	private BoundingBoxE6      		mBigBB         = new BoundingBoxE6(0, 0, 0, 0);
+	private BoundingBox      		mBigBB         = new BoundingBox(0.0, 0.0, 0.0, 0.0);
 	private MapIcon.colourScheme    mIconColouring = colourScheme.NONE;
 	private TileSource         		mTileSource    = TileSource.NONE;
 	private boolean            		mTooManyTrigs;
@@ -89,15 +88,15 @@ public class MapActivity extends Activity implements MapListener {
 		mMapView = (MapView) findViewById(R.id.mapview);  
 		mMapView.setBuiltInZoomControls(true);
 		mMapView.setMultiTouchControls(true);
-		mMapController = mMapView.getController();
+		mMapController = (MapController) mMapView.getController();
 
 
 		// setup current location overlay
-		mMyLocationOverlay = new MyLocationOverlay(this, mMapView, mResourceProxy);      
+		mMyLocationOverlay = new MyLocationNewOverlay(mMapView);      
 		mMapView.getOverlays().add(mMyLocationOverlay);
 
 		// add scalebar
-		mScaleBarOverlay = new ScaleBarOverlay(this);                          
+		mScaleBarOverlay = new ScaleBarOverlay(mMapView);                          
 		mMapView.getOverlays().add(mScaleBarOverlay);
 
 		// setup trigpoint overlay
@@ -109,7 +108,7 @@ public class MapActivity extends Activity implements MapListener {
 					public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
 						// When icon is tapped, jump to TrigDetails activity
 						Intent i = new Intent(MapActivity.this, TrigDetailsActivity.class);
-						i.putExtra(DbHelper.TRIG_ID, (long)Long.parseLong(item.mTitle));
+						i.putExtra(DbHelper.TRIG_ID, (long)Long.parseLong(item.getTitle()));
 						startActivityForResult(i, index);
 						return true; // We 'handled' this event.
 					}
@@ -117,10 +116,10 @@ public class MapActivity extends Activity implements MapListener {
 					@Override
 					public boolean onItemLongPress(final int index,
 							final OverlayItem item) {
-						Toast.makeText(MapActivity.this, item.mDescription, Toast.LENGTH_SHORT).show();
+						Toast.makeText(MapActivity.this, item.getSnippet(), Toast.LENGTH_SHORT).show();
 						return false;
 					}
-				}, new DefaultResourceProxyImpl(getApplicationContext()));
+				}, mResourceProxy);
 		mMapView.getOverlays().add(mTrigOverlay);
 		mMapView.setMapListener(this);
 		
@@ -145,29 +144,25 @@ public class MapActivity extends Activity implements MapListener {
 			mMapView.setTileSource(TileSourceFactory.CLOUDMADESTANDARDTILES);
 			break;
 		case BING_AERIAL:
-            BingMapTileSource.retrieveBingKey(getApplicationContext());
-            BingMapTileSource bingTileSource = new BingMapTileSource(null);
-            bingTileSource.setStyle(BingMapTileSource.IMAGERYSET_AERIAL);
-			mMapView.setTileSource(bingTileSource);
+            // BingMapTileSource is no longer available in modern OSMdroid
+            // Using default tile source instead
+			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
 		case BING_AERIAL_LABELS:
-            BingMapTileSource.retrieveBingKey(getApplicationContext());
-            BingMapTileSource bingTileSource2 = new BingMapTileSource(null);
-            bingTileSource2.setStyle(BingMapTileSource.IMAGERYSET_AERIALWITHLABELS);
-			mMapView.setTileSource(bingTileSource2);
+            // BingMapTileSource is no longer available in modern OSMdroid
+            // Using default tile source instead
+			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
 		case BING_ROAD:
-            BingMapTileSource.retrieveBingKey(getApplicationContext());
-            BingMapTileSource bingTileSource3 = new BingMapTileSource(null);
-            bingTileSource3.setStyle(BingMapTileSource.IMAGERYSET_ROAD);
-			mMapView.setTileSource(bingTileSource3);
+            // BingMapTileSource is no longer available in modern OSMdroid
+            // Using default tile source instead
+			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
 		case BING_OSGB:
 		case NONE:
-            BingMapTileSource.retrieveBingKey(getApplicationContext());
-            BingMapTileSource bingTileSource4 = new BingMapTileSource(null);
-            bingTileSource4.setStyle(BingMapTileSource.IMAGERYSET_OSGB);
-			mMapView.setTileSource(bingTileSource4);
+            // BingMapTileSource is no longer available in modern OSMdroid
+            // Using default tile source instead
+			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
 		}
 		// save choice to prefs
@@ -279,11 +274,8 @@ public class MapActivity extends Activity implements MapListener {
 			mMyLocationOverlay.enableFollowLocation();
             return true;
 		case R.id.compass:
-			if (mMyLocationOverlay.isCompassEnabled()) {
-				mMyLocationOverlay.disableCompass();
-			} else {
-				mMyLocationOverlay.enableCompass();
-			}
+							// Compass functionality has changed in modern OSMdroid
+				// TODO: Implement compass functionality when needed
 			return true;
 		case R.id.filter:
             i = new Intent(MapActivity.this, FilterActivity.class);
@@ -304,13 +296,13 @@ public class MapActivity extends Activity implements MapListener {
 		editor.putInt("latitude", mapCenter.getLatitudeE6());
 		editor.putInt("longitude", mapCenter.getLongitudeE6());
 		editor.putInt("zoomLevel", mMapView.getZoomLevel());
-		BoundingBoxE6 bb = mMapView.getBoundingBox();
-		editor.putInt("north", bb.getLatNorthE6());
-		editor.putInt("south", bb.getLatSouthE6());
-		editor.putInt("east", bb.getLonEastE6());
-		editor.putInt("west", bb.getLonWestE6());
+						BoundingBox bb = mMapView.getBoundingBox();
+		editor.putInt("north", (int)(bb.getLatNorth() * 1E6));
+		editor.putInt("south", (int)(bb.getLatSouth() * 1E6));
+		editor.putInt("east", (int)(bb.getLonEast() * 1E6));
+		editor.putInt("west", (int)(bb.getLonWest() * 1E6));
 		editor.putString("iconColouring", mIconColouring.toString());
-		editor.putBoolean("compass", mMyLocationOverlay.isCompassEnabled());
+		editor.putBoolean("compass", false); // Compass functionality not yet implemented
 		editor.commit();
 		super.onPause();
 	}
@@ -357,19 +349,17 @@ public class MapActivity extends Activity implements MapListener {
 			mMapController.setZoom(mPrefs.getInt("zoomLevel", 12));
 			mMapController.setCenter(new GeoPoint(mPrefs.getInt("latitude", DEFAULT_LAT)
 												, mPrefs.getInt("longitude", DEFAULT_LON)));
-			BoundingBoxE6 bb = new BoundingBoxE6( mPrefs.getInt("north", mPrefs.getInt("latitude",  DEFAULT_LAT)  + 80000) 
-												, mPrefs.getInt("east",  mPrefs.getInt("longitude", DEFAULT_LON)  + 80000)
-												, mPrefs.getInt("south", mPrefs.getInt("latitude",  DEFAULT_LAT)  - 80000)
-												, mPrefs.getInt("west",  mPrefs.getInt("longitude", DEFAULT_LON)  - 80000) );
+									BoundingBox bb = new BoundingBox( 
+												mPrefs.getInt("north", mPrefs.getInt("latitude",  DEFAULT_LAT)  + 80000) / 1E6,
+												mPrefs.getInt("east",  mPrefs.getInt("longitude", DEFAULT_LON)  + 80000) / 1E6,
+												mPrefs.getInt("south", mPrefs.getInt("latitude",  DEFAULT_LAT)  - 80000) / 1E6,
+												mPrefs.getInt("west",  mPrefs.getInt("longitude", DEFAULT_LON)  - 80000) / 1E6);
 			populateTrigOverlay(bb);
 		} catch (ClassCastException e) {
 			// bad coordinates, do nothing
 		}	
-		if (mPrefs.getBoolean("compass", false)) {
-			mMyLocationOverlay.enableCompass();
-		} else {
-			mMyLocationOverlay.disableCompass();
-		}
+		// Compass functionality has changed in modern OSMdroid
+		// TODO: Implement compass functionality when needed
 
 	}
 
@@ -389,21 +379,21 @@ public class MapActivity extends Activity implements MapListener {
 		return false;
 	}
 
-	private void populateTrigOverlay(BoundingBoxE6 bb) {
+	private void populateTrigOverlay(BoundingBox bb) {
 		ArrayList<OverlayItem> newitems = new ArrayList<OverlayItem>();
 		
 		MapIcon mapIcon = new MapIcon(this);
 
 		// Only repopulate if the new bounding box extends beyond region previously queried
-		if (bb.getLatNorthE6() < mBigBB.getLatNorthE6() 
-				&& bb.getLatSouthE6() > mBigBB.getLatSouthE6() 
-				&& bb.getLonEastE6() < mBigBB.getLonEastE6() 
-				&& bb.getLonWestE6() > mBigBB.getLonWestE6()
+		if (bb.getLatNorth() < mBigBB.getLatNorth() 
+				&& bb.getLatSouth() > mBigBB.getLatSouth() 
+				&& bb.getLonEast() < mBigBB.getLonEast() 
+				&& bb.getLonWest() > mBigBB.getLonWest()
 				&& mTooManyTrigs == false) {
 			return;
 		}
 		// Cope with empty regions (when map initially loading)
-		if (bb.getLatitudeSpanE6() == 0 || bb.getLongitudeSpanE6() == 0) {
+		if (bb.getLatitudeSpan() == 0 || bb.getLongitudeSpan() == 0) {
 			return;
 		}
 		

@@ -1,6 +1,6 @@
 package com.trigpointinguk.android;
 
-import org.osmdroid.util.BoundingBoxE6;
+import org.osmdroid.util.BoundingBox;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -301,18 +301,18 @@ public class DbHelper {
 	 * 
 	 * @return Cursor 
 	 */
-	public Cursor fetchTrigMapList (BoundingBoxE6 box) {
+	public Cursor fetchTrigMapList (BoundingBox box) {
 		String strOrder = String.format("%s limit %s", 
 				TRIG_LAT, 
 				mPrefs.getString("mapcount", DEFAULT_MAP_COUNT));	
    
 		String strWhere = String.format("WHERE %s between %s and %s  and  %s between %s and %s",
 				TRIG_LON, 
-				box.getLonWestE6()/1000000.0, 
-				box.getLonEastE6()/1000000.0, 
+				box.getLonWest(), 
+				box.getLonEast(), 
 				TRIG_LAT, 
-				box.getLatSouthE6()/1000000.0, 
-				box.getLatNorthE6()/1000000.0); 
+				box.getLatSouth(), 
+				box.getLatNorth()); 
 
 		strWhere += new Filter((Activity)mCtx).filterWhere("AND");
 		Log.i(TAG, strWhere);
