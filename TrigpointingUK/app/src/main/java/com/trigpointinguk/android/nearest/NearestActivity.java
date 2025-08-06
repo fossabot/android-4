@@ -15,8 +15,13 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
@@ -117,7 +122,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 			Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
 			updateLocationHeader("cached");
-			if (mCurrentLocation != null && !mTaskRunning) {new FindTrigsTask().execute();}
+			if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
 		}
 		
 		// Define a listener that responds to location updates
@@ -209,7 +214,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 
 
 	private void refreshList() {
-		if (!mTaskRunning) {new FindTrigsTask().execute();}
+		if (!mTaskRunning) {findTrigs();}
 	}
 	
 	
@@ -314,7 +319,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 				Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
 				updateLocationHeader("cached");
-				if (mCurrentLocation != null && !mTaskRunning) {new FindTrigsTask().execute();}
+				if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
 			} else {
 				// Permission denied
 				updateLocationHeader("permission_denied");
@@ -326,9 +331,14 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 
 
 
-	private class FindTrigsTask extends AsyncTask<Void, Integer, Cursor> {
+	private void findTrigs() {
+		Log.i(TAG, "FindTrigsTask.onPreExecute");
+		mTaskRunning = true;
 		
-		protected Cursor doInBackground(Void... arg0) {
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		Handler mainHandler = new Handler(Looper.getMainLooper());
+		
+		CompletableFuture.supplyAsync(() -> {
 			Log.i(TAG, "FindTrigsTask.doInBackground");
 			Cursor c = null;
 			try {
@@ -339,13 +349,11 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 			}
 			mUpdateCount++;
 			return c;
-		}
-		protected void onProgressUpdate(Integer... progress) {
-		}
-		protected void onPostExecute(Cursor c) {			
-			Log.i(TAG, "FindTrigsTask.onPostExecute " + c);
+		}, executor)
+		.thenAcceptAsync(cursor -> {
+			Log.i(TAG, "FindTrigsTask.onPostExecute " + cursor);
 			try {
-				mCursor = c;
+				mCursor = cursor;
 				mListAdapter.swapCursor(mCursor, mCurrentLocation);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -353,11 +361,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 			}
 			updateLocationHeader("task");
 			mTaskRunning = false;
-		}
-		protected void onPreExecute() {
-			Log.i(TAG, "FindTrigsTask.onPreExecute");
-			mTaskRunning = true;
-		}
+		}, mainHandler::post);
 	}
 
 
