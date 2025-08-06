@@ -226,6 +226,7 @@ id prefs
 id radar
 id refresh
 id sendTime
+id tabLayout
 id trigArrow
 id trigCondition
 id trigDistance
@@ -247,6 +248,7 @@ id triginfo_waypoint
 id triginfo_wgs84
 id trigosgallery
 id txtUserName
+id viewPager
 id yes
 id zoomview
 layout displaybitmap

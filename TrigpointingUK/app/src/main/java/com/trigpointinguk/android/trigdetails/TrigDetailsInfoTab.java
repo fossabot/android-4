@@ -1,6 +1,5 @@
 package com.trigpointinguk.android.trigdetails;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -11,9 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,6 +24,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -30,7 +35,7 @@ import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.LatLon;
 import com.trigpointinguk.android.types.Trig;
 
-public class TrigDetailsInfoTab extends Activity {
+public class TrigDetailsInfoTab extends Fragment {
 	private static final String TAG="TrigDetailsInfoTab";
 	private long     mTrigId;
 	private DbHelper mDb;
@@ -41,24 +46,33 @@ public class TrigDetailsInfoTab extends Activity {
 	private String   mWaypoint;
 	private CheckBox mMark;
     private SharedPreferences mPrefs;
+    private View mView;
 
 	
 	private static final int RADAR = 1;
 	
-	public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.triginfo);
-
-        // get trig_id from extras
-        Bundle extras = getIntent().getExtras();
-		if (extras == null) {return;}
-		mTrigId = extras.getLong(DbHelper.TRIG_ID);
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.triginfo, container, false);
+	}
+	
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		
+		mView = view;
+		
+		// get trig_id from arguments
+		Bundle args = getArguments();
+		if (args == null) {return;}
+		mTrigId = args.getLong(DbHelper.TRIG_ID);
 		Log.i("TrigInfo", "Trig_id = "+mTrigId);
 
 		// get application preferences
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
-		mMark = (CheckBox) findViewById(R.id.mark);
+		mMark = (CheckBox) view.findViewById(R.id.mark);
 		mMark.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -74,15 +88,15 @@ public class TrigDetailsInfoTab extends Activity {
 
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		populateFields();
 	}
 
 	
-	private void populateFields() {
+		private void populateFields() {
 		// get trig info from database
-		mDb = new DbHelper(TrigDetailsInfoTab.this);
+		mDb = new DbHelper(requireContext());
 		mDb.open();		
 		Cursor c = mDb.fetchTrigInfo(mTrigId);
 		c.moveToFirst();
@@ -97,55 +111,54 @@ public class TrigDetailsInfoTab extends Activity {
 		TextView tv;
 		ImageView iv;
 		
-		tv = (TextView)  findViewById(R.id.triginfo_name);
+		tv = (TextView)  mView.findViewById(R.id.triginfo_name);
 		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_NAME)));
 
-		tv = (TextView)  findViewById(R.id.triginfo_waypoint);
+		tv = (TextView)  mView.findViewById(R.id.triginfo_waypoint);
 		tv.setText(mWaypoint);
 		
-		iv = (ImageView) findViewById(R.id.triginfo_condition_icon);
+		iv = (ImageView) mView.findViewById(R.id.triginfo_condition_icon);
 		iv.setImageResource(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).icon());
 
-		tv = (TextView) findViewById(R.id.triginfo_condition);
+		tv = (TextView) mView.findViewById(R.id.triginfo_condition);
 		tv.setText(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).toString());
 
 		LatLon ll = new LatLon(c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT)), c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON)));
 
-		tv = (TextView)  findViewById(R.id.triginfo_gridref);
+		tv = (TextView)  mView.findViewById(R.id.triginfo_gridref);
 		tv.setText(ll.getOSGB10());
 		
-		tv = (TextView)  findViewById(R.id.triginfo_wgs84);
+		tv = (TextView)  mView.findViewById(R.id.triginfo_wgs84);
 		tv.setText(ll.getWGS());
 		
-		tv = (TextView) findViewById(R.id.triginfo_current);
+		tv = (TextView) mView.findViewById(R.id.triginfo_current);
 		tv.setText(Trig.Current.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CURRENT))).toString());
 
-		tv = (TextView) findViewById(R.id.triginfo_historic);
+		tv = (TextView) mView.findViewById(R.id.triginfo_historic);
 		tv.setText(Trig.Historic.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_HISTORIC))).toString());
 
-		tv = (TextView) findViewById(R.id.triginfo_type);
+		tv = (TextView) mView.findViewById(R.id.triginfo_type);
 		tv.setText(Trig.Physical.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_TYPE))).toString());
 
-		tv = (TextView) findViewById(R.id.triginfo_fb);
+		tv = (TextView) mView.findViewById(R.id.triginfo_fb);
 		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_FB)));
 
 		c.close();
 
 		mMark.setChecked(mDb.isMarkedTrig(mTrigId));
 		
-	
+		
 	}
 	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.trigdetailsinfomenu, menu);
-		return result;
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+		inflater.inflate(R.menu.trigdetailsinfomenu, menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		int itemId = item.getItemId();
 		
 		if (itemId == R.id.directions) {
@@ -153,7 +166,7 @@ public class TrigDetailsInfoTab extends Activity {
 			try {
 				startActivity( new Intent( Intent.ACTION_VIEW, mNavUrl ) );
 			} catch (ActivityNotFoundException e) {
-				Toast.makeText(this, "Unable to launch navigator", Toast.LENGTH_LONG).show();
+				Toast.makeText(requireContext(), "Unable to launch navigator", Toast.LENGTH_LONG).show();
 			} 
 			return true;
 		} else if (itemId == R.id.browser) {
@@ -161,7 +174,7 @@ public class TrigDetailsInfoTab extends Activity {
 			try {
 				startActivity( new Intent( Intent.ACTION_VIEW, mTUKUrl ) );
 			} catch (ActivityNotFoundException e) {
-				Toast.makeText(this, "Unable to launch browser", Toast.LENGTH_LONG).show();
+				Toast.makeText(requireContext(), "Unable to launch browser", Toast.LENGTH_LONG).show();
 			}
 			return true;
 		} else if (itemId == R.id.radar) {
