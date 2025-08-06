@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
+import android.view.KeyEvent;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -91,5 +92,15 @@ public class TrigDetailsActivity extends TabActivity {
 		} finally {
 			mDb.close();
 		}
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// Ensure we finish this activity and return to the previous one
+			finish();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

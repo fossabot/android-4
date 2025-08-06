@@ -151,7 +151,12 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 
 
 	
-	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(TAG, "onActivityResult");
+		refreshList();
+		updateFilterHeader();
+	}
 	
 	@Override
 	protected void onPause() {
@@ -297,12 +302,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 	
     
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(TAG, "onActivityResult");
-		refreshList();
-		updateFilterHeader();
-	}
+
 	
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
