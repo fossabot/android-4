@@ -134,6 +134,7 @@ id bingaerial
 id bingaeriallabels
 id bingosgb
 id bingroad
+id browser
 id btnCrash
 id btnDownload
 id btnDownloadMaps
@@ -159,6 +160,7 @@ id countPillarText
 id countUnsyncedImage
 id countUnsyncedText
 id cyclemap
+id directions
 id downloadMapsProgress
 id downloadMapsStatus
 id downloadMapsTileSource
@@ -187,6 +189,7 @@ id logAdminFlag
 id logComment
 id logCondition
 id logDate
+id logDateUser
 id logDelete
 id logFB
 id logGallery
@@ -194,18 +197,23 @@ id logGetLocation
 id logGridref
 id logScore
 id logSyncLater
+id logText
 id logTime
 id logUploadNow
 id logUserFlag
 id logswitcher
+id map
 id mapTypeGroup
 id mapnik
 id mapquest
 id mapview
 id mark
+id no
 id none
 id north
+id photoDateUser
 id photoDescr
+id photoIcon
 id photoIsPublic
 id photoName
 id photoRemove
@@ -213,12 +221,15 @@ id photoSave
 id photoSubject
 id photoThumb
 id prefs
+id radar
+id refresh
 id sendTime
 id trigArrow
 id trigCondition
 id trigDistance
 id trigListHeader
 id trigListLocation
+id trigLogCondition
 id trigLogged
 id trigName
 id trigType
@@ -232,7 +243,9 @@ id triginfo_name
 id triginfo_type
 id triginfo_waypoint
 id triginfo_wgs84
+id trigosgallery
 id txtUserName
+id yes
 id zoomview
 layout displaybitmap
 layout download
@@ -243,13 +256,21 @@ layout logtrig
 layout main
 layout mapdownload
 layout mapview
+layout radardialog
+layout trigalbum
+layout trigalbumrow
 layout trigdetails
 layout triginfo
 layout triglist
+layout triglogrow
+layout triglogs
+layout trigosmap
 layout trigrow
 menu mainmenu
 menu mapmenu
 menu nearestmenu
+menu trigdetailsinfomenu
+menu trigdetailsmenu
 string addLog
 string app_name
 string bingaerial
@@ -334,5 +355,5 @@ string toastAddPassword
 string toastAddUsername
 string yes
 string zoomview
-styleable TrigpointingUK android:galleryItemBackground
+styleable TrigpointingUK android_galleryItemBackground
 xml preferences

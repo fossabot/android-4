@@ -263,33 +263,32 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
     }    
     
     
-	@Override
+		@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent i;
-        switch (item.getItemId()) {
-        
-        case R.id.downloadtrigs:
-            i = new Intent(MainActivity.this, DownloadTrigsActivity.class);
-            startActivity(i);
-            return true;
-        case R.id.downloadmaps:
-            i = new Intent(MainActivity.this, DownloadMapsActivity.class);
-            startActivity(i);
-            return true;
-        case R.id.prefs:
-            i = new Intent(MainActivity.this, PreferencesActivity.class);
-            // Use activity result launcher for preferences
-            preferencesLauncher.launch(i);
-            return true;
-        case R.id.about:
-            i = new Intent(MainActivity.this, HelpPageActivity.class);
-            i.putExtra(HelpPageActivity.PAGE, "about.html");
-            startActivity(i);
-            return true;
-        case R.id.clearcache:
+		int itemId = item.getItemId();
+		
+		if (itemId == R.id.downloadtrigs) {
+			Intent i = new Intent(MainActivity.this, DownloadTrigsActivity.class);
+			startActivity(i);
+			return true;
+		} else if (itemId == R.id.downloadmaps) {
+			Intent i = new Intent(MainActivity.this, DownloadMapsActivity.class);
+			startActivity(i);
+			return true;
+		} else if (itemId == R.id.prefs) {
+			Intent i = new Intent(MainActivity.this, PreferencesActivity.class);
+			// Use activity result launcher for preferences
+			preferencesLauncher.launch(i);
+			return true;
+		} else if (itemId == R.id.about) {
+			Intent i = new Intent(MainActivity.this, HelpPageActivity.class);
+			i.putExtra(HelpPageActivity.PAGE, "about.html");
+			startActivity(i);
+			return true;
+		} else if (itemId == R.id.clearcache) {
 			new ClearCacheTask(MainActivity.this).execute();        	
-            return true;
-        }
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
  

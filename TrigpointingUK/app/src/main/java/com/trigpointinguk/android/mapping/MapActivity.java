@@ -134,10 +134,10 @@ public class MapActivity extends Activity implements MapListener {
 			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
 		case CYCLEMAP:
-			mMapView.setTileSource(TileSourceFactory.getCycleMap());
+			mMapView.setTileSource(TileSourceFactory.CYCLEMAP);
 			break;
 		case MAPQUEST:
-			mMapView.setTileSource(TileSourceFactory.getMapQuestOSM());
+			mMapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 			break;
 		case CLOUDMADE:
             CloudmadeUtil.retrieveCloudmadeKey(getApplicationContext());
