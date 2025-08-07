@@ -100,6 +100,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 		// Debug: Log initial tile source
 		try {
 			Log.i(TAG, "Initial tile source: " + mMapView.getTileProvider().getTileSource().name());
+			Log.i(TAG, "Initial tile provider: " + mMapView.getTileProvider().getClass().getSimpleName());
 		} catch (Exception e) {
 			Log.e(TAG, "Error getting initial tile source", e);
 		}
