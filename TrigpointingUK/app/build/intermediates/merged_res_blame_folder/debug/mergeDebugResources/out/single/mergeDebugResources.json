@@ -12,12 +12,12 @@
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/layout/mapdownload.xml"
     },
     {
-        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_cs_unknown.png.flat",
-        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/cs_unknown.png"
-    },
-    {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_mapicon_passive_yellow.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/mapicon_passive_yellow.png"
+    },
+    {
+        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_cs_unknown.png.flat",
+        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/cs_unknown.png"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_gpsstatus.png.flat",

@@ -20,7 +20,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.OverlayItem.HotspotPlace;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -46,7 +47,7 @@ import com.trigpointinguk.android.types.Trig;
 
 
 
-public class MapActivity extends Activity implements MapListener {
+public class MapActivity extends AppCompatActivity implements MapListener {
 	private static final int DEFAULT_LON = -1450510;
 	private static final int DEFAULT_LAT = 50931280;
 	public static final String TAG = "MapActivity";
@@ -67,6 +68,7 @@ public class MapActivity extends Activity implements MapListener {
 	private TileSource         		mTileSource    = TileSource.NONE;
 	private boolean            		mTooManyTrigs;
 	private com.trigpointinguk.android.mapping.ResourceProxyImpl mResourceProxy;
+	private FloatingActionButton mFabLocation;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -75,8 +77,8 @@ public class MapActivity extends Activity implements MapListener {
 		setContentView(R.layout.mapview);
 		
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -92,7 +94,7 @@ public class MapActivity extends Activity implements MapListener {
 		// basic map setup
 		mResourceProxy = new ResourceProxyImpl(getApplicationContext());
 		mMapView = (MapView) findViewById(R.id.mapview);  
-		mMapView.setBuiltInZoomControls(true);
+		mMapView.setBuiltInZoomControls(false); // Disable zoom buttons - use pinch zoom instead
 		mMapView.setMultiTouchControls(true);
 		mMapController = (MapController) mMapView.getController();
 
@@ -128,6 +130,13 @@ public class MapActivity extends Activity implements MapListener {
 				}, this);
 		mMapView.getOverlays().add(mTrigOverlay);
 		mMapView.setMapListener(this);
+		
+		// Setup Floating Action Button for location
+		mFabLocation = findViewById(R.id.fab_location);
+		mFabLocation.setOnClickListener(v -> {
+			mMyLocationOverlay.enableFollowLocation();
+			Toast.makeText(MapActivity.this, "Centering on your location", Toast.LENGTH_SHORT).show();
+		});
 		
 		loadViewFromPrefs();
 	}
