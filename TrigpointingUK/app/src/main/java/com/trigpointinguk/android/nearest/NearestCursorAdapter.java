@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,8 +104,20 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 		
 		if (mCurrentLocation != null) {
 			LatLon l = new LatLon(cursor.getDouble(mLatIndex), cursor.getDouble(mLonIndex));			
-			td.setText(String.format("%3.1f", l.distanceTo(mCurrentLocation, mUnits)));
-			ta.setImageResource(getArrow (l.bearingFrom(mCurrentLocation)-mHeading) );  
+			double distance = l.distanceTo(mCurrentLocation, mUnits);
+			double bearing = l.bearingFrom(mCurrentLocation);
+			double adjustedBearing = bearing - mHeading;
+			int arrowResource = getArrow(adjustedBearing);
+			
+			td.setText(String.format("%3.1f", distance));
+			ta.setImageResource(arrowResource);
+			
+			// Debug logging for first few items
+			String trigName = cursor.getString(mNameIndex);
+			if (trigName != null && trigName.length() > 0) {
+				Log.d("NearestCursorAdapter", String.format("Trig: %s, Bearing: %.1f°, Adjusted: %.1f°, Arrow: %d", 
+					trigName, bearing, adjustedBearing, arrowResource));
+			}
 		} else {
 			td.setText("");
 			ta.setImageResource(R.drawable.arrow_x);
@@ -118,7 +131,9 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 	public int getArrow(double bearing) {
 		int division = (int) Math.floor(  (bearing + halfAnglePerDivision + mOrientationOffset) / anglePerDivision) % nDivisions;
 		if (division < 0) {division += nDivisions;}
-		return R.drawable.arrow_00_n + division;
+		int arrowResource = R.drawable.arrow_00_n + division;
+		Log.d("NearestCursorAdapter", String.format("getArrow: bearing=%.1f°, division=%d, resource=%d", bearing, division, arrowResource));
+		return arrowResource;
 	}	
 	
 	@Override
