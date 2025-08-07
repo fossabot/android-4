@@ -23,10 +23,12 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.trigpointinguk.android.logging.SyncTask;
+import com.trigpointinguk.android.logging.SyncListener;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
 
-public class DownloadTrigsActivity extends AppCompatActivity {
+public class DownloadTrigsActivity extends AppCompatActivity implements SyncListener {
 
 	private TextView 		mStatus;
 	private ProgressBar 	mProgress;
@@ -34,6 +36,7 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 	private boolean 		mRunning = false;
 	private static int 		mProgressMax = 10000; // value unimportant
 	private int 			mAppVersion;
+	private Handler 		mainHandler;
 	
 	private static final String TAG = "DownloadTrigsActivity";
 	private enum DownloadStatus {OK, CANCELLED, ERROR};
@@ -64,6 +67,9 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 		mProgress.setMax(mProgressMax);
 		mProgress.setProgress(0);
 		
+		// Initialize main handler
+		mainHandler = new Handler(Looper.getMainLooper());
+		
 		// Automatically start the download
 		mTask = downloadTrigs();       
 
@@ -77,7 +83,6 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 		mRunning = true;
 		
 		ExecutorService executor = Executors.newSingleThreadExecutor();
-		Handler mainHandler = new Handler(Looper.getMainLooper());
 		
 		return CompletableFuture.supplyAsync(() -> {
 			Log.i(TAG, "PopulateTrigsTask: Starting download");
@@ -183,12 +188,12 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 		.thenApplyAsync(result -> {
 			switch (result) {
 			case OK:
-				mStatus.setText("Download complete! " + mDownloadCount + " trigpoints downloaded.");
+				mStatus.setText("Download complete! " + mDownloadCount + " trigpoints downloaded. Starting sync...");
 				mProgress.setProgress(mProgressMax);
-				// Auto-close after 3 seconds
-				mainHandler.postDelayed(() -> {
-					DownloadTrigsActivity.this.finish();
-				}, 3000);
+				// Start sync after successful download
+				mainHandler.post(() -> {
+					new SyncTask(DownloadTrigsActivity.this, DownloadTrigsActivity.this).execute();
+				});
 				break;
 			case ERROR:
 				mStatus.setText("Download failed! Please try again.");
@@ -220,5 +225,35 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onSynced(int status) {
+		Log.i(TAG, "onSynced: Sync completed with status: " + status);
+		
+		mainHandler.post(() -> {
+			switch (status) {
+			case SyncTask.SUCCESS:
+				mStatus.setText("Sync complete! All data synchronized.");
+				break;
+			case SyncTask.NOROWS:
+				mStatus.setText("Sync complete! No data to sync.");
+				break;
+			case SyncTask.ERROR:
+				mStatus.setText("Sync failed! Please check your credentials.");
+				break;
+			case SyncTask.CANCELLED:
+				mStatus.setText("Sync cancelled.");
+				break;
+			default:
+				mStatus.setText("Sync completed with unknown status.");
+				break;
+			}
+			
+			// Auto-close after 3 seconds
+			mainHandler.postDelayed(() -> {
+				DownloadTrigsActivity.this.finish();
+			}, 3000);
+		});
 	}
 }
