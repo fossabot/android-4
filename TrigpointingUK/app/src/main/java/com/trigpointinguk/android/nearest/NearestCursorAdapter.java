@@ -110,7 +110,14 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 			int arrowResource = getArrow(adjustedBearing);
 			
 			td.setText(String.format("%3.1f", distance));
-			ta.setImageResource(arrowResource);
+			
+			// Debug: Check if ImageView is null
+			if (ta == null) {
+				Log.e("NearestCursorAdapter", "trigArrow ImageView is null!");
+			} else {
+				ta.setImageResource(arrowResource);
+				Log.d("NearestCursorAdapter", "Set arrow resource: " + arrowResource + " for trig: " + cursor.getString(mNameIndex));
+			}
 			
 			// Debug logging for first few items
 			String trigName = cursor.getString(mNameIndex);
@@ -120,7 +127,10 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 			}
 		} else {
 			td.setText("");
-			ta.setImageResource(R.drawable.arrow_x);
+			if (ta != null) {
+				ta.setImageResource(R.drawable.arrow_x);
+				Log.d("NearestCursorAdapter", "Set arrow_x resource for null location");
+			}
 		}
 	}
 
