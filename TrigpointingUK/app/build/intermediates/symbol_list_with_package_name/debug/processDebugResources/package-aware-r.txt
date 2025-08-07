@@ -3497,7 +3497,6 @@ id currentState
 id custom
 id customPanel
 id cut
-id cyclemap
 id dark
 id date_picker_actions
 id decelerate
@@ -3787,6 +3786,7 @@ id prefs
 id pressed
 id progress_circular
 id progress_horizontal
+id public_transport
 id radar
 id radio
 id ratio
@@ -3942,6 +3942,8 @@ id uniform
 id unlabeled
 id up
 id useLogo
+id usgs_sat
+id usgs_topo
 id vertical_only
 id view_offset_helper
 id view_transition

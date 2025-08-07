@@ -44,44 +44,79 @@
             android:textSize="16sp" />
 
         <RadioButton
-            android:id="@+id/cyclemap"
+            android:id="@+id/usgs_sat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CycleMap"
+            android:text="USGS Satellite"
             android:padding="12dp"
             android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/usgs_topo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="USGS Topographic"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/public_transport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Public Transport"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <!-- Disabled Bing options -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bing Maps (Unavailable)"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:padding="12dp"
+            android:layout_marginTop="8dp" />
 
         <RadioButton
             android:id="@+id/bingaerial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bing Aerial"
+            android:text="Bing Aerial (Disabled)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/bingaeriallabels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bing Aerial with Labels"
+            android:text="Bing Aerial with Labels (Disabled)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/bingroad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bing Road"
+            android:text="Bing Road (Disabled)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/bingosgb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bing OSGB"
+            android:text="Bing OSGB (Disabled)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
     </RadioGroup>
 

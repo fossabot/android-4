@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	private static final int DEFAULT_LAT = 50931280;
 	public static final String TAG = "MapActivity";
 	
-	public enum TileSource 		{NONE, MAPNIK, CYCLEMAP, MAPQUEST, CLOUDMADE, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
+	public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, USGS_SAT, USGS_TOPO, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
 
 	private MapView            mMapView;
 	private MapController      mMapController;
@@ -148,15 +148,21 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 		case MAPNIK:
 			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
-		case CYCLEMAP:
-			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
 		case MAPQUEST:
 			mMapView.setTileSource(TileSourceFactory.MAPNIK);
 			break;
 		case CLOUDMADE:
             CloudmadeUtil.retrieveCloudmadeKey(getApplicationContext());
 			mMapView.setTileSource(TileSourceFactory.CLOUDMADESTANDARDTILES);
+			break;
+		case USGS_SAT:
+			mMapView.setTileSource(TileSourceFactory.USGS_SAT);
+			break;
+		case USGS_TOPO:
+			mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
+			break;
+		case PUBLIC_TRANSPORT:
+			mMapView.setTileSource(TileSourceFactory.PUBLIC_TRANSPORT);
 			break;
 		case BING_AERIAL:
             // BingMapTileSource is no longer available in modern OSMdroid

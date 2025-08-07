@@ -159,7 +159,6 @@ id countPillarImage
 id countPillarText
 id countUnsyncedImage
 id countUnsyncedText
-id cyclemap
 id directions
 id downloadMapsProgress
 id downloadMapsStatus
@@ -225,6 +224,7 @@ id photoSubject
 id photoThumb
 id preferences_container
 id prefs
+id public_transport
 id radar
 id refresh
 id sendTime
@@ -249,6 +249,8 @@ id triginfo_waypoint
 id triginfo_wgs84
 id trigosgallery
 id txtUserName
+id usgs_sat
+id usgs_topo
 id yes
 id zoomview
 layout colour_by_activity

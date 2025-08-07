@@ -44,8 +44,14 @@ public class MapSourceActivity extends AppCompatActivity {
             case CLOUDMADE:
                 mMapSourceRadioGroup.check(R.id.cloudmade);
                 break;
-            case CYCLEMAP:
-                mMapSourceRadioGroup.check(R.id.cyclemap);
+            case USGS_SAT:
+                mMapSourceRadioGroup.check(R.id.usgs_sat);
+                break;
+            case USGS_TOPO:
+                mMapSourceRadioGroup.check(R.id.usgs_topo);
+                break;
+            case PUBLIC_TRANSPORT:
+                mMapSourceRadioGroup.check(R.id.public_transport);
                 break;
             case BING_AERIAL:
                 mMapSourceRadioGroup.check(R.id.bingaerial);
@@ -59,7 +65,7 @@ public class MapSourceActivity extends AppCompatActivity {
             case BING_OSGB:
             case NONE:
             default:
-                mMapSourceRadioGroup.check(R.id.bingosgb);
+                mMapSourceRadioGroup.check(R.id.mapnik);
                 break;
         }
 
@@ -72,16 +78,19 @@ public class MapSourceActivity extends AppCompatActivity {
                 newSource = MapActivity.TileSource.MAPQUEST;
             } else if (checkedId == R.id.cloudmade) {
                 newSource = MapActivity.TileSource.CLOUDMADE;
-            } else if (checkedId == R.id.cyclemap) {
-                newSource = MapActivity.TileSource.CYCLEMAP;
-            } else if (checkedId == R.id.bingaerial) {
-                newSource = MapActivity.TileSource.BING_AERIAL;
-            } else if (checkedId == R.id.bingaeriallabels) {
-                newSource = MapActivity.TileSource.BING_AERIAL_LABELS;
-            } else if (checkedId == R.id.bingroad) {
-                newSource = MapActivity.TileSource.BING_ROAD;
+            } else if (checkedId == R.id.usgs_sat) {
+                newSource = MapActivity.TileSource.USGS_SAT;
+            } else if (checkedId == R.id.usgs_topo) {
+                newSource = MapActivity.TileSource.USGS_TOPO;
+            } else if (checkedId == R.id.public_transport) {
+                newSource = MapActivity.TileSource.PUBLIC_TRANSPORT;
+            } else if (checkedId == R.id.bingaerial || checkedId == R.id.bingaeriallabels || 
+                       checkedId == R.id.bingroad || checkedId == R.id.bingosgb) {
+                // Bing options are disabled, don't allow selection
+                Log.i(TAG, "Bing map source selected but disabled, ignoring");
+                return;
             } else {
-                newSource = MapActivity.TileSource.BING_OSGB;
+                newSource = MapActivity.TileSource.MAPNIK;
             }
 
             // Save the selection
