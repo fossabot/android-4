@@ -169,8 +169,8 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case USGS_TOPO:
-				Log.i(TAG, "setTileProvider: USGS_TOPO not available, using MAPNIK");
-				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				Log.i(TAG, "setTileProvider: Using USGS_TOPO");
+				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
 				break;
 			case PUBLIC_TRANSPORT:
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
