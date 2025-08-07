@@ -193,6 +193,12 @@ public class LatLon implements Serializable {
 		double x = Math.cos(lat1) * Math.sin(lat2) -
 		           Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2-lon1);
 		b = Math.toDegrees( Math.atan2(y, x) );
+		
+		// Normalize bearing to 0-360 degrees
+		if (b < 0) {
+			b += 360.0;
+		}
+		
 		return b;
 	}
  	
