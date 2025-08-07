@@ -35,6 +35,7 @@ public class TrigDetailsActivity extends AppCompatActivity {
 	    
 	    Resources res = getResources();
 	    TabHost tabHost = findViewById(android.R.id.tabhost);
+	    tabHost.setup(); // Initialize the TabHost
 	    TabHost.TabSpec spec;
 	    Intent intent;
 	    
