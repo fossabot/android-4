@@ -96,6 +96,14 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 		mMapView = (MapView) findViewById(R.id.mapview);  
 		mMapView.setBuiltInZoomControls(false); // Disable zoom buttons - use pinch zoom instead
 		mMapView.setMultiTouchControls(true);
+		
+		// Debug: Log initial tile source
+		try {
+			Log.i(TAG, "Initial tile source: " + mMapView.getTileProvider().getTileSource().name());
+		} catch (Exception e) {
+			Log.e(TAG, "Error getting initial tile source", e);
+		}
+		
 		mMapController = (MapController) mMapView.getController();
 
 
@@ -170,7 +178,15 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				break;
 			case USGS_TOPO:
 				Log.i(TAG, "setTileProvider: Using USGS_TOPO");
-				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
+				try {
+					mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
+					Log.i(TAG, "setTileProvider: Successfully set USGS_TOPO tile source");
+				} catch (Exception e) {
+					Log.e(TAG, "setTileProvider: Error setting USGS_TOPO tile source", e);
+					// Fallback to MAPNIK
+					mMapView.setTileSource(TileSourceFactory.MAPNIK);
+					Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to USGS_TOPO error");
+				}
 				break;
 			case PUBLIC_TRANSPORT:
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
@@ -221,6 +237,14 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 			Log.i(TAG, "MAPQUEST: Not available in this OSMdroid version");
 		} catch (Exception e) {
 			Log.e(TAG, "MAPQUEST: Error checking availability", e);
+		}
+		
+		// Debug: Log current tile source
+		try {
+			Log.i(TAG, "Current tile source: " + mMapView.getTileProvider().getTileSource().name());
+			Log.i(TAG, "Tile provider class: " + mMapView.getTileProvider().getClass().getSimpleName());
+		} catch (Exception e) {
+			Log.e(TAG, "Error getting current tile source", e);
 		}
 	}
 
