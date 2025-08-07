@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +20,7 @@ import com.sonyericsson.zoom.ImageZoomView;
 import com.sonyericsson.zoom.LongPressZoomListener;
 import com.trigpointinguk.android.R;
 
-public class DisplayBitmapActivity extends Activity {
+public class DisplayBitmapActivity extends AppCompatActivity {
 	private static final String TAG="DisplayBitmapActivity";
 
     private static final int MENU_ID_RESET = 0;
@@ -37,8 +38,8 @@ public class DisplayBitmapActivity extends Activity {
         setContentView(R.layout.displaybitmap);
 
         // Enable back button in action bar
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         // get URL from extras
