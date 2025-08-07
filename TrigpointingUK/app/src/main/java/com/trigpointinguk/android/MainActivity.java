@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 		updateUserDisplay();
 		populateCounts();
 		checkAndPopulateDatabase();
+		checkAndPerformAutoSync();
 	}
 
 
@@ -448,6 +449,32 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 				Log.i(TAG, "checkAndPopulateDatabase: Database is already populated");
 			}
 		});
+	}
+	
+	private void checkAndPerformAutoSync() {
+		Log.i(TAG, "checkAndPerformAutoSync: Checking if auto sync is enabled");
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean autoSyncEnabled = prefs.getBoolean("auto_sync", false);
+		
+		Log.i(TAG, "checkAndPerformAutoSync: Auto sync enabled: " + autoSyncEnabled);
+		
+		if (autoSyncEnabled) {
+			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled, starting sync");
+			// Check if user has credentials
+			String username = prefs.getString("username", "");
+			String password = prefs.getString("plaintextpassword", "");
+			
+			if (username != null && !username.trim().isEmpty() && 
+				password != null && !password.trim().isEmpty()) {
+				Log.i(TAG, "checkAndPerformAutoSync: Credentials found, performing auto sync");
+				doSync();
+			} else {
+				Log.i(TAG, "checkAndPerformAutoSync: No credentials found, skipping auto sync");
+			}
+		} else {
+			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is disabled");
+		}
 	}
 
 
