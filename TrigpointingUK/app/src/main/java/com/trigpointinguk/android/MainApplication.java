@@ -20,8 +20,11 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         
-        // Configure OSMdroid user agent
-        Configuration.getInstance().setUserAgentValue("TrigpointingUK/1.0");
+        		// Configure OSMdroid user agent
+		Configuration.getInstance().setUserAgentValue("TrigpointingUK/1.0");
+		
+		// Note: MapQuest API key configuration may need to be done differently
+		// in the current OSMdroid version
         
         // This has been removed from the permissions and the preferences, so set to false for any legacy installations
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

@@ -77,7 +77,9 @@ public class MapSourceActivity extends AppCompatActivity {
             MapActivity.TileSource newSource;
             if (checkedId == R.id.mapnik) {
                 newSource = MapActivity.TileSource.MAPNIK;
-            } else if (checkedId == R.id.mapquest || checkedId == R.id.cloudmade || 
+            } else if (checkedId == R.id.mapquest) {
+                newSource = MapActivity.TileSource.MAPQUEST;
+            } else if (checkedId == R.id.cloudmade || 
                        checkedId == R.id.cyclemap || checkedId == R.id.usgs_sat || 
                        checkedId == R.id.public_transport) {
                 // These sources are disabled, don't allow selection

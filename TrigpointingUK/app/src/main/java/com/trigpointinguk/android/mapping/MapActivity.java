@@ -153,8 +153,8 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case MAPQUEST:
-				Log.i(TAG, "setTileProvider: MAPQUEST not available in this OSMdroid version, using MAPNIK");
-				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				Log.i(TAG, "setTileProvider: Using MapQuest tile source with API key");
+				mMapView.setTileSource(new MapQuestTileSource());
 				break;
 			case CLOUDMADE:
 				Log.i(TAG, "setTileProvider: CLOUDMADE not available in this OSMdroid version, using MAPNIK");
