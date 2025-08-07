@@ -162,13 +162,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 				doSync();
 			}
 		});
-        final Button btnCrash = (Button) findViewById(R.id.btnCrash);
-        btnCrash.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Log.e(TAG, "Deliberate error" + 1/0);
-			}
-		});
+
         final Button btnMap = (Button) findViewById(R.id.btnMap);
         btnMap.setOnClickListener(new OnClickListener() {
 			@Override

@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:background="@color/white">
 
     <!-- User info section -->
     <LinearLayout
@@ -11,20 +12,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="8dp">
+        android:padding="16dp"
+        android:background="@color/white"
+        android:elevation="2dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User: "
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/txtUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Not logged in" />
+            android:text="Not logged in"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
@@ -33,7 +40,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:elevation="2dp">
 
         <!-- Pillar count -->
         <LinearLayout
@@ -174,37 +184,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="16dp"
+        android:layout_marginTop="16dp">
 
         <Button
             android:id="@+id/btnSync"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sync" />
+            android:layout_height="56dp"
+            android:text="Sync"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/btnSearch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Search" />
-
-        <Button
-            android:id="@+id/btnCrash"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test Crash" />
+            android:layout_height="56dp"
+            android:text="Search"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/btnNearest"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nearest" />
+            android:layout_height="56dp"
+            android:text="Nearest"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/btnMap"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Map" />
+            android:layout_height="56dp"
+            android:text="Map"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

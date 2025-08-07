@@ -1,6 +1,6 @@
 package com.trigpointinguk.android.nearest;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +33,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -42,7 +45,7 @@ import com.trigpointinguk.android.trigdetails.TrigDetailsActivity;
 import com.trigpointinguk.android.types.LatLon;
 
 
-public class NearestActivity extends ListActivity implements SensorEventListener {
+public class NearestActivity extends AppCompatActivity implements SensorEventListener {
 	private Cursor 					mCursor;
 	private Location 				mCurrentLocation;
 	private double 					mHeading = 0;
@@ -73,10 +76,23 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 	private static final String TAG = "NearestActivity";
 	private static final int DETAILS = 1;
 	
+	// Modern activity result launcher
+	private ActivityResultLauncher<Intent> detailsLauncher;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.triglist);
+
+		// Register activity result launcher for modern navigation
+		detailsLauncher = registerForActivityResult(
+			new ActivityResultContracts.StartActivityForResult(),
+			result -> {
+				Log.i(TAG, "onActivityResult");
+				refreshList();
+				updateFilterHeader();
+			}
+		);
 
 		// find view references
 		mStrLocation 			= (TextView)  findViewById(R.id.trigListLocation);
@@ -99,10 +115,24 @@ public class NearestActivity extends ListActivity implements SensorEventListener
         	Toast.makeText(this, "Error opening database.  Please try again shortly.", Toast.LENGTH_SHORT).show();
 			finish();
 		}
+		
+		// Set up ListView since we're no longer using ListActivity
+		ListView listView = findViewById(android.R.id.list);
+		if (listView != null) {
+			listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id) {
+					onListItemClick((ListView) parent, view, position, id);
+				}
+			});
+		}
 	
 		// Start off with no location + no trigs
 		mListAdapter = new NearestCursorAdapter(this, R.layout.trigrow, null, new String[]{}, new int[]{}, null);
-		setListAdapter(mListAdapter);
+						ListView listViewAdapter = findViewById(android.R.id.list);
+				if (listViewAdapter != null) {
+					listViewAdapter.setAdapter(mListAdapter);
+				}
 
 		// Find a cached location
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -156,12 +186,7 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 
 
 	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(TAG, "onActivityResult");
-		refreshList();
-		updateFilterHeader();
-	}
+
 	
 	@Override
 	protected void onPause() {
@@ -296,12 +321,11 @@ public class NearestActivity extends ListActivity implements SensorEventListener
 		super.onDestroy();
 	}
 
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    public void onListItemClick(ListView l, View v, int position, long id) {
         Intent i = new Intent(this, TrigDetailsActivity.class);
         i.putExtra(DbHelper.TRIG_ID, id);
         Log.i(TAG, "Trig_id = " +id);
-        startActivityForResult(i, DETAILS);
+        detailsLauncher.launch(i);
     }
 	
 	
