@@ -1,11 +1,11 @@
 package com.trigpointinguk.android;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-public class HelpPageActivity extends Activity {
+public class HelpPageActivity extends AppCompatActivity {
 
 	public static final String PAGE="PAGE";
     private WebView mWebView;
@@ -16,8 +16,8 @@ public class HelpPageActivity extends Activity {
 		setContentView(R.layout.helppage);
 		
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		
 		Bundle extras = getIntent().getExtras();
