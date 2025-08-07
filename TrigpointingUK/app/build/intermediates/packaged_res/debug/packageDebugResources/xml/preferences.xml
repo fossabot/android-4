@@ -27,6 +27,11 @@
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Map Settings">
+        <EditTextPreference
+            android:key="os_api_key"
+            android:title="Ordnance Survey API key"
+            android:summary="Enter OS Data Hub API key for OS Leisure tiles" />
+
         <ListPreference
             android:key="map_type"
             android:title="Map Type"

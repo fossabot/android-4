@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	private static final int DEFAULT_LAT = 50931280;
 	public static final String TAG = "MapActivity";
 	
-	public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, CYCLEMAP, USGS_SAT, USGS_TOPO, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
+    public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, CYCLEMAP, USGS_SAT, USGS_TOPO, ORDNANCE_SURVEY, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
 
 	private MapView            mMapView;
 	private MapController      mMapController;
@@ -231,6 +231,32 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
+            case ORDNANCE_SURVEY:
+                // OS Leisure GB tiles require API key and UK coverage; fall back if missing
+                String osApiKey = PreferenceManager.getDefaultSharedPreferences(this).getString("os_api_key", "");
+                if (osApiKey == null || osApiKey.trim().isEmpty()) {
+                    Toast.makeText(this, "Set Ordnance Survey API key in Preferences to use OS maps", Toast.LENGTH_LONG).show();
+                    mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                    break;
+                }
+                // UK bounding box (rough): lat 49..61, lon -8..2
+                IGeoPoint osCenter = mMapView.getMapCenter();
+                double osLat = osCenter != null ? osCenter.getLatitude() : (DEFAULT_LAT / 1E6);
+                double osLon = osCenter != null ? osCenter.getLongitude() : (DEFAULT_LON / 1E6);
+                boolean inUk = osLat >= 49.0 && osLat <= 61.0 && osLon >= -8.0 && osLon <= 2.0;
+                if (!inUk) {
+                    Toast.makeText(this, "OS maps cover Great Britain only. Falling back to Mapnik.", Toast.LENGTH_LONG).show();
+                    mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                    break;
+                }
+                try {
+                    mMapView.setTileSource(new OsLeisureTileSource(osApiKey));
+                    Log.i(TAG, "setTileProvider: Using Ordnance Survey Leisure tile source");
+                } catch (Exception e) {
+                    Log.e(TAG, "setTileProvider: Error setting Ordnance Survey tile source", e);
+                    mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                }
+                break;
 			case BING_AERIAL:
 				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);

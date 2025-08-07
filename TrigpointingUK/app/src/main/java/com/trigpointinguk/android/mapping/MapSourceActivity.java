@@ -38,6 +38,9 @@ public class MapSourceActivity extends AppCompatActivity {
             case MAPNIK:
                 mMapSourceRadioGroup.check(R.id.mapnik);
                 break;
+            case ORDNANCE_SURVEY:
+                mMapSourceRadioGroup.check(R.id.ordnance_survey);
+                break;
             case MAPQUEST:
                 mMapSourceRadioGroup.check(R.id.mapquest);
                 break;
@@ -77,6 +80,8 @@ public class MapSourceActivity extends AppCompatActivity {
             MapActivity.TileSource newSource;
             if (checkedId == R.id.mapnik) {
                 newSource = MapActivity.TileSource.MAPNIK;
+            } else if (checkedId == R.id.ordnance_survey) {
+                newSource = MapActivity.TileSource.ORDNANCE_SURVEY;
             } else if (checkedId == R.id.usgs_topo) {
                 newSource = MapActivity.TileSource.USGS_TOPO;
             } else if (checkedId == R.id.mapquest || checkedId == R.id.cloudmade || 
