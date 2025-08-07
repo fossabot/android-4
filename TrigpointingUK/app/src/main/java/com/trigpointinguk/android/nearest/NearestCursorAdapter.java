@@ -115,6 +115,8 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 			if (ta == null) {
 				Log.e("NearestCursorAdapter", "trigArrow ImageView is null!");
 			} else {
+				// Debug: Make arrow more visible for testing
+				ta.setBackgroundColor(0xFFFF0000); // Red background
 				ta.setImageResource(arrowResource);
 				Log.d("NearestCursorAdapter", "Set arrow resource: " + arrowResource + " for trig: " + cursor.getString(mNameIndex));
 			}
