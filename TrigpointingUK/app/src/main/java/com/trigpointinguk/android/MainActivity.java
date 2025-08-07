@@ -265,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 		super.onResume();
 		updateUserDisplay();
 		populateCounts();
+		checkAndPopulateDatabase();
 	}
 
 
@@ -405,6 +406,34 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 			Log.e(TAG, "populateCounts: Exception in async operation", throwable);
 			throwable.printStackTrace();
 			return null;
+		});
+	}
+	
+	private void checkAndPopulateDatabase() {
+		Log.i(TAG, "checkAndPopulateDatabase: Checking if database needs population");
+		
+		CompletableFuture.supplyAsync(() -> {
+			DbHelper mDb = new DbHelper(MainActivity.this);
+			try {
+				mDb.open();
+				boolean isPopulated = mDb.isTrigTablePopulated();
+				mDb.close();
+				return isPopulated;
+			} catch (Exception e) {
+				Log.e(TAG, "checkAndPopulateDatabase: Error checking database", e);
+				return false;
+			}
+		}, executor).thenAcceptAsync(isPopulated -> {
+			if (!isPopulated) {
+				Log.i(TAG, "checkAndPopulateDatabase: Database is empty, starting automatic population");
+				runOnUiThread(() -> {
+					Toast.makeText(MainActivity.this, "Database is empty. Starting automatic download...", Toast.LENGTH_LONG).show();
+					Intent intent = new Intent(MainActivity.this, DownloadTrigsActivity.class);
+					startActivity(intent);
+				});
+			} else {
+				Log.i(TAG, "checkAndPopulateDatabase: Database is already populated");
+			}
 		});
 	}
 

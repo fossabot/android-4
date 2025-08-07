@@ -11,6 +11,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.trigpointinguk.android.DbHelper;
+
 
 
 public class ClearCacheTask {
@@ -42,6 +44,15 @@ public class ClearCacheTask {
 		cache = new FileCache(mCtx, "strings");
 		c += cache.clear();
 		if (isCancelled){return 0;}
+		
+		// Also delete the database
+		try {
+			DbHelper db = new DbHelper(mCtx);
+			db.deleteDatabase();
+			Log.d(TAG, "doInBackground: Database deleted");
+		} catch (Exception e) {
+			Log.e(TAG, "doInBackground: Error deleting database", e);
+		}
 		
 		return c;
 	}

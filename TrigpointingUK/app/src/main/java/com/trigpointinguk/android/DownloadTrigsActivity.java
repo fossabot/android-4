@@ -9,7 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
 
-public class DownloadTrigsActivity extends Activity {
+public class DownloadTrigsActivity extends AppCompatActivity {
 
 	private TextView 		mStatus;
 	private ProgressBar 	mProgress;
@@ -51,8 +51,8 @@ public class DownloadTrigsActivity extends Activity {
 		setContentView(R.layout.download);
 		
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		
 		try {

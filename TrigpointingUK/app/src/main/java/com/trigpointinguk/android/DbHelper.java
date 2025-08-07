@@ -868,4 +868,23 @@ public class DbHelper {
 		}
     }
     
+    /**
+     * Delete the entire database file
+     */
+    public void deleteDatabase() {
+        Log.i(TAG, "deleteDatabase: Deleting database file");
+        try {
+            if (mDb != null && mDb.isOpen()) {
+                mDb.close();
+            }
+            if (mDbHelper != null) {
+                mDbHelper.close();
+            }
+            boolean deleted = mCtx.deleteDatabase(DATABASE_NAME);
+            Log.i(TAG, "deleteDatabase: Database deletion result: " + deleted);
+        } catch (Exception e) {
+            Log.e(TAG, "deleteDatabase: Error deleting database", e);
+        }
+    }
+    
 }
