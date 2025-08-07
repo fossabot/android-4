@@ -12,12 +12,12 @@
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/layout/mapdownload.xml"
     },
     {
-        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_mapicon_passive_yellow.png.flat",
-        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/mapicon_passive_yellow.png"
-    },
-    {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_cs_unknown.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/cs_unknown.png"
+    },
+    {
+        "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_mapicon_passive_yellow.png.flat",
+        "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/mapicon_passive_yellow.png"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_gpsstatus.png.flat",
@@ -102,10 +102,6 @@
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_zoom_in.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/zoom_in.png"
-    },
-    {
-        "merged": "com.trigpointinguk.android.app-debug-43:/layout_trigrow.xml.flat",
-        "source": "com.trigpointinguk.android.app-main-45:/layout/trigrow.xml"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_mapicon_fbm_yellow.png.flat",
@@ -222,6 +218,10 @@
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_marker_default_focused_base.png.flat",
         "source": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-main-45:/drawable/marker_default_focused_base.png"
+    },
+    {
+        "merged": "com.trigpointinguk.android.app-debug-43:/layout_mapview.xml.flat",
+        "source": "com.trigpointinguk.android.app-main-45:/layout/mapview.xml"
     },
     {
         "merged": "/home/ianh/.gradle/daemon/8.13/com.trigpointinguk.android.app-debug-43:/drawable_navto_small.png.flat",

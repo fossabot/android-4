@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Placeholder for MapView - will be replaced with actual OSMdroid MapView later -->
-    <View
+    <org.osmdroid.views.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#CCCCCC" />
+        android:layout_height="match_parent" />
 
 </LinearLayout> 
