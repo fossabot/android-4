@@ -16,6 +16,16 @@ out/
 # Gradle files
 .gradle/
 build/
+# Gradle wrapper files
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+# Gradle cache and lock files
+.gradle/caches/
+.gradle/checksums/
+.gradle/executionHistory/
+.gradle/fileHashes/
+.gradle/buildOutputCleanup/
+.gradle/*.lock
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -46,6 +56,9 @@ captures/
 .idea/modules.xml
 # Comment next line if keeping position of elements in Navigation Editor is desired
 .idea/navEditor.xml
+# Additional IntelliJ/Android Studio files
+.idea/*.xml
+.idea/*.iml
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
