@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -48,6 +49,11 @@ public class DownloadTrigsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.download);
+		
+		// Enable back button in action bar
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 		
 		try {
 			mAppVersion = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
@@ -215,5 +221,15 @@ public class DownloadTrigsActivity extends Activity {
 			mRunning = false;
 			return result;
 		}, mainHandler::post);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

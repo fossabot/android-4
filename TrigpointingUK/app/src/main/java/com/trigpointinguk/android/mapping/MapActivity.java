@@ -73,6 +73,12 @@ public class MapActivity extends Activity implements MapListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mapview);
+		
+		// Enable back button in action bar
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		try {
 			mDb = new DbHelper(this);
@@ -223,6 +229,12 @@ public class MapActivity extends Activity implements MapListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		
 		item.setChecked(true);
 		int itemId = item.getItemId();
 		

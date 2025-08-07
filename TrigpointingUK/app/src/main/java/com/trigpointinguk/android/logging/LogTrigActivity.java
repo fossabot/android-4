@@ -43,6 +43,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.view.MenuItem;
 import android.widget.ViewSwitcher;
 
 import com.trigpointinguk.android.DbHelper;
@@ -94,6 +95,12 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 		Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.logtrig);
+		
+		// Enable back button in action bar
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		// Get trig_id from extras 
@@ -305,6 +312,16 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 		if (mDb != null) {
 			mDb.close();
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	

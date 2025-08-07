@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -53,6 +54,11 @@ public class DownloadMapsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mapdownload);
+
+		// Enable back button in action bar
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		mStatus 		= (TextView)	findViewById(R.id.downloadMapsStatus);
 		mProgress 		= (ProgressBar)	findViewById(R.id.downloadMapsProgress);
@@ -218,6 +224,16 @@ public class DownloadMapsActivity extends Activity {
 		if(!f.isDirectory()) { 
 			f.mkdirs(); 
 		} 
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

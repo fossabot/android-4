@@ -6,6 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -27,6 +28,10 @@ public class FilterActivity extends Activity {
 		mFilterType 	= (Spinner)		findViewById(R.id.filterType);  
 		mFilterRadio	= (RadioGroup)	findViewById(R.id.filterRadio);
 
+		// Enable back button in action bar
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	
@@ -62,6 +67,16 @@ public class FilterActivity extends Activity {
 		mFilterRadio.check(mPrefs.getInt(Filter.FILTERRADIO, R.id.filterAll));
 		
 		mFilterType.setSelection(mPrefs.getInt(Filter.FILTERTYPE, 0));
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

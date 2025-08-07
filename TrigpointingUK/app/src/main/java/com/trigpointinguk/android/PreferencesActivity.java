@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 
 public class PreferencesActivity extends PreferenceActivity {
     public static final String PREFS_NAME = "TUKPrefsFile";
@@ -28,6 +29,11 @@ public class PreferencesActivity extends PreferenceActivity {
 			addPreferencesFromResource(R.xml.preferences); 
 			break;
 		}
+		
+		// Enable back button in action bar
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	@Override
@@ -44,6 +50,16 @@ public class PreferencesActivity extends PreferenceActivity {
 			editor.remove("password");
 			editor.apply();
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	

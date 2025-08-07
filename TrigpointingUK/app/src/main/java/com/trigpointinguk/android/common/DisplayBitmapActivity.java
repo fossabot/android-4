@@ -36,6 +36,11 @@ public class DisplayBitmapActivity extends Activity {
 
         setContentView(R.layout.displaybitmap);
 
+        // Enable back button in action bar
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         // get URL from extras
         Bundle extras = getIntent().getExtras();
 		if (extras == null) {return;}
@@ -77,6 +82,12 @@ public class DisplayBitmapActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle back button in action bar
+            finish();
+            return true;
+        }
+        
         switch (item.getItemId()) {
             case MENU_ID_RESET:
                 resetZoomState();
