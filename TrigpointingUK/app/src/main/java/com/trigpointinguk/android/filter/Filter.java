@@ -3,6 +3,7 @@ package com.trigpointinguk.android.filter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -78,9 +79,11 @@ public class Filter {
 		StringBuilder sql = new StringBuilder();
 		String tok = " " + initialtok + " ";
 		
+		Log.i("Filter", "filterWhere: Starting with initialtok: '" + initialtok + "'");
 		
 		// Deal with RADIO
 		int filterRadio = mPrefs.getInt(FILTERRADIO, 0); // 0 = filterAll
+		Log.i("Filter", "filterWhere: Filter radio value: " + filterRadio);
 		if (filterRadio == 1) { // filterLogged
 			sql.append(tok).append("(")
 			   .append(DbHelper.TRIG_TABLE).append(".").append(DbHelper.TRIG_LOGGED)
@@ -111,7 +114,9 @@ public class Filter {
 		
 		
 		// Deal with TYPES
-		switch (mPrefs.getInt(FILTERTYPE, TYPESDEFAULT)) {
+		int filterType = mPrefs.getInt(FILTERTYPE, TYPESDEFAULT);
+		Log.i("Filter", "filterWhere: Filter type value: " + filterType);
+		switch (filterType) {
 		case TYPESPILLAR:
 			sql.append(tok)
 			   .append(DbHelper.TRIG_TABLE).append(".").append(DbHelper.TRIG_TYPE)
@@ -155,6 +160,8 @@ public class Filter {
 			break;
 		}
 		
-		return sql.toString();
+		String result = sql.toString();
+		Log.i("Filter", "filterWhere: Final SQL where clause: '" + result + "'");
+		return result;
 	}
 }

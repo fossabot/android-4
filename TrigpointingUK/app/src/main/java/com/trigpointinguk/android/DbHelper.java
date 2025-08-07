@@ -272,7 +272,14 @@ public class DbHelper {
 		Log.i(TAG, strOrder);
 		
 		String strWhere = new Filter((Activity) mCtx).filterWhere("WHERE");
-		Log.i(TAG, "where : " + strWhere);
+		Log.i(TAG, "fetchTrigList: Filter where clause: " + strWhere);
+		
+		// Debug: Log the current filter settings
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
+		int filterType = prefs.getInt(Filter.FILTERTYPE, 0);
+		int filterRadio = prefs.getInt(Filter.FILTERRADIO, 0);
+		String filterRadioText = prefs.getString(Filter.FILTERRADIOTEXT, "");
+		Log.i(TAG, "fetchTrigList: Filter settings - Type: " + filterType + ", Radio: " + filterRadio + ", RadioText: '" + filterRadioText + "'");
 		
 		final String qry = "SELECT "+
 				TRIG_TABLE +"."+ TRIG_ID +", "+
