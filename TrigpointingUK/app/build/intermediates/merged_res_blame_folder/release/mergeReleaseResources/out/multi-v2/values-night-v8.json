@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.trigpointinguk.android.app-mergeReleaseResources-40:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.trigpointinguk.android.app-mergeReleaseResources-41:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "/home/ianh/.gradle/caches/8.13/transforms/1aec09faf681e1da898b7c2acaf86d77/transformed/appcompat-1.6.1/res/values-night-v8/values-night-v8.xml",

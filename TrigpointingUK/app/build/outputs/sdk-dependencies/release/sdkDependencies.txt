@@ -846,6 +846,71 @@ library {
 }
 library {
   maven_library {
+    groupId: "org.apache.httpcomponents"
+    artifactId: "httpmime"
+    version: "4.5.14"
+  }
+  digests {
+    sha256: "\324\001$=\\n\256\222\2127\022\033n\201\221X\310\303.\240XG\223\347([\264\211\253*=\027"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "org.apache.httpcomponents"
+    artifactId: "httpclient"
+    version: "4.5.14"
+  }
+  digests {
+    sha256: "\310\274~\034Q\246\324\316r\364\r.\273\253\361\304\266\213\376v\3472\020K\0048\033I4x\351\326"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "org.apache.httpcomponents"
+    artifactId: "httpcore"
+    version: "4.4.16"
+  }
+  digests {
+    sha256: "l\233=\321B\240\235\304h\342:\323\232\255ou\240\362\270Q%\020Di\360&\345*GNFO"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "commons-logging"
+    artifactId: "commons-logging"
+    version: "1.2"
+  }
+  digests {
+    sha256: "\332\335\352\036\240\276\017V\227\212\263\000k\212\311(4\257\356\373\331\267\344\3461o\312W\337\017\2466"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
+    groupId: "commons-codec"
+    artifactId: "commons-codec"
+    version: "1.11"
+  }
+  digests {
+    sha256: "\345\231\3251\216\227\252H\364!6\242\222~m\372N\210\201\337\360\346\310\343\020\235\333\277\365\035{}"
+  }
+  repo_index {
+    value: 1
+  }
+}
+library {
+  maven_library {
     groupId: "com.squareup.okhttp3"
     artifactId: "okhttp"
     version: "4.12.0"
@@ -964,6 +1029,19 @@ library {
     sha256: "\274\211\361\246\021\211e!kEC\236~\223`\246\362\005FT\344\2023Tv\216x\204\373;k\f"
   }
   repo_index {
+  }
+}
+library {
+  maven_library {
+    groupId: "org.osmdroid"
+    artifactId: "osmdroid-android"
+    version: "6.1.18"
+  }
+  digests {
+    sha256: "\267\217\203;d\bf0Z~V$\230\315\021\225\306\354\325fy~\'\340<U\034\255Z=\a\245"
+  }
+  repo_index {
+    value: 1
   }
 }
 library_dependencies {
@@ -1504,51 +1582,61 @@ library_dependencies {
 library_dependencies {
   library_index: 70
   library_dep_index: 71
-  library_dep_index: 19
 }
 library_dependencies {
   library_index: 71
   library_dep_index: 72
-}
-library_dependencies {
-  library_index: 72
-  library_dep_index: 19
-  library_dep_index: 7
-}
-library_dependencies {
-  library_index: 73
+  library_dep_index: 73
   library_dep_index: 74
 }
 library_dependencies {
   library_index: 75
-  library_dep_index: 46
   library_dep_index: 76
-  library_dep_index: 77
-  library_dep_index: 78
+  library_dep_index: 19
 }
 library_dependencies {
   library_index: 76
-  library_dep_index: 3
-  library_dep_index: 4
-  library_dep_index: 46
   library_dep_index: 77
-  library_dep_index: 78
 }
 library_dependencies {
   library_index: 77
+  library_dep_index: 19
+  library_dep_index: 7
+}
+library_dependencies {
+  library_index: 78
+  library_dep_index: 79
+}
+library_dependencies {
+  library_index: 80
+  library_dep_index: 46
+  library_dep_index: 81
+  library_dep_index: 82
+  library_dep_index: 83
+}
+library_dependencies {
+  library_index: 81
+  library_dep_index: 3
+  library_dep_index: 4
+  library_dep_index: 46
+  library_dep_index: 82
+  library_dep_index: 83
+}
+library_dependencies {
+  library_index: 82
   library_dep_index: 3
   library_dep_index: 4
   library_dep_index: 46
 }
 library_dependencies {
-  library_index: 78
-  library_dep_index: 77
+  library_index: 83
+  library_dep_index: 82
 }
 library_dependencies {
-  library_index: 79
-  library_dep_index: 76
-  library_dep_index: 77
-  library_dep_index: 78
+  library_index: 84
+  library_dep_index: 81
+  library_dep_index: 82
+  library_dep_index: 83
 }
 module_dependencies {
   module_name: "base"
@@ -1557,9 +1645,12 @@ module_dependencies {
   dependency_index: 57
   dependency_index: 62
   dependency_index: 70
-  dependency_index: 73
+  dependency_index: 71
   dependency_index: 75
-  dependency_index: 79
+  dependency_index: 78
+  dependency_index: 80
+  dependency_index: 84
+  dependency_index: 85
 }
 repositories {
   maven_repo {

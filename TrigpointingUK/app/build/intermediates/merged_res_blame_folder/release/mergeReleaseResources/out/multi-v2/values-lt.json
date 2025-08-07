@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.trigpointinguk.android.app-mergeReleaseResources-40:/values-lt/values-lt.xml",
+            "outputFile": "com.trigpointinguk.android.app-mergeReleaseResources-41:/values-lt/values-lt.xml",
             "map": [
                 {
                     "source": "/home/ianh/.gradle/caches/8.13/transforms/1384616261ac72a11a5a104a9a7c02f4/transformed/preference-1.2.1/res/values-lt/values-lt.xml",

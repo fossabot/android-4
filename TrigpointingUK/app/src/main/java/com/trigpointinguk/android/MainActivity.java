@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
     private TextView			mUnsyncedCount;
     private TextView			mPhotosCount;
     private Button				mSyncBtn;
+    private TextView			mUserName;
     
     // Modern activity result launchers
     private ActivityResultLauncher<Intent> nearestLauncher;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
         mPhotosIcon = (ImageView) findViewById(R.id.countPhotosImage);
         mPhotosCount = (TextView) findViewById(R.id.countPhotosText);
         mSyncBtn = (Button) findViewById(R.id.btnSync);
+        mUserName = (TextView) findViewById(R.id.txtUserName);
         
         Log.i(TAG, "onCreate: Setting up preferences");
         mPrefs = getSharedPreferences("TrigpointingUK", MODE_PRIVATE);
@@ -92,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Setting up click listeners");
         setupClickListeners();
+        
+        Log.i(TAG, "onCreate: Updating user display");
+        updateUserDisplay();
         
         Log.i(TAG, "onCreate: Populating counts");
         populateCounts();
@@ -256,7 +261,9 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
     
 	@Override
 	protected void onResume() {
+		Log.i(TAG, "onResume: Refreshing counts and user display");
 		super.onResume();
+		updateUserDisplay();
 		populateCounts();
 	}
 
@@ -278,6 +285,29 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 
 
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	
+	private void updateUserDisplay() {
+		Log.i(TAG, "updateUserDisplay: Updating user display");
+		try {
+			// Get username from preferences
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String username = prefs.getString("username", "");
+			
+			Log.i(TAG, "updateUserDisplay: Username from preferences: '" + username + "'");
+			
+			if (username != null && !username.trim().isEmpty()) {
+				Log.i(TAG, "updateUserDisplay: Setting username to: " + username);
+				mUserName.setText(username);
+			} else {
+				Log.i(TAG, "updateUserDisplay: No username found, showing 'Not logged in'");
+				mUserName.setText("Not logged in");
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "updateUserDisplay: Error updating user display", e);
+			e.printStackTrace();
+			mUserName.setText("Not logged in");
+		}
+	}
 	
 	private void populateCounts() {
 		Log.i(TAG, "populateCounts: Starting count population");
