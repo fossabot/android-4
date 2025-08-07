@@ -405,21 +405,22 @@ public class DbHelper {
 	 */
 	public int countLoggedPillars () {
 		Log.i(TAG, "countLoggedPillars: Starting count");
+		Cursor c = null;
 		try {
-			Cursor cursor = mDb.rawQuery("SELECT COUNT(*) FROM " + TRIG_TABLE + " WHERE " + TRIG_TYPE + " = " + Trig.Physical.PILLAR.ordinal() + " AND " + TRIG_LOGGED + " != 'U'", null);
-			if (cursor.moveToFirst()) {
-				int count = cursor.getInt(0);
-				Log.i(TAG, "countLoggedPillars: Count = " + count);
-				cursor.close();
-				return count;
-			}
-			cursor.close();
-			Log.i(TAG, "countLoggedPillars: No results found");
-			return 0;
+			c = mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, 
+					TRIG_TYPE + "='" + Trig.Physical.PILLAR.code()+"' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code()+ "'", 
+					null, null, null, null);
+			int count = c.getCount();
+			Log.i(TAG, "countLoggedPillars: Count = " + count);
+			return count;
 		} catch (Exception e) {
 			Log.e(TAG, "countLoggedPillars: Exception occurred", e);
 			e.printStackTrace();
 			return 0;
+		} finally {
+			if (c != null) {
+				c.close();
+			}
 		}
 	}
 	/**
