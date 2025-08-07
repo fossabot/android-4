@@ -19,6 +19,15 @@ public class MapQuestTileSource extends OnlineTileSourceBase {
         final int zoom = (int) (pMapTileIndex >> 28);
         final int x = (int) ((pMapTileIndex << 4) >> 28);
         final int y = (int) (pMapTileIndex & 0xFFFFFFF);
-        return getBaseUrl() + zoom + "/" + x + "/" + y + "?key=" + MAPQUEST_API_KEY;
+        
+        // Try the MapQuest tile API with the correct format
+        // Based on MapQuest documentation, the format should be:
+        // https://www.mapquestapi.com/tile/v1/map/{z}/{x}/{y}?key={key}
+        String url = "https://www.mapquestapi.com/tile/v1/map/" + zoom + "/" + x + "/" + y + "?key=" + MAPQUEST_API_KEY;
+        
+        // Add debugging
+        android.util.Log.d("MapQuestTileSource", "Generated URL: " + url);
+        
+        return url;
     }
 } 
