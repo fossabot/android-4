@@ -1,6 +1,5 @@
 package com.trigpointinguk.android.filter;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -10,10 +9,11 @@ import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.R;
 
-public class FilterActivity extends Activity {
+public class FilterActivity extends AppCompatActivity {
 	private static final String TAG = "FilterActivity";
 	private SharedPreferences 	mPrefs;
 	private Spinner				mFilterType;
@@ -29,8 +29,8 @@ public class FilterActivity extends Activity {
 		mFilterRadio	= (RadioGroup)	findViewById(R.id.filterRadio);
 
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
 
