@@ -184,11 +184,23 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				Log.i(TAG, "setTileProvider: USGS_TOPO object: " + TileSourceFactory.USGS_TOPO);
 				Log.i(TAG, "setTileProvider: USGS_TOPO name: " + TileSourceFactory.USGS_TOPO.name());
 				
+				// Debug: Check if USGS_TOPO has a base URL
+				try {
+					Log.i(TAG, "setTileProvider: USGS_TOPO base URL: " + TileSourceFactory.USGS_TOPO.getBaseUrl());
+				} catch (Exception e) {
+					Log.e(TAG, "setTileProvider: Error getting USGS_TOPO base URL", e);
+				}
+				
 				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
 				Log.i(TAG, "setTileProvider: Successfully set USGS_TOPO tile source");
 				
 				// Debug: Check what was actually set
 				Log.i(TAG, "setTileProvider: After setting, tile source is: " + mMapView.getTileProvider().getTileSource().name());
+				
+				// Debug: Check if the tile provider is actually using USGS
+				Log.i(TAG, "setTileProvider: Tile provider class: " + mMapView.getTileProvider().getClass().getSimpleName());
+				Log.i(TAG, "setTileProvider: Tile provider tile source: " + mMapView.getTileProvider().getTileSource().name());
+				
 			} catch (Exception e) {
 				Log.e(TAG, "setTileProvider: Error setting USGS_TOPO tile source", e);
 				// Fallback to MAPNIK
@@ -366,11 +378,14 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	private void loadViewFromPrefs() {
 		try {
 			// set tilesource from prefs
-			setTileProvider(TileSource.valueOf(mPrefs.getString("tileSource", TileSource.BING_OSGB.toString())));
+			String tileSourcePref = mPrefs.getString("tileSource", TileSource.BING_OSGB.toString());
+			Log.i(TAG, "loadViewFromPrefs: Loading tile source from preferences: " + tileSourcePref);
+			setTileProvider(TileSource.valueOf(tileSourcePref));
 			// set colouring from prefs
 			mIconColouring = colourScheme.valueOf(mPrefs.getString("iconColouring", colourScheme.BYCONDITION.toString()));
 		} catch (IllegalArgumentException e) {
 			// invalid preference
+			Log.e(TAG, "loadViewFromPrefs: Invalid tile source preference, using default", e);
 			setTileProvider(TileSource.BING_OSGB);
 			mIconColouring = colourScheme.NONE;
 		}
