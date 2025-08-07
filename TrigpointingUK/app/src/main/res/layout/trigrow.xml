@@ -8,57 +8,70 @@
     android:elevation="1dp"
     android:layout_margin="4dp">
 
-    <!-- Trig name -->
+    <!-- Trig condition (left side) -->
+    <ImageView
+        android:id="@+id/trigCondition"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/c_good"
+        android:padding="2dp"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Trig type (left side) -->
+    <ImageView
+        android:id="@+id/trigType"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/t_pillar"
+        android:padding="2dp"
+        android:layout_marginEnd="12dp" />
+
+    <!-- Trig name (center, takes remaining space) -->
     <TextView
         android:id="@+id/trigName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:text="Trig Name"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:layout_marginEnd="8dp" />
 
-    <!-- Trig distance -->
-    <TextView
-        android:id="@+id/trigDistance"
-        android:layout_width="0dp"
+    <!-- Right side group: distance, arrow, logged status -->
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="0.0km"
-        android:textSize="16sp"
-        android:textColor="@color/black" />
+        android:orientation="horizontal"
+        android:gravity="end">
 
-    <!-- Trig arrow -->
-    <ImageView
-        android:id="@+id/trigArrow"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/arrow_00_n"
-        android:padding="4dp" />
+        <!-- Trig distance -->
+        <TextView
+            android:id="@+id/trigDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0km"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginEnd="4dp" />
 
-    <!-- Trig condition -->
-    <ImageView
-        android:id="@+id/trigCondition"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/c_good"
-        android:padding="4dp" />
+        <!-- Trig arrow -->
+        <ImageView
+            android:id="@+id/trigArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/arrow_00_n"
+            android:padding="2dp"
+            android:layout_marginEnd="4dp" />
 
-    <!-- Trig type -->
-    <ImageView
-        android:id="@+id/trigType"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/t_pillar"
-        android:padding="4dp" />
+        <!-- Trig logged status -->
+        <ImageView
+            android:id="@+id/trigLogged"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/c_good"
+            android:padding="2dp" />
 
-    <!-- Trig logged status -->
-    <ImageView
-        android:id="@+id/trigLogged"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/c_good"
-        android:padding="4dp" />
+    </LinearLayout>
 
 </LinearLayout> 
