@@ -83,6 +83,12 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.triglist);
+		
+		// Enable back button in action bar
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setTitle("Nearest Trig Points");
+		}
 
 		// Register activity result launcher for modern navigation
 		detailsLauncher = registerForActivityResult(
@@ -300,7 +306,11 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		
-		if (itemId == R.id.filter) {
+		if (itemId == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		} else if (itemId == R.id.filter) {
 			Intent i = new Intent(NearestActivity.this, FilterActivity.class);
 			startActivityForResult(i, R.id.filter);
 			return true;

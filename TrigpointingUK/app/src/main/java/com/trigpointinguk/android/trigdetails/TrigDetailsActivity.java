@@ -1,6 +1,6 @@
 package com.trigpointinguk.android.trigdetails;
 
-import android.app.TabActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -8,12 +8,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TabHost;
 import android.view.KeyEvent;
+import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.logging.LogTrigActivity;
 
-public class TrigDetailsActivity extends TabActivity {
+public class TrigDetailsActivity extends AppCompatActivity {
 
 	private static final String TAG="TrigDetailsActivity";
     //private SharedPreferences mPrefs;
@@ -21,13 +23,18 @@ public class TrigDetailsActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.trigdetails);
+	    
+	    // Enable back button in action bar
+	    if (getSupportActionBar() != null) {
+	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    }
 
 		Bundle extras = getIntent().getExtras();
         //mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 	    
 	    Resources res = getResources();
-	    TabHost tabHost = getTabHost();
+	    TabHost tabHost = findViewById(android.R.id.tabhost);
 	    TabHost.TabSpec spec;
 	    Intent intent;
 	    
@@ -92,6 +99,16 @@ public class TrigDetailsActivity extends TabActivity {
 		} finally {
 			mDb.close();
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// Handle back button in action bar
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
