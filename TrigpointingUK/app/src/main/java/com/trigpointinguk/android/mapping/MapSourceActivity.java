@@ -79,7 +79,7 @@ public class MapSourceActivity extends AppCompatActivity {
                 newSource = MapActivity.TileSource.MAPNIK;
             } else if (checkedId == R.id.mapquest || checkedId == R.id.cloudmade || 
                        checkedId == R.id.cyclemap || checkedId == R.id.usgs_sat || 
-                       checkedId == R.id.public_transport) {
+                       checkedId == R.id.usgs_topo || checkedId == R.id.public_transport) {
                 // These sources are disabled, don't allow selection
                 Log.i(TAG, "Disabled map source selected, ignoring");
                 return;

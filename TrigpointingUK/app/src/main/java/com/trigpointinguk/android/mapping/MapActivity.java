@@ -169,8 +169,8 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case USGS_TOPO:
-				Log.i(TAG, "setTileProvider: Using USGS_TOPO");
-				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
+				Log.i(TAG, "setTileProvider: USGS_TOPO not available in this OSMdroid version, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case PUBLIC_TRANSPORT:
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
@@ -204,6 +204,19 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 		Editor editor = mPrefs.edit();
 		editor.putString("tileSource", tileSource.toString());
 		editor.apply();
+		
+		// Debug: Log available tile sources
+		Log.i(TAG, "Available tile sources in this OSMdroid version:");
+		try {
+			Log.i(TAG, "MAPNIK: " + (TileSourceFactory.MAPNIK != null ? "Available" : "Not available"));
+		} catch (Exception e) {
+			Log.e(TAG, "MAPNIK: Error checking availability", e);
+		}
+		try {
+			Log.i(TAG, "USGS_TOPO: " + (TileSourceFactory.USGS_TOPO != null ? "Available" : "Not available"));
+		} catch (Exception e) {
+			Log.e(TAG, "USGS_TOPO: Error checking availability", e);
+		}
 	}
 
 

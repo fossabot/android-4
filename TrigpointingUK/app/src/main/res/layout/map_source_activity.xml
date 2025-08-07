@@ -82,9 +82,11 @@
             android:id="@+id/usgs_topo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="USGS Topographic"
+            android:text="USGS Topographic (May not work)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/public_transport"
