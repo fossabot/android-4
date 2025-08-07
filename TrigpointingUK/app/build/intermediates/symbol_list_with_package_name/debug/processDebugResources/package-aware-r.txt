@@ -3497,6 +3497,7 @@ id currentState
 id custom
 id customPanel
 id cut
+id cyclemap
 id dark
 id date_picker_actions
 id decelerate

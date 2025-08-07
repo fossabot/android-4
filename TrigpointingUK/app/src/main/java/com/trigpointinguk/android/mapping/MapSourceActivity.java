@@ -44,6 +44,9 @@ public class MapSourceActivity extends AppCompatActivity {
             case CLOUDMADE:
                 mMapSourceRadioGroup.check(R.id.cloudmade);
                 break;
+            case CYCLEMAP:
+                mMapSourceRadioGroup.check(R.id.cyclemap);
+                break;
             case USGS_SAT:
                 mMapSourceRadioGroup.check(R.id.usgs_sat);
                 break;
@@ -74,16 +77,12 @@ public class MapSourceActivity extends AppCompatActivity {
             MapActivity.TileSource newSource;
             if (checkedId == R.id.mapnik) {
                 newSource = MapActivity.TileSource.MAPNIK;
-            } else if (checkedId == R.id.mapquest) {
-                newSource = MapActivity.TileSource.MAPQUEST;
-            } else if (checkedId == R.id.cloudmade) {
-                newSource = MapActivity.TileSource.CLOUDMADE;
-            } else if (checkedId == R.id.usgs_sat) {
-                newSource = MapActivity.TileSource.USGS_SAT;
-            } else if (checkedId == R.id.usgs_topo) {
-                newSource = MapActivity.TileSource.USGS_TOPO;
-            } else if (checkedId == R.id.public_transport) {
-                newSource = MapActivity.TileSource.PUBLIC_TRANSPORT;
+            } else if (checkedId == R.id.mapquest || checkedId == R.id.cloudmade || 
+                       checkedId == R.id.cyclemap || checkedId == R.id.usgs_sat || 
+                       checkedId == R.id.usgs_topo || checkedId == R.id.public_transport) {
+                // These sources are disabled, don't allow selection
+                Log.i(TAG, "Disabled map source selected, ignoring");
+                return;
             } else if (checkedId == R.id.bingaerial || checkedId == R.id.bingaeriallabels || 
                        checkedId == R.id.bingroad || checkedId == R.id.bingosgb) {
                 // Bing options are disabled, don't allow selection

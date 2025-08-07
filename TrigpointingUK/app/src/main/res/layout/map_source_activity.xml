@@ -31,41 +31,72 @@
             android:id="@+id/mapquest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MapQuest"
+            android:text="MapQuest (May not work)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/cloudmade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CloudMade"
+            android:text="CloudMade (May not work)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
+
+        <RadioButton
+            android:id="@+id/cyclemap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CycleMap (May not work)"
+            android:padding="12dp"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
+
+        <!-- Note: USGS and Public Transport may require API keys or may not be available -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Additional Sources (May require API keys)"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/darker_gray"
+            android:padding="12dp"
+            android:layout_marginTop="8dp" />
 
         <RadioButton
             android:id="@+id/usgs_sat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="USGS Satellite"
+            android:text="USGS Satellite (May not work)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/usgs_topo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="USGS Topographic"
+            android:text="USGS Topographic (May not work)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <RadioButton
             android:id="@+id/public_transport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Public Transport"
+            android:text="Public Transport (May not work)"
             android:padding="12dp"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:enabled="false"
+            android:textColor="@android:color/darker_gray" />
 
         <!-- Disabled Bing options -->
         <TextView

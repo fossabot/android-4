@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	private static final int DEFAULT_LAT = 50931280;
 	public static final String TAG = "MapActivity";
 	
-	public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, USGS_SAT, USGS_TOPO, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
+	public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, CYCLEMAP, USGS_SAT, USGS_TOPO, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
 
 	private MapView            mMapView;
 	private MapController      mMapController;
@@ -144,52 +144,66 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 
 	private void setTileProvider(TileSource tileSource) {
 		mTileSource = tileSource;
-		switch (tileSource) {
-		case MAPNIK:
+		Log.i(TAG, "setTileProvider: Setting tile source to: " + tileSource);
+		
+		try {
+			switch (tileSource) {
+			case MAPNIK:
+				Log.i(TAG, "setTileProvider: Using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case MAPQUEST:
+				Log.i(TAG, "setTileProvider: MAPQUEST not available in this OSMdroid version, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case CLOUDMADE:
+				Log.i(TAG, "setTileProvider: CLOUDMADE not available in this OSMdroid version, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case CYCLEMAP:
+				Log.i(TAG, "setTileProvider: CYCLEMAP not available in this OSMdroid version, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case USGS_SAT:
+				Log.i(TAG, "setTileProvider: USGS_SAT not available, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case USGS_TOPO:
+				Log.i(TAG, "setTileProvider: USGS_TOPO not available, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case PUBLIC_TRANSPORT:
+				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case BING_AERIAL:
+				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case BING_AERIAL_LABELS:
+				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case BING_ROAD:
+				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			case BING_OSGB:
+			case NONE:
+				Log.i(TAG, "setTileProvider: Using MAPNIK as default");
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				break;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "setTileProvider: Error setting tile source: " + tileSource, e);
+			// Fallback to MAPNIK
 			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
-		case MAPQUEST:
-			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
-		case CLOUDMADE:
-            CloudmadeUtil.retrieveCloudmadeKey(getApplicationContext());
-			mMapView.setTileSource(TileSourceFactory.CLOUDMADESTANDARDTILES);
-			break;
-		case USGS_SAT:
-			mMapView.setTileSource(TileSourceFactory.USGS_SAT);
-			break;
-		case USGS_TOPO:
-			mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
-			break;
-		case PUBLIC_TRANSPORT:
-			mMapView.setTileSource(TileSourceFactory.PUBLIC_TRANSPORT);
-			break;
-		case BING_AERIAL:
-            // BingMapTileSource is no longer available in modern OSMdroid
-            // Using default tile source instead
-			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
-		case BING_AERIAL_LABELS:
-            // BingMapTileSource is no longer available in modern OSMdroid
-            // Using default tile source instead
-			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
-		case BING_ROAD:
-            // BingMapTileSource is no longer available in modern OSMdroid
-            // Using default tile source instead
-			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
-		case BING_OSGB:
-		case NONE:
-            // BingMapTileSource is no longer available in modern OSMdroid
-            // Using default tile source instead
-			mMapView.setTileSource(TileSourceFactory.MAPNIK);
-			break;
 		}
+		
 		// save choice to prefs
 		Editor editor = mPrefs.edit();
 		editor.putString("tileSource", tileSource.toString());
-		editor.apply();	
+		editor.apply();
 	}
 
 

@@ -159,6 +159,7 @@ id countPillarImage
 id countPillarText
 id countUnsyncedImage
 id countUnsyncedText
+id cyclemap
 id directions
 id downloadMapsProgress
 id downloadMapsStatus
