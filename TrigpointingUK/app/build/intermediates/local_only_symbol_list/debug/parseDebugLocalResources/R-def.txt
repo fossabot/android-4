@@ -221,6 +221,7 @@ id photoRemove
 id photoSave
 id photoSubject
 id photoThumb
+id preferences_container
 id prefs
 id radar
 id refresh
@@ -257,6 +258,7 @@ layout logtrig
 layout main
 layout mapdownload
 layout mapview
+layout preferences_activity
 layout radardialog
 layout trigalbum
 layout trigalbumrow
@@ -356,6 +358,6 @@ string toastAddPassword
 string toastAddUsername
 string yes
 string zoomview
-styleable TrigpointingUK android:galleryItemBackground
+styleable TrigpointingUK android_galleryItemBackground
 xml network_security_config
 xml preferences

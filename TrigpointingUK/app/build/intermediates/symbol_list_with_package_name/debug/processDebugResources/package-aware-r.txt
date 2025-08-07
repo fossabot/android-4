@@ -3777,6 +3777,7 @@ id photoThumb
 id pin
 id position
 id postLayout
+id preferences_container
 id preferences_detail
 id preferences_header
 id preferences_sliding_pane_layout
@@ -4178,6 +4179,7 @@ layout preference_widget_seekbar
 layout preference_widget_seekbar_material
 layout preference_widget_switch
 layout preference_widget_switch_compat
+layout preferences_activity
 layout radardialog
 layout select_dialog_item_material
 layout select_dialog_multichoice_material

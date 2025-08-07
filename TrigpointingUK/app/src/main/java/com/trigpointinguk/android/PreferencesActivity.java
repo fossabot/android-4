@@ -3,12 +3,13 @@ package com.trigpointinguk.android;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceFragmentCompat;
 
-public class PreferencesActivity extends PreferenceActivity {
+public class PreferencesActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "TUKPrefsFile";
     public static final String TAG = "PreferenceActivity";
     public static final String PREFERENCETYPE = "PreferenceType"; 
@@ -19,20 +20,24 @@ public class PreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.preferences_activity);
+		
+		// Enable back button in action bar
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			mPreferenceType = extras.getInt(PREFERENCETYPE);
 		}
 		
-		switch (mPreferenceType) {
-		case MAINPREFERENCES:
-			addPreferencesFromResource(R.xml.preferences); 
-			break;
-		}
-		
-		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		// Load the appropriate preference fragment
+		if (savedInstanceState == null) {
+			getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.preferences_container, new PreferencesFragment())
+				.commit();
 		}
 	}
 
@@ -60,6 +65,16 @@ public class PreferencesActivity extends PreferenceActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/**
+	 * Preference Fragment to handle the preferences
+	 */
+	public static class PreferencesFragment extends PreferenceFragmentCompat {
+		@Override
+		public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+			setPreferencesFromResource(R.xml.preferences, rootKey);
+		}
 	}
 	
 	
