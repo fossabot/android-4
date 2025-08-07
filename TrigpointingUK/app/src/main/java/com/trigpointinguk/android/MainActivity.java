@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
     public static final String 	TAG ="MainActivity";
     public static final int 	NOTRIGS = 1;
 	private static final String RUNBEFORE = "RUNBEFORE";
+	private static final String AUTO_SYNC_RUN = "AUTO_SYNC_RUN";
     private SharedPreferences 	mPrefs;
     private ImageView			mPillarIcon;
     private ImageView			mFbmIcon;
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Setting up preferences");
         mPrefs = getSharedPreferences("TrigpointingUK", MODE_PRIVATE);
+        
+        // Reset auto sync flag on app startup
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean(AUTO_SYNC_RUN, false).apply();
+        Log.i(TAG, "onCreate: Reset auto sync flag for new app session");
         
         Log.i(TAG, "onCreate: Setting up activity result launchers");
         setupActivityResultLaunchers();
@@ -456,11 +462,12 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean autoSyncEnabled = prefs.getBoolean("auto_sync", false);
+		boolean autoSyncAlreadyRun = prefs.getBoolean(AUTO_SYNC_RUN, false);
 		
-		Log.i(TAG, "checkAndPerformAutoSync: Auto sync enabled: " + autoSyncEnabled);
+		Log.i(TAG, "checkAndPerformAutoSync: Auto sync enabled: " + autoSyncEnabled + ", already run: " + autoSyncAlreadyRun);
 		
-		if (autoSyncEnabled) {
-			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled, starting sync");
+		if (autoSyncEnabled && !autoSyncAlreadyRun) {
+			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled and not yet run, starting sync");
 			// Check if user has credentials
 			String username = prefs.getString("username", "");
 			String password = prefs.getString("plaintextpassword", "");
@@ -468,10 +475,14 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 			if (username != null && !username.trim().isEmpty() && 
 				password != null && !password.trim().isEmpty()) {
 				Log.i(TAG, "checkAndPerformAutoSync: Credentials found, performing auto sync");
+				// Mark that auto sync has been run
+				prefs.edit().putBoolean(AUTO_SYNC_RUN, true).apply();
 				doSync();
 			} else {
 				Log.i(TAG, "checkAndPerformAutoSync: No credentials found, skipping auto sync");
 			}
+		} else if (autoSyncEnabled && autoSyncAlreadyRun) {
+			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled but already run this session");
 		} else {
 			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is disabled");
 		}
