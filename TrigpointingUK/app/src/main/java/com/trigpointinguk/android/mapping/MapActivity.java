@@ -69,6 +69,13 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	private boolean            		mTooManyTrigs;
 	private com.trigpointinguk.android.mapping.ResourceProxyImpl mResourceProxy;
 	private FloatingActionButton mFabLocation;
+
+    // Rough bounding box for USGS National Map coverage (includes Alaska/Hawaii broadly)
+    // If the current map center is outside this, USGS Topo will not return tiles.
+    private static final double US_MIN_LAT = 14.0;   // approx southernmost
+    private static final double US_MAX_LAT = 72.0;   // approx northernmost (Alaska)
+    private static final double US_MIN_LON = -172.0; // approx westernmost (Alaska/Aleutians)
+    private static final double US_MAX_LON = -52.0;  // approx easternmost
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -190,6 +197,18 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				} catch (Exception e) {
 					Log.e(TAG, "setTileProvider: Error getting USGS_TOPO base URL", e);
 				}
+
+                    // If outside US coverage, avoid blank map and fall back
+                    IGeoPoint center = mMapView.getMapCenter();
+                    double lat = center != null ? center.getLatitude() : (DEFAULT_LAT / 1E6);
+                    double lon = center != null ? center.getLongitude() : (DEFAULT_LON / 1E6);
+                    boolean inUsCoverage = lat >= US_MIN_LAT && lat <= US_MAX_LAT && lon >= US_MIN_LON && lon <= US_MAX_LON;
+                    Log.i(TAG, "setTileProvider: Center lat/lon=" + lat + "," + lon + " inUsCoverage=" + inUsCoverage);
+                    if (!inUsCoverage) {
+                        Toast.makeText(this, "USGS Topo covers the USA only. Falling back to Mapnik.", Toast.LENGTH_LONG).show();
+                        mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                        break;
+                    }
 				
 				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
 				Log.i(TAG, "setTileProvider: Successfully set USGS_TOPO tile source");
