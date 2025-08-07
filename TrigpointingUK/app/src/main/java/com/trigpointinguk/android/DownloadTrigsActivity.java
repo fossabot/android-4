@@ -16,9 +16,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,7 +30,6 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 
 	private TextView 		mStatus;
 	private ProgressBar 	mProgress;
-	private Button 			mDownloadBtn;
 	private Integer 		mDownloadCount = 0;
 	private boolean 		mRunning = false;
 	private static int 		mProgressMax = 10000; // value unimportant
@@ -63,22 +59,13 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 		}		
 		
 		mStatus = (TextView) findViewById(R.id.downloadStatus);
-		mStatus.setText(R.string.downloadIdleStatus);
+		mStatus.setText("Starting download...");
 		mProgress = (ProgressBar) findViewById(R.id.downloadProgress);
 		mProgress.setMax(mProgressMax);
 		mProgress.setProgress(0);
-		mDownloadBtn = (Button) findViewById(R.id.btnDownload);
-
-		mDownloadBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (mRunning == false) {
-					mTask = downloadTrigs();
-				} else {
-					mTask.cancel(true);
-				}
-			}
-		});       
+		
+		// Automatically start the download
+		mTask = downloadTrigs();       
 
 	}
 
@@ -86,8 +73,7 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 	private CompletableFuture<DownloadStatus> downloadTrigs() {
 		// Setup UI on main thread
 		mDownloadCount = 0;
-		mStatus.setText(R.string.downloadInsertStatus);
-		mDownloadBtn.setText(R.string.btnCancel);
+		mStatus.setText("Downloading trigpoint data...");
 		mRunning = true;
 		
 		ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -197,25 +183,28 @@ public class DownloadTrigsActivity extends AppCompatActivity {
 		.thenApplyAsync(result -> {
 			switch (result) {
 			case OK:
-				mStatus.setText("Finished downloading " + mDownloadCount +" trigs");
-				mDownloadBtn.setText(R.string.btnDownloadFinished);
+				mStatus.setText("Download complete! " + mDownloadCount + " trigpoints downloaded.");
 				mProgress.setProgress(mProgressMax);
-				mDownloadBtn.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-							DownloadTrigsActivity.this.finish();
-					}
-				});       
+				// Auto-close after 3 seconds
+				mainHandler.postDelayed(() -> {
+					DownloadTrigsActivity.this.finish();
+				}, 3000);
 				break;
 			case ERROR:
-				mStatus.setText("Download failed!");
-				mDownloadBtn.setText(R.string.btnDownload);
+				mStatus.setText("Download failed! Please try again.");
 				mProgress.setProgress(0);
+				// Auto-close after 3 seconds on error too
+				mainHandler.postDelayed(() -> {
+					DownloadTrigsActivity.this.finish();
+				}, 3000);
 				break;
 			case CANCELLED:
-				mStatus.setText("Download Cancelled!");
-				mDownloadBtn.setText(R.string.btnDownload);
+				mStatus.setText("Download cancelled.");
 				mProgress.setProgress(0);
+				// Auto-close after 3 seconds
+				mainHandler.postDelayed(() -> {
+					DownloadTrigsActivity.this.finish();
+				}, 3000);
 				break;
 			}
 			mRunning = false;
