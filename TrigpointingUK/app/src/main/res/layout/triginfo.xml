@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="24dp"
+        android:background="@color/white">
 
         <!-- Mark checkbox -->
         <CheckBox
             android:id="@+id/mark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mark this trig point" />
+            android:text="Mark this trig point"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:padding="8dp" />
 
         <!-- Trig info fields -->
         <LinearLayout
@@ -28,20 +33,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="4dp">
+                android:padding="12dp"
+                android:layout_marginTop="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name: "
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/triginfo_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Trig Name" />
+                    android:text="Trig Name"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -76,9 +86,10 @@
 
                 <ImageView
                     android:id="@+id/triginfo_condition_icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/c_good" />
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/c_good"
+                    android:padding="4dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
