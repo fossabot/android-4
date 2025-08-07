@@ -20,4 +20,8 @@
         android:id="@+id/clearcache"
         android:title="Clear Cache"
         android:icon="@drawable/ic_menu_delete" />
+    <item
+        android:id="@+id/exit"
+        android:title="Exit"
+        android:icon="@drawable/ic_menu_delete" />
 </menu> 

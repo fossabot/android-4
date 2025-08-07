@@ -253,6 +253,19 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 		} else if (itemId == R.id.clearcache) {
 			new ClearCacheTask(MainActivity.this).execute();        	
 			return true;
+		} else if (itemId == R.id.exit) {
+			// Show confirmation dialog before exiting
+			new AlertDialog.Builder(this)
+				.setTitle("Exit Application")
+				.setMessage("Are you sure you want to exit?")
+				.setPositiveButton("Yes", (dialog, which) -> {
+					// Close the application
+					finish();
+					System.exit(0);
+				})
+				.setNegativeButton("No", null)
+				.show();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

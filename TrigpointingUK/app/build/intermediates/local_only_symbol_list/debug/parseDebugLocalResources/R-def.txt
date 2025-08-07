@@ -169,6 +169,7 @@ id downloadProgress
 id downloadStatus
 id downloadmaps
 id downloadtrigs
+id exit
 id fab_location
 id filter
 id filterAll
