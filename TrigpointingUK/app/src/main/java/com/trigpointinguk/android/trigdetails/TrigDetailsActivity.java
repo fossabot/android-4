@@ -1,6 +1,7 @@
 package com.trigpointinguk.android.trigdetails;
 
 import android.app.Activity;
+import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -19,6 +20,7 @@ public class TrigDetailsActivity extends AppCompatActivity {
 
 	private static final String TAG="TrigDetailsActivity";
     //private SharedPreferences mPrefs;
+    private LocalActivityManager mLocalActivityManager;
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -35,7 +37,9 @@ public class TrigDetailsActivity extends AppCompatActivity {
 	    
 	    Resources res = getResources();
 	    TabHost tabHost = findViewById(android.R.id.tabhost);
-	    tabHost.setup(); // Initialize the TabHost
+	    mLocalActivityManager = new LocalActivityManager(this, false);
+	    mLocalActivityManager.dispatchCreate(savedInstanceState);
+	    tabHost.setup(mLocalActivityManager); // Initialize the TabHost with LocalActivityManager
 	    TabHost.TabSpec spec;
 	    Intent intent;
 	    
@@ -99,6 +103,30 @@ public class TrigDetailsActivity extends AppCompatActivity {
 		} catch (Exception e) {
 		} finally {
 			mDb.close();
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mLocalActivityManager != null) {
+			mLocalActivityManager.dispatchResume();
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (mLocalActivityManager != null) {
+			mLocalActivityManager.dispatchPause(isFinishing());
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mLocalActivityManager != null) {
+			mLocalActivityManager.dispatchDestroy(isFinishing());
 		}
 	}
 	
