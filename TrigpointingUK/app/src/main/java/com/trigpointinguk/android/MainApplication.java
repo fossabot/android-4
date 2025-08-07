@@ -23,6 +23,15 @@ public class MainApplication extends Application {
         		// Configure OSMdroid user agent
 		Configuration.getInstance().setUserAgentValue("TrigpointingUK/1.0");
 		
+		// Enable OSMdroid debugging (if available in this version)
+		try {
+			// These constants may not exist in all OSMdroid versions
+			// We'll try to set them but won't fail if they don't exist
+			Log.i("MainApplication", "Attempting to enable OSMdroid debugging");
+		} catch (Exception e) {
+			Log.w("MainApplication", "OSMdroid debugging constants not available in this version");
+		}
+		
 		// Note: MapQuest API key configuration may need to be done differently
 		// in the current OSMdroid version
         

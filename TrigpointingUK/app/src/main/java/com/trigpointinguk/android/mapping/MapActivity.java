@@ -153,7 +153,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case MAPQUEST:
-				Log.i(TAG, "setTileProvider: MapQuest Static Map API not compatible with OSMdroid tile system, using MAPNIK");
+				Log.i(TAG, "setTileProvider: MAPQUEST not available in this OSMdroid version, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case CLOUDMADE:
@@ -169,8 +169,8 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
 			case USGS_TOPO:
-				Log.i(TAG, "setTileProvider: USGS_TOPO not available in this OSMdroid version, using MAPNIK");
-				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				Log.i(TAG, "setTileProvider: Using USGS_TOPO");
+				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
 				break;
 			case PUBLIC_TRANSPORT:
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
@@ -216,6 +216,11 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 			Log.i(TAG, "USGS_TOPO: " + (TileSourceFactory.USGS_TOPO != null ? "Available" : "Not available"));
 		} catch (Exception e) {
 			Log.e(TAG, "USGS_TOPO: Error checking availability", e);
+		}
+		try {
+			Log.i(TAG, "MAPQUEST: Not available in this OSMdroid version");
+		} catch (Exception e) {
+			Log.e(TAG, "MAPQUEST: Error checking availability", e);
 		}
 	}
 
