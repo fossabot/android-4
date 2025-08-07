@@ -177,18 +177,25 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				Log.i(TAG, "setTileProvider: USGS_SAT not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
-			case USGS_TOPO:
-				Log.i(TAG, "setTileProvider: Using USGS_TOPO");
-				try {
-					mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
-					Log.i(TAG, "setTileProvider: Successfully set USGS_TOPO tile source");
-				} catch (Exception e) {
-					Log.e(TAG, "setTileProvider: Error setting USGS_TOPO tile source", e);
-					// Fallback to MAPNIK
-					mMapView.setTileSource(TileSourceFactory.MAPNIK);
-					Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to USGS_TOPO error");
-				}
-				break;
+					case USGS_TOPO:
+			Log.i(TAG, "setTileProvider: Using USGS_TOPO");
+			try {
+				// Debug: Check what USGS_TOPO actually is
+				Log.i(TAG, "setTileProvider: USGS_TOPO object: " + TileSourceFactory.USGS_TOPO);
+				Log.i(TAG, "setTileProvider: USGS_TOPO name: " + TileSourceFactory.USGS_TOPO.name());
+				
+				mMapView.setTileSource(TileSourceFactory.USGS_TOPO);
+				Log.i(TAG, "setTileProvider: Successfully set USGS_TOPO tile source");
+				
+				// Debug: Check what was actually set
+				Log.i(TAG, "setTileProvider: After setting, tile source is: " + mMapView.getTileProvider().getTileSource().name());
+			} catch (Exception e) {
+				Log.e(TAG, "setTileProvider: Error setting USGS_TOPO tile source", e);
+				// Fallback to MAPNIK
+				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+				Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to USGS_TOPO error");
+			}
+			break;
 			case PUBLIC_TRANSPORT:
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
