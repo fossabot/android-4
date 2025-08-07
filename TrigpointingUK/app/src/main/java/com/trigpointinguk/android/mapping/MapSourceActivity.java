@@ -1,6 +1,6 @@
 package com.trigpointinguk.android.mapping;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -11,7 +11,7 @@ import android.widget.RadioGroup;
 
 import com.trigpointinguk.android.R;
 
-public class MapSourceActivity extends Activity {
+public class MapSourceActivity extends AppCompatActivity {
     private static final String TAG = "MapSourceActivity";
     private SharedPreferences mPrefs;
     private RadioGroup mMapSourceRadioGroup;
@@ -21,10 +21,10 @@ public class MapSourceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_source_activity);
 
-        // Enable back button in action bar
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        		// Enable back button in action bar
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mMapSourceRadioGroup = findViewById(R.id.mapSourceRadioGroup);

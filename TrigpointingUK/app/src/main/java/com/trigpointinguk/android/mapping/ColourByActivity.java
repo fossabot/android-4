@@ -1,6 +1,6 @@
 package com.trigpointinguk.android.mapping;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.mapping.MapIcon.colourScheme;
 
-public class ColourByActivity extends Activity {
+public class ColourByActivity extends AppCompatActivity {
     private static final String TAG = "ColourByActivity";
     private SharedPreferences mPrefs;
     private RadioGroup mColourRadioGroup;
@@ -23,10 +23,10 @@ public class ColourByActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.colour_by_activity);
 
-        // Enable back button in action bar
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        		// Enable back button in action bar
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mColourRadioGroup = findViewById(R.id.colourRadioGroup);
