@@ -192,47 +192,6 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 		boolean result = super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.mapmenu, menu);
-		
-		// initialise menu ticks
-		switch (mIconColouring) {
-		case BYCONDITION:
-			menu.findItem(R.id.byCondition).setChecked(true);
-			break;
-		case BYLOGGED:
-			menu.findItem(R.id.byLogged).setChecked(true);
-			break;
-		case NONE:
-			menu.findItem(R.id.none).setChecked(true);
-			break;
-		}
-		// initialise tile provider ticks
-		switch (mTileSource) {
-		case MAPNIK:
-			menu.findItem(R.id.mapnik).setChecked(true);
-			break;
-		case MAPQUEST:
-			menu.findItem(R.id.mapquest).setChecked(true);
-			break;
-		case CLOUDMADE:
-			menu.findItem(R.id.cloudmade).setChecked(true);
-			break;
-		case CYCLEMAP:
-			menu.findItem(R.id.cyclemap).setChecked(true);
-			break;
-		case BING_AERIAL:
-			menu.findItem(R.id.bingaerial).setChecked(true);
-			break;
-		case BING_AERIAL_LABELS:
-			menu.findItem(R.id.bingaeriallabels).setChecked(true);
-			break;
-		case BING_ROAD:
-			menu.findItem(R.id.bingroad).setChecked(true);
-			break;
-		case BING_OSGB:
-		case NONE:
-			menu.findItem(R.id.bingosgb).setChecked(true);
-			break;
-		}
 		return result;
 	}    
 
@@ -244,54 +203,28 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 			return true;
 		}
 		
-		item.setChecked(true);
 		int itemId = item.getItemId();
 		
-		// Tile provider options
-		if (itemId == R.id.cloudmade) {
-			setTileProvider(TileSource.CLOUDMADE);
-		} else if (itemId == R.id.cyclemap) {
-			setTileProvider(TileSource.CYCLEMAP);
-		} else if (itemId == R.id.mapnik) {
-			setTileProvider(TileSource.MAPNIK);
-		} else if (itemId == R.id.mapquest) {
-			setTileProvider(TileSource.MAPQUEST);
-		} else if (itemId == R.id.bingaerial) {
-			setTileProvider(TileSource.BING_AERIAL);
-		} else if (itemId == R.id.bingaeriallabels) {
-			setTileProvider(TileSource.BING_AERIAL_LABELS);
-		} else if (itemId == R.id.bingroad) {
-			setTileProvider(TileSource.BING_ROAD);
-		} else if (itemId == R.id.bingosgb) {
-			setTileProvider(TileSource.BING_OSGB);
-		}
-		// Icon colouring options
-		else if (itemId == R.id.byCondition) {
-			mIconColouring = colourScheme.BYCONDITION;
-			refreshMap();
-		} else if (itemId == R.id.none) {
-			mIconColouring = colourScheme.NONE;
-			refreshMap();
-		} else if (itemId == R.id.byLogged) {
-			mIconColouring = colourScheme.BYLOGGED;
-			refreshMap();
-		}
-		// Other
-		else if (itemId == R.id.downloadmaps) {
+		if (itemId == R.id.colourBy) {
+			Intent i = new Intent(MapActivity.this, ColourByActivity.class);
+			startActivityForResult(i, R.id.colourBy);
+			return true;
+		} else if (itemId == R.id.mapSource) {
+			Intent i = new Intent(MapActivity.this, MapSourceActivity.class);
+			startActivityForResult(i, R.id.mapSource);
+			return true;
+		} else if (itemId == R.id.filterBy) {
+            Intent i = new Intent(MapActivity.this, FilterActivity.class);
+            startActivityForResult(i, R.id.filterBy);
+            return true;
+		} else if (itemId == R.id.downloadmaps) {
 			Intent i = new Intent(MapActivity.this, DownloadMapsActivity.class);
 			startActivity(i);
 			return true;
-		} else if (itemId == R.id.location) {
-			mMyLocationOverlay.enableFollowLocation();
-            return true;
 		} else if (itemId == R.id.compass) {
 			// Compass functionality has changed in modern OSMdroid
 			// TODO: Implement compass functionality when needed
 			return true;
-		} else if (itemId == R.id.filter) {
-            Intent i = new Intent(MapActivity.this, FilterActivity.class);
-            startActivityForResult(i, R.id.filter);
-            return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -320,8 +253,24 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(TAG, "onActivityResult");
-		refreshMap();
+		Log.i(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+		
+		if (resultCode == RESULT_OK && data != null) {
+			if (requestCode == R.id.colourBy) {
+				String colourSchemeStr = data.getStringExtra("colourScheme");
+				if (colourSchemeStr != null) {
+					mIconColouring = colourScheme.valueOf(colourSchemeStr);
+					refreshMap();
+				}
+			} else if (requestCode == R.id.mapSource) {
+				String tileSourceStr = data.getStringExtra("tileSource");
+				if (tileSourceStr != null) {
+					setTileProvider(TileSource.valueOf(tileSourceStr));
+				}
+			} else if (requestCode == R.id.filterBy) {
+				refreshMap();
+			}
+		}
 	}
 
 

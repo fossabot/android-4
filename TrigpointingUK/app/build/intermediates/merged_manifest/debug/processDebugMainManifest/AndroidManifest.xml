@@ -93,6 +93,8 @@
         <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsLoglistTab" />
         <activity android:name="com.trigpointinguk.android.trigdetails.TrigDetailsOSMapTab" />
         <activity android:name="com.trigpointinguk.android.mapping.MapActivity" />
+        <activity android:name="com.trigpointinguk.android.mapping.ColourByActivity" />
+        <activity android:name="com.trigpointinguk.android.mapping.MapSourceActivity" />
 
         <meta-data
             android:name="CLOUDMADE_KEY"

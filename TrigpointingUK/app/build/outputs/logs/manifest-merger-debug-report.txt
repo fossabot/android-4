@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-52:12
-INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-52:12
-INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-52:12
-INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-52:12
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-54:12
+INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-54:12
+INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-54:12
+INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:2:1-54:12
 MERGED from [androidx.preference:preference:1.2.1] /home/ianh/.gradle/caches/8.13/transforms/1384616261ac72a11a5a104a9a7c02f4/transformed/preference-1.2.1/AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.material:material:1.10.0] /home/ianh/.gradle/caches/8.13/transforms/48ef705f1b1bf2d5bb06fe84858dd245/transformed/material-1.10.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/ianh/.gradle/caches/8.13/transforms/c323cb3391f7712fedcf9ddbc0b93cc5/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
@@ -119,8 +119,8 @@ ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xm
 	android:name
 		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:18:22-73
 application
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:20:5-51:19
-INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:20:5-51:19
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:20:5-53:19
+INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:20:5-53:19
 MERGED from [com.google.android.material:material:1.10.0] /home/ianh/.gradle/caches/8.13/transforms/48ef705f1b1bf2d5bb06fe84858dd245/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.10.0] /home/ianh/.gradle/caches/8.13/transforms/48ef705f1b1bf2d5bb06fe84858dd245/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /home/ianh/.gradle/caches/8.13/transforms/c323cb3391f7712fedcf9ddbc0b93cc5/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -229,38 +229,46 @@ activity#com.trigpointinguk.android.mapping.MapActivity
 ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:9-66
 	android:name
 		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:43:19-54
+activity#com.trigpointinguk.android.mapping.ColourByActivity
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:9-71
+	android:name
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:19-59
+activity#com.trigpointinguk.android.mapping.MapSourceActivity
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:9-72
+	android:name
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:19-60
 meta-data#CLOUDMADE_KEY
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:9-110
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:9-110
 	android:value
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:20-68
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:20-68
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:44:69-97
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:69-97
 meta-data#BING_KEY
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:9-137
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:9-137
 	android:value
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:20-100
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:20-100
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:45:101-124
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:101-124
 activity#com.trigpointinguk.android.HelpPageActivity
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:9-62
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:9-62
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:46:19-50
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:19-50
 activity#com.trigpointinguk.android.common.DisplayBitmapActivity
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:9-75
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:9-75
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:47:19-63
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:19-63
 activity#com.trigpointinguk.android.logging.LogTrigActivity
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:9-70
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:50:9-70
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:48:19-58
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:50:19-58
 activity#com.trigpointinguk.android.logging.LogPhotoActivity
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:9-71
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:51:9-71
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:49:19-59
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:51:19-59
 activity#com.trigpointinguk.android.filter.FilterActivity
-ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:50:9-68
+ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:52:9-68
 	android:name
-		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:50:19-56
+		ADDED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml:52:19-56
 uses-sdk
 INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/ianh/dev/android/TrigpointingUK/app/src/main/AndroidManifest.xml

@@ -3467,6 +3467,8 @@ id clockwise
 id closest
 id cloudmade
 id collapseActionView
+id colourBy
+id colourRadioGroup
 id compass
 id compassArrow
 id compress
@@ -3559,8 +3561,8 @@ id fill_vertical
 id filled
 id filter
 id filterAll
+id filterBy
 id filterFbm
-id filterGroup
 id filterIntersected
 id filterLogged
 id filterMarked
@@ -3629,7 +3631,6 @@ id linear
 id listMode
 id list_item
 id locale
-id location
 id locationError
 id logAddPhoto
 id logAdminFlag
@@ -3652,7 +3653,8 @@ id logswitcher
 id ltr
 id m3_side_sheet
 id map
-id mapTypeGroup
+id mapSource
+id mapSourceRadioGroup
 id mapnik
 id mapquest
 id mapview
@@ -4080,6 +4082,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout bonuspack_bubble
+layout colour_by_activity
 layout custom_dialog
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog
@@ -4110,6 +4113,7 @@ layout m3_alert_dialog_title
 layout m3_auto_complete_simple_item
 layout m3_side_sheet_dialog
 layout main
+layout map_source_activity
 layout mapdownload
 layout mapview
 layout material_chip_input_combo

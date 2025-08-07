@@ -145,6 +145,8 @@ id byCondition
 id byLogged
 id clearcache
 id cloudmade
+id colourBy
+id colourRadioGroup
 id compass
 id compassArrow
 id countFbmImage
@@ -171,8 +173,8 @@ id downloadtrigs
 id fab_location
 id filter
 id filterAll
+id filterBy
 id filterFbm
-id filterGroup
 id filterIntersected
 id filterLogged
 id filterMarked
@@ -184,7 +186,6 @@ id filterType
 id filterUnsynced
 id heading
 id helppage
-id location
 id locationError
 id logAddPhoto
 id logAdminFlag
@@ -205,7 +206,8 @@ id logUploadNow
 id logUserFlag
 id logswitcher
 id map
-id mapTypeGroup
+id mapSource
+id mapSourceRadioGroup
 id mapnik
 id mapquest
 id mapview
@@ -250,6 +252,7 @@ id trigosgallery
 id txtUserName
 id yes
 id zoomview
+layout colour_by_activity
 layout displaybitmap
 layout download
 layout filter
@@ -257,6 +260,7 @@ layout helppage
 layout logphoto
 layout logtrig
 layout main
+layout map_source_activity
 layout mapdownload
 layout mapview
 layout preferences_activity

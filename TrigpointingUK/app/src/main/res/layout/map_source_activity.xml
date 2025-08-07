@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose map source:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <RadioGroup
+        android:id="@+id/mapSourceRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/mapnik"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mapnik (OpenStreetMap)"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/mapquest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MapQuest"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/cloudmade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CloudMade"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/cyclemap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CycleMap"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/bingaerial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bing Aerial"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/bingaeriallabels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bing Aerial with Labels"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/bingroad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bing Road"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/bingosgb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bing OSGB"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+    </RadioGroup>
+
+</LinearLayout> 
