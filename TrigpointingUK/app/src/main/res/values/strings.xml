@@ -65,6 +65,7 @@
     
     <!-- Filter layout strings -->
     <string name="filter">Filter</string>
+    <string name="filterBy">Filter by...</string>
     <string name="filterType">Filter Type</string>
     <string name="filterRadio">Filter Radio</string>
     

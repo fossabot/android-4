@@ -138,7 +138,6 @@ id browser
 id btnDownloadMaps
 id btnMap
 id btnNearest
-id btnSearch
 id btnSync
 id byCondition
 id byLogged
@@ -307,6 +306,7 @@ string downloadmaps
 string errorcolour
 string filter
 string filterAll
+string filterBy
 string filterLogged
 string filterMarked
 string filterNotLogged

@@ -67,6 +67,7 @@
     <string name="errorcolour">Error</string>
     <string name="filter">Filter</string>
     <string name="filterAll">All</string>
+    <string name="filterBy">Filter by...</string>
     <string name="filterLogged">Logged</string>
     <string name="filterMarked">Marked</string>
     <string name="filterNotLogged">Not Logged</string>

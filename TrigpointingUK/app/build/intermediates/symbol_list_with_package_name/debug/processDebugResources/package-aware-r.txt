@@ -3432,7 +3432,6 @@ id browser
 id btnDownloadMaps
 id btnMap
 id btnNearest
-id btnSearch
 id btnSync
 id bubble_description
 id bubble_image
@@ -4313,6 +4312,7 @@ string fab_transformation_sheet_behavior
 string fiets_nl
 string filter
 string filterAll
+string filterBy
 string filterLogged
 string filterMarked
 string filterNotLogged

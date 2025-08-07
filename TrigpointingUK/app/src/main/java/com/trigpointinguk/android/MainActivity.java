@@ -182,14 +182,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 				mapLauncher.launch(i);
 			}
 		});
-        final Button btnSearch = (Button) findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-	            Intent i = new Intent(MainActivity.this, FilterActivity.class);
-	            searchLauncher.launch(i);
-			}
-		});
+
     }
     
     private void showNoTrigsDialog() {
