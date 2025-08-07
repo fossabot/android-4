@@ -135,7 +135,6 @@ id bingaeriallabels
 id bingosgb
 id bingroad
 id browser
-id btnDownload
 id btnDownloadMaps
 id btnMap
 id btnNearest

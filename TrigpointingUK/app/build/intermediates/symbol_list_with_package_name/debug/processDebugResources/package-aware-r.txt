@@ -3429,7 +3429,6 @@ id bounceBoth
 id bounceEnd
 id bounceStart
 id browser
-id btnDownload
 id btnDownloadMaps
 id btnMap
 id btnNearest
