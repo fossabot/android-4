@@ -2,6 +2,17 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://esri.jfrog.io/artifactory/arcgis' }
+    }
+}
+
+// Gradle 7+/AGP 8+: prefer centralized dependency resolution
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://esri.jfrog.io/artifactory/arcgis' }
     }
 }
 rootProject.name = "TrigpointingUK"
