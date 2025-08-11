@@ -14,12 +14,12 @@ public class OsLeisureTileSource extends OnlineTileSourceBase {
     private final String apiKey;
 
     public OsLeisureTileSource(String apiKey) {
-        super("OS_Leisure_3857",
-                6, // min zoom where tiles look reasonable
-                19, // max zoom
+        super("OS_Leisure_27700",
+                0, // min zoom where tiles look reasonable
+                13, // max zoom
                 256,
                 ".png",
-                new String[]{"https://api.os.uk/maps/raster/v1/zxy/Leisure_3857/"});
+                new String[]{"https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/"});
         this.apiKey = apiKey;
     }
 
@@ -34,7 +34,7 @@ public class OsLeisureTileSource extends OnlineTileSourceBase {
         try {
             // Avoid logging full key
             String maskedKey = apiKey.length() > 6 ? apiKey.substring(0, 3) + "…" + apiKey.substring(apiKey.length()-3) : "***";
-            Log.d(TAG, "Requesting OS tile: z=" + z + " x=" + x + " y=" + y + " key=" + maskedKey);
+            Log.d(TAG, "Requesting OS Leisure tile: z=" + z + " x=" + x + " y=" + y + " key=" + maskedKey);
         } catch (Exception ignore) {}
         return url;
     }

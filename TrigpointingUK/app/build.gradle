@@ -62,6 +62,9 @@ dependencies {
     
     // OSMdroid - replacing the old forked version with current library
     implementation 'org.osmdroid:osmdroid-android:6.1.18'
+
+    // ArcGIS Runtime SDK
+    implementation 'com.esri.arcgisruntime:arcgis-android:100.15.0'
     
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'

@@ -183,6 +183,15 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 			}
 		});
 
+        final Button btnArcGisMap = (Button) findViewById(R.id.btnArcGisMap);
+        btnArcGisMap.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.trigpointinguk.android.mapping.ArcGisMapActivity.class);
+                mapLauncher.launch(i);
+            }
+        });
+
     }
     
     private void showNoTrigsDialog() {
