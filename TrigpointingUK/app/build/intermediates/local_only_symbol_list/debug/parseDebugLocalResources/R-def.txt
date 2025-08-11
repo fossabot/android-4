@@ -130,11 +130,13 @@ drawable zoom_in
 drawable zoom_out
 id about
 id addLog
+id arcgisMapView
 id bingaerial
 id bingaeriallabels
 id bingosgb
 id bingroad
 id browser
+id btnArcGisMap
 id btnDownloadMaps
 id btnMap
 id btnNearest
@@ -256,6 +258,7 @@ id usgs_sat
 id usgs_topo
 id yes
 id zoomview
+layout arcgis_map
 layout colour_by_activity
 layout displaybitmap
 layout download
