@@ -6,21 +6,20 @@ import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.MapTileIndex;
 
 /**
- * Ordnance Survey Leisure tiles (OSGB 27700) from OS Data Hub.
+ * Ordnance Survey Leisure tiles (Web Mercator 3857) from OS Data Hub.
  * Requires an API key. Coverage: Great Britain only.
- * Note: This layer uses British National Grid (EPSG:27700) tiling. It may not align with Web Mercator.
  */
 public class OsLeisureTileSource extends OnlineTileSourceBase {
     private static final String TAG = "OsLeisureTileSource";
     private final String apiKey;
 
     public OsLeisureTileSource(String apiKey) {
-        super("OS_Leisure_27700",
+        super("OS_Leisure_3857",
                 6, // min zoom where tiles look reasonable
                 19, // max zoom
                 256,
                 ".png",
-                new String[]{"https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/"});
+                new String[]{"https://api.os.uk/maps/raster/v1/zxy/Leisure_3857/"});
         this.apiKey = apiKey;
     }
 

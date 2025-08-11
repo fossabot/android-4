@@ -214,7 +214,8 @@ id mark
 id no
 id none
 id north
-id ordnance_survey
+id ordnance_survey_leisure
+id ordnance_survey_outdoor
 id photoDateUser
 id photoDescr
 id photoIcon

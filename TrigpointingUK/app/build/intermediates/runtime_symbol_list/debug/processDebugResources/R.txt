@@ -3752,7 +3752,8 @@ int id open_search_view_search_prefix 0x7f0901ac
 int id open_search_view_status_bar_spacer 0x7f0901ad
 int id open_search_view_toolbar 0x7f0901ae
 int id open_search_view_toolbar_container 0x7f0901af
-int id ordnance_survey 0x7f0901b0
+int id ordnance_survey_leisure 0x7f090286
+int id ordnance_survey_outdoor 0x7f090287
 int id outline 0x7f0901b1
 int id outward 0x7f0901b2
 int id overshoot 0x7f0901b3

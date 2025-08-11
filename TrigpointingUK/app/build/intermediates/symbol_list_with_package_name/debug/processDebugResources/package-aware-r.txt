@@ -3753,7 +3753,8 @@ id open_search_view_search_prefix
 id open_search_view_status_bar_spacer
 id open_search_view_toolbar
 id open_search_view_toolbar_container
-id ordnance_survey
+id ordnance_survey_leisure
+id ordnance_survey_outdoor
 id outline
 id outward
 id overshoot
