@@ -28,7 +28,15 @@
             android:textSize="16sp" />
 
         <RadioButton
-            android:id="@+id/ordnance_survey"
+            android:id="@+id/ordnance_survey_outdoor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ordnance Survey Outdoor (GB)"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/ordnance_survey_leisure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ordnance Survey Leisure (GB)"

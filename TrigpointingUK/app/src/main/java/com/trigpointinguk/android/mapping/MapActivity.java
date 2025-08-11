@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	private static final int DEFAULT_LAT = 50931280;
 	public static final String TAG = "MapActivity";
 	
-    public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, CYCLEMAP, USGS_SAT, USGS_TOPO, ORDNANCE_SURVEY, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};	
+    public enum TileSource 		{NONE, MAPNIK, MAPQUEST, CLOUDMADE, CYCLEMAP, USGS_SAT, USGS_TOPO, ORDNANCE_SURVEY, ORDNANCE_SURVEY_OUTDOOR, ORDNANCE_SURVEY_LEISURE, PUBLIC_TRANSPORT, BING_AERIAL, BING_ROAD, BING_AERIAL_LABELS, BING_OSGB};
 
 	private MapView            mMapView;
 	private MapController      mMapController;
@@ -240,7 +240,8 @@ public class MapActivity extends AppCompatActivity implements MapListener {
                 effectiveTileSource = TileSource.MAPNIK;
 				break;
             case ORDNANCE_SURVEY:
-                // OS Leisure GB tiles require API key and UK coverage; fall back if missing
+            case ORDNANCE_SURVEY_OUTDOOR:
+                // OS Outdoor GB tiles require API key and UK coverage; fall back if missing
                 String osApiKey = PreferenceManager.getDefaultSharedPreferences(this).getString("os_api_key", "");
                 if (osApiKey == null || osApiKey.trim().isEmpty()) {
                     Toast.makeText(this, "Set Ordnance Survey API key in Preferences to use OS maps", Toast.LENGTH_LONG).show();
@@ -261,14 +262,46 @@ public class MapActivity extends AppCompatActivity implements MapListener {
                         Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to outside GB");
                         effectiveTileSource = TileSource.MAPNIK;
                     } else {
-                        mMapView.setTileSource(new OsLeisureTileSource(osApiKey));
-                        Log.i(TAG, "setTileProvider: Using Ordnance Survey Leisure tile source");
-                        effectiveTileSource = TileSource.ORDNANCE_SURVEY;
+                        mMapView.setTileSource(new OsOutdoorTileSource(osApiKey));
+                        Log.i(TAG, "setTileProvider: Using Ordnance Survey Outdoor tile source");
+                        effectiveTileSource = TileSource.ORDNANCE_SURVEY_OUTDOOR;
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "setTileProvider: Error setting Ordnance Survey tile source", e);
+                    Log.e(TAG, "setTileProvider: Error setting Ordnance Survey Outdoor tile source", e);
                     mMapView.setTileSource(TileSourceFactory.MAPNIK);
                     Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to OS error");
+                    effectiveTileSource = TileSource.MAPNIK;
+                }
+                break;
+            case ORDNANCE_SURVEY_LEISURE:
+                // OS Leisure (27700) requires API key and UK coverage
+                String osApiKey2 = PreferenceManager.getDefaultSharedPreferences(this).getString("os_api_key", "");
+                if (osApiKey2 == null || osApiKey2.trim().isEmpty()) {
+                    Toast.makeText(this, "Set Ordnance Survey API key in Preferences to use OS maps", Toast.LENGTH_LONG).show();
+                    mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                    effectiveTileSource = TileSource.MAPNIK;
+                    break;
+                }
+                IGeoPoint osCenter2 = mMapView.getMapCenter();
+                double osLat2 = osCenter2 != null ? osCenter2.getLatitude() : (DEFAULT_LAT / 1E6);
+                double osLon2 = osCenter2 != null ? osCenter2.getLongitude() : (DEFAULT_LON / 1E6);
+                boolean inUk2 = osLat2 >= 49.0 && osLat2 <= 61.0 && osLon2 >= -8.0 && osLon2 <= 2.0;
+                Log.i(TAG, "setTileProvider: OS Leisure check lat/lon=" + osLat2 + "," + osLon2 + " inUk=" + inUk2);
+                try {
+                    if (!inUk2) {
+                        Toast.makeText(this, "OS maps cover Great Britain only. Falling back to Mapnik.", Toast.LENGTH_LONG).show();
+                        mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                        Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to outside GB");
+                        effectiveTileSource = TileSource.MAPNIK;
+                    } else {
+                        mMapView.setTileSource(new OsLeisureTileSource(osApiKey2));
+                        Log.i(TAG, "setTileProvider: Using Ordnance Survey Leisure tile source (27700)");
+                        effectiveTileSource = TileSource.ORDNANCE_SURVEY_LEISURE;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "setTileProvider: Error setting Ordnance Survey Leisure tile source", e);
+                    mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                    Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to OS Leisure error");
                     effectiveTileSource = TileSource.MAPNIK;
                 }
                 break;
