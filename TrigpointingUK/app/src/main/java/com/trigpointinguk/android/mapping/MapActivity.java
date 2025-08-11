@@ -158,31 +158,36 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 	}
 
 
-	private void setTileProvider(TileSource tileSource) {
-		mTileSource = tileSource;
-		Log.i(TAG, "setTileProvider: Setting tile source to: " + tileSource);
+    private void setTileProvider(TileSource tileSource) {
+        mTileSource = tileSource;
+        Log.i(TAG, "setTileProvider: Requested tile source: " + tileSource);
+        TileSource effectiveTileSource = tileSource;
 		
 		try {
 			switch (tileSource) {
-			case MAPNIK:
+            case MAPNIK:
 				Log.i(TAG, "setTileProvider: Using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
 				break;
-			case MAPQUEST:
+            case MAPQUEST:
 				Log.i(TAG, "setTileProvider: MAPQUEST not available in this OSMdroid version, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
-			case CLOUDMADE:
+            case CLOUDMADE:
 				Log.i(TAG, "setTileProvider: CLOUDMADE not available in this OSMdroid version, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
-			case CYCLEMAP:
+            case CYCLEMAP:
 				Log.i(TAG, "setTileProvider: CYCLEMAP not available in this OSMdroid version, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
-			case USGS_SAT:
+            case USGS_SAT:
 				Log.i(TAG, "setTileProvider: USGS_SAT not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
 					case USGS_TOPO:
 			Log.i(TAG, "setTileProvider: Using USGS_TOPO");
@@ -207,6 +212,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
                     if (!inUsCoverage) {
                         Toast.makeText(this, "USGS Topo covers the USA only. Falling back to Mapnik.", Toast.LENGTH_LONG).show();
                         mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                        effectiveTileSource = TileSource.MAPNIK;
                         break;
                     }
 				
@@ -220,16 +226,18 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 				Log.i(TAG, "setTileProvider: Tile provider class: " + mMapView.getTileProvider().getClass().getSimpleName());
 				Log.i(TAG, "setTileProvider: Tile provider tile source: " + mMapView.getTileProvider().getTileSource().name());
 				
-			} catch (Exception e) {
+            } catch (Exception e) {
 				Log.e(TAG, "setTileProvider: Error setting USGS_TOPO tile source", e);
 				// Fallback to MAPNIK
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to USGS_TOPO error");
 			}
 			break;
-			case PUBLIC_TRANSPORT:
+            case PUBLIC_TRANSPORT:
 				Log.i(TAG, "setTileProvider: PUBLIC_TRANSPORT not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
             case ORDNANCE_SURVEY:
                 // OS Leisure GB tiles require API key and UK coverage; fall back if missing
@@ -237,6 +245,7 @@ public class MapActivity extends AppCompatActivity implements MapListener {
                 if (osApiKey == null || osApiKey.trim().isEmpty()) {
                     Toast.makeText(this, "Set Ordnance Survey API key in Preferences to use OS maps", Toast.LENGTH_LONG).show();
                     mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                    effectiveTileSource = TileSource.MAPNIK;
                     break;
                 }
                 // UK bounding box (rough): lat 49..61, lon -8..2
@@ -244,46 +253,57 @@ public class MapActivity extends AppCompatActivity implements MapListener {
                 double osLat = osCenter != null ? osCenter.getLatitude() : (DEFAULT_LAT / 1E6);
                 double osLon = osCenter != null ? osCenter.getLongitude() : (DEFAULT_LON / 1E6);
                 boolean inUk = osLat >= 49.0 && osLat <= 61.0 && osLon >= -8.0 && osLon <= 2.0;
-                if (!inUk) {
-                    Toast.makeText(this, "OS maps cover Great Britain only. Falling back to Mapnik.", Toast.LENGTH_LONG).show();
-                    mMapView.setTileSource(TileSourceFactory.MAPNIK);
-                    break;
-                }
+                Log.i(TAG, "setTileProvider: OS check lat/lon=" + osLat + "," + osLon + " inUk=" + inUk);
                 try {
-                    mMapView.setTileSource(new OsLeisureTileSource(osApiKey));
-                    Log.i(TAG, "setTileProvider: Using Ordnance Survey Leisure tile source");
+                    if (!inUk) {
+                        Toast.makeText(this, "OS maps cover Great Britain only. Falling back to Mapnik.", Toast.LENGTH_LONG).show();
+                        mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                        Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to outside GB");
+                        effectiveTileSource = TileSource.MAPNIK;
+                    } else {
+                        mMapView.setTileSource(new OsLeisureTileSource(osApiKey));
+                        Log.i(TAG, "setTileProvider: Using Ordnance Survey Leisure tile source");
+                        effectiveTileSource = TileSource.ORDNANCE_SURVEY;
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, "setTileProvider: Error setting Ordnance Survey tile source", e);
                     mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                    Log.i(TAG, "setTileProvider: Fallback to MAPNIK due to OS error");
+                    effectiveTileSource = TileSource.MAPNIK;
                 }
                 break;
-			case BING_AERIAL:
+            case BING_AERIAL:
 				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
-			case BING_AERIAL_LABELS:
+            case BING_AERIAL_LABELS:
 				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
-			case BING_ROAD:
+            case BING_ROAD:
 				Log.i(TAG, "setTileProvider: Bing not available, using MAPNIK");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
-			case BING_OSGB:
-			case NONE:
+            case BING_OSGB:
+            case NONE:
 				Log.i(TAG, "setTileProvider: Using MAPNIK as default");
 				mMapView.setTileSource(TileSourceFactory.MAPNIK);
+                effectiveTileSource = TileSource.MAPNIK;
 				break;
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "setTileProvider: Error setting tile source: " + tileSource, e);
 			// Fallback to MAPNIK
 			mMapView.setTileSource(TileSourceFactory.MAPNIK);
+            effectiveTileSource = TileSource.MAPNIK;
 		}
 		
 		// save choice to prefs
 		Editor editor = mPrefs.edit();
-		editor.putString("tileSource", tileSource.toString());
+        editor.putString("tileSource", effectiveTileSource.toString());
 		editor.apply();
 		
 		// Debug: Log available tile sources
@@ -304,10 +324,11 @@ public class MapActivity extends AppCompatActivity implements MapListener {
 			Log.e(TAG, "MAPQUEST: Error checking availability", e);
 		}
 		
-		// Debug: Log current tile source
+        // Debug: Log current tile source
 		try {
 			Log.i(TAG, "Current tile source: " + mMapView.getTileProvider().getTileSource().name());
 			Log.i(TAG, "Tile provider class: " + mMapView.getTileProvider().getClass().getSimpleName());
+            Log.i(TAG, "Effective tile source saved to prefs: " + effectiveTileSource);
 		} catch (Exception e) {
 			Log.e(TAG, "Error getting current tile source", e);
 		}
