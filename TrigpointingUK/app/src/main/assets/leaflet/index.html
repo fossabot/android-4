@@ -93,7 +93,37 @@
       const zoom = map.getZoom();
       map.remove();
       
-      const opts = to27700 ? { crs: osgb, center: center, zoom: Math.min(zoom, 13) } : { center: center, zoom: zoom };
+      // Convert zoom level to maintain similar field of view
+      let targetZoom;
+      if (to27700) {
+        // Converting from 3857 to 27700
+        // Get current resolution in meters per pixel
+        const currentRes = map.options.crs.scale(zoom);
+        // OSGB resolutions: [896, 448, 224, 112, 56, 28, 14, 7, 3.5, 1.75, 0.875, 0.4375, 0.21875]
+        const osgbResolutions = [896, 448, 224, 112, 56, 28, 14, 7, 3.5, 1.75, 0.875, 0.4375, 0.21875];
+        // Find closest matching resolution
+        const webMercatorRes = 156543.03392804097 / Math.pow(2, zoom); // Web Mercator resolution at this zoom
+        let bestMatch = 0;
+        let bestDiff = Math.abs(osgbResolutions[0] - webMercatorRes);
+        for (let i = 1; i < osgbResolutions.length; i++) {
+          const diff = Math.abs(osgbResolutions[i] - webMercatorRes);
+          if (diff < bestDiff) {
+            bestDiff = diff;
+            bestMatch = i;
+          }
+        }
+        targetZoom = Math.max(0, Math.min(13, bestMatch));
+      } else {
+        // Converting from 27700 to 3857
+        // Reverse: get OSGB resolution and find matching Web Mercator zoom
+        const osgbResolutions = [896, 448, 224, 112, 56, 28, 14, 7, 3.5, 1.75, 0.875, 0.4375, 0.21875];
+        const currentOsgbRes = osgbResolutions[Math.min(zoom, osgbResolutions.length - 1)];
+        // Find matching Web Mercator zoom level
+        targetZoom = Math.round(Math.log2(156543.03392804097 / currentOsgbRes));
+        targetZoom = Math.max(0, Math.min(19, targetZoom));
+      }
+      
+      const opts = to27700 ? { crs: osgb, center: center, zoom: targetZoom } : { center: center, zoom: targetZoom };
       map = L.map('map', opts);
       currentCRS = to27700 ? '27700' : '3857';
       
