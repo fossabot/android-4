@@ -1010,16 +1010,7 @@
       const bounds = map.getBounds();
       const zoom = map.getZoom();
       
-      // Don't load markers at low zoom levels (performance)
-      // Different zoom thresholds for different projections
-      const minZoom = currentCRS === '27700' ? 2 : 9;
-      console.log(`MARKER DEBUG: Zoom check - current: ${zoom}, min required: ${minZoom}, CRS: ${currentCRS}`);
-      
-      if (zoom < minZoom) {
-        console.log('MARKER DEBUG: Zoom too low, clearing markers and returning');
-        markersLayer.clearLayers();
-        return;
-      }
+      // Marker count is now user-configurable, so no need for zoom-based clearing
       
       // Check if we need to reload (bounds changed significantly)
       if (currentBounds && bounds.contains(currentBounds)) {
