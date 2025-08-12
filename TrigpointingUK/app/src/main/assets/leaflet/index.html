@@ -26,6 +26,113 @@
     .tile-error-tooltip:before {
       display: none !important;
     }
+    
+    /* Custom Trigpointing Control Styles */
+    .leaflet-trigpointing-control {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      overflow: hidden;
+      min-width: 200px;
+    }
+    
+    .trigpointing-control-header {
+      background: #2c3e50;
+      color: white;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .trigpointing-control-header:hover {
+      background: #34495e;
+    }
+    
+    .trigpointing-control-panel {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .trigpointing-control-panel.collapsed {
+      max-height: 0;
+      overflow: hidden;
+    }
+    
+    .control-section {
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .control-section:last-child {
+      border-bottom: none;
+    }
+    
+    .section-header {
+      background: #ecf0f1;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    
+    .section-header:hover {
+      background: #d5dbdb;
+    }
+    
+    .section-content {
+      padding: 8px 16px;
+      background: white;
+      max-height: 200px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .section-content.collapsed {
+      max-height: 0;
+      padding: 0 16px;
+    }
+    
+    .control-option {
+      display: flex;
+      align-items: center;
+      padding: 6px 0;
+      cursor: pointer;
+    }
+    
+    .control-option:hover {
+      background: #f8f9fa;
+      margin: 0 -8px;
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+    
+    .control-option input[type="radio"] {
+      margin-right: 8px;
+    }
+    
+    .control-option label {
+      cursor: pointer;
+      font-size: 13px;
+      flex: 1;
+    }
+    
+    .toggle-icon {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+    }
+    
+    .toggle-icon.expanded {
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
@@ -160,8 +267,10 @@
     let currentCRS = '3857';
     let currentLayerName = 'OpenStreetMap';
     let switchingCRS = false; // Flag to prevent recursive switching
+    let pendingControlExpansion = false; // Flag to restore control state after CRS switch
+    let pendingSectionStates = {}; // Object to store individual section states
     let map = L.map('map', { center: [54.0, -2.0], zoom: 7 });
-    let layersControl;
+    // layersControl removed - using custom control instead
     
     // Layer instances
     let osmLayer, outdoorLayer, leisureLayer, outdoor27700Layer;
@@ -201,12 +310,7 @@
         currentCRS = '3857';
       }
       
-      // Setup layer control first
-      layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
-      layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
-      layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
-      layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
-      layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
+      // Layer control removed - using custom control instead
       
       // Add scale control
       L.control.scale({
@@ -215,14 +319,20 @@
         imperial: false,
         maxWidth: 200
       }).addTo(map);
+
+      // Add custom trigpointing control
+      L.control.trigpointingControl({
+        position: 'topright'
+      }).addTo(map);
       
       // Add initial layer after control is set up
       initialLayer.addTo(map);
       currentLayerName = initialStyle;
       
-      // Force the layer control to show the correct selection
+      // Setup custom control
       setTimeout(() => {
-        updateLayerControlSelection(initialStyle);
+        setupTrigpointingControl();
+        loadControlPreferences();
       }, 100);
       
       map.on('baselayerchange', onBaseLayerChange);
@@ -231,6 +341,35 @@
     function switchCRS(to27700, targetLayerName) {
       if (switchingCRS) return; // Prevent recursive calls
       switchingCRS = true;
+      
+      // Store current control state before CRS switch
+      const panel = document.getElementById('trigpointing-panel');
+      const controlWasExpanded = panel && !panel.classList.contains('collapsed');
+      pendingControlExpansion = controlWasExpanded; // Store in global flag
+      
+      // Store individual section states
+      pendingSectionStates = {};
+      const sections = ['mapstyle', 'markercolor', 'filter'];
+      sections.forEach(sectionName => {
+        const sectionContent = document.getElementById(sectionName + '-content');
+        if (sectionContent) {
+          const isExpanded = !sectionContent.classList.contains('collapsed');
+          pendingSectionStates[sectionName] = isExpanded;
+          console.log(`Section ${sectionName} was expanded:`, isExpanded);
+        }
+      });
+      
+      console.log('Before CRS switch - Panel found:', !!panel);
+      if (panel) {
+        console.log('Before CRS switch - Panel classes:', panel.className);
+        console.log('Before CRS switch - Has collapsed class:', panel.classList.contains('collapsed'));
+      }
+      console.log('Control was expanded before CRS switch:', controlWasExpanded);
+      console.log('Set pendingControlExpansion to:', pendingControlExpansion);
+      console.log('Stored section states:', pendingSectionStates);
+      
+      // Reset control setup flag since control will be recreated
+      controlSetupDone = false;
       
       const center = map.getCenter();
       const zoom = map.getZoom();
@@ -270,13 +409,8 @@
       map = L.map('map', opts);
       currentCRS = to27700 ? '27700' : '3857';
       
-      // Recreate layers and control
+      // Recreate layers - layer control removed, using custom control instead
       initializeLayers();
-      layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
-      layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
-      layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
-      layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
-      layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
       
       // Re-add scale control after CRS switch
       L.control.scale({
@@ -284,6 +418,11 @@
         metric: true,
         imperial: false,
         maxWidth: 200
+      }).addTo(map);
+
+      // Re-add custom trigpointing control after CRS switch
+      L.control.trigpointingControl({
+        position: 'topright'
       }).addTo(map);
       
       // Add the correct layer based on user selection
@@ -308,9 +447,61 @@
       tileErrorCount = 0;
       tileSuccessCount = 0;
       
-      // Update layer control selection after CRS switch
+      // Setup custom control after CRS switch
       setTimeout(() => {
-        updateLayerControlSelection(targetLayerName);
+        setupTrigpointingControl();
+        loadControlPreferences();
+        
+        // Check if control state was restored properly during creation
+        console.log('Checking control state after CRS switch. PendingControlExpansion:', pendingControlExpansion);
+        if (pendingControlExpansion) {
+          const newPanel = document.getElementById('trigpointing-panel');
+          const newToggle = document.getElementById('main-toggle');
+          console.log('Found new panel:', !!newPanel, 'Found new toggle:', !!newToggle);
+          
+          if (newPanel) {
+            console.log('Panel current classes after creation:', newPanel.className);
+            console.log('Panel has collapsed class:', newPanel.classList.contains('collapsed'));
+            
+            // Verify the control was created in expanded state
+            if (!newPanel.classList.contains('collapsed')) {
+              console.log('Control was correctly created in expanded state');
+            } else {
+              console.log('Control was not created in expanded state, forcing expansion');
+              newPanel.classList.remove('collapsed');
+              if (newToggle) {
+                newToggle.classList.add('expanded');
+              }
+            }
+            pendingControlExpansion = false; // Clear the flag
+          } else {
+            console.log('Could not find new panel element');
+          }
+        } else {
+          console.log('Control was not expanded before CRS switch, correctly created collapsed');
+        }
+        
+        // Restore individual section states
+        console.log('Restoring section states:', pendingSectionStates);
+        Object.keys(pendingSectionStates).forEach(sectionName => {
+          const shouldBeExpanded = pendingSectionStates[sectionName];
+          const sectionContent = document.getElementById(sectionName + '-content');
+          const sectionHeader = sectionContent?.previousElementSibling;
+          const toggle = sectionHeader?.querySelector('.toggle-icon');
+          
+          if (sectionContent && shouldBeExpanded) {
+            console.log(`Expanding section ${sectionName}`);
+            sectionContent.classList.remove('collapsed');
+            if (toggle) toggle.classList.add('expanded');
+          } else if (sectionContent && !shouldBeExpanded) {
+            console.log(`Keeping section ${sectionName} collapsed`);
+            sectionContent.classList.add('collapsed');
+            if (toggle) toggle.classList.remove('expanded');
+          }
+        });
+        
+        // Clear section states
+        pendingSectionStates = {};
       }, 100);
       
       switchingCRS = false;
@@ -335,20 +526,323 @@
       }
     }
 
-    function updateLayerControlSelection(layerName) {
-      // Find and check the radio button for the specified layer
-      const controlElement = layersControl.getContainer();
-      if (controlElement) {
-        const inputs = controlElement.querySelectorAll('input[type="radio"]');
-        inputs.forEach(input => {
-          const label = input.nextSibling;
-          if (label && label.textContent && label.textContent.trim() === layerName) {
-            input.checked = true;
-          } else {
-            input.checked = false;
+    // updateLayerControlSelection function removed - no longer needed with custom control
+
+    // Custom Trigpointing Control
+    L.Control.TrigpointingControl = L.Control.extend({
+      onAdd: function(map) {
+        const container = L.DomUtil.create('div', 'leaflet-trigpointing-control leaflet-control');
+        
+        // Conditionally set initial collapsed state based on pending restoration
+        const initialCollapsedClass = pendingControlExpansion ? '' : 'collapsed';
+        const initialToggleClass = pendingControlExpansion ? 'expanded' : '';
+        
+        console.log('Creating control with pendingControlExpansion:', pendingControlExpansion);
+        console.log('Initial collapsed class:', initialCollapsedClass);
+        console.log('Initial toggle class:', initialToggleClass);
+        
+        container.innerHTML = `
+          <div class="trigpointing-control-header" id="trigpointing-header">
+            <span>🗺️ Controls</span>
+            <span class="toggle-icon ${initialToggleClass}" id="main-toggle">▼</span>
+          </div>
+          <div class="trigpointing-control-panel ${initialCollapsedClass}" id="trigpointing-panel">
+            
+            <!-- Map Style Section -->
+            <div class="control-section">
+              <button class="section-header" data-section="mapstyle">
+                <span>🗺️ Map Style</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content collapsed" id="mapstyle-content">
+                <div class="control-option">
+                  <input type="radio" name="mapstyle" value="OpenStreetMap" id="js-osm">
+                  <label for="js-osm">OpenStreetMap</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="mapstyle" value="OS Outdoor (3857)" id="js-outdoor3857">
+                  <label for="js-outdoor3857">OS Outdoor (3857)</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="mapstyle" value="OS Outdoor (27700)" id="js-outdoor27700">
+                  <label for="js-outdoor27700">OS Outdoor (27700)</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="mapstyle" value="OS Leisure (27700)" id="js-leisure27700">
+                  <label for="js-leisure27700">OS Leisure (27700)</label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Marker Color Section -->
+            <div class="control-section">
+              <button class="section-header" data-section="markercolor">
+                <span>🎨 Marker Colors</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content collapsed" id="markercolor-content">
+                <div class="control-option">
+                  <input type="radio" name="markercolor" value="condition" id="js-condition">
+                  <label for="js-condition">By Condition</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="markercolor" value="logged" id="js-logged">
+                  <label for="js-logged">By Logged Status</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="markercolor" value="none" id="js-none">
+                  <label for="js-none">None (Default)</label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="control-section">
+              <button class="section-header" data-section="filter">
+                <span>🔍 Filter</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content collapsed" id="filter-content">
+                <div class="control-option">
+                  <input type="radio" name="filter" value="all" id="js-all">
+                  <label for="js-all">Show All</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filter" value="pillars" id="js-pillars">
+                  <label for="js-pillars">Pillars Only</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filter" value="fbm" id="js-fbm">
+                  <label for="js-fbm">Flush Bracket Marks</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filter" value="passive" id="js-passive">
+                  <label for="js-passive">Passive Stations</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filter" value="intersected" id="js-intersected">
+                  <label for="js-intersected">Intersected Stations</label>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        `;
+        
+        // Prevent map interaction when clicking on control
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.disableScrollPropagation(container);
+        
+        return container;
+      },
+      
+      onRemove: function(map) {
+        // Cleanup if needed
+      }
+    });
+
+    // Factory function
+    L.control.trigpointingControl = function(opts) {
+      return new L.Control.TrigpointingControl(opts);
+    };
+
+    // Control interaction handlers
+    let controlSetupDone = false;
+    function setupTrigpointingControl() {
+      // Prevent duplicate event listener setup
+      if (controlSetupDone) {
+        console.log('Control setup already done, skipping duplicate setup');
+        return;
+      }
+      
+      // Main panel toggle
+      document.getElementById('trigpointing-header').addEventListener('click', function() {
+        const panel = document.getElementById('trigpointing-panel');
+        const toggle = document.getElementById('main-toggle');
+        
+        panel.classList.toggle('collapsed');
+        toggle.classList.toggle('expanded');
+      });
+      
+      // Section toggles
+      document.querySelectorAll('.section-header').forEach(header => {
+        header.addEventListener('click', function() {
+          const section = this.getAttribute('data-section');
+          const content = document.getElementById(section + '-content');
+          const toggle = this.querySelector('.toggle-icon');
+          
+          content.classList.toggle('collapsed');
+          toggle.classList.toggle('expanded');
+        });
+      });
+      
+      controlSetupDone = true;
+      
+      // Check for pending control expansion (backup restoration)
+      if (pendingControlExpansion) {
+        console.log('Backup restoration: Checking if expansion needed');
+        const panel = document.getElementById('trigpointing-panel');
+        const toggle = document.getElementById('main-toggle');
+        if (panel && panel.classList.contains('collapsed')) {
+          console.log('Backup restoration: Panel still collapsed, forcing expansion');
+          panel.classList.remove('collapsed');
+          if (toggle) toggle.classList.add('expanded');
+          console.log('Backup restoration: Control expanded successfully');
+        } else {
+          console.log('Backup restoration: Panel already expanded or not found');
+        }
+        pendingControlExpansion = false;
+      }
+      
+      // Backup restoration for section states
+      if (Object.keys(pendingSectionStates).length > 0) {
+        console.log('Backup restoration: Restoring section states:', pendingSectionStates);
+        Object.keys(pendingSectionStates).forEach(sectionName => {
+          const shouldBeExpanded = pendingSectionStates[sectionName];
+          const sectionContent = document.getElementById(sectionName + '-content');
+          const sectionHeader = sectionContent?.previousElementSibling;
+          const toggle = sectionHeader?.querySelector('.toggle-icon');
+          
+          if (sectionContent && shouldBeExpanded && sectionContent.classList.contains('collapsed')) {
+            console.log(`Backup restoration: Expanding section ${sectionName}`);
+            sectionContent.classList.remove('collapsed');
+            if (toggle) toggle.classList.add('expanded');
           }
         });
+        pendingSectionStates = {};
       }
+      
+      // Radio button handlers
+      document.querySelectorAll('input[name="mapstyle"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.checked) {
+            console.log('JS Control - Map style changed to:', this.value);
+            // Switch map layer immediately
+            switchMapToLayer(this.value);
+          }
+        });
+      });
+      
+      document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.checked) {
+            console.log('JS Control - Marker color changed to:', this.value);
+            // Update marker colors (will implement this function)
+            if (typeof updateMarkerColors === 'function') {
+              updateMarkerColors(this.value);
+            }
+          }
+        });
+      });
+      
+      document.querySelectorAll('input[name="filter"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.checked) {
+            console.log('JS Control - Filter changed to:', this.value);
+            // Update filter (will implement this function)
+            if (typeof updateFilter === 'function') {
+              updateFilter(this.value);
+            }
+          }
+        });
+      });
+    }
+
+    // Functions that will be called from Android
+    function switchToLayer(layerName) {
+      console.log('Switching to layer:', layerName);
+      
+      // Update the JavaScript control radio buttons
+      document.querySelectorAll('input[name="mapstyle"]').forEach(radio => {
+        radio.checked = (radio.value === layerName);
+      });
+      
+      // Actually switch the map layer
+      switchMapToLayer(layerName);
+    }
+
+    function switchMapToLayer(layerName) {
+      // Check if we need CRS switch
+      const currentIs27700 = (currentCRS === '27700');
+      const targetIs27700 = (layerName === 'OS Leisure (27700)' || layerName === 'OS Outdoor (27700)');
+      
+      if (currentIs27700 !== targetIs27700) {
+        // Need CRS switch - use existing mechanism
+        switchCRS(targetIs27700, layerName);
+        return;
+      }
+      
+      // Same CRS - just switch layers directly
+      console.log('Switching layers within same CRS from', currentLayerName, 'to', layerName);
+      
+      // Remove current layer
+      if (currentLayerName === 'OpenStreetMap' && map.hasLayer(osmLayer)) {
+        map.removeLayer(osmLayer);
+      } else if (currentLayerName === 'OS Outdoor (3857)' && map.hasLayer(outdoorLayer)) {
+        map.removeLayer(outdoorLayer);
+      } else if (currentLayerName === 'OS Outdoor (27700)' && map.hasLayer(outdoor27700Layer)) {
+        map.removeLayer(outdoor27700Layer);
+      } else if (currentLayerName === 'OS Leisure (27700)' && map.hasLayer(leisureLayer)) {
+        map.removeLayer(leisureLayer);
+      }
+      
+      // Add new layer
+      if (layerName === 'OpenStreetMap') {
+        osmLayer.addTo(map);
+      } else if (layerName === 'OS Outdoor (3857)') {
+        outdoorLayer.addTo(map);
+      } else if (layerName === 'OS Outdoor (27700)') {
+        outdoor27700Layer.addTo(map);
+      } else if (layerName === 'OS Leisure (27700)') {
+        leisureLayer.addTo(map);
+      }
+      
+      // Update current layer name
+      currentLayerName = layerName;
+      
+      // Trigger layer change event for preferences
+      const layerChangeEvent = { name: layerName };
+      onBaseLayerChange(layerChangeEvent);
+    }
+
+    function updateMarkerColors(colorScheme) {
+      // This function will be implemented when we add markers
+      console.log('Updating marker colors:', colorScheme);
+      
+      // Update the JavaScript control radio buttons
+      document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
+        radio.checked = (radio.value === colorScheme);
+      });
+    }
+
+    function updateFilter(filterType) {
+      // This function will be implemented when we add markers
+      console.log('Updating filter:', filterType);
+      
+      // Update the JavaScript control radio buttons
+      document.querySelectorAll('input[name="filter"]').forEach(radio => {
+        radio.checked = (radio.value === filterType);
+      });
+    }
+
+    // Load preferences and set initial control states
+    function loadControlPreferences() {
+      // Set map style selection
+      const currentMapStyle = currentLayerName || 'OpenStreetMap';
+      document.querySelectorAll('input[name="mapstyle"]').forEach(radio => {
+        radio.checked = (radio.value === currentMapStyle);
+      });
+      
+      // Set other preferences from localStorage or defaults
+      const markerColor = localStorage.getItem('leaflet_marker_color') || 'none';
+      document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
+        radio.checked = (radio.value === markerColor);
+      });
+      
+      const filter = localStorage.getItem('leaflet_filter') || 'all';
+      document.querySelectorAll('input[name="filter"]').forEach(radio => {
+        radio.checked = (radio.value === filter);
+      });
     }
 
     initializeMap();

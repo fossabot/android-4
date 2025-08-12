@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <RadioGroup
+        android:id="@+id/markerColorRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioByCondition"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="By Condition"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioByLogged"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="By Logged Status"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioNone"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="None (Default)"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+    </RadioGroup>
+</ScrollView>
