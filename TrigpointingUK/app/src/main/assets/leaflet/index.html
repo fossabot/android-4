@@ -174,47 +174,40 @@
     </svg>
   </button>
   <script>
-    // Service Worker registration for offline tile caching
+    // Cache support detection and setup
+    let cacheSupported = false;
+    let cacheMode = 'none';
+    
+    // Try Service Worker first
     if ('serviceWorker' in navigator) {
-      console.log('SW REGISTER: Starting Service Worker registration');
+      console.log('CACHE: Attempting Service Worker registration');
       navigator.serviceWorker.register('./sw.js')
         .then(registration => {
-          console.log('SW REGISTER: Service Worker registered successfully:', registration.scope);
-          console.log('SW REGISTER: Registration state:', registration.active ? 'active' : 'not active');
-          
-          // Wait for SW to become active
-          if (registration.installing) {
-            console.log('SW REGISTER: Service Worker installing...');
-            registration.installing.addEventListener('statechange', () => {
-              console.log('SW REGISTER: SW state changed to:', registration.installing.state);
-            });
-          }
-          
-          if (registration.waiting) {
-            console.log('SW REGISTER: Service Worker waiting...');
-          }
-          
-          if (registration.active) {
-            console.log('SW REGISTER: Service Worker active and ready');
-          }
-          
-          // Listen for controller change
-          navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('SW REGISTER: Controller changed, reloading...');
-            window.location.reload();
-          });
+          console.log('CACHE: Service Worker registered successfully');
+          cacheSupported = true;
+          cacheMode = 'serviceworker';
         })
         .catch(error => {
-          console.log('SW REGISTER: Service Worker registration failed:', error);
+          console.log('CACHE: Service Worker failed (expected in WebView):', error.message);
+          initFallbackCache();
         });
-        
-      // Check current state
-      navigator.serviceWorker.ready.then(registration => {
-        console.log('SW REGISTER: Service Worker ready:', registration);
-        console.log('SW REGISTER: Controller available:', !!navigator.serviceWorker.controller);
-      });
     } else {
-      console.log('SW REGISTER: Service Workers not supported');
+      console.log('CACHE: Service Workers not supported, using fallback');
+      initFallbackCache();
+    }
+    
+    // Fallback cache using WebView's built-in cache + localStorage
+    function initFallbackCache() {
+      cacheSupported = true;
+      cacheMode = 'webview';
+      console.log('CACHE: Using WebView fallback cache mode');
+      
+      // Enable aggressive caching via meta tags (already done in HTML head)
+      // Store cache metadata in localStorage
+      if (!localStorage.getItem('cache_init_time')) {
+        localStorage.setItem('cache_init_time', Date.now().toString());
+        localStorage.setItem('cached_tiles_count', '0');
+      }
     }
 
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
@@ -232,10 +225,18 @@
       }
     );
 
-    // Global variables for error tracking
+    // Global variables for error tracking and cache monitoring
     let errorTooltip = null;
     let tileErrorCount = 0;
     let tileSuccessCount = 0;
+    
+    // Cache tile counter
+    function updateTileCount() {
+      if (cacheMode === 'webview') {
+        const currentCount = parseInt(localStorage.getItem('cached_tiles_count') || '0');
+        localStorage.setItem('cached_tiles_count', (currentCount + 1).toString());
+      }
+    }
 
     // Add tile error handling and visual feedback
     function addTileErrorHandling(layer, layerName, minZoom, maxZoom) {
@@ -258,6 +259,7 @@
       
       layer.on('tileload', function(e) {
         tileSuccessCount++;
+        updateTileCount(); // Count tiles for cache tracking
         // Hide error feedback if tiles start loading successfully
         if (tileSuccessCount > 0 && errorTooltip) {
           hideErrorFeedback();
@@ -1064,48 +1066,85 @@
 
     // Cache management functions
     async function getCacheStatus() {
-      try {
-        const response = await sendServiceWorkerMessage('CACHE_STATUS');
-        return response.status;
-      } catch (error) {
-        console.error('Failed to get cache status:', error);
-        
-        // If Service Worker isn't ready, provide a helpful message
-        if (error.message.includes('not controlling page')) {
-          return {
-            error: 'Service Worker not ready - please refresh the page',
-            tileCount: 0,
-            totalSize: 0,
-            usagePercent: 0
-          };
+      console.log('CACHE: Getting cache status, mode:', cacheMode);
+      
+      if (cacheMode === 'serviceworker') {
+        try {
+          const response = await sendServiceWorkerMessage('CACHE_STATUS');
+          return response.status;
+        } catch (error) {
+          console.error('CACHE: Service Worker cache status failed:', error);
+          return { error: 'Service Worker error: ' + error.message };
         }
+      } else if (cacheMode === 'webview') {
+        // WebView fallback - estimate cache from localStorage and performance
+        const initTime = localStorage.getItem('cache_init_time');
+        const estimatedTiles = localStorage.getItem('cached_tiles_count') || '0';
+        const daysSinceInit = initTime ? Math.floor((Date.now() - parseInt(initTime)) / (1000 * 60 * 60 * 24)) : 0;
         
-        return null;
+        return {
+          mode: 'WebView Cache',
+          tileCount: parseInt(estimatedTiles),
+          totalSize: parseInt(estimatedTiles) * 15000, // Estimate 15KB per tile
+          usagePercent: Math.min(Math.floor(parseInt(estimatedTiles) / 100), 100), // Estimate %
+          cacheAge: daysSinceInit + ' days',
+          note: 'Using WebView built-in cache (tiles persist until app cache cleared)'
+        };
+      } else {
+        return { error: 'Cache not available' };
       }
     }
 
     async function clearTileCache() {
-      try {
-        await sendServiceWorkerMessage('CLEAR_CACHE');
-        console.log('Tile cache cleared successfully');
-        return true;
-      } catch (error) {
-        console.error('Failed to clear cache:', error);
+      console.log('CACHE: Clearing cache, mode:', cacheMode);
+      
+      if (cacheMode === 'serviceworker') {
+        try {
+          await sendServiceWorkerMessage('CLEAR_CACHE');
+          console.log('CACHE: Service Worker cache cleared');
+          return true;
+        } catch (error) {
+          console.error('CACHE: Failed to clear SW cache:', error);
+          return false;
+        }
+      } else if (cacheMode === 'webview') {
+        // WebView fallback - clear localStorage and prompt for app cache clear
+        localStorage.setItem('cached_tiles_count', '0');
+        localStorage.setItem('cache_init_time', Date.now().toString());
+        console.log('CACHE: WebView cache metadata cleared');
+        
+        // Note: Can't programmatically clear WebView cache from JavaScript
+        // This requires Android code or user action
+        return { 
+          partial: true, 
+          message: 'Cache metadata cleared. To fully clear tiles, go to Android Settings > Apps > TrigpointingUK > Storage > Clear Cache' 
+        };
+      } else {
         return false;
       }
     }
 
     async function downloadBulkTiles(zipUrl, options = {}) {
-      try {
-        const response = await sendServiceWorkerMessage('BULK_DOWNLOAD', { 
-          url: zipUrl, 
-          options 
-        });
-        console.log('Bulk download completed:', response.result);
-        return response.result;
-      } catch (error) {
-        console.error('Bulk download failed:', error);
-        throw error;
+      console.log('CACHE: Bulk download request, mode:', cacheMode);
+      
+      if (cacheMode === 'serviceworker') {
+        try {
+          const response = await sendServiceWorkerMessage('BULK_DOWNLOAD', { 
+            url: zipUrl, 
+            options 
+          });
+          console.log('CACHE: Service Worker bulk download completed');
+          return response.result;
+        } catch (error) {
+          console.error('CACHE: Bulk download failed:', error);
+          throw error;
+        }
+      } else if (cacheMode === 'webview') {
+        // WebView fallback - can't directly bulk download to WebView cache
+        // But we can pre-load tiles by making requests
+        throw new Error('Bulk download not supported in WebView mode. Tiles will cache automatically as you browse the map.');
+      } else {
+        throw new Error('Cache not available');
       }
     }
 

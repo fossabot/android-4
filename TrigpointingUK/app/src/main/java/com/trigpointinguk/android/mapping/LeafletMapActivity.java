@@ -68,6 +68,15 @@ public class LeafletMapActivity extends AppCompatActivity {
         ws.setDomStorageEnabled(true);
         ws.setBuiltInZoomControls(true);
         ws.setDisplayZoomControls(false);
+        
+        // Enable Service Worker support for file:// URLs
+        ws.setAllowFileAccessFromFileURLs(true);
+        ws.setAllowUniversalAccessFromFileURLs(true);
+        ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        
+        // Enable aggressive caching for offline support
+        ws.setCacheMode(WebSettings.LOAD_DEFAULT); // Cache when possible
+        ws.setDatabaseEnabled(true);
         ws.setGeolocationEnabled(true);
         
         // Add JavaScript interface for saving preferences
@@ -164,10 +173,14 @@ public class LeafletMapActivity extends AppCompatActivity {
                 "    if (status.error) {" +
                 "      alert('Cache Status:\\n' + status.error);" +
                 "    } else {" +
-                "      alert('Cache Status:\\n' +" +
-                "        'Tiles: ' + status.tileCount + '\\n' +" +
-                "        'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n' +" +
-                "        'Usage: ' + status.usagePercent + '%');" +
+                "      let message = 'Cache Status\\n';" +
+                "      if (status.mode) message += 'Mode: ' + status.mode + '\\n';" +
+                "      message += 'Tiles: ' + status.tileCount + '\\n';" +
+                "      message += 'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n';" +
+                "      if (status.usagePercent !== undefined) message += 'Usage: ' + status.usagePercent + '%\\n';" +
+                "      if (status.cacheAge) message += 'Age: ' + status.cacheAge + '\\n';" +
+                "      if (status.note) message += '\\n' + status.note;" +
+                "      alert(message);" +
                 "    }" +
                 "  } else {" +
                 "    alert('Cache status not available - check console for details');" +
