@@ -329,10 +329,11 @@
       initialLayer.addTo(map);
       currentLayerName = initialStyle;
       
-      // Setup custom control
+      // Setup custom control and markers
       setTimeout(() => {
         setupTrigpointingControl();
         loadControlPreferences();
+        initializeMarkers();
       }, 100);
       
       map.on('baselayerchange', onBaseLayerChange);
@@ -451,6 +452,7 @@
       setTimeout(() => {
         setupTrigpointingControl();
         loadControlPreferences();
+        initializeMarkers(); // Reinitialize markers after CRS switch
         
         // Check if control state was restored properly during creation
         console.log('Checking control state after CRS switch. PendingControlExpansion:', pendingControlExpansion);
@@ -727,9 +729,11 @@
         radio.addEventListener('change', function() {
           if (this.checked) {
             console.log('JS Control - Marker color changed to:', this.value);
-            // Update marker colors (will implement this function)
-            if (typeof updateMarkerColors === 'function') {
-              updateMarkerColors(this.value);
+            currentMarkerColor = this.value;
+            localStorage.setItem('leaflet_marker_color', this.value);
+            if (markersLayer) {
+              currentBounds = null; // Force reload
+              loadTrigpointMarkers();
             }
           }
         });
@@ -739,9 +743,11 @@
         radio.addEventListener('change', function() {
           if (this.checked) {
             console.log('JS Control - Filter changed to:', this.value);
-            // Update filter (will implement this function)
-            if (typeof updateFilter === 'function') {
-              updateFilter(this.value);
+            currentFilter = this.value;
+            localStorage.setItem('leaflet_filter', this.value);
+            if (markersLayer) {
+              currentBounds = null; // Force reload
+              loadTrigpointMarkers();
             }
           }
         });
@@ -806,23 +812,37 @@
     }
 
     function updateMarkerColors(colorScheme) {
-      // This function will be implemented when we add markers
       console.log('Updating marker colors:', colorScheme);
       
       // Update the JavaScript control radio buttons
       document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
         radio.checked = (radio.value === colorScheme);
       });
+      
+      // Update current marker color and reload markers
+      currentMarkerColor = colorScheme;
+      localStorage.setItem('leaflet_marker_color', colorScheme);
+      if (markersLayer) {
+        currentBounds = null; // Force reload
+        loadTrigpointMarkers();
+      }
     }
 
     function updateFilter(filterType) {
-      // This function will be implemented when we add markers
       console.log('Updating filter:', filterType);
       
       // Update the JavaScript control radio buttons
       document.querySelectorAll('input[name="filter"]').forEach(radio => {
         radio.checked = (radio.value === filterType);
       });
+      
+      // Update current filter and reload markers
+      currentFilter = filterType;
+      localStorage.setItem('leaflet_filter', filterType);
+      if (markersLayer) {
+        currentBounds = null; // Force reload
+        loadTrigpointMarkers();
+      }
     }
 
     // Load preferences and set initial control states
@@ -833,16 +853,190 @@
         radio.checked = (radio.value === currentMapStyle);
       });
       
-      // Set other preferences from localStorage or defaults
+      // Set other preferences from localStorage or defaults and update globals
       const markerColor = localStorage.getItem('leaflet_marker_color') || 'none';
+      currentMarkerColor = markerColor;
       document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
         radio.checked = (radio.value === markerColor);
       });
       
       const filter = localStorage.getItem('leaflet_filter') || 'all';
+      currentFilter = filter;
       document.querySelectorAll('input[name="filter"]').forEach(radio => {
         radio.checked = (radio.value === filter);
       });
+    }
+
+    // Trigpoint marker management
+    let markersLayer = null;
+    let currentBounds = null;
+    let currentMarkerColor = 'none';
+    let currentFilter = 'all';
+
+    function initializeMarkers() {
+      // Create markers layer group
+      markersLayer = L.layerGroup().addTo(map);
+      
+      // Load initial markers
+      loadTrigpointMarkers();
+      
+      // Update markers when map moves
+      map.on('moveend', () => {
+        loadTrigpointMarkers();
+      });
+      
+      map.on('zoomend', () => {
+        loadTrigpointMarkers();
+      });
+    }
+
+    function loadTrigpointMarkers() {
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      
+      // Don't load markers at low zoom levels (performance)
+      if (zoom < 10) {
+        markersLayer.clearLayers();
+        return;
+      }
+      
+      // Check if we need to reload (bounds changed significantly)
+      if (currentBounds && bounds.contains(currentBounds)) {
+        console.log('Markers: No reload needed, current view within cached bounds');
+        return;
+      }
+      
+      console.log('Loading trigpoint markers for bounds:', bounds);
+      
+      // Expand bounds for efficient loading
+      const expandedBounds = bounds.pad(0.5); // 50% expansion
+      currentBounds = expandedBounds;
+      
+      // Call Android to get trigpoint data
+      AndroidPrefs.getTrigpointData(
+        expandedBounds.getSouth(),
+        expandedBounds.getWest(), 
+        expandedBounds.getNorth(),
+        expandedBounds.getEast(),
+        currentFilter,
+        currentMarkerColor
+      );
+    }
+
+    function displayTrigpointMarkers(trigpointsJson) {
+      console.log('Displaying trigpoint markers:', trigpointsJson);
+      
+      try {
+        const trigpoints = JSON.parse(trigpointsJson);
+        
+        // Clear existing markers
+        markersLayer.clearLayers();
+        
+        trigpoints.forEach(trig => {
+          const marker = L.marker([trig.lat, trig.lon], {
+            icon: createTrigIcon(trig)
+          });
+          
+          // Add popup with basic info
+          marker.bindPopup(`
+            <b>${trig.name}</b><br>
+            Type: ${trig.type}<br>
+            Condition: ${trig.condition}<br>
+            <a href="#" onclick="AndroidPrefs.openTrigDetails(${trig.id})">View Details</a>
+          `);
+          
+          // Add click handler for details
+          marker.on('click', () => {
+            AndroidPrefs.openTrigDetails(trig.id);
+          });
+          
+          markersLayer.addLayer(marker);
+        });
+        
+        console.log(`Added ${trigpoints.length} markers to map`);
+        
+      } catch (error) {
+        console.error('Error parsing trigpoint data:', error);
+      }
+    }
+
+    function createTrigIcon(trig) {
+      // Determine icon based on type and coloring scheme
+      let iconClass = 'trig-icon';
+      let color = 'green'; // default
+      
+      // Apply coloring scheme
+      if (currentMarkerColor === 'condition') {
+        color = getConditionColor(trig.condition);
+      } else if (currentMarkerColor === 'logged') {
+        color = getLoggedColor(trig.logged);
+      }
+      
+      // Get type-specific icon
+      const iconUrl = getTrigIconUrl(trig.type, color, trig.flagged);
+      console.log(`Creating icon for ${trig.name}: type=${trig.type}, color=${color}, iconUrl=${iconUrl}`);
+      
+      return L.icon({
+        iconUrl: iconUrl,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -10]
+      });
+    }
+
+    function getConditionColor(condition) {
+      // Match OSMdroid MapIcon color logic using single-letter codes
+      switch (condition) {
+        case 'U': // Unknown
+        case 'Z': // Condition not logged 
+        case '-': // Trig not logged
+          return 'grey';
+        case 'G': // Good
+        case 'S': // Slightly damaged
+        case 'C': // Converted
+        case 'D': // Damaged
+        case 'T': // Toppled
+        case 'M': // Moved
+        case 'R': // Remains
+          return 'green';
+        case 'V': // Visible (unreachable but visible)
+          return 'yellow';
+        case 'Q': // Possibly missing
+        case 'X': // Missing/destroyed
+        case 'P': // Inaccessible
+        case 'N': // Couldn't find
+          return 'red';
+        default:
+          return 'grey';
+      }
+    }
+
+    function getLoggedColor(logged) {
+      // Use logged status codes
+      if (logged === '-') { // TRIGNOTLOGGED
+        return 'grey';
+      } else {
+        return 'green';
+      }
+    }
+
+    function getTrigIconUrl(type, color, flagged) {
+      // Map database type codes to icon type names
+      const typeMap = {
+        'PI': 'pillar',
+        'FB': 'fbm', 
+        'IN': 'intersected'
+      };
+      
+      // Default to passive for any unknown types
+      const iconType = typeMap[type] || 'passive';
+      
+      // Build icon path based on type, color, and highlight state
+      const highlight = flagged ? '_h' : '';
+      const iconName = `mapicon_${iconType}_${color}${highlight}.png`;
+      
+      // Use relative path from current leaflet directory
+      return `icons/${iconName}`;
     }
 
     initializeMap();
