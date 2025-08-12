@@ -1250,6 +1250,24 @@
       }
     }
 
+    function getIconSizeFromStyle(iconStyle) {
+      // Map icon style preferences to actual pixel sizes
+      const sizeMap = {
+        'small_logo': 20,
+        'medium_logo': 50,
+        'large_logo': 80,
+        'xlarge_logo': 120,
+        'huge_logo': 200,
+        'small_symbol': 20,
+        'medium_symbol': 50,
+        'large_symbol': 80,
+        'xlarge_symbol': 120,
+        'huge_symbol': 200
+      };
+      
+      return sizeMap[iconStyle] || 50; // Default to medium size
+    }
+
     function createTrigIcon(trig) {
       // Determine icon based on type and coloring scheme
       let iconClass = 'trig-icon';
@@ -1262,15 +1280,19 @@
         color = getLoggedColor(trig.logged);
       }
       
+      // Get icon style and size from Android preferences
+      const iconStyle = AndroidPrefs.getIconStyle();
+      const iconSize = getIconSizeFromStyle(iconStyle);
+      
       // Get type-specific icon
       const iconUrl = getTrigIconUrl(trig.type, color, trig.flagged);
-      console.log(`Creating icon for ${trig.name}: type=${trig.type}, color=${color}, iconUrl=${iconUrl}`);
+      console.log(`Creating icon for ${trig.name}: type=${trig.type}, color=${color}, size=${iconSize}px, iconUrl=${iconUrl}`);
       
       return L.icon({
         iconUrl: iconUrl,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [0, -10]
+        iconSize: [iconSize, iconSize],
+        iconAnchor: [iconSize/2, iconSize/2],
+        popupAnchor: [0, -iconSize/2]
       });
     }
 

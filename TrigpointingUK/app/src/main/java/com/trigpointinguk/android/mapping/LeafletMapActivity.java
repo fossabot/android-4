@@ -445,6 +445,12 @@ public class LeafletMapActivity extends AppCompatActivity {
             });
         }
         
+        @JavascriptInterface
+        public String getIconStyle() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
+            return prefs.getString("map_icon_style", "medium_logo");
+        }
+        
 
     }
 }
