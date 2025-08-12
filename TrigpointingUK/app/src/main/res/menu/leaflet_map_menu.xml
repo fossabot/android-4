@@ -7,5 +7,14 @@
         android:title="Map Controls"
         android:icon="@drawable/ic_menu_mapmode"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_cache_status"
+        android:title="Cache Status" />
+    <item
+        android:id="@+id/menu_clear_cache"
+        android:title="Clear Cache" />
+    <item
+        android:id="@+id/menu_download_tiles"
+        android:title="Download OSM Tiles" />
         
 </menu>

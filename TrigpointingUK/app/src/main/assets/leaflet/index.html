@@ -174,6 +174,17 @@
     </svg>
   </button>
   <script>
+    // Service Worker registration for offline tile caching
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(registration => {
+          console.log('Service Worker registered successfully:', registration.scope);
+        })
+        .catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
     const osKey = getParam('os_key');
     const initialStyle = getParam('initial_style') || 'OpenStreetMap';
@@ -980,6 +991,66 @@
     let currentMarkerColor = 'none';
     let currentTrigpointType = 'all';
     let currentFilterFound = 'all';
+
+    // Service Worker communication
+    async function sendServiceWorkerMessage(type, data = {}) {
+      if (!navigator.serviceWorker || !navigator.serviceWorker.controller) {
+        throw new Error('Service Worker not available');
+      }
+      
+      return new Promise((resolve, reject) => {
+        const messageChannel = new MessageChannel();
+        
+        messageChannel.port1.onmessage = (event) => {
+          if (event.data.success) {
+            resolve(event.data);
+          } else {
+            reject(new Error(event.data.error));
+          }
+        };
+        
+        navigator.serviceWorker.controller.postMessage(
+          { type, data },
+          [messageChannel.port2]
+        );
+      });
+    }
+
+    // Cache management functions
+    async function getCacheStatus() {
+      try {
+        const response = await sendServiceWorkerMessage('CACHE_STATUS');
+        return response.status;
+      } catch (error) {
+        console.error('Failed to get cache status:', error);
+        return null;
+      }
+    }
+
+    async function clearTileCache() {
+      try {
+        await sendServiceWorkerMessage('CLEAR_CACHE');
+        console.log('Tile cache cleared successfully');
+        return true;
+      } catch (error) {
+        console.error('Failed to clear cache:', error);
+        return false;
+      }
+    }
+
+    async function downloadBulkTiles(zipUrl, options = {}) {
+      try {
+        const response = await sendServiceWorkerMessage('BULK_DOWNLOAD', { 
+          url: zipUrl, 
+          options 
+        });
+        console.log('Bulk download completed:', response.result);
+        return response.result;
+      } catch (error) {
+        console.error('Bulk download failed:', error);
+        throw error;
+      }
+    }
 
     function initializeMarkers() {
       console.log('MARKER DEBUG: initializeMarkers() called');
