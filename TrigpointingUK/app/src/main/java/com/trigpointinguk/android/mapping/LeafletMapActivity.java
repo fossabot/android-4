@@ -4,9 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.webkit.GeolocationPermissions;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -40,6 +42,10 @@ public class LeafletMapActivity extends AppCompatActivity {
         ws.setBuiltInZoomControls(true);
         ws.setDisplayZoomControls(false);
         ws.setGeolocationEnabled(true);
+        
+        // Add JavaScript interface for saving preferences
+        webView.addJavascriptInterface(new LeafletPreferencesInterface(), "AndroidPrefs");
+        
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -49,8 +55,11 @@ public class LeafletMapActivity extends AppCompatActivity {
             }
         });
 
-        String osKey = PreferenceManager.getDefaultSharedPreferences(this).getString("os_api_key", "");
-        String url = "file:///android_asset/leaflet/index.html" + (osKey.isEmpty() ? "" : ("?os_key=" + osKey));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String osKey = prefs.getString("os_api_key", "");
+        String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
+        
+        String url = buildLeafletUrl(osKey, leafletMapStyle);
         try {
             if (ensureLocationPermission()) {
                 webView.loadUrl(url);
@@ -58,6 +67,28 @@ public class LeafletMapActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, "Error loading Leaflet page", e);
             Toast.makeText(this, "Error loading Leaflet page", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String buildLeafletUrl(String osKey, String leafletMapStyle) {
+        try {
+            StringBuilder url = new StringBuilder("file:///android_asset/leaflet/index.html");
+            boolean hasParams = false;
+            
+            if (!osKey.isEmpty()) {
+                url.append("?os_key=").append(java.net.URLEncoder.encode(osKey, "UTF-8"));
+                hasParams = true;
+            }
+            
+            if (!leafletMapStyle.isEmpty()) {
+                url.append(hasParams ? "&" : "?");
+                url.append("initial_style=").append(java.net.URLEncoder.encode(leafletMapStyle, "UTF-8"));
+            }
+            
+            return url.toString();
+        } catch (java.io.UnsupportedEncodingException e) {
+            Log.e(TAG, "Error encoding URL parameters", e);
+            return "file:///android_asset/leaflet/index.html";
         }
     }
 
@@ -74,8 +105,10 @@ public class LeafletMapActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                String osKey = PreferenceManager.getDefaultSharedPreferences(this).getString("os_api_key", "");
-                String url = "file:///android_asset/leaflet/index.html" + (osKey.isEmpty() ? "" : ("?os_key=" + osKey));
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                String osKey = prefs.getString("os_api_key", "");
+                String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
+                String url = buildLeafletUrl(osKey, leafletMapStyle);
                 webView.loadUrl(url);
             } else {
                 Toast.makeText(this, "Location permission denied; My location will be disabled.", Toast.LENGTH_LONG).show();
@@ -90,6 +123,15 @@ public class LeafletMapActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class LeafletPreferencesInterface {
+        @JavascriptInterface
+        public void saveMapStyle(String mapStyle) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
+            prefs.edit().putString("leaflet_map_style", mapStyle).apply();
+            Log.d(TAG, "Saved map style preference: " + mapStyle);
+        }
     }
 }
 

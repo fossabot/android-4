@@ -34,6 +34,7 @@
   <script>
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
     const osKey = getParam('os_key');
+    const initialStyle = getParam('initial_style') || 'OpenStreetMap';
 
     // Define OSGB CRS for 27700
     const osgb = new L.Proj.CRS(
@@ -174,7 +175,37 @@
 
     function initializeMap() {
       initializeLayers();
-      osmLayer.addTo(map);
+      
+      // Determine initial layer and CRS based on preference
+      let initialLayer = osmLayer;
+      let initialCRS = L.CRS.EPSG3857;
+      
+      if (initialStyle === 'OS Outdoor (3857)') {
+        initialLayer = outdoorLayer;
+        initialCRS = L.CRS.EPSG3857;
+      } else if (initialStyle === 'OS Outdoor (27700)') {
+        initialLayer = outdoor27700Layer;
+        initialCRS = osgb;
+      } else if (initialStyle === 'OS Leisure (27700)') {
+        initialLayer = leisureLayer;
+        initialCRS = osgb;
+      }
+      
+      // Recreate map with correct CRS if needed
+      if (initialCRS !== L.CRS.EPSG3857) {
+        map.remove();
+        map = L.map('map', { crs: initialCRS, center: [54.0, -2.0], zoom: 7 });
+        currentCRS = '27700';
+        initializeLayers(); // Recreate layers for new map
+      } else {
+        currentCRS = '3857';
+      }
+      
+      // Add initial layer
+      initialLayer.addTo(map);
+      currentLayerName = initialStyle;
+      
+      // Setup layer control
       layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
       layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
       layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
@@ -263,6 +294,11 @@
       
       const name = e.name || '';
       currentLayerName = name;
+      
+      // Save the new layer preference to Android
+      if (typeof AndroidPrefs !== 'undefined') {
+        AndroidPrefs.saveMapStyle(name);
+      }
       
       const needs27700 = name.indexOf('27700') !== -1;
       const needsCRSSwitch = (needs27700 && currentCRS !== '27700') || (!needs27700 && currentCRS !== '3857');

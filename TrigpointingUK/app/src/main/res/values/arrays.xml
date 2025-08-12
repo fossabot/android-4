@@ -23,6 +23,21 @@
         <item>BING_OSGB</item>
     </string-array>
 
+    <!-- Leaflet map styles for preferences -->
+    <string-array name="leaflet_map_styles">
+        <item>OpenStreetMap</item>
+        <item>OS Outdoor (3857)</item>
+        <item>OS Outdoor (27700)</item>
+        <item>OS Leisure (27700)</item>
+    </string-array>
+
+    <string-array name="leaflet_map_style_values">
+        <item>OpenStreetMap</item>
+        <item>OS Outdoor (3857)</item>
+        <item>OS Outdoor (27700)</item>
+        <item>OS Leisure (27700)</item>
+    </string-array>
+
     <!-- Download maps arrays -->
     <string-array name="downloadMapsArrayValues">
         <item>https://tile.openstreetmap.org/{z}/{x}/{y}.png</item>
