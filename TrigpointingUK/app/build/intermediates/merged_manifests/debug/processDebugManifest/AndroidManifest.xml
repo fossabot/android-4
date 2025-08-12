@@ -96,7 +96,9 @@
         <activity android:name="com.trigpointinguk.android.mapping.MapActivity" />
         <activity android:name="com.trigpointinguk.android.mapping.ColourByActivity" />
         <activity android:name="com.trigpointinguk.android.mapping.MapSourceActivity" />
-        <activity android:name="com.trigpointinguk.android.mapping.ArcGisMapActivity" />
+        <activity
+            android:name="com.trigpointinguk.android.mapping.ArcGisMapActivity"
+            android:hardwareAccelerated="true" />
 
         <meta-data
             android:name="CLOUDMADE_KEY"

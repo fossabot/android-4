@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaflet Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.2/proj4.js"></script>
+  <script src="https://unpkg.com/proj4leaflet@1.0.2/src/proj4leaflet.js"></script>
+  <style>
+    html, body, #map { height: 100%; margin: 0; }
+    .leaflet-control-layers { font-size: 14px; }
+    .fab { position:absolute; right:16px; bottom:16px; z-index:1000; background:#fff; border:1px solid #ccc; border-radius:24px; padding:12px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <button class="fab" id="locbtn">My location</button>
+  <script>
+    function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
+    const osKey = getParam('os_key');
+
+    const map = L.map('map').setView([54.0, -2.0], 7);
+
+    // OSM (3857)
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // OS Outdoor (3857)
+    const osOutdoor = L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=${osKey}`, {
+      maxZoom: 19,
+      attribution: '&copy; Ordnance Survey'
+    });
+
+    // OS Leisure (27700) using Proj4Leaflet
+    const osgb = new L.Proj.CRS('EPSG:27700',
+      '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy '
+      + '+datum=OSGB36 +units=m +no_defs +towgs84=446.448, -125.157, 542.06, 0.1502, 0.2470, 0.8421, -20.4894',
+      {
+        resolutions: [896, 448, 224, 112, 56, 28, 14, 7, 3.5, 1.75, 0.875, 0.4375, 0.21875],
+        origin: [0,0]
+      }
+    );
+    const osLeisure = L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png?key=${osKey}`, {
+      maxZoom: 13,
+      tms: false,
+      attribution: '&copy; Ordnance Survey'
+    });
+
+    const layers = {
+      'OpenStreetMap': osm,
+      'OS Outdoor (3857)': osOutdoor,
+      'OS Leisure (27700)': osLeisure
+    };
+    L.control.layers(layers, null, { collapsed: false }).addTo(map);
+
+    // Center on geolocation
+    document.getElementById('locbtn').onclick = function(){
+      if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+      navigator.geolocation.getCurrentPosition(function(pos){
+        const lat = pos.coords.latitude, lon = pos.coords.longitude;
+        map.setView([lat, lon], 14);
+      }, function(err){
+        alert('Location error: ' + err.message);
+      }, { enableHighAccuracy: true });
+    };
+  </script>
+</body>
+</html>
+
+

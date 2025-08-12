@@ -3878,6 +3878,9 @@ int id snackbar_action 0x7f09021d
 int id snackbar_text 0x7f09021e
 int id snap 0x7f09021f
 int id snapMargins 0x7f090220
+int id source_os_leisure 0x7f09029b
+int id source_os_outdoor 0x7f09029c
+int id source_osm 0x7f09029d
 int id south 0x7f090221
 int id spacer 0x7f090222
 int id special_effects_controller_view_tag 0x7f090223
@@ -4243,6 +4246,7 @@ int layout triglogrow 0x7f0c0096
 int layout triglogs 0x7f0c0097
 int layout trigosmap 0x7f0c0098
 int layout trigrow 0x7f0c0099
+int menu arcgis_map_menu 0x7f0e0005
 int menu mainmenu 0x7f0e0000
 int menu mapmenu 0x7f0e0001
 int menu nearestmenu 0x7f0e0002

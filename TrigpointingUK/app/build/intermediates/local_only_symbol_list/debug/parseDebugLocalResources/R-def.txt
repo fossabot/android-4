@@ -233,6 +233,9 @@ id public_transport
 id radar
 id refresh
 id sendTime
+id source_os_leisure
+id source_os_outdoor
+id source_osm
 id trigArrow
 id trigCondition
 id trigDistance
@@ -281,6 +284,7 @@ layout triglogrow
 layout triglogs
 layout trigosmap
 layout trigrow
+menu arcgis_map_menu
 menu mainmenu
 menu mapmenu
 menu nearestmenu

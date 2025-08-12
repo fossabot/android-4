@@ -192,6 +192,15 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
             }
         });
 
+        final Button btnLeafletMap = (Button) findViewById(R.id.btnLeafletMap);
+        btnLeafletMap.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, com.trigpointinguk.android.mapping.LeafletMapActivity.class);
+                mapLauncher.launch(i);
+            }
+        });
+
     }
     
     private void showNoTrigsDialog() {

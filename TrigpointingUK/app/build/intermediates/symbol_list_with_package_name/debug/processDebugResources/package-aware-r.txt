@@ -3879,6 +3879,9 @@ id snackbar_action
 id snackbar_text
 id snap
 id snapMargins
+id source_os_leisure
+id source_os_outdoor
+id source_osm
 id south
 id spacer
 id special_effects_controller_view_tag
@@ -4244,6 +4247,7 @@ layout triglogrow
 layout triglogs
 layout trigosmap
 layout trigrow
+menu arcgis_map_menu
 menu mainmenu
 menu mapmenu
 menu nearestmenu
