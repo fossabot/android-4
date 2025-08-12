@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Map types for preferences -->
-    <string-array name="map_types">
-        <item>Mapnik</item>
-        <item>Cycle Map</item>
-        <item>MapQuest</item>
-        <item>Cloudmade</item>
-        <item>Bing Aerial</item>
-        <item>Bing Aerial Labels</item>
-        <item>Bing Road</item>
-        <item>Bing OSGB</item>
-    </string-array>
 
-    <string-array name="map_type_values">
-        <item>MAPNIK</item>
-        <item>CYCLEMAP</item>
-        <item>MAPQUEST</item>
-        <item>CLOUDMADE</item>
-        <item>BING_AERIAL</item>
-        <item>BING_AERIAL_LABELS</item>
-        <item>BING_ROAD</item>
-        <item>BING_OSGB</item>
-    </string-array>
 
     <!-- Leaflet map styles for preferences -->
     <string-array name="leaflet_map_styles">

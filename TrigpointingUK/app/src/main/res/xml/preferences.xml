@@ -30,20 +30,12 @@
         <EditTextPreference
             android:key="os_api_key"
             android:title="Ordnance Survey API key"
-            android:summary="Enter OS Data Hub API key for OS Leisure tiles" />
-
-        <ListPreference
-            android:key="map_type"
-            android:title="Map Type"
-            android:summary="Choose default map type"
-            android:entries="@array/map_types"
-            android:entryValues="@array/map_type_values"
-            android:defaultValue="osm" />
+            android:summary="Enter OS Data Hub API key for Ordnance Survey maps" />
 
         <ListPreference
             android:key="leaflet_map_style"
-            android:title="Leaflet Map Style"
-            android:summary="Choose default style for Leaflet map"
+            android:title="Map Style"
+            android:summary="Choose default map style"
             android:entries="@array/leaflet_map_styles"
             android:entryValues="@array/leaflet_map_style_values"
             android:defaultValue="OpenStreetMap" />
