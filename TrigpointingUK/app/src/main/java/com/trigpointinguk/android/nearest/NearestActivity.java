@@ -59,10 +59,6 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 	TextView						mStrLocation;
 	TextView						mStrFilter;
 	TextView						mNorthText;
-	ImageView						mImgFilterPillar;
-	ImageView						mImgFilterFBM;
-	ImageView						mImgFilterPassive;
-	ImageView						mImgFilterIntersected;
 	ImageView						mCompassArrow;
 	private SharedPreferences       mPrefs;
 	private float[] 				mGravity;
@@ -104,10 +100,6 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 		mStrLocation 			= (TextView)  findViewById(R.id.trigListLocation);
 		mStrFilter	 			= (TextView)  findViewById(R.id.trigListHeader);
 		mNorthText	 			= (TextView)  findViewById(R.id.north);
-		mImgFilterPillar 		= (ImageView) findViewById(R.id.filterPillar);
-		mImgFilterFBM	 		= (ImageView) findViewById(R.id.filterFbm);
-		mImgFilterPassive 		= (ImageView) findViewById(R.id.filterPassive);
-		mImgFilterIntersected 	= (ImageView) findViewById(R.id.filterIntersected);
 		mCompassArrow			= (ImageView) findViewById(R.id.compassArrow);
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -265,30 +257,7 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 	}
 
 	private void updateFilterHeader() {
-		Filter filter = new Filter(this);
-		if (filter.isPillars()) {
-			mImgFilterPillar.setImageResource(R.drawable.ts_pillar);
-		} else {
-			mImgFilterPillar.setImageResource(R.drawable.t_pillar);
-		}
-
-		if (filter.isFBMs()) {
-			mImgFilterFBM.setImageResource(R.drawable.ts_fbm);
-		} else {
-			mImgFilterFBM.setImageResource(R.drawable.t_fbm);
-		}
-	
-		if (filter.isPassives()) {
-			mImgFilterPassive.setImageResource(R.drawable.ts_passive);
-		} else {
-			mImgFilterPassive.setImageResource(R.drawable.t_passive);
-		}
-		
-		if (filter.isIntersecteds()) {
-			mImgFilterIntersected.setImageResource(R.drawable.ts_intersected);
-		} else {
-			mImgFilterIntersected.setImageResource(R.drawable.t_intersected);
-		}
+		// Filter icons removed - filter selection now available via context menu
 
 		mStrFilter.setText(mPrefs.getString(Filter.FILTERRADIOTEXT, "All") + " trigpoints");
 
