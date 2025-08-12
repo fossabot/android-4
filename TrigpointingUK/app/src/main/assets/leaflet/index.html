@@ -21,44 +21,92 @@
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
     const osKey = getParam('os_key');
 
-    const map = L.map('map').setView([54.0, -2.0], 7);
-
-    // OSM (3857)
-    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // OS Outdoor (3857)
-    const osOutdoor = L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=${osKey}`, {
-      maxZoom: 19,
-      attribution: '&copy; Ordnance Survey'
-    });
-
-    // OS Leisure (27700) using Proj4Leaflet
-    const osgb = new L.Proj.CRS('EPSG:27700',
-      '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy '
-      + '+datum=OSGB36 +units=m +no_defs +towgs84=446.448, -125.157, 542.06, 0.1502, 0.2470, 0.8421, -20.4894',
+    // Define OSGB CRS for 27700
+    const osgb = new L.Proj.CRS(
+      'EPSG:27700',
+      '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs +towgs84=446.448,-125.157,542.06,0.1502,0.2470,0.8421,-20.4894',
       {
         resolutions: [896, 448, 224, 112, 56, 28, 14, 7, 3.5, 1.75, 0.875, 0.4375, 0.21875],
-        origin: [0,0]
+        origin: [-238375.0, 1376256.0],
+        bounds: L.bounds([-238375.0, 0.0], [900000.0, 1376256.0])
       }
     );
-    const osLeisure = L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png?key=${osKey}`, {
-      maxZoom: 13,
-      tms: false,
-      attribution: '&copy; Ordnance Survey'
-    });
 
-    const layers = {
-      'OpenStreetMap': osm,
-      'OS Outdoor (3857)': osOutdoor,
-      'OS Leisure (27700)': osLeisure
-    };
-    L.control.layers(layers, null, { collapsed: false }).addTo(map);
+    // Tile layer factories
+    function createOSM() {
+      return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+      });
+    }
+    function createOSOutdoor() {
+      return L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=${osKey}`, {
+        maxZoom: 19,
+        attribution: '&copy; Ordnance Survey',
+        noWrap: true
+      });
+    }
+    function createOSLeisure() {
+      return L.tileLayer(
+        `https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png?key=${osKey}`,
+        {
+          minZoom: 0,
+          maxZoom: 13,
+          tileSize: 256,
+          noWrap: true,
+          continuousWorld: false,
+          attribution: '&copy; Ordnance Survey'
+        }
+      );
+    }
 
-    // Center on geolocation
-    document.getElementById('locbtn').onclick = function(){
+    let currentCRS = '3857';
+    let map = L.map('map', { center: [54.0, -2.0], zoom: 7 });
+    let base = createOSM().addTo(map);
+    const layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
+    layersControl.addBaseLayer(base, 'OpenStreetMap');
+    layersControl.addBaseLayer(createOSOutdoor(), 'OS Outdoor (3857)');
+    layersControl.addBaseLayer(createOSLeisure(), 'OS Leisure (27700)');
+
+    function switchCRS(to27700) {
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      map.remove();
+      const opts = to27700 ? { crs: osgb, center: center, zoom: Math.min(zoom, 13) } : { center: center, zoom: zoom };
+      map = L.map('map', opts);
+      // Recreate base layers for the new map
+      const osm = createOSM();
+      const outdoor = createOSOutdoor();
+      const leisure = createOSLeisure();
+      const lc = L.control.layers({}, null, { collapsed: false }).addTo(map);
+      lc.addBaseLayer(osm, 'OpenStreetMap');
+      lc.addBaseLayer(outdoor, 'OS Outdoor (3857)');
+      lc.addBaseLayer(leisure, 'OS Leisure (27700)');
+      // Select appropriate default
+      if (to27700) {
+        leisure.addTo(map);
+        currentCRS = '27700';
+      } else {
+        osm.addTo(map);
+        currentCRS = '3857';
+      }
+      // Reattach location button handler
+      document.getElementById('locbtn').onclick = locate;
+      // Reattach baselayerchange handler
+      map.on('baselayerchange', onBaseLayerChange);
+    }
+
+    function onBaseLayerChange(e) {
+      const name = e.name || '';
+      if (name.indexOf('27700') !== -1 && currentCRS !== '27700') {
+        switchCRS(true);
+      } else if (name.indexOf('27700') === -1 && currentCRS !== '3857') {
+        switchCRS(false);
+      }
+    }
+    map.on('baselayerchange', onBaseLayerChange);
+
+    function locate(){
       if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
       navigator.geolocation.getCurrentPosition(function(pos){
         const lat = pos.coords.latitude, lon = pos.coords.longitude;
@@ -66,7 +114,8 @@
       }, function(err){
         alert('Location error: ' + err.message);
       }, { enableHighAccuracy: true });
-    };
+    }
+    document.getElementById('locbtn').onclick = locate;
   </script>
 </body>
 </html>

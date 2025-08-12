@@ -33,12 +33,8 @@ public class ArcGisMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.arcgis_map);
-        // Enable verbose ArcGIS Runtime logging to Logcat (if supported in this version)
-        try {
-            ArcGISRuntimeEnvironment.setLogLevel(com.esri.arcgisruntime.io.LogLevel.VERBOSE);
-        } catch (Throwable t) {
-            Log.w(TAG, "ArcGIS logging level not supported in this version");
-        }
+        // ArcGIS Runtime logging APIs vary by version; skipping SDK-level log routing to avoid
+        // compatibility issues. We log layer load statuses and draw status below instead.
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

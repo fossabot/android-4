@@ -229,6 +229,16 @@
             android:background="@color/white"
             android:textColor="@color/black" />
 
+        <Button
+            android:id="@+id/btnLeafletMap"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Leaflet map"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/white"
+            android:textColor="@color/black" />
+
     </LinearLayout>
 
 </LinearLayout>

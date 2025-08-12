@@ -3459,6 +3459,7 @@ id browser_actions_menu_items
 id browser_actions_menu_view
 id btnArcGisMap
 id btnDownloadMaps
+id btnLeafletMap
 id btnMap
 id btnNearest
 id btnSync
@@ -3649,6 +3650,7 @@ id jumpToEnd
 id jumpToStart
 id labeled
 id layout
+id leafletWebView
 id left
 id leftToRight
 id legacy
@@ -4153,6 +4155,7 @@ layout expand_button
 layout filter
 layout helppage
 layout image_frame
+layout leaflet_map
 layout logphoto
 layout logtrig
 layout m3_alert_dialog

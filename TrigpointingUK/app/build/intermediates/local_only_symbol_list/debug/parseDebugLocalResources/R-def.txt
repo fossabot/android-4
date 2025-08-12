@@ -138,6 +138,7 @@ id bingroad
 id browser
 id btnArcGisMap
 id btnDownloadMaps
+id btnLeafletMap
 id btnMap
 id btnNearest
 id btnSync
@@ -187,6 +188,7 @@ id filterType
 id filterUnsynced
 id heading
 id helppage
+id leafletWebView
 id locationError
 id logAddPhoto
 id logAdminFlag
@@ -267,6 +269,7 @@ layout displaybitmap
 layout download
 layout filter
 layout helppage
+layout leaflet_map
 layout logphoto
 layout logtrig
 layout main

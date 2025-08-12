@@ -3458,6 +3458,7 @@ int id browser_actions_menu_items 0x7f090079
 int id browser_actions_menu_view 0x7f09007a
 int id btnArcGisMap 0x7f09007b
 int id btnDownloadMaps 0x7f09007c
+int id btnLeafletMap 0x7f09029e
 int id btnMap 0x7f09007d
 int id btnNearest 0x7f09007e
 int id btnSync 0x7f09007f
@@ -3648,6 +3649,7 @@ int id jumpToEnd 0x7f090137
 int id jumpToStart 0x7f090138
 int id labeled 0x7f090139
 int id layout 0x7f09013a
+int id leafletWebView 0x7f09029f
 int id left 0x7f09013b
 int id leftToRight 0x7f09013c
 int id legacy 0x7f09013d
@@ -4152,6 +4154,7 @@ int layout expand_button 0x7f0c0038
 int layout filter 0x7f0c0039
 int layout helppage 0x7f0c003a
 int layout image_frame 0x7f0c003b
+int layout leaflet_map 0x7f0c009a
 int layout logphoto 0x7f0c003c
 int layout logtrig 0x7f0c003d
 int layout m3_alert_dialog 0x7f0c003e
