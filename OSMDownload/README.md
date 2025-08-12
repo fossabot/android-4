@@ -26,17 +26,23 @@ pip install -r requirements.txt
 ### Basic Examples
 
 ```bash
-# Download zoom levels 0-10 (warning: this is a lot of tiles!)
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 10
+# Light download - Overview + moderate detail (561 MB)
+python osm_tile_downloader.py --min-zoom 0 --max-zoom 12
 
-# Download a smaller range for testing
+# Standard download - Covers most mapping needs (2.2 GB)
+python osm_tile_downloader.py --min-zoom 0 --max-zoom 13
+
+# Testing - Small download for experimentation (225 KB)
 python osm_tile_downloader.py --min-zoom 0 --max-zoom 5
 
 # Resume download starting from tile 1000, download only 500 more tiles
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 10 --start-tile 1000 --limit 500
+python osm_tile_downloader.py --min-zoom 0 --max-zoom 12 --start-tile 1000 --limit 500
 
 # Download with slower rate limiting (be more respectful)
 python osm_tile_downloader.py --min-zoom 8 --max-zoom 12 --min-delay 1.0 --max-delay 3.0
+
+# Heavy usage - High detail (8.9 GB, takes time!)
+python osm_tile_downloader.py --min-zoom 0 --max-zoom 14
 ```
 
 ### Check Download Statistics
@@ -56,25 +62,37 @@ python osm_tile_downloader.py --stats
 - `--tiles-dir`: Directory to store tiles (default: tiles)
 - `--stats`: Show download statistics and exit
 
-## Understanding Tile Counts
+## UK Tile Count Estimates
 
-The number of tiles grows exponentially with zoom level:
+The downloader only fetches tiles covering the UK region, dramatically reducing download size:
 
-| Zoom Level | Tiles at This Level | Total Tiles (0 to Z) |
-|------------|--------------------|--------------------|
-| 0          | 1                  | 1                  |
-| 1          | 4                  | 5                  |
-| 2          | 16                 | 21                 |
-| 3          | 64                 | 85                 |
-| 4          | 256                | 341                |
-| 5          | 1,024              | 1,365              |
-| 6          | 4,096              | 5,461              |
-| 7          | 16,384             | 21,845             |
-| 8          | 65,536             | 87,381             |
-| 9          | 262,144            | 349,525            |
-| 10         | 1,048,576          | 1,398,101          |
+| Zoom | UK Tiles | World Tiles | Reduction | Cumulative UK | Est. Size |
+|------|----------|-------------|-----------|---------------|-----------|
+| 0    | 1        | 1           | 1x        | 1             | 15 KB     |
+| 1    | 2        | 4           | 2x        | 3             | 45 KB     |
+| 2    | 2        | 16          | 8x        | 5             | 75 KB     |
+| 3    | 2        | 64          | 32x       | 7             | 105 KB    |
+| 4    | 4        | 256         | 64x       | 11            | 165 KB    |
+| 5    | 4        | 1,024       | 256x      | 15            | 225 KB    |
+| 6    | 12       | 4,096       | 341x      | 27            | 405 KB    |
+| 7    | 40       | 16,384      | 410x      | 67            | 1.0 MB    |
+| 8    | 144      | 65,536      | 455x      | 211           | 3.2 MB    |
+| 9    | 480      | 262,144     | 546x      | 691           | 10.4 MB   |
+| 10   | 1,829    | 1,048,576   | 573x      | 2,520         | 37.8 MB   |
+| 11   | 7,076    | 4,194,304   | 593x      | 9,596         | 144 MB    |
+| 12   | 27,840   | 16,777,216  | 603x      | 37,436        | 561 MB    |
+| 13   | 111,360  | 67,108,864  | 603x      | 148,796       | 2.2 GB    |
+| 14   | 444,033  | 268,435,456 | 605x      | 592,829       | 8.9 GB    |
+| 15   | 1,774,278| 1,073,741,824| 605x     | 2,367,107     | 35.5 GB   |
+| 16   | 7,091,491| 4,294,967,296| 606x     | 9,458,598     | 142 GB    |
 
-**Important**: High zoom levels require significant storage space and download time. Start with lower zoom levels for testing.
+**Practical Recommendations:**
+- **Light usage**: Zoom 0-12 (561 MB) - Good for overview and moderate detail
+- **Standard usage**: Zoom 0-13 (2.2 GB) - Covers most mapping needs
+- **Heavy usage**: Zoom 0-14 (8.9 GB) - High detail for serious users
+- **Maximum practical**: Zoom 0-16 (142 GB) - Only for extreme offline needs
+
+**10M Tile Limit**: Cumulative tiles stay under 10 million through zoom 16 (9.46M tiles).
 
 ## Output Structure
 
