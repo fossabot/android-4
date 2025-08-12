@@ -349,7 +349,38 @@
     let switchingCRS = false; // Flag to prevent recursive switching
     let pendingControlExpansion = false; // Flag to restore control state after CRS switch
     let pendingSectionStates = {}; // Object to store individual section states
-    let map = L.map('map', { center: [54.0, -2.0], zoom: 7 });
+    
+    function getInitialMapView(forCRS = '3857') {
+      // Try to get cached location from previous session
+      const cachedLocation = localStorage.getItem('leaflet_last_location');
+      if (cachedLocation) {
+        try {
+          const location = JSON.parse(cachedLocation);
+          const age = Date.now() - location.timestamp;
+          // Use cached location if less than 24 hours old
+          if (age < 24 * 60 * 60 * 1000) {
+            console.log('Using cached location for initial view:', location);
+            const zoom = forCRS === '27700' ? 7 : 14; // Adjust zoom for projection
+            return {
+              center: [location.lat, location.lon],
+              zoom: zoom
+            };
+          }
+        } catch (e) {
+          console.log('Invalid cached location data');
+        }
+      }
+      
+      // Fall back to UK center
+      console.log('No cached location, using UK center');
+      return {
+        center: [54.0, -2.0],
+        zoom: 7
+      };
+    }
+
+    const initialView = getInitialMapView();
+    let map = L.map('map', { center: initialView.center, zoom: initialView.zoom });
     // layersControl removed - using custom control instead
     
     // Layer instances
@@ -383,7 +414,8 @@
       // Recreate map with correct CRS if needed
       if (initialCRS !== L.CRS.EPSG3857) {
         map.remove();
-        map = L.map('map', { crs: initialCRS, center: [54.0, -2.0], zoom: 7 });
+        const view27700 = getInitialMapView('27700');
+        map = L.map('map', { crs: initialCRS, center: view27700.center, zoom: view27700.zoom });
         currentCRS = '27700';
         initializeLayers(); // Recreate layers for new map
       } else {
@@ -1387,6 +1419,14 @@
       navigator.geolocation.getCurrentPosition(function(pos){
         const lat = pos.coords.latitude, lon = pos.coords.longitude;
         console.log(`Located at: ${lat}, ${lon}`);
+        
+        // Cache this location for future map initializations
+        const locationData = {
+          lat: lat,
+          lon: lon,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('leaflet_last_location', JSON.stringify(locationData));
         
         // Adjust zoom level based on current projection
         let zoom;
