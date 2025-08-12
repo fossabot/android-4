@@ -208,6 +208,14 @@
       layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
       layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
       
+      // Add scale control
+      L.control.scale({
+        position: 'bottomleft',
+        metric: true,
+        imperial: false,
+        maxWidth: 200
+      }).addTo(map);
+      
       // Add initial layer after control is set up
       initialLayer.addTo(map);
       currentLayerName = initialStyle;
@@ -269,6 +277,14 @@
       layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
       layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
       layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
+      
+      // Re-add scale control after CRS switch
+      L.control.scale({
+        position: 'bottomleft',
+        metric: true,
+        imperial: false,
+        maxWidth: 200
+      }).addTo(map);
       
       // Add the correct layer based on user selection
       if (targetLayerName === 'OS Leisure (27700)') {
