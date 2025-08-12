@@ -2,7 +2,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://esri.jfrog.io/artifactory/arcgis' }
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.11.1'
@@ -13,6 +13,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://esri.jfrog.io/artifactory/arcgis' }
+
     }
 }

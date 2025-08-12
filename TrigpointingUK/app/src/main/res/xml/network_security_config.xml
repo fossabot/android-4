@@ -13,7 +13,6 @@
     <!-- Explicitly allow additional HTTPS tile domains -->
     <domain-config>
         <domain includeSubdomains="true">api.os.uk</domain>
-        <domain includeSubdomains="true">arcgis.com</domain>
-        <domain includeSubdomains="true">arcgisonline.com</domain>
+
     </domain-config>
 </network-security-config> 
