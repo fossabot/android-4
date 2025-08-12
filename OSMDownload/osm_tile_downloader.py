@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
 """
-OSM Tile Downloader for TrigpointingUK
-=====================================
+OSM Tile Downloader for TrigpointingUK Leaflet Maps
+===================================================
 
-Downloads OpenStreetMap tiles from Mapnik provider for offline use.
+Downloads OpenStreetMap tiles from Mapnik provider for offline use with Leaflet maps.
 Supports resumable downloads, zoom level ranges, and configurable rate limiting.
 
 Usage:
     python osm_tile_downloader.py --min-zoom 0 --max-zoom 10 --start-tile 0 --limit 1000
 
 Features:
-- Downloads tiles in z/x/y.png directory structure
+- Downloads tiles in standard z/x/y.png directory structure
+- Optimized for Leaflet WebView cache integration
 - Resumable downloads (skips existing tiles)
 - Configurable rate limiting with random delays
 - Progress tracking and statistics
-- Proper tile coordinate calculation
-- Web server ready directory structure
+- Web server ready directory structure for ZIP distribution
 """
 
 import os

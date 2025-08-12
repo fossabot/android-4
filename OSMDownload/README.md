@@ -1,6 +1,6 @@
-# OSM Tile Downloader for TrigpointingUK
+# OSM Tile Downloader for TrigpointingUK Leaflet Maps
 
-This Python application downloads OpenStreetMap tiles from the Mapnik provider for offline use in the TrigpointingUK Android application.
+This Python application downloads OpenStreetMap tiles from the Mapnik provider for offline use with Leaflet maps in the TrigpointingUK Android application.
 
 ## Features
 
@@ -98,11 +98,11 @@ tiles/
 ...
 ```
 
-## Creating ZIP Files for Android App
+## Creating ZIP Files for Leaflet Cache
 
-Once you have downloaded tiles, you can create ZIP files for the Android application:
+Once you have downloaded tiles, create ZIP files for the Android Leaflet cache:
 
-### Method 1: Create a single ZIP file
+### Method 1: Create a single ZIP file (recommended)
 ```bash
 cd tiles
 zip -r ../osm_tiles.zip .
@@ -119,24 +119,28 @@ done
 ### Method 3: Create ZIP files for specific zoom ranges
 ```bash
 cd tiles
-# Zoom levels 0-8 (smaller file for basic functionality)
+# Zoom levels 0-8 (low detail for overview)
 zip -r ../osm_tiles_low.zip {0..8}
 
-# Zoom levels 9-12 (detailed tiles)
+# Zoom levels 9-12 (high detail for close-up)
 zip -r ../osm_tiles_high.zip {9..12}
 ```
 
-## Web Server Setup
+## Web Server Setup for Leaflet
 
-To serve tiles to the Android application, place the `tiles` directory on a web server:
+Host ZIP files on a web server for the Android app to download:
 
 ```bash
-# Example: Copy to web server
-rsync -av tiles/ user@yourserver.com:/var/www/html/osm_tiles/
+# Example: Copy ZIP files to web server
+scp osm_tiles*.zip user@yourserver.com:/var/www/html/
 
-# The Android app can then download from:
+# Update Android app arrays.xml with your URLs:
 # https://yourserver.com/osm_tiles.zip
+# https://yourserver.com/osm_tiles_low.zip
+# https://yourserver.com/osm_tiles_high.zip
 ```
+
+The Android DownloadMapsActivity will extract ZIP files directly into the Leaflet WebView cache for offline use.
 
 ## Rate Limiting and Ethics
 

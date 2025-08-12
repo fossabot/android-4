@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
-import com.trigpointinguk.android.mapping.MapActivity;
+import com.trigpointinguk.android.mapping.LeafletMapActivity;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.LatLon;
 import com.trigpointinguk.android.types.Trig;
@@ -188,7 +188,7 @@ public class TrigDetailsInfoTab extends Activity {
 			editor.putInt("latitude", (int)(mLatitude * 1E6));
 			editor.putInt("longitude", (int)(mLongitude * 1E6));
 			editor.apply();
-			Intent i = new Intent(TrigDetailsInfoTab.this, MapActivity.class);
+			Intent i = new Intent(TrigDetailsInfoTab.this, LeafletMapActivity.class);
 			startActivityForResult(i, R.id.map);
 			return true;	     
 		}

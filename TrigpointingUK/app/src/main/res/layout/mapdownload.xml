@@ -46,34 +46,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
-    <!-- Cache destination options -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cache Destination:"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
-    
-    <CheckBox
-        android:id="@+id/osmDroidCacheCheck"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="OSMdroid Cache (for legacy map)"
-        android:checked="true" />
-    
-    <CheckBox
-        android:id="@+id/webViewCacheCheck"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="WebView Cache (for Leaflet map)"
-        android:checked="true"
-        android:layout_marginBottom="16dp" />
-    
     <!-- Instructions -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Note: Downloads tiles from ZIP files into selected cache(s). WebView cache requires custom tile server with CORS headers."
+        android:text="Downloads map tiles from ZIP files for offline use with Leaflet maps. Tiles are cached locally for fast access without internet connection."
         android:textSize="12sp"
         android:textStyle="italic"
         android:layout_marginBottom="8dp" />

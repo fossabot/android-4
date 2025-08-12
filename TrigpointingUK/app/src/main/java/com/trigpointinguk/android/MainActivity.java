@@ -34,7 +34,6 @@ import com.trigpointinguk.android.filter.FilterActivity;
 import com.trigpointinguk.android.logging.SyncListener;
 import com.trigpointinguk.android.logging.SyncTask;
 import com.trigpointinguk.android.mapping.DownloadMapsActivity;
-import com.trigpointinguk.android.mapping.MapActivity;
 import com.trigpointinguk.android.nearest.NearestActivity;
 
 public class MainActivity extends AppCompatActivity implements SyncListener {
@@ -171,15 +170,6 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
 			@Override
 			public void onClick(View arg0) {
 				doSync();
-			}
-		});
-
-        final Button btnMap = (Button) findViewById(R.id.btnMap);
-        btnMap.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Intent i = new Intent(MainActivity.this, MapActivity.class);
-				mapLauncher.launch(i);
 			}
 		});
 

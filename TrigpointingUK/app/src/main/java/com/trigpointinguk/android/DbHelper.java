@@ -1,6 +1,6 @@
 package com.trigpointinguk.android;
 
-import org.osmdroid.util.BoundingBox;
+import com.trigpointinguk.android.mapping.BoundingBox;
 
 import android.app.Activity;
 import android.content.ContentValues;

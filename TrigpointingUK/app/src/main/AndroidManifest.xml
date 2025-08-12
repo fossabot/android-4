@@ -40,9 +40,8 @@
         <activity android:name=".trigdetails.TrigDetailsInfoTab"></activity>
         <activity android:name=".trigdetails.TrigDetailsLoglistTab"></activity>
         <activity android:name=".trigdetails.TrigDetailsOSMapTab"></activity>
-        <activity android:name=".mapping.MapActivity"></activity>
-        <activity android:name=".mapping.ColourByActivity"></activity>
-        <activity android:name=".mapping.MapSourceActivity"></activity>
+
+
 
         <activity android:name=".mapping.LeafletMapActivity"></activity>
         <meta-data android:value="6668b1358f29457b88baf287a692ae97" android:name="CLOUDMADE_KEY"></meta-data>

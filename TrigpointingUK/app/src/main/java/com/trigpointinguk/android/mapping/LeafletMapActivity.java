@@ -25,7 +25,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.osmdroid.util.BoundingBox;
+import com.trigpointinguk.android.mapping.BoundingBox;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -286,7 +286,7 @@ public class LeafletMapActivity extends AppCompatActivity {
             // Create bounding box for query
             BoundingBox bounds = new BoundingBox(north, east, south, west);
             
-            // Query database using existing OSMdroid method
+            // Query database using bounding box
             Cursor cursor = dbHelper.fetchTrigMapList(bounds);
             
             if (cursor == null) {

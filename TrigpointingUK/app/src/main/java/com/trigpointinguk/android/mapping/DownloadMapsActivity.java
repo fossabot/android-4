@@ -42,9 +42,7 @@ public class DownloadMapsActivity extends Activity {
 	private ProgressBar mProgress;
 	private Button mDownloadBtn;
 	private Spinner mTileSource;
-	private RadioGroup mCacheTypeGroup;
-	private CheckBox mOsmDroidCacheCheck;
-	private CheckBox mWebViewCacheCheck;
+
 	private int mProgressMax=100;
 	private int mDownloadCount;
 	private boolean mRunning=false;
@@ -56,10 +54,7 @@ public class DownloadMapsActivity extends Activity {
 	private static final int STATUS_NOSPACE		= 4;
 	private static final int STATUS_IOERROR		= 5;
 	
-	// Cache types
-	private static final int CACHE_OSMDROID = 1;
-	private static final int CACHE_WEBVIEW = 2;
-	private static final int CACHE_BOTH = 3;
+
 	
 	private CompletableFuture<Integer> mTask;
 
@@ -76,9 +71,7 @@ public class DownloadMapsActivity extends Activity {
 		mStatus 		= (TextView)	findViewById(R.id.downloadMapsStatus);
 		mProgress 		= (ProgressBar)	findViewById(R.id.downloadMapsProgress);
 		mDownloadBtn	= (Button)		findViewById(R.id.btnDownloadMaps);
-		mTileSource 	= (Spinner)		findViewById(R.id.downloadMapsTileSource);
-		mOsmDroidCacheCheck = (CheckBox) findViewById(R.id.osmDroidCacheCheck);
-		mWebViewCacheCheck = (CheckBox) findViewById(R.id.webViewCacheCheck);  
+		mTileSource 	= (Spinner)		findViewById(R.id.downloadMapsTileSource);  
 
 		mStatus.setText(R.string.downloadMapsIdleStatus);
 		mProgress.setProgress(0);
@@ -87,24 +80,6 @@ public class DownloadMapsActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				if (!mRunning) {
-					// Check which caches are selected
-					boolean osmDroidSelected = mOsmDroidCacheCheck.isChecked();
-					boolean webViewSelected = mWebViewCacheCheck.isChecked();
-					
-					if (!osmDroidSelected && !webViewSelected) {
-						new AlertDialog.Builder(DownloadMapsActivity.this)
-							.setTitle("No Cache Selected")
-							.setMessage("Please select at least one cache destination.")
-							.setPositiveButton("OK", null)
-							.show();
-						return;
-					}
-					
-					// Determine cache type
-					int cacheType = 0;
-					if (osmDroidSelected) cacheType |= CACHE_OSMDROID;
-					if (webViewSelected) cacheType |= CACHE_WEBVIEW;
-					
 					// find which item is selected
 					final int tilePos = mTileSource.getSelectedItemPosition();
 					// get the list of URLs
@@ -113,8 +88,7 @@ public class DownloadMapsActivity extends Activity {
 					mProgressMax = getResources().getIntArray(R.array.downloadMapsArrayTiles)[tilePos];
 					Log.i(TAG, "Downloading from: " + tileURL);
 					Log.i(TAG, "Expected tiles: " + mProgressMax);
-					Log.i(TAG, "Cache type: " + cacheType);
-					mTask = downloadMaps(tileURL, cacheType);
+					mTask = downloadMaps(tileURL);
 				} else {
 					mTask.cancel(true);
 				}
@@ -139,13 +113,11 @@ public class DownloadMapsActivity extends Activity {
 
 
 
-	private CompletableFuture<Integer> downloadMaps(String tileURL, int cacheType) {
+	private CompletableFuture<Integer> downloadMaps(String tileURL) {
 		// Setup UI on main thread
 		mStatus.setText(R.string.downloadMapsInsertStatus);
 		mDownloadBtn.setText(R.string.btnCancel);
 		mTileSource.setEnabled(false);
-		mOsmDroidCacheCheck.setEnabled(false);
-		mWebViewCacheCheck.setEnabled(false);
 		mProgress.setMax(mProgressMax);
 		mProgress.setProgress(0);
 		mDownloadCount = 0;
@@ -154,14 +126,11 @@ public class DownloadMapsActivity extends Activity {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		Handler mainHandler = new Handler(Looper.getMainLooper());
 		
-				return CompletableFuture.supplyAsync(() -> {
-			// Determine cache directories
-			String osmDroidCacheDir = Environment.getExternalStorageDirectory().getPath() + "/osmdroid/tiles/";
+		return CompletableFuture.supplyAsync(() -> {
+			// Use WebView cache directory for Leaflet tiles
 			String webViewCacheDir = getFilesDir().getPath() + "/webview_tiles/";
 			
-			Log.d(TAG, "OSMdroid cache: " + osmDroidCacheDir);
-			Log.d(TAG, "WebView cache: " + webViewCacheDir);
-			Log.d(TAG, "Cache type flags: " + cacheType);
+			Log.d(TAG, "WebView cache directory: " + webViewCacheDir);
 			
 			int i=0; // not using mDownloadcount in loop for performance reasons
 
@@ -175,33 +144,17 @@ public class DownloadMapsActivity extends Activity {
 					ZipInputStream zis = new ZipInputStream(is); 
 					ZipEntry ze; 
 
-					byte[] buffer = new byte[1024];
-					int length;
-
 					while ((ze = zis.getNextEntry()) != null) { 
 						Log.v(TAG, "Unzipping " + ze.getName()); 
 
 						if(ze.isDirectory()) {
-							// Create directories in selected caches
-							if ((cacheType & CACHE_OSMDROID) != 0) {
-								dirChecker(osmDroidCacheDir + ze.getName()); 
-							}
-							if ((cacheType & CACHE_WEBVIEW) != 0) {
-								dirChecker(webViewCacheDir + ze.getName()); 
-							}
+							// Create directory structure
+							dirChecker(webViewCacheDir + ze.getName()); 
 						} else {
-							// Read tile data once
+							// Read tile data and write to WebView cache
 							byte[] tileData = readZipEntryData(zis);
 							zis.closeEntry();
-							
-							// Write to selected caches
-							if ((cacheType & CACHE_OSMDROID) != 0) {
-								writeToCache(osmDroidCacheDir + ze.getName(), tileData);
-							}
-							if ((cacheType & CACHE_WEBVIEW) != 0) {
-								writeToCache(webViewCacheDir + ze.getName(), tileData);
-							}
-							
+							writeToCache(webViewCacheDir + ze.getName(), tileData);
 							i++;
 						} 
 						if (i % 10 == 0) {
@@ -209,15 +162,7 @@ public class DownloadMapsActivity extends Activity {
 							final int progress = i;
 							mainHandler.post(() -> {
 								mProgress.setProgress(progress);
-								String cacheInfo = "";
-								if ((cacheType & CACHE_OSMDROID) != 0 && (cacheType & CACHE_WEBVIEW) != 0) {
-									cacheInfo = " (both caches)";
-								} else if ((cacheType & CACHE_OSMDROID) != 0) {
-									cacheInfo = " (OSMdroid cache)";
-								} else if ((cacheType & CACHE_WEBVIEW) != 0) {
-									cacheInfo = " (WebView cache)";
-								}
-								mStatus.setText("Downloaded " + progress + " tiles" + cacheInfo);
+								mStatus.setText("Downloaded " + progress + " tiles to Leaflet cache");
 							});
 						}
 					} 
@@ -276,8 +221,6 @@ public class DownloadMapsActivity extends Activity {
 			}
 			mDownloadBtn.setText(R.string.btnDownload);
 			mTileSource.setEnabled(true);
-			mOsmDroidCacheCheck.setEnabled(true);
-			mWebViewCacheCheck.setEnabled(true);
 			mRunning = false;
 			return result;
 		}, mainHandler::post);
