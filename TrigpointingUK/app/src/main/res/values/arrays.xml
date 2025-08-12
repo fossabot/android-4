@@ -93,29 +93,17 @@
 
     <!-- Icon style options -->
     <string-array name="icon_style_names">
-        <item>Small Logo Icons (20px)</item>
-        <item>Medium Logo Icons (50px) - Default</item>
-        <item>Large Logo Icons (80px)</item>
-        <item>Extra Large Logo Icons (120px)</item>
-        <item>Huge Logo Icons (200px)</item>
-        <item>Small Trigpoint Symbols (20px)</item>
-        <item>Medium Trigpoint Symbols (50px)</item>
-        <item>Large Trigpoint Symbols (80px)</item>
-        <item>Extra Large Trigpoint Symbols (120px)</item>
-        <item>Huge Trigpoint Symbols (200px)</item>
+        <item>Small Icons</item>
+        <item>Medium Icons - Default</item>
+        <item>Large Icons</item>
+        <item>Trigpoint Symbols</item>
     </string-array>
 
     <string-array name="icon_style_values">
-        <item>small_logo</item>
-        <item>medium_logo</item>
-        <item>large_logo</item>
-        <item>xlarge_logo</item>
-        <item>huge_logo</item>
-        <item>small_symbol</item>
-        <item>medium_symbol</item>
-        <item>large_symbol</item>
-        <item>xlarge_symbol</item>
-        <item>huge_symbol</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>symbols</item>
     </string-array>
 
 </resources> 

@@ -54,7 +54,7 @@
             android:summary="Choose icon style and size for map markers"
             android:entries="@array/icon_style_names"
             android:entryValues="@array/icon_style_values"
-            android:defaultValue="medium_logo" />
+            android:defaultValue="medium" />
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Filter Settings">

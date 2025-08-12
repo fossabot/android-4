@@ -1253,16 +1253,10 @@
     function getIconSizeFromStyle(iconStyle) {
       // Map icon style preferences to actual pixel sizes
       const sizeMap = {
-        'small_logo': 20,
-        'medium_logo': 50,
-        'large_logo': 80,
-        'xlarge_logo': 120,
-        'huge_logo': 200,
-        'small_symbol': 20,
-        'medium_symbol': 50,
-        'large_symbol': 80,
-        'xlarge_symbol': 120,
-        'huge_symbol': 200
+        'small': 20,
+        'medium': 50,
+        'large': 80,
+        'symbols': 50
       };
       
       return sizeMap[iconStyle] || 50; // Default to medium size
@@ -1285,8 +1279,8 @@
       const iconSize = getIconSizeFromStyle(iconStyle);
       
       // Get type-specific icon
-      const iconUrl = getTrigIconUrl(trig.type, color, trig.flagged);
-      console.log(`Creating icon for ${trig.name}: type=${trig.type}, color=${color}, size=${iconSize}px, iconUrl=${iconUrl}`);
+      const iconUrl = getTrigIconUrl(trig.type, color, trig.flagged, iconStyle);
+      console.log(`Creating icon for ${trig.name}: type=${trig.type}, color=${color}, style=${iconStyle}, size=${iconSize}px, iconUrl=${iconUrl}`);
       
       return L.icon({
         iconUrl: iconUrl,
@@ -1332,23 +1326,43 @@
       }
     }
 
-    function getTrigIconUrl(type, color, flagged) {
-      // Map database type codes to icon type names
-      const typeMap = {
-        'PI': 'pillar',
-        'FB': 'fbm', 
-        'IN': 'intersected'
-      };
-      
-      // Default to passive for any unknown types
-      const iconType = typeMap[type] || 'passive';
-      
-      // Build icon path based on type, color, and highlight state
-      const highlight = flagged ? '_h' : '';
-      const iconName = `mapicon_${iconType}_${color}${highlight}.png`;
-      
-      // Use relative path from current leaflet directory
-      return `icons/${iconName}`;
+    function getTrigIconUrl(type, color, flagged, iconStyle) {
+      // Check if using trigpoint symbols
+      if (iconStyle === 'symbols') {
+        // Map database type codes to symbol icon names
+        const typeMap = {
+          'PI': 'pillar',
+          'FB': 'fbm', 
+          'IN': 'intersected'
+        };
+        
+        // Default to passive for any unknown types
+        const iconType = typeMap[type] || 'passive';
+        
+        // Use symbol icons: t_ for normal, ts_ for flagged/highlighted
+        const prefix = flagged ? 'ts_' : 't_';
+        const iconName = `${prefix}${iconType}.png`;
+        
+        return `icons/${iconName}`;
+      } else {
+        // Use colored logo icons (existing system)
+        // Map database type codes to icon type names
+        const typeMap = {
+          'PI': 'pillar',
+          'FB': 'fbm', 
+          'IN': 'intersected'
+        };
+        
+        // Default to passive for any unknown types
+        const iconType = typeMap[type] || 'passive';
+        
+        // Build icon path based on type, color, and highlight state
+        const highlight = flagged ? '_h' : '';
+        const iconName = `mapicon_${iconType}_${color}${highlight}.png`;
+        
+        // Use relative path from current leaflet directory
+        return `icons/${iconName}`;
+      }
     }
 
     initializeMap();
