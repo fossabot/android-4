@@ -20,7 +20,9 @@ public class MapControlsTabAdapter extends FragmentStateAdapter {
             case 1:
                 return new MarkerColorTabFragment();
             case 2:
-                return new FilterTabFragment();
+                return new TrigpointTypesTabFragment();
+            case 3:
+                return new FilterFoundTabFragment();
             default:
                 return new MapStyleTabFragment();
         }
@@ -28,6 +30,6 @@ public class MapControlsTabAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 4;
     }
 }

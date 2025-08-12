@@ -180,7 +180,10 @@ public class LeafletMapActivity extends AppCompatActivity {
                     tab.setText("Markers");
                     break;
                 case 2:
-                    tab.setText("Filter");
+                    tab.setText("Trigpoint types");
+                    break;
+                case 3:
+                    tab.setText("Filter found");
                     break;
             }
         }).attach();
@@ -200,12 +203,17 @@ public class LeafletMapActivity extends AppCompatActivity {
         Log.d(TAG, "Updated marker color to: " + color);
     }
 
-    public void updateFilter(String filter) {
-        webView.evaluateJavascript("if (typeof updateFilter === 'function') updateFilter('" + filter + "');", null);
-        Log.d(TAG, "Updated filter to: " + filter);
+    public void updateTrigpointType(String type) {
+        webView.evaluateJavascript("if (typeof updateTrigpointType === 'function') updateTrigpointType('" + type + "');", null);
+        Log.d(TAG, "Updated trigpoint type to: " + type);
+    }
+    
+    public void updateFilterFound(String found) {
+        webView.evaluateJavascript("if (typeof updateFilterFound === 'function') updateFilterFound('" + found + "');", null);
+        Log.d(TAG, "Updated filter found to: " + found);
     }
 
-    private String queryTrigpoints(double south, double west, double north, double east, String filter, String colorScheme) {
+    private String queryTrigpoints(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
         if (dbHelper == null) {
             Log.e(TAG, "Database helper not initialized");
             return "[]";
@@ -213,7 +221,7 @@ public class LeafletMapActivity extends AppCompatActivity {
 
         try {
             // Convert leaflet filter names to Filter constants
-            setupFilterPreferences(filter);
+            setupFilterPreferences(trigpointType, filterFound);
             
             // Create bounding box for query
             BoundingBox bounds = new BoundingBox(north, east, south, west);
@@ -256,13 +264,13 @@ public class LeafletMapActivity extends AppCompatActivity {
         }
     }
 
-    private void setupFilterPreferences(String filter) {
+    private void setupFilterPreferences(String trigpointType, String filterFound) {
         // Convert JavaScript filter names to Filter preference values
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         
-        // Set filter type based on filter parameter
-        switch (filter) {
+        // Set trigpoint type filter based on trigpointType parameter
+        switch (trigpointType) {
             case "all":
                 editor.putInt(Filter.FILTERTYPE, 6); // TYPESALL
                 break;
@@ -280,6 +288,27 @@ public class LeafletMapActivity extends AppCompatActivity {
                 break;
             default:
                 editor.putInt(Filter.FILTERTYPE, 6); // TYPESALL
+        }
+        
+        // Set filter found status based on filterFound parameter
+        switch (filterFound) {
+            case "all":
+                editor.putInt(Filter.FILTERRADIO, 0); // All
+                break;
+            case "logged":
+                editor.putInt(Filter.FILTERRADIO, 1); // Logged
+                break;
+            case "notlogged":
+                editor.putInt(Filter.FILTERRADIO, 2); // Not Logged
+                break;
+            case "marked":
+                editor.putInt(Filter.FILTERRADIO, 3); // Marked
+                break;
+            case "unsynced":
+                editor.putInt(Filter.FILTERRADIO, 4); // Unsynced
+                break;
+            default:
+                editor.putInt(Filter.FILTERRADIO, 0); // All
         }
         
         editor.apply();
@@ -302,13 +331,13 @@ public class LeafletMapActivity extends AppCompatActivity {
         }
         
         @JavascriptInterface
-        public void getTrigpointData(double south, double west, double north, double east, String filter, String colorScheme) {
-            Log.d(TAG, String.format("getTrigpointData: bounds=(%.6f,%.6f,%.6f,%.6f) filter=%s color=%s", south, west, north, east, filter, colorScheme));
+        public void getTrigpointData(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
+            Log.d(TAG, String.format("getTrigpointData: bounds=(%.6f,%.6f,%.6f,%.6f) type=%s found=%s color=%s", south, west, north, east, trigpointType, filterFound, colorScheme));
             
             // Run database query on background thread
             new Thread(() -> {
                 try {
-                    String trigpointsJson = queryTrigpoints(south, west, north, east, filter, colorScheme);
+                    String trigpointsJson = queryTrigpoints(south, west, north, east, trigpointType, filterFound, colorScheme);
                     
                     // Return results to JavaScript on UI thread
                     runOnUiThread(() -> {

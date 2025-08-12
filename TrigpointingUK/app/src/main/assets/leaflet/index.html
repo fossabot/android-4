@@ -866,17 +866,34 @@
       }
     }
 
-    function updateFilter(filterType) {
-      console.log('Updating filter:', filterType);
+    function updateTrigpointType(type) {
+      console.log('Updating trigpoint type:', type);
       
-      // Update the JavaScript control radio buttons
-      document.querySelectorAll('input[name="filter"]').forEach(radio => {
-        radio.checked = (radio.value === filterType);
+      // Update the JavaScript control radio buttons if they exist
+      document.querySelectorAll('input[name="trigpointtype"]').forEach(radio => {
+        radio.checked = (radio.value === type);
       });
       
-      // Update current filter and reload markers
-      currentFilter = filterType;
-      localStorage.setItem('leaflet_filter', filterType);
+      // Update current type and reload markers
+      currentTrigpointType = type;
+      localStorage.setItem('leaflet_trigpoint_type', type);
+      if (markersLayer) {
+        currentBounds = null; // Force reload
+        loadTrigpointMarkers();
+      }
+    }
+    
+    function updateFilterFound(found) {
+      console.log('Updating filter found:', found);
+      
+      // Update the JavaScript control radio buttons if they exist
+      document.querySelectorAll('input[name="filterfound"]').forEach(radio => {
+        radio.checked = (radio.value === found);
+      });
+      
+      // Update current found filter and reload markers
+      currentFilterFound = found;
+      localStorage.setItem('leaflet_filter_found', found);
       if (markersLayer) {
         currentBounds = null; // Force reload
         loadTrigpointMarkers();
@@ -898,10 +915,16 @@
         radio.checked = (radio.value === markerColor);
       });
       
-      const filter = localStorage.getItem('leaflet_filter') || 'all';
-      currentFilter = filter;
-      document.querySelectorAll('input[name="filter"]').forEach(radio => {
-        radio.checked = (radio.value === filter);
+      const trigpointType = localStorage.getItem('leaflet_trigpoint_type') || 'all';
+      currentTrigpointType = trigpointType;
+      document.querySelectorAll('input[name="trigpointtype"]').forEach(radio => {
+        radio.checked = (radio.value === trigpointType);
+      });
+      
+      const filterFound = localStorage.getItem('leaflet_filter_found') || 'all';
+      currentFilterFound = filterFound;
+      document.querySelectorAll('input[name="filterfound"]').forEach(radio => {
+        radio.checked = (radio.value === filterFound);
       });
     }
 
@@ -909,11 +932,17 @@
     let markersLayer = null;
     let currentBounds = null;
     let currentMarkerColor = 'none';
-    let currentFilter = 'all';
+    let currentTrigpointType = 'all';
+    let currentFilterFound = 'all';
 
     function initializeMarkers() {
+      console.log('MARKER DEBUG: initializeMarkers() called');
+      console.log('MARKER DEBUG: Current CRS:', currentCRS);
+      console.log('MARKER DEBUG: Map exists:', !!map);
+      
       // Create markers layer group
       markersLayer = L.layerGroup().addTo(map);
+      console.log('MARKER DEBUG: Created markersLayer and added to map');
       
       // Load initial markers
       loadTrigpointMarkers();
@@ -929,11 +958,19 @@
     }
 
     function loadTrigpointMarkers() {
+      console.log('MARKER DEBUG: loadTrigpointMarkers() called');
+      console.log('MARKER DEBUG: markersLayer exists:', !!markersLayer);
+      
       const bounds = map.getBounds();
       const zoom = map.getZoom();
       
       // Don't load markers at low zoom levels (performance)
-      if (zoom < 10) {
+      // Different zoom thresholds for different projections
+      const minZoom = currentCRS === '27700' ? 2 : 9;
+      console.log(`MARKER DEBUG: Zoom check - current: ${zoom}, min required: ${minZoom}, CRS: ${currentCRS}`);
+      
+      if (zoom < minZoom) {
+        console.log('MARKER DEBUG: Zoom too low, clearing markers and returning');
         markersLayer.clearLayers();
         return;
       }
@@ -945,10 +982,13 @@
       }
       
       console.log('Loading trigpoint markers for bounds:', bounds);
+      console.log(`Map CRS: ${currentCRS}, Zoom: ${map.getZoom()}`);
       
       // Expand bounds for efficient loading
       const expandedBounds = bounds.pad(0.5); // 50% expansion
       currentBounds = expandedBounds;
+      
+      console.log(`Querying trigpoints: S=${expandedBounds.getSouth()}, W=${expandedBounds.getWest()}, N=${expandedBounds.getNorth()}, E=${expandedBounds.getEast()}`);
       
       // Call Android to get trigpoint data
       AndroidPrefs.getTrigpointData(
@@ -956,7 +996,8 @@
         expandedBounds.getWest(), 
         expandedBounds.getNorth(),
         expandedBounds.getEast(),
-        currentFilter,
+        currentTrigpointType,
+        currentFilterFound,
         currentMarkerColor
       );
     }
@@ -971,7 +1012,14 @@
         markersLayer.clearLayers();
         
         trigpoints.forEach(trig => {
-          const marker = L.marker([trig.lat, trig.lon], {
+          // Use standard lat/lon - Leaflet CRS should handle transformation automatically
+          const coords = [trig.lat, trig.lon];
+          
+          console.log(`Creating marker for ${trig.name} at [${trig.lat}, ${trig.lon}] in CRS: ${currentCRS}`);
+          console.log(`Current map bounds:`, map.getBounds());
+          console.log(`Map center:`, map.getCenter());
+          
+          const marker = L.marker(coords, {
             icon: createTrigIcon(trig)
           });
           

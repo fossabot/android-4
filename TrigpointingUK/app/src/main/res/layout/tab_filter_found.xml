@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <RadioGroup
+        android:id="@+id/filterFoundRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioFoundAll"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="All"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioFoundLogged"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Logged"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioFoundNotLogged"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Not Logged"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioFoundMarked"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Marked"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioFoundUnsynced"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Unsynced"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+    </RadioGroup>
+</ScrollView>
