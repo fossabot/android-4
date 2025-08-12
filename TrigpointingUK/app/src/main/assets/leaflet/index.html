@@ -11,7 +11,34 @@
   <style>
     html, body, #map { height: 100%; margin: 0; }
     .leaflet-control-layers { font-size: 14px; }
-    .fab { position:absolute; right:16px; bottom:16px; z-index:1000; background:#fff; border:1px solid #ccc; border-radius:24px; padding:12px; }
+    .fab { 
+      position: absolute; 
+      right: 16px; 
+      bottom: 16px; 
+      z-index: 1000; 
+      background: #fff; 
+      border: 1px solid #ccc; 
+      border-radius: 50%; 
+      width: 48px; 
+      height: 48px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: all 0.2s ease;
+    }
+    .fab:hover {
+      background: #f5f5f5;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .fab:active {
+      transform: scale(0.95);
+    }
+    .location-btn svg {
+      color: #333;
+    }
     .tile-error-tooltip {
       background: rgba(255, 87, 34, 0.9) !important;
       color: white !important;
@@ -137,7 +164,15 @@
 </head>
 <body>
   <div id="map"></div>
-  <button class="fab" id="locbtn">My location</button>
+  <button class="fab location-btn" id="locbtn" title="My location">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <!-- Standard location crosshairs icon -->
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="12" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M12 2v4m0 12v4M2 12h4m12 0h4" stroke="currentColor" stroke-width="1"/>
+    </svg>
+  </button>
   <script>
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
     const osKey = getParam('os_key');
@@ -334,6 +369,9 @@
         setupTrigpointingControl();
         loadControlPreferences();
         initializeMarkers();
+        
+        // Auto-center on GPS location when first visiting
+        autoLocateOnFirstVisit();
       }, 100);
       
       map.on('baselayerchange', onBaseLayerChange);
@@ -1041,14 +1079,38 @@
 
     initializeMap();
 
+    function autoLocateOnFirstVisit() {
+      // Check if we should auto-center on first visit
+      const hasAutoLocated = sessionStorage.getItem('leaflet_auto_located');
+      if (!hasAutoLocated) {
+        console.log('First visit to map - attempting auto-location');
+        sessionStorage.setItem('leaflet_auto_located', 'true');
+        locate();
+      }
+    }
+
     function locate(){
-      if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+      if (!navigator.geolocation) { 
+        console.log('Geolocation not supported'); 
+        return; 
+      }
+      
+      console.log('Getting current location...');
       navigator.geolocation.getCurrentPosition(function(pos){
         const lat = pos.coords.latitude, lon = pos.coords.longitude;
+        console.log(`Located at: ${lat}, ${lon}`);
         map.setView([lat, lon], 14);
+        
+        // Optional: Add a temporary marker to show current location
+        // This could be enhanced to show accuracy circle
       }, function(err){
-        alert('Location error: ' + err.message);
-      }, { enableHighAccuracy: true });
+        console.log('Error getting location: ' + err.message);
+        // Don't show alert for auto-location failures to avoid disrupting UX
+      }, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // 5 minutes
+      });
     }
     document.getElementById('locbtn').onclick = locate;
   </script>
