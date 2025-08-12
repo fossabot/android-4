@@ -112,16 +112,18 @@ class OSMTileDownloader:
         tile_path = self.get_tile_path(z, x, y)
         return tile_path.exists() and tile_path.stat().st_size > 0
     
-    def download_tile(self, z: int, x: int, y: int) -> bool:
+    def download_tile(self, z: int, x: int, y: int) -> tuple[bool, bool]:
         """
         Download a single tile.
         
         Returns:
-            True if downloaded successfully, False otherwise
+            Tuple of (success, actually_downloaded)
+            - success: True if tile is available (downloaded or already exists)
+            - actually_downloaded: True only if tile was downloaded from server
         """
         if self.tile_exists(z, x, y):
             self.skipped_count += 1
-            return True
+            return True, False  # Success but not downloaded
         
         url = MAPNIK_TILE_URL.format(z=z, x=x, y=y)
         tile_path = self.get_tile_path(z, x, y)
@@ -140,7 +142,7 @@ class OSMTileDownloader:
             
             self.downloaded_count += 1
             self.logger.debug(f"Downloaded tile {z}/{x}/{y}")
-            return True
+            return True, True  # Success and downloaded
             
         except requests.exceptions.RequestException as e:
             self.error_count += 1
@@ -150,7 +152,7 @@ class OSMTileDownloader:
             if tile_path.exists():
                 tile_path.unlink()
             
-            return False
+            return False, False  # Failed
     
     def random_delay(self):
         """Add a random delay between requests."""
@@ -178,6 +180,7 @@ class OSMTileDownloader:
             self.logger.info(f"Download limit: {limit:,} tiles")
         
         downloaded_this_session = 0
+        start_time = time.time()
         
         try:
             for z, x, y in self.tile_coordinates_generator(min_zoom, max_zoom, start_tile):
@@ -187,33 +190,50 @@ class OSMTileDownloader:
                     break
                 
                 # Download tile
-                success = self.download_tile(z, x, y)
-                if success and not self.tile_exists(z, x, y):
+                success, actually_downloaded = self.download_tile(z, x, y)
+                if actually_downloaded:
                     downloaded_this_session += 1
                 
-                # Progress reporting
+                # Progress reporting (every 50 tiles processed or every actual download)
                 total_processed = self.downloaded_count + self.skipped_count + self.error_count
-                if total_processed % 100 == 0:
-                    self.logger.info(
-                        f"Progress: {total_processed:,} tiles processed "
-                        f"(downloaded: {self.downloaded_count:,}, "
-                        f"skipped: {self.skipped_count:,}, "
-                        f"errors: {self.error_count:,})"
+                if total_processed % 50 == 0 or actually_downloaded:
+                    elapsed = time.time() - start_time
+                    rate = self.downloaded_count / elapsed if elapsed > 0 else 0
+                    
+                    progress_msg = (
+                        f"Progress: {total_processed:,} processed "
+                        f"(↓{self.downloaded_count:,} ⏭{self.skipped_count:,} "
+                        f"✗{self.error_count:,}) "
+                        f"[{rate:.1f} downloads/sec]"
                     )
+                    
+                    if actually_downloaded:
+                        progress_msg += f" → z{z}/{x}/{y}.png"
+                    
+                    self.logger.info(progress_msg)
                 
-                # Rate limiting
-                if success:
+                # Rate limiting - only delay after actual downloads from server
+                if actually_downloaded:
                     self.random_delay()
                 
         except KeyboardInterrupt:
             self.logger.info("Download interrupted by user")
         
         # Final statistics
+        total_time = time.time() - start_time
+        avg_rate = self.downloaded_count / total_time if total_time > 0 else 0
+        
         self.logger.info("Download session complete:")
         self.logger.info(f"  Downloaded: {self.downloaded_count:,} tiles")
         self.logger.info(f"  Skipped (existing): {self.skipped_count:,} tiles")
         self.logger.info(f"  Errors: {self.error_count:,} tiles")
         self.logger.info(f"  Total processed: {self.downloaded_count + self.skipped_count + self.error_count:,} tiles")
+        self.logger.info(f"  Session time: {total_time:.1f} seconds")
+        self.logger.info(f"  Average download rate: {avg_rate:.2f} tiles/second")
+        
+        if self.downloaded_count > 0:
+            estimated_size_mb = self.downloaded_count * 15 / 1024  # Estimate 15KB per tile
+            self.logger.info(f"  Estimated data downloaded: {estimated_size_mb:.1f} MB")
     
     def get_stats(self) -> dict:
         """Get download statistics."""
