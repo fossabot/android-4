@@ -201,16 +201,22 @@
         currentCRS = '3857';
       }
       
-      // Add initial layer
-      initialLayer.addTo(map);
-      currentLayerName = initialStyle;
-      
-      // Setup layer control
+      // Setup layer control first
       layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
       layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
       layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
       layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
       layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
+      
+      // Add initial layer after control is set up
+      initialLayer.addTo(map);
+      currentLayerName = initialStyle;
+      
+      // Force the layer control to show the correct selection
+      setTimeout(() => {
+        updateLayerControlSelection(initialStyle);
+      }, 100);
+      
       map.on('baselayerchange', onBaseLayerChange);
     }
 
@@ -286,6 +292,11 @@
       tileErrorCount = 0;
       tileSuccessCount = 0;
       
+      // Update layer control selection after CRS switch
+      setTimeout(() => {
+        updateLayerControlSelection(targetLayerName);
+      }, 100);
+      
       switchingCRS = false;
     }
 
@@ -305,6 +316,22 @@
       
       if (needsCRSSwitch) {
         switchCRS(needs27700, name);
+      }
+    }
+
+    function updateLayerControlSelection(layerName) {
+      // Find and check the radio button for the specified layer
+      const controlElement = layersControl.getContainer();
+      if (controlElement) {
+        const inputs = controlElement.querySelectorAll('input[type="radio"]');
+        inputs.forEach(input => {
+          const label = input.nextSibling;
+          if (label && label.textContent && label.textContent.trim() === layerName) {
+            input.checked = true;
+          } else {
+            input.checked = false;
+          }
+        });
       }
     }
 
