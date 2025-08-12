@@ -49,4 +49,22 @@
             android:defaultValue="OpenStreetMap" />
     </PreferenceCategory>
     
+    <PreferenceCategory android:title="Filter Settings">
+        <ListPreference
+            android:key="trigpoint_type_filter"
+            android:title="Trigpoint Types"
+            android:summary="Choose which trigpoint types to display"
+            android:entries="@array/trigpoint_type_names"
+            android:entryValues="@array/trigpoint_type_values"
+            android:defaultValue="6" />
+
+        <ListPreference
+            android:key="filter_found_status"
+            android:title="Filter Found"
+            android:summary="Filter by logging status"
+            android:entries="@array/filter_found_names"
+            android:entryValues="@array/filter_found_values"
+            android:defaultValue="0" />
+    </PreferenceCategory>
+    
 </PreferenceScreen> 

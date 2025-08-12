@@ -51,4 +51,42 @@
         <item>1000</item>
     </integer-array>
 
+    <!-- Trigpoint type filter arrays -->
+    <string-array name="trigpoint_type_names">
+        <item>Pillars Only</item>
+        <item>Pillars + FBM</item>
+        <item>FBM Only</item>
+        <item>Passive Stations</item>
+        <item>Intersected Stations</item>
+        <item>All except Intersected</item>
+        <item>All Types</item>
+    </string-array>
+
+    <string-array name="trigpoint_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <!-- Filter found status arrays -->
+    <string-array name="filter_found_names">
+        <item>All</item>
+        <item>Logged</item>
+        <item>Not Logged</item>
+        <item>Marked</item>
+        <item>Unsynced</item>
+    </string-array>
+
+    <string-array name="filter_found_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 </resources> 

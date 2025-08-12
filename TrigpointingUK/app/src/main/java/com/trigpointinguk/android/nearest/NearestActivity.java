@@ -310,9 +310,13 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 			// Handle back button in action bar
 			finish();
 			return true;
-		} else if (itemId == R.id.filter) {
-			Intent i = new Intent(NearestActivity.this, FilterActivity.class);
-			startActivityForResult(i, R.id.filter);
+		} else if (itemId == R.id.trigpoint_types) {
+			Intent i = new Intent(NearestActivity.this, com.trigpointinguk.android.filter.TrigpointTypesActivity.class);
+			detailsLauncher.launch(i);
+			return true;
+		} else if (itemId == R.id.filter_found) {
+			Intent i = new Intent(NearestActivity.this, com.trigpointinguk.android.filter.FilterFoundActivity.class);
+			detailsLauncher.launch(i);
 			return true;
 		} else if (itemId == R.id.heading) {
 			useCompass(!mUsingCompass);

@@ -52,5 +52,7 @@
         <activity android:name=".logging.LogTrigActivity"></activity>
         <activity android:name=".logging.LogPhotoActivity"></activity>
         <activity android:name=".filter.FilterActivity"></activity>
+        <activity android:name=".filter.TrigpointTypesActivity"></activity>
+        <activity android:name=".filter.FilterFoundActivity"></activity>
     </application>
 </manifest>
