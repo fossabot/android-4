@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,8 +30,23 @@ public class TrigpointTypesActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Populate spinner with trigpoint type options
+        setupSpinner();
+
         // Load current selection
         loadCurrentSelection();
+    }
+
+    private void setupSpinner() {
+        // Get trigpoint type names from resources
+        String[] trigpointTypeNames = getResources().getStringArray(R.array.trigpoint_type_names);
+        
+        // Create adapter and set it to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, trigpointTypeNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mFilterType.setAdapter(adapter);
+        
+        Log.i(TAG, "setupSpinner: Populated spinner with " + trigpointTypeNames.length + " items");
     }
 
     private void loadCurrentSelection() {

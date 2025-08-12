@@ -388,7 +388,7 @@
       
       // Store individual section states
       pendingSectionStates = {};
-      const sections = ['mapstyle', 'markercolor', 'filter'];
+      const sections = ['mapstyle', 'markercolor', 'trigpointtypes', 'filterfound'];
       sections.forEach(sectionName => {
         const sectionContent = document.getElementById(sectionName + '-content');
         if (sectionContent) {
@@ -636,32 +636,62 @@
               </div>
             </div>
             
-            <!-- Filter Section -->
+            <!-- Trigpoint Types Section -->
             <div class="control-section">
-              <button class="section-header" data-section="filter">
-                <span>🔍 Filter</span>
+              <button class="section-header" data-section="trigpointtypes">
+                <span>🏔️ Trigpoint types</span>
                 <span class="toggle-icon">▼</span>
               </button>
-              <div class="section-content collapsed" id="filter-content">
+              <div class="section-content collapsed" id="trigpointtypes-content">
                 <div class="control-option">
-                  <input type="radio" name="filter" value="all" id="js-all">
-                  <label for="js-all">Show All</label>
+                  <input type="radio" name="trigpointtype" value="all" id="js-types-all">
+                  <label for="js-types-all">Show All</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="filter" value="pillars" id="js-pillars">
-                  <label for="js-pillars">Pillars Only</label>
+                  <input type="radio" name="trigpointtype" value="pillars" id="js-types-pillars">
+                  <label for="js-types-pillars">Pillars Only</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="filter" value="fbm" id="js-fbm">
-                  <label for="js-fbm">Flush Bracket Marks</label>
+                  <input type="radio" name="trigpointtype" value="fbm" id="js-types-fbm">
+                  <label for="js-types-fbm">Flush Bracket Marks</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="filter" value="passive" id="js-passive">
-                  <label for="js-passive">Passive Stations</label>
+                  <input type="radio" name="trigpointtype" value="passive" id="js-types-passive">
+                  <label for="js-types-passive">Passive Stations</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="filter" value="intersected" id="js-intersected">
-                  <label for="js-intersected">Intersected Stations</label>
+                  <input type="radio" name="trigpointtype" value="intersected" id="js-types-intersected">
+                  <label for="js-types-intersected">Intersected Stations</label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Filter Found Section -->
+            <div class="control-section">
+              <button class="section-header" data-section="filterfound">
+                <span>🔍 Filter found</span>
+                <span class="toggle-icon">▼</span>
+              </button>
+              <div class="section-content collapsed" id="filterfound-content">
+                <div class="control-option">
+                  <input type="radio" name="filterfound" value="all" id="js-found-all">
+                  <label for="js-found-all">All</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filterfound" value="logged" id="js-found-logged">
+                  <label for="js-found-logged">Logged</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filterfound" value="notlogged" id="js-found-notlogged">
+                  <label for="js-found-notlogged">Not Logged</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filterfound" value="marked" id="js-found-marked">
+                  <label for="js-found-marked">Marked</label>
+                </div>
+                <div class="control-option">
+                  <input type="radio" name="filterfound" value="unsynced" id="js-found-unsynced">
+                  <label for="js-found-unsynced">Unsynced</label>
                 </div>
               </div>
             </div>
@@ -777,12 +807,28 @@
         });
       });
       
-      document.querySelectorAll('input[name="filter"]').forEach(radio => {
+      // Trigpoint type controls
+      document.querySelectorAll('input[name="trigpointtype"]').forEach(radio => {
         radio.addEventListener('change', function() {
           if (this.checked) {
-            console.log('JS Control - Filter changed to:', this.value);
-            currentFilter = this.value;
-            localStorage.setItem('leaflet_filter', this.value);
+            console.log('JS Control - Trigpoint type changed to:', this.value);
+            currentTrigpointType = this.value;
+            localStorage.setItem('leaflet_trigpoint_type', this.value);
+            if (markersLayer) {
+              currentBounds = null; // Force reload
+              loadTrigpointMarkers();
+            }
+          }
+        });
+      });
+      
+      // Filter found controls
+      document.querySelectorAll('input[name="filterfound"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.checked) {
+            console.log('JS Control - Filter found changed to:', this.value);
+            currentFilterFound = this.value;
+            localStorage.setItem('leaflet_filter_found', this.value);
             if (markersLayer) {
               currentBounds = null; // Force reload
               loadTrigpointMarkers();
