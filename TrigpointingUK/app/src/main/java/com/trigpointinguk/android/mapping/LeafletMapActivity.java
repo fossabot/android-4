@@ -158,15 +158,41 @@ public class LeafletMapActivity extends AppCompatActivity {
             showMapControlsBottomSheet();
             return true;
         } else if (item.getItemId() == R.id.menu_cache_status) {
-            webView.evaluateJavascript("AndroidPrefs.showCacheStatus();", null);
+            webView.evaluateJavascript(
+                "getCacheStatus().then(status => {" +
+                "  if (status) {" +
+                "    alert('Cache Status:\\n' +" +
+                "      'Tiles: ' + status.tileCount + '\\n' +" +
+                "      'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n' +" +
+                "      'Usage: ' + status.usagePercent + '%');" +
+                "  } else {" +
+                "    alert('Cache status not available');" +
+                "  }" +
+                "});", 
+                null
+            );
             return true;
         } else if (item.getItemId() == R.id.menu_clear_cache) {
-            webView.evaluateJavascript("AndroidPrefs.clearCache();", null);
+            webView.evaluateJavascript(
+                "clearTileCache().then(success => {" +
+                "  alert(success ? 'Cache cleared successfully' : 'Failed to clear cache');" +
+                "});", 
+                null
+            );
             return true;
         } else if (item.getItemId() == R.id.menu_download_tiles) {
             // For now, use a placeholder URL - this would be your website URL
             String osmTilesUrl = "https://example.com/osm-tiles.zip";
-            webView.evaluateJavascript("AndroidPrefs.downloadBulkTiles('" + osmTilesUrl + "');", null);
+            webView.evaluateJavascript(
+                "downloadBulkTiles('" + osmTilesUrl + "')" +
+                ".then(result => {" +
+                "  alert('Bulk download completed: ' + result.message);" +
+                "})" +
+                ".catch(error => {" +
+                "  alert('Bulk download failed: ' + error.message);" +
+                "});", 
+                null
+            );
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -368,53 +394,7 @@ public class LeafletMapActivity extends AppCompatActivity {
             startActivity(i);
         }
         
-        @JavascriptInterface
-        public void showCacheStatus() {
-            runOnUiThread(() -> {
-                webView.evaluateJavascript(
-                    "getCacheStatus().then(status => {" +
-                    "  if (status) {" +
-                    "    alert('Cache Status:\\n' +" +
-                    "      'Tiles: ' + status.tileCount + '\\n' +" +
-                    "      'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n' +" +
-                    "      'Usage: ' + status.usagePercent + '%');" +
-                    "  } else {" +
-                    "    alert('Cache status not available');" +
-                    "  }" +
-                    "});", 
-                    null
-                );
-            });
-        }
-        
-        @JavascriptInterface
-        public void clearCache() {
-            runOnUiThread(() -> {
-                webView.evaluateJavascript(
-                    "clearTileCache().then(success => {" +
-                    "  alert(success ? 'Cache cleared successfully' : 'Failed to clear cache');" +
-                    "});", 
-                    null
-                );
-            });
-        }
-        
-        @JavascriptInterface
-        public void downloadBulkTiles(String zipUrl) {
-            Log.d(TAG, "Starting bulk download from: " + zipUrl);
-            runOnUiThread(() -> {
-                webView.evaluateJavascript(
-                    "downloadBulkTiles('" + zipUrl + "')" +
-                    ".then(result => {" +
-                    "  alert('Bulk download completed: ' + result.message);" +
-                    "})" +
-                    ".catch(error => {" +
-                    "  alert('Bulk download failed: ' + error.message);" +
-                    "});", 
-                    null
-                );
-            });
-        }
+
     }
 }
 

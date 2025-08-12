@@ -994,14 +994,28 @@
 
     // Service Worker communication
     async function sendServiceWorkerMessage(type, data = {}) {
-      if (!navigator.serviceWorker || !navigator.serviceWorker.controller) {
-        throw new Error('Service Worker not available');
+      console.log('SW MESSAGE: Attempting to send message type:', type);
+      
+      if (!navigator.serviceWorker) {
+        console.error('SW MESSAGE: Service Worker not supported');
+        throw new Error('Service Worker not supported');
       }
+      
+      // Wait for service worker to be ready
+      await navigator.serviceWorker.ready;
+      
+      if (!navigator.serviceWorker.controller) {
+        console.error('SW MESSAGE: Service Worker controller not available');
+        throw new Error('Service Worker not controlling page - try refreshing');
+      }
+      
+      console.log('SW MESSAGE: Service Worker ready, sending message');
       
       return new Promise((resolve, reject) => {
         const messageChannel = new MessageChannel();
         
         messageChannel.port1.onmessage = (event) => {
+          console.log('SW MESSAGE: Received response:', event.data);
           if (event.data.success) {
             resolve(event.data);
           } else {

@@ -215,37 +215,52 @@ async function cleanupOldestTiles(cache) {
 
 // Message handler for bulk download operations
 self.addEventListener('message', event => {
+  console.log('Service Worker: Received message:', event.data);
   const { type, data } = event.data;
   
   switch (type) {
     case 'BULK_DOWNLOAD':
+      console.log('Service Worker: Handling bulk download');
       handleBulkDownload(data.url, data.options)
         .then(result => {
+          console.log('Service Worker: Bulk download success:', result);
           event.ports[0].postMessage({ success: true, result });
         })
         .catch(error => {
+          console.log('Service Worker: Bulk download error:', error);
           event.ports[0].postMessage({ success: false, error: error.message });
         });
       break;
       
     case 'CACHE_STATUS':
+      console.log('Service Worker: Handling cache status request');
       getCacheStatus()
         .then(status => {
+          console.log('Service Worker: Cache status success:', status);
           event.ports[0].postMessage({ success: true, status });
         })
         .catch(error => {
+          console.log('Service Worker: Cache status error:', error);
           event.ports[0].postMessage({ success: false, error: error.message });
         });
       break;
       
     case 'CLEAR_CACHE':
+      console.log('Service Worker: Handling clear cache request');
       clearTileCache()
         .then(() => {
+          console.log('Service Worker: Clear cache success');
           event.ports[0].postMessage({ success: true });
         })
         .catch(error => {
+          console.log('Service Worker: Clear cache error:', error);
           event.ports[0].postMessage({ success: false, error: error.message });
         });
+      break;
+      
+    default:
+      console.log('Service Worker: Unknown message type:', type);
+      event.ports[0].postMessage({ success: false, error: 'Unknown message type: ' + type });
       break;
   }
 });
