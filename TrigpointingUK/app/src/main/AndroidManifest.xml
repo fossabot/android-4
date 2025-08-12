@@ -32,7 +32,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".nearest.NearestActivity"></activity>
-        <activity android:configChanges="keyboardHidden|orientation" android:name="DownloadTrigsActivity"></activity>
+        <activity 
+            android:name="DownloadTrigsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name="PreferencesActivity"></activity>
         <activity android:configChanges="keyboardHidden|orientation" android:name=".mapping.DownloadMapsActivity"></activity>
         <activity android:name=".trigdetails.TrigDetailsActivity"></activity>
