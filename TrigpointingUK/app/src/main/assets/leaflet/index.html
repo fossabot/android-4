@@ -1099,7 +1099,19 @@
       navigator.geolocation.getCurrentPosition(function(pos){
         const lat = pos.coords.latitude, lon = pos.coords.longitude;
         console.log(`Located at: ${lat}, ${lon}`);
-        map.setView([lat, lon], 14);
+        
+        // Adjust zoom level based on current projection
+        let zoom;
+        if (currentCRS === '27700') {
+          // EPSG:27700 needs lower zoom numbers for similar field of view
+          zoom = 7; // Roughly equivalent to zoom 14 in Web Mercator
+        } else {
+          // EPSG:3857 Web Mercator  
+          zoom = 14;
+        }
+        
+        console.log(`Setting view with zoom ${zoom} for CRS ${currentCRS}`);
+        map.setView([lat, lon], zoom);
         
         // Optional: Add a temporary marker to show current location
         // This could be enhanced to show accuracy circle
