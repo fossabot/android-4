@@ -5,17 +5,20 @@ OSM Tile Downloader for TrigpointingUK Leaflet Maps
 
 Downloads OpenStreetMap tiles from Mapnik provider for offline use with Leaflet maps.
 Supports resumable downloads, zoom level ranges, and configurable rate limiting.
+ONLY downloads tiles that intersect with the UK (including Northern Ireland).
 
 Usage:
     python osm_tile_downloader.py --min-zoom 0 --max-zoom 10 --start-tile 0 --limit 1000
 
 Features:
 - Downloads tiles in standard z/x/y.png directory structure
+- UK-specific bounding box (-8.5°W to 2.0°E, 49.5°N to 61.0°N)
 - Optimized for Leaflet WebView cache integration
 - Resumable downloads (skips existing tiles)
 - Configurable rate limiting with random delays
 - Progress tracking and statistics
 - Web server ready directory structure for ZIP distribution
+- Dramatically reduced download size vs. worldwide tiles
 """
 
 import os
@@ -35,6 +38,10 @@ MAPNIK_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 USER_AGENT = "TrigpointingUK OSM Downloader (https://github.com/trigpointinguk/android)"
 TILES_DIR = "tiles"
 LOG_FILE = "download.log"
+
+# UK bounding box (approximate, includes Northern Ireland and surrounding islands)
+# Coordinates: [West, South, East, North] in degrees
+UK_BBOX = [-8.5, 49.5, 2.0, 61.0]  # Generous bounds covering all UK territories
 
 # Rate limiting
 DEFAULT_MIN_DELAY = 0.5  # Minimum delay between requests (seconds)
@@ -68,9 +75,49 @@ class OSMTileDownloader:
         self.skipped_count = 0
         self.error_count = 0
         
+    def deg2num(self, lat: float, lon: float, zoom: int) -> Tuple[int, int]:
+        """Convert lat/lon coordinates to tile numbers."""
+        lat_rad = math.radians(lat)
+        n = 2.0 ** zoom
+        x = int((lon + 180.0) / 360.0 * n)
+        y = int((1.0 - math.asinh(math.tan(lat_rad)) / math.pi) / 2.0 * n)
+        return (x, y)
+    
+    def num2deg(self, x: int, y: int, zoom: int) -> Tuple[float, float]:
+        """Convert tile numbers to lat/lon coordinates (northwest corner)."""
+        n = 2.0 ** zoom
+        lon_deg = x / n * 360.0 - 180.0
+        lat_rad = math.atan(math.sinh(math.pi * (1 - 2 * y / n)))
+        lat_deg = math.degrees(lat_rad)
+        return (lat_deg, lon_deg)
+    
+    def get_uk_tile_bounds(self, zoom: int) -> Tuple[int, int, int, int]:
+        """Get tile coordinate bounds for UK at given zoom level."""
+        west, south, east, north = UK_BBOX
+        
+        # Convert bounding box to tile coordinates
+        x_min, y_max = self.deg2num(north, west, zoom)  # NW corner
+        x_max, y_min = self.deg2num(south, east, zoom)  # SE corner
+        
+        # Ensure bounds are within valid tile range and properly ordered
+        max_tile = 2 ** zoom - 1
+        x_min = max(0, min(x_min, max_tile))
+        x_max = max(0, min(x_max, max_tile))
+        y_min = max(0, min(y_min, max_tile))
+        y_max = max(0, min(y_max, max_tile))
+        
+        # Ensure min <= max (fix ordering if needed)
+        if x_min > x_max:
+            x_min, x_max = x_max, x_min
+        if y_min > y_max:
+            y_min, y_max = y_max, y_min
+        
+        return (x_min, y_min, x_max, y_max)
+    
     def num_tiles_at_zoom(self, zoom: int) -> int:
-        """Calculate total number of tiles at a given zoom level."""
-        return 4 ** zoom
+        """Calculate total number of UK tiles at a given zoom level."""
+        x_min, y_min, x_max, y_max = self.get_uk_tile_bounds(zoom)
+        return (x_max - x_min + 1) * (y_max - y_min + 1)
     
     def tiles_for_zoom_range(self, min_zoom: int, max_zoom: int) -> int:
         """Calculate total number of tiles in zoom range."""
@@ -82,7 +129,7 @@ class OSMTileDownloader:
     def tile_coordinates_generator(self, min_zoom: int, max_zoom: int, 
                                   start_tile: int = 0) -> Generator[Tuple[int, int, int], None, None]:
         """
-        Generate tile coordinates (z, x, y) in sequence.
+        Generate tile coordinates (z, x, y) for UK region only.
         
         Args:
             min_zoom: Minimum zoom level
@@ -90,15 +137,19 @@ class OSMTileDownloader:
             start_tile: Starting tile number in the sequence (for resuming)
         
         Yields:
-            Tuple of (z, x, y) coordinates
+            Tuple of (z, x, y) coordinates for tiles that intersect UK
         """
         tile_count = 0
         
         for z in range(min_zoom, max_zoom + 1):
-            max_coord = 2 ** z
+            # Get UK-specific bounds for this zoom level
+            x_min, y_min, x_max, y_max = self.get_uk_tile_bounds(z)
             
-            for x in range(max_coord):
-                for y in range(max_coord):
+            self.logger.info(f"Zoom {z}: UK tiles x={x_min}-{x_max}, y={y_min}-{y_max} "
+                           f"({(x_max-x_min+1)*(y_max-y_min+1)} tiles)")
+            
+            for x in range(x_min, x_max + 1):
+                for y in range(y_min, y_max + 1):
                     if tile_count >= start_tile:
                         yield (z, x, y)
                     tile_count += 1
@@ -172,8 +223,9 @@ class OSMTileDownloader:
         """
         total_tiles = self.tiles_for_zoom_range(min_zoom, max_zoom)
         
-        self.logger.info(f"Starting download: zoom {min_zoom}-{max_zoom}")
-        self.logger.info(f"Total tiles in range: {total_tiles:,}")
+        self.logger.info(f"Starting download: zoom {min_zoom}-{max_zoom} (UK region only)")
+        self.logger.info(f"UK bounding box: {UK_BBOX[0]}°W to {UK_BBOX[2]}°E, {UK_BBOX[1]}°N to {UK_BBOX[3]}°N")
+        self.logger.info(f"Total UK tiles in range: {total_tiles:,}")
         if start_tile > 0:
             self.logger.info(f"Starting from tile #{start_tile:,}")
         if limit:

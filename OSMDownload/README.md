@@ -1,15 +1,17 @@
 # OSM Tile Downloader for TrigpointingUK Leaflet Maps
 
-This Python application downloads OpenStreetMap tiles from the Mapnik provider for offline use with Leaflet maps in the TrigpointingUK Android application.
+This Python application downloads OpenStreetMap tiles from the Mapnik provider for offline use with Leaflet maps in the TrigpointingUK Android application. **Only downloads tiles that intersect with the UK region** (including Northern Ireland), dramatically reducing download size compared to worldwide tiles.
 
 ## Features
 
+- **UK-Specific Region**: Only downloads tiles covering the UK bounding box (-8.5°W to 2.0°E, 49.5°N to 61.0°N)
 - **Resumable Downloads**: Automatically skips existing tiles, allowing you to resume interrupted downloads
 - **Zoom Level Control**: Specify minimum and maximum zoom levels to download
 - **Rate Limiting**: Configurable random delays between requests to be respectful to tile servers
-- **Progress Tracking**: Real-time progress reporting and detailed logging
+- **Progress Tracking**: Real-time progress reporting with UK tile bounds per zoom level
 - **Web Server Ready**: Creates tiles in standard z/x/y.png directory structure
 - **Statistics**: View download progress and tile counts by zoom level
+- **Efficient Storage**: Dramatically reduced download size vs. worldwide tiles
 
 ## Installation
 

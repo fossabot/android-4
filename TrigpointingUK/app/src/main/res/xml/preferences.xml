@@ -47,6 +47,14 @@
             android:entries="@array/marker_limit_names"
             android:entryValues="@array/marker_limit_values"
             android:defaultValue="500" />
+
+        <ListPreference
+            android:key="map_icon_style"
+            android:title="Map Icon Style"
+            android:summary="Choose icon style and size for map markers"
+            android:entries="@array/icon_style_names"
+            android:entryValues="@array/icon_style_values"
+            android:defaultValue="medium_logo" />
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Filter Settings">
