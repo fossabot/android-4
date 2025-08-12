@@ -176,13 +176,45 @@
   <script>
     // Service Worker registration for offline tile caching
     if ('serviceWorker' in navigator) {
+      console.log('SW REGISTER: Starting Service Worker registration');
       navigator.serviceWorker.register('./sw.js')
         .then(registration => {
-          console.log('Service Worker registered successfully:', registration.scope);
+          console.log('SW REGISTER: Service Worker registered successfully:', registration.scope);
+          console.log('SW REGISTER: Registration state:', registration.active ? 'active' : 'not active');
+          
+          // Wait for SW to become active
+          if (registration.installing) {
+            console.log('SW REGISTER: Service Worker installing...');
+            registration.installing.addEventListener('statechange', () => {
+              console.log('SW REGISTER: SW state changed to:', registration.installing.state);
+            });
+          }
+          
+          if (registration.waiting) {
+            console.log('SW REGISTER: Service Worker waiting...');
+          }
+          
+          if (registration.active) {
+            console.log('SW REGISTER: Service Worker active and ready');
+          }
+          
+          // Listen for controller change
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            console.log('SW REGISTER: Controller changed, reloading...');
+            window.location.reload();
+          });
         })
         .catch(error => {
-          console.log('Service Worker registration failed:', error);
+          console.log('SW REGISTER: Service Worker registration failed:', error);
         });
+        
+      // Check current state
+      navigator.serviceWorker.ready.then(registration => {
+        console.log('SW REGISTER: Service Worker ready:', registration);
+        console.log('SW REGISTER: Controller available:', !!navigator.serviceWorker.controller);
+      });
+    } else {
+      console.log('SW REGISTER: Service Workers not supported');
     }
 
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
@@ -1037,6 +1069,17 @@
         return response.status;
       } catch (error) {
         console.error('Failed to get cache status:', error);
+        
+        // If Service Worker isn't ready, provide a helpful message
+        if (error.message.includes('not controlling page')) {
+          return {
+            error: 'Service Worker not ready - please refresh the page',
+            tileCount: 0,
+            totalSize: 0,
+            usagePercent: 0
+          };
+        }
+        
         return null;
       }
     }

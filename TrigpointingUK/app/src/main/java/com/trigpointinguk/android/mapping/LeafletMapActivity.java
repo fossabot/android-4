@@ -161,12 +161,16 @@ public class LeafletMapActivity extends AppCompatActivity {
             webView.evaluateJavascript(
                 "getCacheStatus().then(status => {" +
                 "  if (status) {" +
-                "    alert('Cache Status:\\n' +" +
-                "      'Tiles: ' + status.tileCount + '\\n' +" +
-                "      'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n' +" +
-                "      'Usage: ' + status.usagePercent + '%');" +
+                "    if (status.error) {" +
+                "      alert('Cache Status:\\n' + status.error);" +
+                "    } else {" +
+                "      alert('Cache Status:\\n' +" +
+                "        'Tiles: ' + status.tileCount + '\\n' +" +
+                "        'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n' +" +
+                "        'Usage: ' + status.usagePercent + '%');" +
+                "    }" +
                 "  } else {" +
-                "    alert('Cache status not available');" +
+                "    alert('Cache status not available - check console for details');" +
                 "  }" +
                 "});", 
                 null
