@@ -171,19 +171,19 @@ public class LeafletMapActivity extends AppCompatActivity {
                 "getCacheStatus().then(status => {" +
                 "  if (status) {" +
                 "    if (status.error) {" +
-                "      alert('Cache Status:\\n' + status.error);" +
+                "      AndroidPrefs.showCacheDialog(status.error, '');" +
                 "    } else {" +
-                "      let message = 'Cache Status\\n';" +
+                "      let message = '';" +
                 "      if (status.mode) message += 'Mode: ' + status.mode + '\\n';" +
                 "      message += 'Tiles: ' + status.tileCount + '\\n';" +
                 "      message += 'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n';" +
                 "      if (status.usagePercent !== undefined) message += 'Usage: ' + status.usagePercent + '%\\n';" +
                 "      if (status.cacheAge) message += 'Age: ' + status.cacheAge + '\\n';" +
-                "      if (status.note) message += '\\n' + status.note;" +
-                "      alert(message);" +
+                "      let note = status.note || '';" +
+                "      AndroidPrefs.showCacheDialog(message, note);" +
                 "    }" +
                 "  } else {" +
-                "    alert('Cache status not available - check console for details');" +
+                "    AndroidPrefs.showCacheDialog('Cache status not available', 'Check console for details');" +
                 "  }" +
                 "});", 
                 null
@@ -191,8 +191,14 @@ public class LeafletMapActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.menu_clear_cache) {
             webView.evaluateJavascript(
-                "clearTileCache().then(success => {" +
-                "  alert(success ? 'Cache cleared successfully' : 'Failed to clear cache');" +
+                "clearTileCache().then(result => {" +
+                "  if (typeof result === 'boolean') {" +
+                "    AndroidPrefs.showDialog('Clear Cache', result ? 'Cache cleared successfully' : 'Failed to clear cache');" +
+                "  } else if (result && result.partial) {" +
+                "    AndroidPrefs.showDialog('Clear Cache', result.message);" +
+                "  } else {" +
+                "    AndroidPrefs.showDialog('Clear Cache', 'Cache clear operation completed');" +
+                "  }" +
                 "});", 
                 null
             );
@@ -203,10 +209,10 @@ public class LeafletMapActivity extends AppCompatActivity {
             webView.evaluateJavascript(
                 "downloadBulkTiles('" + osmTilesUrl + "')" +
                 ".then(result => {" +
-                "  alert('Bulk download completed: ' + result.message);" +
+                "  AndroidPrefs.showDialog('Bulk Download', 'Completed: ' + result.message);" +
                 "})" +
                 ".catch(error => {" +
-                "  alert('Bulk download failed: ' + error.message);" +
+                "  AndroidPrefs.showDialog('Bulk Download', 'Failed: ' + error.message);" +
                 "});", 
                 null
             );
@@ -409,6 +415,34 @@ public class LeafletMapActivity extends AppCompatActivity {
             Intent i = new Intent(LeafletMapActivity.this, com.trigpointinguk.android.trigdetails.TrigDetailsActivity.class);
             i.putExtra(com.trigpointinguk.android.DbHelper.TRIG_ID, trigId);
             startActivity(i);
+        }
+        
+        @JavascriptInterface
+        public void showCacheDialog(String message, String note) {
+            runOnUiThread(() -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
+                builder.setTitle("Cache Status");
+                
+                String fullMessage = message;
+                if (note != null && !note.trim().isEmpty()) {
+                    fullMessage += "\n\n" + note;
+                }
+                
+                builder.setMessage(fullMessage);
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            });
+        }
+        
+        @JavascriptInterface
+        public void showDialog(String title, String message) {
+            runOnUiThread(() -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
+                builder.setTitle(title);
+                builder.setMessage(message);
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            });
         }
         
 
