@@ -12,6 +12,20 @@
     html, body, #map { height: 100%; margin: 0; }
     .leaflet-control-layers { font-size: 14px; }
     .fab { position:absolute; right:16px; bottom:16px; z-index:1000; background:#fff; border:1px solid #ccc; border-radius:24px; padding:12px; }
+    .tile-error-tooltip {
+      background: rgba(255, 87, 34, 0.9) !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 8px !important;
+      padding: 8px 12px !important;
+      font-size: 14px !important;
+      font-weight: bold !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+      z-index: 1000 !important;
+    }
+    .tile-error-tooltip:before {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
@@ -32,45 +46,114 @@
       }
     );
 
-    // Tile layer factories
-    function createOSM() {
-      return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
+    // Global variables for error tracking
+    let errorTooltip = null;
+    let tileErrorCount = 0;
+    let tileSuccessCount = 0;
+
+    // Add tile error handling and visual feedback
+    function addTileErrorHandling(layer, layerName, minZoom, maxZoom) {
+      layer.on('tileerror', function(e) {
+        tileErrorCount++;
+        const zoom = map.getZoom();
+        
+        // Check if zoom is outside optimal range
+        let zoomMessage = '';
+        if (minZoom !== undefined && maxZoom !== undefined) {
+          if (zoom < minZoom) {
+            zoomMessage = ` (zoom too low, try ${minZoom}+)`;
+          } else if (zoom > maxZoom) {
+            zoomMessage = ` (zoom too high, try ${maxZoom} or lower)`;
+          }
+        }
+        
+        showErrorFeedback(`${layerName}: tiles unavailable at zoom ${zoom}${zoomMessage}`);
+      });
+      
+      layer.on('tileload', function(e) {
+        tileSuccessCount++;
+        // Hide error feedback if tiles start loading successfully
+        if (tileSuccessCount > 0 && errorTooltip) {
+          hideErrorFeedback();
+        }
+      });
+      
+      layer.on('add', function() {
+        // Reset counters when layer is added
+        tileErrorCount = 0;
+        tileSuccessCount = 0;
+        hideErrorFeedback();
       });
     }
+
+    function showErrorFeedback(message) {
+      hideErrorFeedback(); // Remove any existing tooltip
+      
+      errorTooltip = L.tooltip({
+        permanent: true,
+        direction: 'center',
+        className: 'tile-error-tooltip'
+      })
+      .setContent(`⚠️ ${message}`)
+      .setLatLng(map.getCenter())
+      .addTo(map);
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        if (errorTooltip && tileErrorCount > tileSuccessCount) {
+          hideErrorFeedback();
+        }
+      }, 5000);
+    }
+
+    function hideErrorFeedback() {
+      if (errorTooltip) {
+        map.removeLayer(errorTooltip);
+        errorTooltip = null;
+      }
+    }
+
+    // Tile layer factories
+    function createOSM() {
+      const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      });
+      addTileErrorHandling(layer, 'OpenStreetMap');
+      return layer;
+    }
     function createOSOutdoor() {
-      return L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=${osKey}`, {
-        maxZoom: 19,
+      const layer = L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=${osKey}`, {
         attribution: '&copy; Ordnance Survey',
         noWrap: true
       });
+      addTileErrorHandling(layer, 'OS Outdoor (3857)', 6, 19);
+      return layer;
     }
     function createOSLeisure() {
-      return L.tileLayer(
+      const layer = L.tileLayer(
         `https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png?key=${osKey}`,
         {
-          minZoom: 0,
-          maxZoom: 13,
           tileSize: 256,
           noWrap: true,
           continuousWorld: false,
           attribution: '&copy; Ordnance Survey'
         }
       );
+      addTileErrorHandling(layer, 'OS Leisure (27700)', 0, 13);
+      return layer;
     }
     function createOSOutdoor27700() {
-      return L.tileLayer(
+      const layer = L.tileLayer(
         `https://api.os.uk/maps/raster/v1/zxy/Outdoor_27700/{z}/{x}/{y}.png?key=${osKey}`,
         {
-          minZoom: 0,
-          maxZoom: 13,
           tileSize: 256,
           noWrap: true,
           continuousWorld: false,
           attribution: '&copy; Ordnance Survey'
         }
       );
+      addTileErrorHandling(layer, 'OS Outdoor (27700)', 0, 13);
+      return layer;
     }
 
     let currentCRS = '3857';
@@ -166,6 +249,11 @@
       // Reattach handlers
       document.getElementById('locbtn').onclick = locate;
       map.on('baselayerchange', onBaseLayerChange);
+      
+      // Reset error tracking for new map
+      hideErrorFeedback();
+      tileErrorCount = 0;
+      tileSuccessCount = 0;
       
       switchingCRS = false;
     }
