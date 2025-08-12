@@ -69,7 +69,7 @@ public class DbHelper {
 	public  static final String JOIN_MARKED         = "marked";
 
 
-	public  static final String DEFAULT_MAP_COUNT   = "400";
+	public  static final String DEFAULT_MAP_COUNT   = "4000";
 
 
 	private static final String TRIG_CREATE = "create table " + TRIG_TABLE + "("
