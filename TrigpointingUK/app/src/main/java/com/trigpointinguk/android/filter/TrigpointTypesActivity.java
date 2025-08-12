@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.R;
@@ -15,7 +15,8 @@ import com.trigpointinguk.android.R;
 public class TrigpointTypesActivity extends AppCompatActivity {
     private static final String TAG = "TrigpointTypesActivity";
     private SharedPreferences mPrefs;
-    private Spinner mFilterType;
+    private RadioGroup mFilterTypeRadioGroup;
+    private RadioButton[] mRadioButtons;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,35 +24,46 @@ public class TrigpointTypesActivity extends AppCompatActivity {
         setContentView(R.layout.trigpoint_types);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mFilterType = (Spinner) findViewById(R.id.filterType);  
+        mFilterTypeRadioGroup = findViewById(R.id.filterTypeRadioGroup);  
 
         // Enable back button in action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Populate spinner with trigpoint type options
-        setupSpinner();
+        // Initialize radio buttons
+        setupRadioButtons();
 
         // Load current selection
         loadCurrentSelection();
     }
 
-    private void setupSpinner() {
-        // Get trigpoint type names from resources
-        String[] trigpointTypeNames = getResources().getStringArray(R.array.trigpoint_type_names);
+    private void setupRadioButtons() {
+        // Initialize array of radio buttons
+        mRadioButtons = new RadioButton[] {
+            findViewById(R.id.radio_pillars_only),
+            findViewById(R.id.radio_pillars_fbm),
+            findViewById(R.id.radio_fbm_only),
+            findViewById(R.id.radio_passive),
+            findViewById(R.id.radio_intersected),
+            findViewById(R.id.radio_all_except_intersected),
+            findViewById(R.id.radio_all_types)
+        };
         
-        // Create adapter and set it to spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, trigpointTypeNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mFilterType.setAdapter(adapter);
-        
-        Log.i(TAG, "setupSpinner: Populated spinner with " + trigpointTypeNames.length + " items");
+        Log.i(TAG, "setupRadioButtons: Initialized " + mRadioButtons.length + " radio buttons");
     }
 
     private void loadCurrentSelection() {
         int currentType = mPrefs.getInt(Filter.FILTERTYPE, 0);
-        mFilterType.setSelection(currentType);
+        
+        // Ensure currentType is within bounds
+        if (currentType >= 0 && currentType < mRadioButtons.length) {
+            mRadioButtons[currentType].setChecked(true);
+        } else {
+            // Default to "All Types" if invalid selection
+            mRadioButtons[6].setChecked(true);
+        }
+        
         Log.i(TAG, "Loaded filter type: " + currentType);
     }
 
@@ -61,8 +73,15 @@ public class TrigpointTypesActivity extends AppCompatActivity {
         
         Editor editor = mPrefs.edit();
         
-        // Get identifier for selected item from physical type list
-        int filterType = mFilterType.getSelectedItemPosition();
+        // Find which radio button is selected
+        int filterType = 0; // default
+        for (int i = 0; i < mRadioButtons.length; i++) {
+            if (mRadioButtons[i].isChecked()) {
+                filterType = i;
+                break;
+            }
+        }
+        
         editor.putInt(Filter.FILTERTYPE, filterType);
         Log.i(TAG, "onPause: Saving filter type: " + filterType);
     

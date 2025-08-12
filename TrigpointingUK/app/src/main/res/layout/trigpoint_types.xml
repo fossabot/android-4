@@ -1,20 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select trigpoint types to display:"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <Spinner
-        android:id="@+id/filterType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select trigpoint types to display:"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
 
-</LinearLayout>
+        <RadioGroup
+            android:id="@+id/filterTypeRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_pillars_only"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pillars Only"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_pillars_fbm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pillars + FBM"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_fbm_only"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FBM Only"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_passive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Passive Stations"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_intersected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Intersected Stations"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_all_except_intersected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All except Intersected"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_all_types"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All Types"
+                android:padding="8dp" />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+</ScrollView>
