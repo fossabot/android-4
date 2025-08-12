@@ -47,6 +47,14 @@
             android:entries="@array/leaflet_map_styles"
             android:entryValues="@array/leaflet_map_style_values"
             android:defaultValue="OpenStreetMap" />
+
+        <ListPreference
+            android:key="mapcount"
+            android:title="Map Marker Limit"
+            android:summary="Maximum number of markers to display on maps"
+            android:entries="@array/marker_limit_names"
+            android:entryValues="@array/marker_limit_values"
+            android:defaultValue="500" />
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Filter Settings">

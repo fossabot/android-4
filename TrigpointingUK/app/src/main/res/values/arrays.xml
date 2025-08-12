@@ -89,4 +89,21 @@
         <item>4</item>
     </string-array>
 
+    <!-- Map marker limit arrays -->
+    <string-array name="marker_limit_names">
+        <item>100 markers (fast)</item>
+        <item>250 markers (balanced)</item>
+        <item>500 markers (recommended)</item>
+        <item>1000 markers (slow)</item>
+        <item>2000 markers (very slow)</item>
+    </string-array>
+
+    <string-array name="marker_limit_values">
+        <item>100</item>
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+    </string-array>
+
 </resources> 

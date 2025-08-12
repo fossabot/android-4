@@ -69,7 +69,7 @@ public class DbHelper {
 	public  static final String JOIN_MARKED         = "marked";
 
 
-	public  static final String DEFAULT_MAP_COUNT   = "4000";
+	public  static final String DEFAULT_MAP_COUNT   = "500";
 
 
 	private static final String TRIG_CREATE = "create table " + TRIG_TABLE + "("
@@ -311,8 +311,15 @@ public class DbHelper {
 	 * @return Cursor 
 	 */
 	public Cursor fetchTrigMapList (BoundingBox box) {
-		String strOrder = String.format("%s limit %s", 
-				TRIG_LAT, 
+		// Calculate the center of the bounding box for distance-based sorting
+		double centerLat = (box.getLatNorth() + box.getLatSouth()) / 2.0;
+		double centerLon = (box.getLonEast() + box.getLonWest()) / 2.0;
+		
+		// Create distance-based ordering using approximate distance formula
+		// (lat-centerLat)^2 + (lon-centerLon)^2 gives relative distance squared
+		String strOrder = String.format("((%s - %f) * (%s - %f) + (%s - %f) * (%s - %f)) limit %s", 
+				TRIG_LAT, centerLat, TRIG_LAT, centerLat,
+				TRIG_LON, centerLon, TRIG_LON, centerLon,
 				mPrefs.getString("mapcount", DEFAULT_MAP_COUNT));	
    
 		String strWhere = String.format("WHERE %s between %s and %s  and  %s between %s and %s",
@@ -325,7 +332,7 @@ public class DbHelper {
 
 		strWhere += new Filter((Activity)mCtx).filterWhere("AND");
 		Log.i(TAG, strWhere);
-		Log.i(TAG, strOrder);
+		Log.i(TAG, "lat limit " + mPrefs.getString("mapcount", DEFAULT_MAP_COUNT));
 		
 		final String qry = "SELECT "+
 				TRIG_TABLE +"."+ TRIG_ID +", "+
