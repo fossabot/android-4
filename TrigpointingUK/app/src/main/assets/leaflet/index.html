@@ -61,50 +61,82 @@
     }
 
     let currentCRS = '3857';
+    let currentLayerName = 'OpenStreetMap';
+    let switchingCRS = false; // Flag to prevent recursive switching
     let map = L.map('map', { center: [54.0, -2.0], zoom: 7 });
-    let base = createOSM().addTo(map);
-    const layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
-    layersControl.addBaseLayer(base, 'OpenStreetMap');
-    layersControl.addBaseLayer(createOSOutdoor(), 'OS Outdoor (3857)');
-    layersControl.addBaseLayer(createOSLeisure(), 'OS Leisure (27700)');
+    let layersControl;
+    
+    // Layer instances
+    let osmLayer, outdoorLayer, leisureLayer;
 
-    function switchCRS(to27700) {
-      const center = map.getCenter();
-      const zoom = map.getZoom();
-      map.remove();
-      const opts = to27700 ? { crs: osgb, center: center, zoom: Math.min(zoom, 13) } : { center: center, zoom: zoom };
-      map = L.map('map', opts);
-      // Recreate base layers for the new map
-      const osm = createOSM();
-      const outdoor = createOSOutdoor();
-      const leisure = createOSLeisure();
-      const lc = L.control.layers({}, null, { collapsed: false }).addTo(map);
-      lc.addBaseLayer(osm, 'OpenStreetMap');
-      lc.addBaseLayer(outdoor, 'OS Outdoor (3857)');
-      lc.addBaseLayer(leisure, 'OS Leisure (27700)');
-      // Select appropriate default
-      if (to27700) {
-        leisure.addTo(map);
-        currentCRS = '27700';
-      } else {
-        osm.addTo(map);
-        currentCRS = '3857';
-      }
-      // Reattach location button handler
-      document.getElementById('locbtn').onclick = locate;
-      // Reattach baselayerchange handler
+    function initializeLayers() {
+      osmLayer = createOSM();
+      outdoorLayer = createOSOutdoor();
+      leisureLayer = createOSLeisure();
+    }
+
+    function initializeMap() {
+      initializeLayers();
+      osmLayer.addTo(map);
+      layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
+      layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
+      layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
+      layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
       map.on('baselayerchange', onBaseLayerChange);
     }
 
+    function switchCRS(to27700, targetLayerName) {
+      if (switchingCRS) return; // Prevent recursive calls
+      switchingCRS = true;
+      
+      const center = map.getCenter();
+      const zoom = map.getZoom();
+      map.remove();
+      
+      const opts = to27700 ? { crs: osgb, center: center, zoom: Math.min(zoom, 13) } : { center: center, zoom: zoom };
+      map = L.map('map', opts);
+      currentCRS = to27700 ? '27700' : '3857';
+      
+      // Recreate layers and control
+      initializeLayers();
+      layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
+      layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
+      layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
+      layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
+      
+      // Add the correct layer based on user selection
+      if (targetLayerName === 'OS Leisure (27700)') {
+        leisureLayer.addTo(map);
+      } else if (targetLayerName === 'OS Outdoor (3857)') {
+        outdoorLayer.addTo(map);
+      } else {
+        osmLayer.addTo(map);
+      }
+      
+      currentLayerName = targetLayerName;
+      
+      // Reattach handlers
+      document.getElementById('locbtn').onclick = locate;
+      map.on('baselayerchange', onBaseLayerChange);
+      
+      switchingCRS = false;
+    }
+
     function onBaseLayerChange(e) {
+      if (switchingCRS) return; // Ignore events during CRS switching
+      
       const name = e.name || '';
-      if (name.indexOf('27700') !== -1 && currentCRS !== '27700') {
-        switchCRS(true);
-      } else if (name.indexOf('27700') === -1 && currentCRS !== '3857') {
-        switchCRS(false);
+      currentLayerName = name;
+      
+      const needs27700 = name.indexOf('27700') !== -1;
+      const needsCRSSwitch = (needs27700 && currentCRS !== '27700') || (!needs27700 && currentCRS !== '3857');
+      
+      if (needsCRSSwitch) {
+        switchCRS(needs27700, name);
       }
     }
-    map.on('baselayerchange', onBaseLayerChange);
+
+    initializeMap();
 
     function locate(){
       if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
