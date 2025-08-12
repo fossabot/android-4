@@ -59,6 +59,19 @@
         }
       );
     }
+    function createOSOutdoor27700() {
+      return L.tileLayer(
+        `https://api.os.uk/maps/raster/v1/zxy/Outdoor_27700/{z}/{x}/{y}.png?key=${osKey}`,
+        {
+          minZoom: 0,
+          maxZoom: 13,
+          tileSize: 256,
+          noWrap: true,
+          continuousWorld: false,
+          attribution: '&copy; Ordnance Survey'
+        }
+      );
+    }
 
     let currentCRS = '3857';
     let currentLayerName = 'OpenStreetMap';
@@ -67,12 +80,13 @@
     let layersControl;
     
     // Layer instances
-    let osmLayer, outdoorLayer, leisureLayer;
+    let osmLayer, outdoorLayer, leisureLayer, outdoor27700Layer;
 
     function initializeLayers() {
       osmLayer = createOSM();
       outdoorLayer = createOSOutdoor();
       leisureLayer = createOSLeisure();
+      outdoor27700Layer = createOSOutdoor27700();
     }
 
     function initializeMap() {
@@ -81,6 +95,7 @@
       layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
       layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
       layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
+      layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
       layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
       map.on('baselayerchange', onBaseLayerChange);
     }
@@ -132,11 +147,14 @@
       layersControl = L.control.layers({}, null, { collapsed: false }).addTo(map);
       layersControl.addBaseLayer(osmLayer, 'OpenStreetMap');
       layersControl.addBaseLayer(outdoorLayer, 'OS Outdoor (3857)');
+      layersControl.addBaseLayer(outdoor27700Layer, 'OS Outdoor (27700)');
       layersControl.addBaseLayer(leisureLayer, 'OS Leisure (27700)');
       
       // Add the correct layer based on user selection
       if (targetLayerName === 'OS Leisure (27700)') {
         leisureLayer.addTo(map);
+      } else if (targetLayerName === 'OS Outdoor (27700)') {
+        outdoor27700Layer.addTo(map);
       } else if (targetLayerName === 'OS Outdoor (3857)') {
         outdoorLayer.addTo(map);
       } else {
