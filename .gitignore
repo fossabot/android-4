@@ -1,0 +1,19 @@
+# OSM Download tiles - exclude from version control
+OSMDownload/tiles/
+OSMDownload/download.log
+OSMDownload/*.zip
+
+# Gradle cache files
+.gradle/
+TrigpointingUK/.gradle/
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+build/
+*.apk
+
+# Logs
+*.log

@@ -40,15 +40,21 @@
 
     <!-- Download maps arrays -->
     <string-array name="downloadMapsArrayValues">
-        <item>https://tile.openstreetmap.org/{z}/{x}/{y}.png</item>
-        <item>https://c.tile.openstreetmap.org/cycle/{z}/{x}/{y}.png</item>
-        <item>https://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png</item>
+        <item>https://example.com/osm_tiles.zip</item>
+        <item>https://example.com/osm_tiles_low.zip</item>
+        <item>https://example.com/osm_tiles_high.zip</item>
+    </string-array>
+    
+    <string-array name="downloadMapsArrayNames">
+        <item>OSM Tiles Complete (All Zoom Levels)</item>
+        <item>OSM Tiles Low Detail (Zoom 0-8)</item>
+        <item>OSM Tiles High Detail (Zoom 9-12)</item>
     </string-array>
 
     <integer-array name="downloadMapsArrayTiles">
-        <item>1000</item>
-        <item>1000</item>
-        <item>1000</item>
+        <item>1398101</item>
+        <item>87381</item>
+        <item>1310720</item>
     </integer-array>
 
     <!-- Trigpoint type filter arrays -->
