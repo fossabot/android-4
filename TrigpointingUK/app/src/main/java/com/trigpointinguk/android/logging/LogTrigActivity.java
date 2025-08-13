@@ -116,8 +116,12 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			new ActivityResultCallback<ActivityResult>() {
 				@Override
 				public void onActivityResult(ActivityResult result) {
+					Log.i(TAG, "Photo picker result: " + result.getResultCode() + ", data: " + (result.getData() != null ? "present" : "null"));
 					if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+						Log.i(TAG, "Calling createPhoto with data");
 						createPhoto(result.getData());
+					} else {
+						Log.w(TAG, "Photo picker returned unexpected result: " + result.getResultCode());
 					}
 				}
 			}
@@ -434,14 +438,17 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     		photoPickerIntent = new Intent(Intent.ACTION_PICK);
     		photoPickerIntent.setType("image/*");
     		photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpeg", "image/png", "image/webp"});
+    		Log.i(TAG, "Using modern Photo Picker (Android 13+)");
     	} else {
     		// Older Android - Use Storage Access Framework
     		photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
     		photoPickerIntent.setType("image/*");
     		photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
     		photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    		Log.i(TAG, "Using Storage Access Framework (Android < 13)");
     	}
     	
+    	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
     	mPhotoPickerLauncher.launch(photoPickerIntent);
     }
  
