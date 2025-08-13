@@ -428,21 +428,14 @@ public class TrigDetailsOSMapTab extends Activity {
 		float centerY = imageHeight / 2.0f;
 		float circleRadius = imageWidth * 0.025f; // 5% of image width diameter = 2.5% radius
 		
-		// Create paint for the blue circle
+		// Create paint for the blue circle outline only
 		Paint circlePaint = new Paint();
 		circlePaint.setColor(0xFF0066CC); // Blue color
 		circlePaint.setStyle(Paint.Style.STROKE);
-		circlePaint.setStrokeWidth(3.0f);
+		circlePaint.setStrokeWidth(1.5f); // Half the previous thickness (3.0f -> 1.5f)
 		circlePaint.setAntiAlias(true);
 		
-		// Create paint for inner circle (semi-transparent fill)
-		Paint fillPaint = new Paint();
-		fillPaint.setColor(0x400066CC); // Semi-transparent blue
-		fillPaint.setStyle(Paint.Style.FILL);
-		fillPaint.setAntiAlias(true);
-		
-		// Draw the filled circle first, then the outline
-		canvas.drawCircle(centerX, centerY, circleRadius, fillPaint);
+		// Draw only the outline (no fill for transparent interior)
 		canvas.drawCircle(centerX, centerY, circleRadius, circlePaint);
 		
 		Log.d(TAG, String.format("Added center marker: circle at (%.1f, %.1f) radius %.1f", 
