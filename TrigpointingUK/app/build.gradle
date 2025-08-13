@@ -23,15 +23,38 @@ android {
     }
     
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     
     lint {
         disable 'MissingTranslation'
     }
     
+    // Make source sets explicit so IDEs reliably detect classpath
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['src/main/assets']
+        }
+        androidTest {
+            java.srcDirs = ['src/androidTest/java']
+        }
+        test {
+            java.srcDirs = ['src/test/java']
+        }
+    }
+    
     // Removed deprecated excludes; rely on default packaging behavior
+}
+
+// Ensure JDK 17 toolchain is used (required by AGP 8.x)
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 dependencies {

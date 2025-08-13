@@ -74,9 +74,9 @@ public class ThemeUtils {
                 View rootChild = contentGroup.getChildAt(0);
 
                 int actionBarHeight = getActionBarHeight(activity);
-                // Add approximately one line height of padding (16dp)
+                // Nudge content downward a bit more than before (about one line = 16dp)
                 int extraPaddingPx = Math.round(TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 8,
+                        TypedValue.COMPLEX_UNIT_DIP, 24,
                         activity.getResources().getDisplayMetrics()));
 
                 int desiredTopPadding = actionBarHeight + extraPaddingPx;
