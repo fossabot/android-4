@@ -15,7 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Custom ImageView that supports pinch-to-zoom and pan gestures
- * Modern replacement for the old Sony Ericsson zoom library
+ * Modern implementation using standard Android gesture detection
  */
 public class ZoomableImageView extends AppCompatImageView {
     private static final String TAG = "ZoomableImageView";
