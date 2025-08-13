@@ -1,16 +1,16 @@
 package com.trigpointinguk.android.trigdetails;
 
-import android.app.Activity;
-import android.app.LocalActivityManager;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TabHost;
-import android.view.KeyEvent;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.FrameLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
@@ -20,8 +20,10 @@ import com.trigpointinguk.android.logging.LogTrigActivity;
 public class TrigDetailsActivity extends AppCompatActivity {
 
 	private static final String TAG="TrigDetailsActivity";
-    //private SharedPreferences mPrefs;
-    private LocalActivityManager mLocalActivityManager;
+    private Long mTrigId;
+    private ImageView mTabInfo, mTabLogs, mTabAlbum, mTabMap, mTabMyLog;
+    private FrameLayout mTabContent;
+    private FragmentManager mFragmentManager;
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -36,66 +38,75 @@ public class TrigDetailsActivity extends AppCompatActivity {
 	    ThemeUtils.setupContentPositioning(this);
 
 		Bundle extras = getIntent().getExtras();
-        //mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-	    
-	    Resources res = getResources();
-	    TabHost tabHost = findViewById(android.R.id.tabhost);
-	    mLocalActivityManager = new LocalActivityManager(this, false);
-	    mLocalActivityManager.dispatchCreate(savedInstanceState);
-	    tabHost.setup(mLocalActivityManager); // Initialize the TabHost with LocalActivityManager
-	    TabHost.TabSpec spec;
-	    Intent intent;
-	    
-
-	    intent = new Intent().setClass(this, TrigDetailsInfoTab.class);
-	    intent.putExtras(extras);
-	    spec = tabHost.newTabSpec("info").setIndicator("",
-	                    res.getDrawable(android.R.drawable.ic_menu_info_details))
-	                    .setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, TrigDetailsLoglistTab.class);
-	    intent.putExtras(extras);
-	    spec = tabHost.newTabSpec("logs").setIndicator("",
-	                      res.getDrawable(android.R.drawable.ic_menu_agenda))
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, TrigDetailsAlbumTab.class);
-	    intent.putExtras(extras);
-	    spec = tabHost.newTabSpec("album").setIndicator("",
-	                      res.getDrawable(android.R.drawable.ic_menu_gallery))
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, TrigDetailsOSMapTab.class);
-	    intent.putExtras(extras);
-	    spec = tabHost.newTabSpec("map").setIndicator("",
-	                      res.getDrawable(android.R.drawable.ic_menu_mapmode))
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, LogTrigActivity.class);
-	    intent.putExtras(extras);
-	    spec = tabHost.newTabSpec("mylog").setIndicator("",
-	                      res.getDrawable(android.R.drawable.ic_menu_edit))
-	                  .setContent(intent);
-	    tabHost.addTab(spec);
-	    
-	    tabHost.setCurrentTab(0);
-	    
-	    // Change title
-	    // get trig_id from extras
 		if (extras == null) {return;}
-		Long  trigId = extras.getLong(DbHelper.TRIG_ID);
-		Log.i(TAG, "Trig_id = "+trigId);
-
-		// get trig info from database
+		
+		mTrigId = extras.getLong(DbHelper.TRIG_ID);
+		Log.i(TAG, "Trig_id = "+mTrigId);
+		
+		// Initialize views
+		initializeViews();
+		setupTabListeners();
+		
+		// Set initial tab
+		showInfoTab();
+		
+		// Set title
+		setTitleFromDatabase();
+	}
+	
+	private void initializeViews() {
+		mTabInfo = findViewById(R.id.tab_info);
+		mTabLogs = findViewById(R.id.tab_logs);
+		mTabAlbum = findViewById(R.id.tab_album);
+		mTabMap = findViewById(R.id.tab_map);
+		mTabMyLog = findViewById(R.id.tab_mylog);
+		mTabContent = findViewById(R.id.tab_content);
+		mFragmentManager = getSupportFragmentManager();
+	}
+	
+	private void setupTabListeners() {
+		mTabInfo.setOnClickListener(v -> showInfoTab());
+		mTabLogs.setOnClickListener(v -> showLogsTab());
+		mTabAlbum.setOnClickListener(v -> showAlbumTab());
+		mTabMap.setOnClickListener(v -> showMapTab());
+		mTabMyLog.setOnClickListener(v -> showMyLogTab());
+	}
+	
+	private void showInfoTab() {
+		Intent intent = new Intent(this, TrigDetailsInfoTab.class);
+		intent.putExtra(DbHelper.TRIG_ID, mTrigId);
+		startActivity(intent);
+	}
+	
+	private void showLogsTab() {
+		Intent intent = new Intent(this, TrigDetailsLoglistTab.class);
+		intent.putExtra(DbHelper.TRIG_ID, mTrigId);
+		startActivity(intent);
+	}
+	
+	private void showAlbumTab() {
+		Intent intent = new Intent(this, TrigDetailsAlbumTab.class);
+		intent.putExtra(DbHelper.TRIG_ID, mTrigId);
+		startActivity(intent);
+	}
+	
+	private void showMapTab() {
+		Intent intent = new Intent(this, TrigDetailsOSMapTab.class);
+		intent.putExtra(DbHelper.TRIG_ID, mTrigId);
+		startActivity(intent);
+	}
+	
+	private void showMyLogTab() {
+		Intent intent = new Intent(this, LogTrigActivity.class);
+		intent.putExtra(DbHelper.TRIG_ID, mTrigId);
+		startActivity(intent);
+	}
+	
+	private void setTitleFromDatabase() {
 		DbHelper mDb = new DbHelper(this);
 		try {
 			mDb.open();		
-			Cursor c = mDb.fetchTrigInfo(trigId);
+			Cursor c = mDb.fetchTrigInfo(mTrigId);
 			c.moveToFirst();
 				
 			String title = String.format("TrigpointingUK - %s" 
@@ -105,52 +116,9 @@ public class TrigDetailsActivity extends AppCompatActivity {
 			c.close();
 	        mDb.close();
 		} catch (Exception e) {
+			Log.e(TAG, "Error setting title", e);
 		} finally {
 			mDb.close();
 		}
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (mLocalActivityManager != null) {
-			mLocalActivityManager.dispatchResume();
-		}
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (mLocalActivityManager != null) {
-			mLocalActivityManager.dispatchPause(isFinishing());
-		}
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (mLocalActivityManager != null) {
-			mLocalActivityManager.dispatchDestroy(isFinishing());
-		}
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			// Handle back button in action bar
-			finish();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// Ensure we finish this activity and return to the previous one
-			finish();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
 	}
 }
