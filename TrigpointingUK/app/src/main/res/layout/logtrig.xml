@@ -38,19 +38,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <ToggleButton
-        android:id="@+id/sendTime"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Time"
-        android:layout_marginBottom="8dp" />
-
-    <TimePicker
-        android:id="@+id/logTime"
-        android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        android:timePickerMode="spinner"
-        android:layout_marginBottom="8dp" />
+        android:text="Date:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
 
     <DatePicker
         android:id="@+id/logDate"
@@ -59,12 +52,35 @@
         android:datePickerMode="spinner"
         android:layout_marginBottom="8dp" />
 
-    <EditText
-        android:id="@+id/logGridref"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Grid Reference:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Grid Reference"
-        android:layout_marginBottom="4dp" />
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
+
+        <EditText
+            android:id="@+id/logGridref"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Grid Reference"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/logGetLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Update" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/locationError"
@@ -74,18 +90,11 @@
         android:textSize="12sp"
         android:layout_marginBottom="8dp" />
 
-    <Button
-        android:id="@+id/logGetLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Current Location"
-        android:layout_marginBottom="8dp" />
-
     <EditText
         android:id="@+id/logFB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Found By"
+        android:hint="Flush Bracket"
         android:layout_marginBottom="8dp" />
 
     <TextView

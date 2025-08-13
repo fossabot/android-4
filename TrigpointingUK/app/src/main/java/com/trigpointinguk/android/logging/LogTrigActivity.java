@@ -10,12 +10,17 @@ import java.util.List;
 
 // import org.acra.ErrorReporter;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -56,7 +61,7 @@ import com.trigpointinguk.android.types.LatLon.UNITS;
 import com.trigpointinguk.android.types.PhotoSubject;
 import com.trigpointinguk.android.types.TrigPhoto;
 
-public class LogTrigActivity extends Activity implements OnDateChangedListener, LocationListener, SyncListener {
+public class LogTrigActivity extends AppCompatActivity implements OnDateChangedListener, LocationListener, SyncListener {
 	private static final String TAG			= "LogTrigActivity";
     private static final int    CHOOSE_PHOTO  = 1;
     private static final int    EDIT_PHOTO  = 2;
@@ -69,9 +74,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	private LatLon				mTrigLocation;
 	
     private ViewSwitcher 		mSwitcher;
-    private ToggleButton		mSendTime;
     private DatePicker			mDate;
-    private TimePicker			mTime;
     private EditText			mGridref;
     private EditText			mFb;
     private Spinner				mCondition;
@@ -89,6 +92,10 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 
     private ProgressDialog		mProgressDialog;
     private LocationManager 	mLocationManager;
+    
+    // Modern photo picker launchers
+    private ActivityResultLauncher<Intent> mPhotoPickerLauncher;
+    private ActivityResultLauncher<Intent> mEditPhotoLauncher;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +104,32 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 		setContentView(R.layout.logtrig);
 		
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
+		
+		// Initialize modern photo picker launchers
+		mPhotoPickerLauncher = registerForActivityResult(
+			new ActivityResultContracts.StartActivityForResult(),
+			new ActivityResultCallback<ActivityResult>() {
+				@Override
+				public void onActivityResult(ActivityResult result) {
+					if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+						createPhoto(result.getData());
+					}
+				}
+			}
+		);
+		
+		mEditPhotoLauncher = registerForActivityResult(
+			new ActivityResultContracts.StartActivityForResult(),
+			new ActivityResultCallback<ActivityResult>() {
+				@Override
+				public void onActivityResult(ActivityResult result) {
+					updateGallery();
+				}
+			}
+		);
 		
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -123,22 +153,29 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 		
 		// Get references to various views and form elements
 		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
-		mSendTime		= (ToggleButton)	findViewById(R.id.sendTime);
-	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
 	   	mDate			= (DatePicker)		findViewById(R.id.logDate);
 	   	mGridref 		= (EditText)		findViewById(R.id.logGridref);
 	   	mLocationError 	= (TextView)		findViewById(R.id.locationError);
 	   	mFb 			= (EditText)		findViewById(R.id.logFB);
 	   	mCondition		= (Spinner)			findViewById(R.id.logCondition);
 	   	mScore			= (RatingBar)		findViewById(R.id.logScore);
+	   	
+	   	// Ensure minimum 1 star rating
+	   	mScore.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+	   		@Override
+	   		public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+	   			if (fromUser && rating < 1.0f) {
+	   				ratingBar.setRating(1.0f);
+	   			}
+	   		}
+	   	});
 	   	mComment		= (EditText)		findViewById(R.id.logComment);
 	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
 	    mGallery 		= (Gallery) 		findViewById(R.id.logGallery);
 
 	    
-    	// Setup time picker options which cannot be set in the config xml
- 		mTime.setIs24HourView(true);
+
 
 		// Setup condition spinner
  		List<Condition> loggableConditions = new ArrayList<Condition>(Arrays.asList(Condition.values()));
@@ -159,7 +196,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	            Log.i(TAG, "Clicked photo icon number : " + position);
 	            Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
 	            i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
-	            startActivityForResult(i, EDIT_PHOTO);
+	            mEditPhotoLauncher.launch(i);
 	        }
 	    });
 
@@ -233,13 +270,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			}
 		});	
 
-		// Setup change listener for sendTime button
-		mSendTime.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-	        	updateTimeVisibility();
-			}
-		});	
+
 
 
 		
@@ -293,7 +324,42 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			mLocationError.setText(e.getMessage());
 			mLocationError.setTextColor(getResources().getColor(R.color.errorcolour));
 		}		
-	} 
+	}
+	
+	private void tryPrePopulateGridReference() {
+		if (mLocationManager == null) {
+			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		}
+		
+		try {
+			// Check if GPS is enabled
+			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				Log.d(TAG, "GPS not enabled, cannot pre-populate grid reference");
+				return;
+			}
+			
+			// Get last known location
+			Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (lastLocation != null) {
+				// Check if location is recent (within last 10 minutes)
+				long locationAge = System.currentTimeMillis() - lastLocation.getTime();
+				if (locationAge < 10 * 60 * 1000) { // 10 minutes in milliseconds
+					LatLon ll = new LatLon(lastLocation);
+					mGridref.setText(ll.getOSGB10());
+					checkDistance();
+					Log.d(TAG, "Pre-populated grid reference with GPS: " + ll.getOSGB10());
+				} else {
+					Log.d(TAG, "Last GPS location too old (" + (locationAge / 60000) + " minutes), not using");
+				}
+			} else {
+				Log.d(TAG, "No last known GPS location available");
+			}
+		} catch (SecurityException e) {
+			Log.w(TAG, "No location permission, cannot pre-populate grid reference");
+		} catch (Exception e) {
+			Log.e(TAG, "Error trying to pre-populate grid reference", e);
+		}
+	}
     
 	@Override
 	protected void onPause() {
@@ -331,37 +397,41 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	}
 
 	
-    // service request to choose a photo
+    // service request to choose a photo using modern approach
     private void choosePhoto() {
-    	Log.i(TAG, "Get a photo from the gallery");
-    	Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-    	photoPickerIntent.setType("image/*");
-    	startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
+    	Log.i(TAG, "Get a photo from the gallery using modern picker");
+    	
+    	Intent photoPickerIntent;
+    	
+    	// Use modern Photo Picker for Android 13+ or Storage Access Framework for older versions
+    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    		// Android 13+ - Use the built-in Photo Picker
+    		photoPickerIntent = new Intent(Intent.ACTION_PICK);
+    		photoPickerIntent.setType("image/*");
+    		photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpeg", "image/png", "image/webp"});
+    	} else {
+    		// Older Android - Use Storage Access Framework
+    		photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+    		photoPickerIntent.setType("image/*");
+    		photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+    		photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    	}
+    	
+    	mPhotoPickerLauncher.launch(photoPickerIntent);
     }
  
     
     
     
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data); 
-    	switch (requestCode) {
-    	case CHOOSE_PHOTO:
-    		createPhoto(requestCode, resultCode, data);
-    		break;
-    	case EDIT_PHOTO:
-    		updateGallery();
-    		break;
-    	}
-	}	
+
 	
     
     
-	private void createPhoto (int requestCode, int resultCode, Intent data) {
+	private void createPhoto (Intent data) {
 		// Photo chosen - create DB entry and send user to edit activity
 		Log.i(TAG, "createPhoto");
-		if(resultCode == RESULT_OK){  
-			Uri selectedImageUri = data.getData();
+		Uri selectedImageUri = data.getData();
+		if (selectedImageUri != null) {
     		Log.i(TAG, "Photo URI - " + selectedImageUri);
     		
     		// create a database record for the new photo
@@ -396,9 +466,10 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     		// edit the other fields for the new photo
             Intent i = new Intent(this, LogPhotoActivity.class);
             i.putExtra(DbHelper.PHOTO_ID, photoId);
-            startActivityForResult(i, EDIT_PHOTO);
+            mEditPhotoLauncher.launch(i);
+		} else {
+			Log.w(TAG, "No image URI received from picker");
 		}
-    		
 	}
 
 	
@@ -415,16 +486,18 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     							 c.getInt(c.getColumnIndex(DbHelper.LOG_DAY)), 
     							 this);
 
-    	// set Time
-    	mSendTime.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);
-    	mTime.setCurrentHour  	(c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR)));
-    	mTime.setCurrentMinute 	(c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES)));
-    	updateTimeVisibility();
+
     	
     	// set Text fields    	
     	mComment.setText 		(c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)));
-    	mGridref.setText		(c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF)));
+    	String gridref = c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF));
+    	mGridref.setText		(gridref);
     	mFb.setText 			(c.getString(c.getColumnIndex(DbHelper.LOG_FB)));
+    	
+    	// Pre-populate grid reference with GPS if blank and GPS available
+    	if (gridref == null || gridref.trim().isEmpty()) {
+    		tryPrePopulateGridReference();
+    	}
     	
     	// set Flags
     	mAdminFlag.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);
@@ -444,9 +517,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 
     }
     
-    private void updateTimeVisibility () {
-    	mTime.setEnabled(mSendTime.isChecked());
-    }
+
     
     private void updateGallery() {
 		Log.i(TAG, "updateGallery");
@@ -481,9 +552,9 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     			mDate.getYear(), 
     			mDate.getMonth(), 
     			mDate.getDayOfMonth(),
-    			mSendTime.isChecked()?1:0,
-				mTime.getCurrentHour(), 
-				mTime.getCurrentMinute(), 
+    			0, // No longer sending time
+				0, // Default hour
+				0, // Default minute 
 				mGridref.getText().toString(), 
 				mFb.getText().toString(), 
 				(Condition) mCondition.getSelectedItem(), 
@@ -509,13 +580,13 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     			now.get(Calendar.YEAR), 
     			now.get(Calendar.MONTH), 
     			now.get(Calendar.DAY_OF_MONTH),
-    			1,
-    			now.get(Calendar.HOUR_OF_DAY), 
-    			now.get(Calendar.MINUTE), 
+    			0, // No longer sending time
+    			0, // Default hour
+    			0, // Default minute 
     			"", 
     			"", 
     			Condition.CONDITIONNOTLOGGED, 
-    			5, 
+    			1, // Start with 1 star minimum
     			"", 
     			0, 
     			0);
