@@ -9,14 +9,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.nio.charset.StandardCharsets;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -29,10 +27,14 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.util.TypedValue;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
-import com.trigpointinguk.android.common.CountingMultipartEntity;
 import com.trigpointinguk.android.common.CountingMultipartEntity.ProgressListener;
 import com.trigpointinguk.android.common.ProgressRequestBody;
 import okhttp3.FormBody;
@@ -50,35 +52,50 @@ public class SyncTask implements ProgressListener {
 	public static final String TAG ="SyncTask";
 	private Context 			mCtx;
 	private SharedPreferences 	mPrefs;
-    private ProgressDialog 		mProgressDialog;
+    private AlertDialog 		progressDialog;
+    private ProgressBar 		progressBar;
+    private TextView   		progressText;
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private Handler mainHandler = new Handler(Looper.getMainLooper());
 	
 	private void updateProgress(int type, int... values) {
-		mainHandler.post(() -> {
-			String message;
-			switch (type) {
-			case MAX:
-				mProgressDialog.setIndeterminate(false);
-				mProgressDialog.setMax(values[0]);
-				mProgressDialog.setProgress(0);
-				break;
-			case PROGRESS:
-				mProgressDialog.setProgress(values[0]);
-				break;
-			case MESSAGE:
-				message = mCtx.getResources().getString(values[0]);
-				mProgressDialog.setMessage(message);
-				break;
-			case MESSAGECOUNT:
-				message = "Uploading photo " + values[0] + " of " + values[1];
-				mProgressDialog.setMessage(message);
-				break;
-			case BLANKPROGRESS:
-				mProgressDialog.setMax(1);
-				break;
-			}
-		});
+        mainHandler.post(() -> {
+            String message;
+            if (progressDialog == null) {
+                showDialog("");
+            }
+            switch (type) {
+            case MAX:
+                if (progressBar != null) {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setMax(values[0]);
+                    progressBar.setProgress(0);
+                }
+                break;
+            case PROGRESS:
+                if (progressBar != null) {
+                    progressBar.setProgress(values[0]);
+                }
+                break;
+            case MESSAGE:
+                message = mCtx.getResources().getString(values[0]);
+                if (progressText != null) {
+                    progressText.setText(message);
+                }
+                break;
+            case MESSAGECOUNT:
+                message = "Uploading photo " + values[0] + " of " + values[1];
+                if (progressText != null) {
+                    progressText.setText(message);
+                }
+                break;
+            case BLANKPROGRESS:
+                if (progressBar != null) {
+                    progressBar.setMax(1);
+                }
+                break;
+            }
+        });
 	}
 
 	private	DbHelper 			mDb = null;
@@ -121,15 +138,15 @@ public class SyncTask implements ProgressListener {
 	}
 	
 	public void detach() {
-		mCtx = null;
-		mSyncListener = null;
-		mProgressDialog.dismiss();
+        mCtx = null;
+        mSyncListener = null;
+        if (progressDialog != null) { progressDialog.dismiss(); }
 	}
 	
 	public void attach(Context pCtx, SyncListener listener) {
 		this.mCtx = pCtx;
 		this.mSyncListener = listener;
-		showDialog("Continuing sync");
+        showDialog("Continuing sync");
 	}
 	
 	public void execute(Long... trigId) {
@@ -202,8 +219,8 @@ public class SyncTask implements ProgressListener {
 				Toast.makeText(mCtx, "Error syncing with TrigpointingUK - " + mErrorMessage, Toast.LENGTH_LONG).show();					
 			}
 			try {
-				if (mProgressDialog != null) {mProgressDialog.dismiss();}
-			} catch (Exception e) {
+                if (progressDialog != null) {progressDialog.dismiss();}
+            } catch (Exception e) {
 				Log.e(TAG, "Exception dismissing dialog - " + e.getMessage());
 			}
 			if (mSyncListener != null) {
@@ -316,8 +333,7 @@ public class SyncTask implements ProgressListener {
                 .add("sendemail", String.valueOf(mPrefs.getBoolean("sendLogEmails", false)))
                 .add("appversion", String.valueOf(mAppVersion))
                 .build();
-	    
-        try {
+		try {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url("https://trigpointing.uk/trigs/android-sync-log.php")
@@ -365,7 +381,6 @@ public class SyncTask implements ProgressListener {
 			Log.e(TAG, "Unable to convert log_id received from T:UK into integer");
 			return ERROR;
 		}
-
 		return SUCCESS;
 	}
 	
@@ -377,8 +392,8 @@ public class SyncTask implements ProgressListener {
 		Long	photoId 	= c.getLong  (c.getColumnIndex(DbHelper.PHOTO_ID));
     	String 	photoPath 	= c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO));
     	String 	thumbPath 	= c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
-		
-        try {
+
+		try {
             OkHttpClient client = new OkHttpClient();
 
             MediaType JPEG = MediaType.parse("image/jpeg");
@@ -444,7 +459,6 @@ public class SyncTask implements ProgressListener {
 			Log.e(TAG, "Unable to convert tukPhotoId received from T:UK into integer");
 			return ERROR;
 		}
-
 		return SUCCESS;
 	}
 	
@@ -508,7 +522,7 @@ public class SyncTask implements ProgressListener {
 				updateProgress(MAX, mMax);
 			}
 			// read log records records
-            while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
+			while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
             	//Log.i(TAG,strLine);
 				String[] csv=strLine.split("\t");
 				Condition logged		= Condition.fromCode(csv[0]);
@@ -555,12 +569,28 @@ public class SyncTask implements ProgressListener {
     
     
     protected void showDialog(String message) {
-		mProgressDialog = new ProgressDialog(mCtx);
-		mProgressDialog.setIndeterminate(false);
-		mProgressDialog.setCancelable(true);
-		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgressDialog.setMessage(message);
-		mProgressDialog.show();    	
+        // Build a simple dialog with a horizontal ProgressBar and a message
+        LinearLayout container = new LinearLayout(mCtx);
+        container.setOrientation(LinearLayout.VERTICAL);
+        int paddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24,
+                mCtx.getResources().getDisplayMetrics());
+        container.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+
+        progressText = new TextView(mCtx);
+        progressText.setText(message);
+        container.addView(progressText, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        progressBar = new ProgressBar(mCtx, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setIndeterminate(false);
+        container.addView(progressBar, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        progressDialog = new AlertDialog.Builder(mCtx)
+                .setView(container)
+                .setCancelable(true)
+                .create();
+        progressDialog.show();
     }
     
 

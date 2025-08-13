@@ -31,14 +31,14 @@ public class LazyImageLoader {
 
     MemoryCache memoryCache=new MemoryCache();
     FileCache fileCache;
-    private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private final Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<>());
 
     PhotosLoader photoLoaderThread=new PhotosLoader();
-    PhotosQueue photosQueue=new PhotosQueue();
+    PhotosQueue photosQueue= new PhotosQueue();
 
     
     public LazyImageLoader(Context context){
-        //Make the background thead low priority. This way it will not affect the UI performance
+        //Make the background thread low priority. This way it will not affect the UI performance
         photoLoaderThread.setPriority(Thread.NORM_PRIORITY-1);
         
         fileCache=new FileCache(context, "images");
@@ -50,7 +50,7 @@ public class LazyImageLoader {
         Bitmap bitmap=memoryCache.getBitmap(url);
         if(bitmap!=null) {
             imageView.setImageBitmap(bitmap);
-        	Log.i(TAG, "Got "+url+" from memory");
+            Log.i(TAG, "Got "+url+" from memory");
         } else {
             queuePhoto(url, imageView);
             imageView.setImageResource(stub_id);
@@ -61,7 +61,7 @@ public class LazyImageLoader {
     {
         //This ImageView may be used for other images before. So there may be some old tasks in the queue. We need to discard them. 
         photosQueue.Clean(imageView);
-        PhotoToLoad p=new PhotoToLoad(url, imageView);
+        PhotoToLoad p= new PhotoToLoad(url, imageView);
         synchronized(photosQueue.photosToLoad){
             photosQueue.photosToLoad.push(p);
             photosQueue.photosToLoad.notifyAll();
@@ -85,7 +85,7 @@ public class LazyImageLoader {
         
         //from web
         try {
-            Bitmap bitmap=null;
+            Bitmap bitmap;
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
             conn.setConnectTimeout(30000);
@@ -95,13 +95,16 @@ public class LazyImageLoader {
             Utils.CopyStream(is, os);
             os.close();
             bitmap = decodeFile(f);
-        	Log.i(TAG, "Got "+url+" from network");
+            Log.i(TAG, "Got "+url+" from network");
             return bitmap;
         } catch (Exception ex){
            Log.e(TAG, "Error loading image from URL: " + url, ex);
            // Clean up the failed download file
            if (f.exists()) {
-               f.delete();
+               boolean ok = f.delete();
+               if (!ok) {
+                   Log.w(TAG, "Failed to delete partial image file: " + f.getAbsolutePath());
+               }
            }
            return null;
         }
@@ -123,12 +126,10 @@ public class LazyImageLoader {
             final int REQUIRED_SIZE=600;
             int width_tmp=o.outWidth, height_tmp=o.outHeight;
             int scale=1;
-            while(true){
-                if(width_tmp/2<REQUIRED_SIZE || height_tmp/2<REQUIRED_SIZE)
-                    break;
-                width_tmp/=2;
-                height_tmp/=2;
-                scale*=2;
+            while (width_tmp / 2 >= REQUIRED_SIZE && height_tmp / 2 >= REQUIRED_SIZE) {
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
             }
             
             //decode with inSampleSize
@@ -144,7 +145,7 @@ public class LazyImageLoader {
     }
     
     //Task for the queue
-    private class PhotoToLoad
+    private static class PhotoToLoad
     {
         public String url;
         public ImageView imageView;
@@ -153,17 +154,12 @@ public class LazyImageLoader {
             imageView=i;
         }
     }
-    
-    
-    public void stopThread()
-    {
-        photoLoaderThread.interrupt();
-    }
-    
+
+
     //stores list of photos to download
-    class PhotosQueue
+    static class PhotosQueue
     {
-        private Stack<PhotoToLoad> photosToLoad=new Stack<PhotoToLoad>();
+        private final Stack<PhotoToLoad> photosToLoad= new Stack<>();
         
         //removes all instances of this ImageView
         public void Clean(ImageView image)
@@ -180,31 +176,27 @@ public class LazyImageLoader {
     class PhotosLoader extends Thread {
         public void run() {
             try {
-                while(true)
-                {
+                do {
                     //thread waits until there are any images to load in the queue
-                    if(photosQueue.photosToLoad.size()==0)
-                        synchronized(photosQueue.photosToLoad){
+                    if (photosQueue.photosToLoad.isEmpty())
+                        synchronized (photosQueue.photosToLoad) {
                             photosQueue.photosToLoad.wait();
                         }
-                    if(photosQueue.photosToLoad.size()!=0)
-                    {
+                    if (!photosQueue.photosToLoad.isEmpty()) {
                         PhotoToLoad photoToLoad;
-                        synchronized(photosQueue.photosToLoad){
-                            photoToLoad=photosQueue.photosToLoad.pop();
+                        synchronized (photosQueue.photosToLoad) {
+                            photoToLoad = photosQueue.photosToLoad.pop();
                         }
-                        Bitmap bmp=getBitmap(photoToLoad.url);
+                        Bitmap bmp = getBitmap(photoToLoad.url);
                         memoryCache.put(photoToLoad.url, bmp);
-                        String tag=imageViews.get(photoToLoad.imageView);
-                        if(tag!=null && tag.equals(photoToLoad.url)){
-                            BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad.imageView);
-                            Activity a=(Activity)photoToLoad.imageView.getContext();
+                        String tag = imageViews.get(photoToLoad.imageView);
+                        if (tag != null && tag.equals(photoToLoad.url)) {
+                            BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad.imageView);
+                            Activity a = (Activity) photoToLoad.imageView.getContext();
                             a.runOnUiThread(bd);
                         }
                     }
-                    if(Thread.interrupted())
-                        break;
-                }
+                } while (!Thread.interrupted());
             } catch (InterruptedException e) {
                 //allow thread to exit
             }
@@ -231,11 +223,6 @@ public class LazyImageLoader {
                 Log.w(TAG, "Bitmap was null, showing placeholder image");
             }
         }
-    }
-
-    public void clearCache() {
-        memoryCache.clear();
-        fileCache.clear();
     }
 
 }

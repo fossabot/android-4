@@ -1,5 +1,7 @@
 package com.trigpointinguk.android.common;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,7 +35,7 @@ public class ProgressRequestBody extends RequestBody {
     }
 
     @Override
-    public void writeTo(BufferedSink sink) throws IOException {
+    public void writeTo(@NonNull BufferedSink sink) throws IOException {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
             long uploaded = 0;

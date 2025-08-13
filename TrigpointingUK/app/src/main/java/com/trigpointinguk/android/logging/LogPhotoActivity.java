@@ -3,14 +3,13 @@ package com.trigpointinguk.android.logging;
 import java.io.File;
 import java.util.Arrays;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -52,44 +51,38 @@ public class LogPhotoActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 		mPhotoId = extras.getLong(DbHelper.PHOTO_ID);
 		
-		mThumb		= (ImageView)		findViewById(R.id.photoThumb);
-	   	mName		= (EditText)		findViewById(R.id.photoName);
-	   	mDescr		= (EditText)		findViewById(R.id.photoDescr);
-	   	mSubject	= (Spinner)			findViewById(R.id.photoSubject);
-	   	mIsPublic	= (CheckBox)		findViewById(R.id.photoIsPublic);
+		mThumb		= findViewById(R.id.photoThumb);
+	   	mName		= findViewById(R.id.photoName);
+	   	mDescr		= findViewById(R.id.photoDescr);
+	   	mSubject	= findViewById(R.id.photoSubject);
+	   	mIsPublic	= findViewById(R.id.photoIsPublic);
 	   	
 				
 		// Setup condition spinner
-		ArrayAdapter<PhotoSubject> adapter = new ArrayAdapter<PhotoSubject> (this, android.R.layout.simple_spinner_item, PhotoSubject.values());
+		ArrayAdapter<PhotoSubject> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, PhotoSubject.values());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSubject.setAdapter(adapter);
 
 		// Setup button to save photo
-		Button savePhotoBtn = (Button) findViewById(R.id.photoSave);
-		savePhotoBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Log.i(TAG, "Save Photo");
-				setResult(RESULT_OK);
-				finish();
-			}
-		});	
+		Button savePhotoBtn = findViewById(R.id.photoSave);
+		savePhotoBtn.setOnClickListener(arg0 -> {
+            Log.i(TAG, "Save Photo");
+            setResult(RESULT_OK);
+            finish();
+        });
 
 		// Setup button to remove photo
-		Button removePhotoBtn = (Button) findViewById(R.id.photoRemove);
-		removePhotoBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Log.i(TAG, "Remove Photo");
-				// delete the photo record from the database
-				mDb.deletePhoto(mPhotoId);
-				// delete the files from the cache
-				new File (mPhotoURL).delete();
-				new File (mIconURL).delete();
-				setResult(RESULT_CANCELED);
-				finish();
-			}
-		});	
+		Button removePhotoBtn = findViewById(R.id.photoRemove);
+		removePhotoBtn.setOnClickListener(arg0 -> {
+            Log.i(TAG, "Remove Photo");
+            // delete the photo record from the database
+            mDb.deletePhoto(mPhotoId);
+            // delete the files from the cache
+            new File (mPhotoURL).delete();
+            new File (mIconURL).delete();
+            setResult(RESULT_CANCELED);
+            finish();
+        });
 
 		
 		// Connect to database
@@ -148,7 +141,8 @@ public class LogPhotoActivity extends Activity {
    						mIsPublic.isChecked()?1:0);	
 	}
 
-	private void populateFields () {
+	@SuppressLint("Range")
+    private void populateFields () {
     	Log.i(TAG, "populateFields");
     	
     	Cursor c = mDb.fetchPhoto(mPhotoId);

@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class BitmapLoader {
 	private static final String TAG="BitmapLoader";
-	private static MemoryCache mMemoryCache=new MemoryCache();
+	private static final MemoryCache mMemoryCache=new MemoryCache();
 	FileCache   mFileCache;
 
 	public BitmapLoader(Context context) {
@@ -23,12 +23,12 @@ public class BitmapLoader {
 
 	public Bitmap getBitmap(String url, boolean reload) {
 		Log.i(TAG, "getBitmap " + url + " , reload : " + reload);
-		Bitmap bResult = null;
+		Bitmap bResult;
 
 		File file=mFileCache.getFile(url);
 
 		if (!reload) {
-			// try softreference memory cache
+			// try soft reference memory cache
 			bResult =  mMemoryCache.getBitmap(url);
 			if(bResult != null) {
 				Log.i(TAG, "Got "+url+" from memory");

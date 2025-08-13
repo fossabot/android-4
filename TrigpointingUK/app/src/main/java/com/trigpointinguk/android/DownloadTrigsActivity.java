@@ -10,6 +10,8 @@ import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,18 +35,16 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 	private TextView 		mStatus;
 	private ProgressBar 	mProgress;
 	private Integer 		mDownloadCount = 0;
-	private boolean 		mRunning = false;
-	private static int 		mProgressMax = 10000; // value unimportant
+    private static int 		mProgressMax = 10000; // value unimportant
 	private int 			mAppVersion;
 	private Handler 		mainHandler;
 	
 	private static final String TAG = "DownloadTrigsActivity";
-	private enum DownloadStatus {OK, CANCELLED, ERROR};
-	private enum ProgressType 	{UPDATE, NEWMAX};
-	private CompletableFuture<DownloadStatus> mTask;
+	private enum DownloadStatus {OK, CANCELLED, ERROR}
 
-	
-	@Override
+
+    @SuppressLint("SetTextI18n")
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.download);
@@ -61,9 +61,9 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 			mAppVersion = 99999;
 		}		
 		
-		mStatus = (TextView) findViewById(R.id.downloadStatus);
+		mStatus = findViewById(R.id.downloadStatus);
 		mStatus.setText("Starting download...");
-		mProgress = (ProgressBar) findViewById(R.id.downloadProgress);
+		mProgress = findViewById(R.id.downloadProgress);
 		mProgress.setMax(mProgressMax);
 		mProgress.setProgress(0);
 		
@@ -71,18 +71,18 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 		mainHandler = new Handler(Looper.getMainLooper());
 		
 		// Automatically start the download
-		mTask = downloadTrigs();       
+        CompletableFuture<DownloadStatus> mTask = downloadTrigs();
 
 	}
 
 
-	private CompletableFuture<DownloadStatus> downloadTrigs() {
+	@SuppressLint("SetTextI18n")
+    private CompletableFuture<DownloadStatus> downloadTrigs() {
 		// Setup UI on main thread
 		mDownloadCount = 0;
 		mStatus.setText("Downloading trigpoint data...");
-		mRunning = true;
-		
-		ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
 		
 		return CompletableFuture.supplyAsync(() -> {
 			Log.i(TAG, "PopulateTrigsTask: Starting download");
@@ -96,7 +96,7 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 				db.open();
 				db.mDb.beginTransaction();
 
-				String downloadUrl = "https://trigpointing.uk/trigs/down-android-trigs.php?appversion="+String.valueOf(mAppVersion);
+				String downloadUrl = "https://trigpointing.uk/trigs/down-android-trigs.php?appversion="+ mAppVersion;
 				Log.i(TAG, "PopulateTrigsTask: Downloading from URL: " + downloadUrl);
 				
 				URL url = new URL(downloadUrl);
@@ -111,18 +111,16 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 
 				Log.i(TAG, "PopulateTrigsTask: Reading first line");
 				if ((strLine = br.readLine()) != null) {
-					mProgressMax = Integer.valueOf(strLine);
+					mProgressMax = Integer.parseInt(strLine);
 					Log.i(TAG, "PopulateTrigsTask: Downloading " + mProgressMax + " trigs");
 					// Update progress on main thread
-					mainHandler.post(() -> {
-						mProgress.setMax(mProgressMax);
-					});
+					mainHandler.post(() -> mProgress.setMax(mProgressMax));
 				}
 				
 				Log.i(TAG, "PopulateTrigsTask: Deleting all existing data");
 				db.deleteAll();
 
-				while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
+				while ((strLine = br.readLine()) != null && !strLine.trim().isEmpty())   {
 					//Log.v(TAG,strLine);
 					String[] csv=strLine.split("\t");
 					
@@ -133,7 +131,7 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 					}
 					
 					try {
-						int id						= Integer.valueOf(csv[0]);
+						int id						= Integer.parseInt(csv[0]);
 						String waypoint				= csv[1];
 						String name					= csv[2];
 						
@@ -143,8 +141,8 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 							continue;
 						}
 						
-						double lat					= Double.valueOf(csv[3]);
-						double lon					= Double.valueOf(csv[4]);
+						double lat					= Double.parseDouble(csv[3]);
+						double lon					= Double.parseDouble(csv[4]);
 						Trig.Physical type			= Trig.Physical.fromCode(csv[5]);
 						String fb					= csv[6];
 						Condition condition			= Condition.fromCode(csv[7]);
@@ -164,11 +162,9 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 						}
 					} catch (NumberFormatException e) {
 						Log.w(TAG, "Skipping line with invalid number format: " + strLine + " - " + e.getMessage());
-						continue;
-					} catch (Exception e) {
+                    } catch (Exception e) {
 						Log.w(TAG, "Skipping line with parsing error: " + strLine + " - " + e.getMessage());
-						continue;
-					}
+                    }
 				} 
 				db.mDb.execSQL("create index if not exists latlon on trig (lat, lon)");
 				db.mDb.setTransactionSuccessful();
@@ -191,29 +187,22 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 				mStatus.setText("Download complete! " + mDownloadCount + " trigpoints downloaded. Starting sync...");
 				mProgress.setProgress(mProgressMax);
 				// Start sync after successful download
-				mainHandler.post(() -> {
-					new SyncTask(DownloadTrigsActivity.this, DownloadTrigsActivity.this).execute();
-				});
+				mainHandler.post(() -> new SyncTask(DownloadTrigsActivity.this, DownloadTrigsActivity.this).execute());
 				break;
 			case ERROR:
 				mStatus.setText("Download failed! Please try again.");
 				mProgress.setProgress(0);
 				// Auto-close after 3 seconds on error too
-				mainHandler.postDelayed(() -> {
-					DownloadTrigsActivity.this.finish();
-				}, 3000);
+				mainHandler.postDelayed(DownloadTrigsActivity.this::finish, 3000);
 				break;
 			case CANCELLED:
 				mStatus.setText("Download cancelled.");
 				mProgress.setProgress(0);
 				// Auto-close after 3 seconds
-				mainHandler.postDelayed(() -> {
-					DownloadTrigsActivity.this.finish();
-				}, 3000);
+				mainHandler.postDelayed(DownloadTrigsActivity.this::finish, 3000);
 				break;
 			}
-			mRunning = false;
-			return result;
+            return result;
 		}, mainHandler::post);
 	}
 	
@@ -227,7 +216,8 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
+	@SuppressLint("SetTextI18n")
+    @Override
 	public void onSynced(int status) {
 		Log.i(TAG, "onSynced: Sync completed with status: " + status);
 		
@@ -251,9 +241,7 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 			}
 			
 			// Auto-close after 3 seconds
-			mainHandler.postDelayed(() -> {
-				DownloadTrigsActivity.this.finish();
-			}, 3000);
+			mainHandler.postDelayed(DownloadTrigsActivity.this::finish, 3000);
 		});
 	}
 }

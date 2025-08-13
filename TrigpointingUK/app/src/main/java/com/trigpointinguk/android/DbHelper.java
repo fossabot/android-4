@@ -2,7 +2,6 @@ package com.trigpointinguk.android;
 
 import com.trigpointinguk.android.mapping.BoundingBox;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.trigpointinguk.android.filter.Filter;
-import com.trigpointinguk.android.logging.SyncTask;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.PhotoSubject;
 import com.trigpointinguk.android.types.Trig;
@@ -121,7 +119,7 @@ public class DbHelper {
 	
 	private DatabaseHelper mDbHelper;
 	public SQLiteDatabase mDb;
-    private SharedPreferences mPrefs; 
+    private final SharedPreferences mPrefs;
     	
 	private final Context mCtx;
 
@@ -271,7 +269,7 @@ public class DbHelper {
 		}
 		Log.i(TAG, strOrder);
 		
-		String strWhere = new Filter((Activity) mCtx).filterWhere("WHERE");
+		String strWhere = new Filter(mCtx).filterWhere("WHERE");
 		Log.i(TAG, "fetchTrigList: Filter where clause: " + strWhere);
 		
 		// Debug: Log the current filter settings
@@ -330,7 +328,7 @@ public class DbHelper {
 				box.getLatSouth(), 
 				box.getLatNorth()); 
 
-		strWhere += new Filter((Activity)mCtx).filterWhere("AND");
+		strWhere += new Filter(mCtx).filterWhere("AND");
 		Log.i(TAG, strWhere);
 		Log.i(TAG, "lat limit " + mPrefs.getString("mapcount", DEFAULT_MAP_COUNT));
 		
@@ -419,23 +417,17 @@ public class DbHelper {
 	 */
 	public int countLoggedPillars () {
 		Log.i(TAG, "countLoggedPillars: Starting count");
-		Cursor c = null;
-		try {
-			c = mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, 
-					TRIG_TYPE + "='" + Trig.Physical.PILLAR.code()+"' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code()+ "'", 
-					null, null, null, null);
-			int count = c.getCount();
-			Log.i(TAG, "countLoggedPillars: Count = " + count);
-			return count;
-		} catch (Exception e) {
-			Log.e(TAG, "countLoggedPillars: Exception occurred", e);
-			e.printStackTrace();
-			return 0;
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        try (Cursor c = mDb.query(TRIG_TABLE, new String[]{TRIG_ID},
+                TRIG_TYPE + "='" + Trig.Physical.PILLAR.code() + "' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code() + "'",
+                null, null, null, null)) {
+            int count = c.getCount();
+            Log.i(TAG, "countLoggedPillars: Count = " + count);
+            return count;
+        } catch (Exception e) {
+            Log.e(TAG, "countLoggedPillars: Exception occurred", e);
+            e.printStackTrace();
+            return 0;
+        }
 	}
 	/**
 	 * Returns number of logged FBMs
@@ -444,17 +436,11 @@ public class DbHelper {
 	 */
 	public int countLoggedFbms () {
 		Log.i(TAG, "countLoggedFbms");
-		Cursor c = null;
-		try {
-			c =  mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, 
-					TRIG_TYPE + "='" + Trig.Physical.FBM.code()+"' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code()+ "'", 
-					null, null, null, null);
-			return c.getCount();
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        try (Cursor c = mDb.query(TRIG_TABLE, new String[]{TRIG_ID},
+                TRIG_TYPE + "='" + Trig.Physical.FBM.code() + "' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code() + "'",
+                null, null, null, null)) {
+            return c.getCount();
+        }
 	}
 	/**
 	 * Returns number of logged Intersecteds
@@ -463,17 +449,11 @@ public class DbHelper {
 	 */
 	public int countLoggedIntersecteds () {
 		Log.i(TAG, "countLoggedIntersecteds");
-		Cursor c = null;
-		try {
-			c =  mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, 
-					TRIG_TYPE + "='" + Trig.Physical.INTERSECTED.code()+"' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code()+ "'", 
-					null, null, null, null);
-			return c.getCount();
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        try (Cursor c = mDb.query(TRIG_TABLE, new String[]{TRIG_ID},
+                TRIG_TYPE + "='" + Trig.Physical.INTERSECTED.code() + "' and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code() + "'",
+                null, null, null, null)) {
+            return c.getCount();
+        }
 	}
 	/**
 	 * Returns number of logged Passives
@@ -482,19 +462,13 @@ public class DbHelper {
 	 */
 	public int countLoggedPassives () {
 		Log.i(TAG, "countLoggedPassives");
-		Cursor c = null;
-		try {
-			c =  mDb.query(TRIG_TABLE, new String[] {TRIG_ID}, 
-					TRIG_TYPE + " NOT IN ('" + Trig.Physical.PILLAR.code()+"','"+
-								Trig.Physical.INTERSECTED.code()+"','"+Trig.Physical.FBM.code()+"') " +
-					"and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code()+ "'", 
-					null, null, null, null);
-			return c.getCount();
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        try (Cursor c = mDb.query(TRIG_TABLE, new String[]{TRIG_ID},
+                TRIG_TYPE + " NOT IN ('" + Trig.Physical.PILLAR.code() + "','" +
+                        Trig.Physical.INTERSECTED.code() + "','" + Trig.Physical.FBM.code() + "') " +
+                        "and " + TRIG_LOGGED + "!= '" + Condition.TRIGNOTLOGGED.code() + "'",
+                null, null, null, null)) {
+            return c.getCount();
+        }
 	}
 	/**
 	 * Returns number of unsynced logs
@@ -503,17 +477,11 @@ public class DbHelper {
 	 */
 	public int countUnsynced () {
 		Log.i(TAG, "countUnsynced");
-		Cursor c = null;
-		try {
-			c =  mDb.query(LOG_TABLE, new String[] {LOG_ID}, 
-					null, 
-					null, null, null, null);
-			return c.getCount();
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        try (Cursor c = mDb.query(LOG_TABLE, new String[]{LOG_ID},
+                null,
+                null, null, null, null)) {
+            return c.getCount();
+        }
 	}
 	/**
 	 * Returns number of unsynced photos
@@ -522,17 +490,11 @@ public class DbHelper {
 	 */
 	public int countPhotos () {
 		Log.i(TAG, "countPhotos");
-		Cursor c = null;
-		try {
-			c =  mDb.query(PHOTO_TABLE, new String[] {PHOTO_ID}, 
-					null, 
-					null, null, null, null);
-			return c.getCount();
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
+        try (Cursor c = mDb.query(PHOTO_TABLE, new String[]{PHOTO_ID},
+                null,
+                null, null, null, null)) {
+            return c.getCount();
+        }
 	}
 	
 	
@@ -541,7 +503,7 @@ public class DbHelper {
 	 * successfully created return the new rowId, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param id
+	 * @param id Log id
 	 * @return rowId or -1 if failed
 	 */
 	public long createLog(long id, int year, int month, int day, int sendtime, int hour, int minutes, String gridref, String fb, 
@@ -621,7 +583,7 @@ public class DbHelper {
 	/**
      * Return a Cursor positioned at the log that matches the given id
      * 
-     * @param id of log to retrieve
+     * @param trigId of log to retrieve
      * @return Cursor positioned to matching log, if found
      * @throws SQLException if note could not be found/retrieved
      */
@@ -630,7 +592,7 @@ public class DbHelper {
     	String condition = null;
     	if (trigId != null) {
     		// only a single trig
-    		condition = new String (LOG_ID + "=" + trigId);
+    		condition = LOG_ID + "=" + trigId;
     	}
         Cursor mCursor =
             mDb.query(true, LOG_TABLE, new String[] {
@@ -667,7 +629,7 @@ public class DbHelper {
 	 * successfully created return the new rowId, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param id
+	 * @param trigId
 	 * @param name 
 	 * @param descr 
 	 * @param icon 
@@ -698,9 +660,10 @@ public class DbHelper {
 	 * successfully updated return the new rowId, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param id
-	 * @param name 
-	 * @param descr 
+	 * @param photoId
+	 * @param trigId
+	 * @param name
+	 * @param descr
 	 * @param icon 
 	 * @param photo 
 	 * @param subject 
@@ -728,13 +691,8 @@ public class DbHelper {
 	 * successfully updated return the number of rows updated, otherwise return
 	 * a -1 to indicate failure.
 	 * 
-	 * @param id
-	 * @param name 
-	 * @param descr 
-	 * @param icon 
-	 * @param photo 
-	 * @param subject 
-	 * @param ispublic 
+	 * @param trigId
+	 * @param tukLogId
 	 * @return rowId or -1 if failed
 	 */
 	public long updatePhotos(long trigId, long tukLogId) {
@@ -774,7 +732,7 @@ public class DbHelper {
 	/**
      * Return a Cursor positioned at the photo that matches the given id
      * 
-     * @param id of photo to retrieve
+     * @param photo_id of photo to retrieve
      * @return Cursor positioned to matching photo, if found
      * @throws SQLException if photo could not be found/retrieved
      */
@@ -808,7 +766,7 @@ public class DbHelper {
      * Return a Cursor positioned at the first photo for the given trigpoint
      * (or all trigpoints, if null)
      * 
-     * @param id of trigpoint to retrieve
+     * @param trig_id of trigpoint to retrieve
      * @return Cursor positioned to matching photo, if found
      * @throws SQLException if photo could not be found/retrieved
      */

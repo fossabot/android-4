@@ -59,9 +59,7 @@ public class TrigDetailsAlbumAdapter extends ArrayAdapter<TrigPhoto> {
 		}
 				
 		tu.setText(tp.getDate()+"   "+tp.getUsername());
-        imageLoader.DisplayImage(tp.getIconURL(), ta);
-
-		
+		imageLoader.DisplayImage(tp.getIconURL(), ta);
 		return row;
 	}
 
