@@ -179,8 +179,14 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 
 		// Check to see whether log already exists
 		mHaveLog = (mDb.fetchLog(mTrigId) != null);
-		if (!mHaveLog) {
-			mSwitcher.showNext();
+		
+		// Set initial ViewSwitcher state:
+		// - If no log exists, show the "Log this trigpoint" button (index 0)
+		// - If log exists, show the form (index 1)
+		if (mHaveLog) {
+			mSwitcher.setDisplayedChild(1); // Show form
+		} else {
+			mSwitcher.setDisplayedChild(0); // Show button
 		}
 		
 		
@@ -201,7 +207,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	        	Log.i(TAG, "Create Log");
 	        	createNewLog();
 				populateFields();
-	        	mSwitcher.showNext();
+	        	mSwitcher.setDisplayedChild(1); // Show form
 	        	mHaveLog = true;
 			}
 		});	
@@ -213,7 +219,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			public void onClick(View arg0) {
 	        	Log.i(TAG, "Delete Log");
 	        	deleteLog();
-	        	mSwitcher.showNext();
+	        	mSwitcher.setDisplayedChild(0); // Show button
 	        	mHaveLog = false;
 			}
 		});	
@@ -628,7 +634,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	@Override
 	public void onSynced(int status) {
     	if (status == SyncTask.SUCCESS) {
-    		mSwitcher.showNext();
+    		mSwitcher.setDisplayedChild(0); // Show button after successful sync
         	mHaveLog = false;
     	}
 	}
