@@ -56,6 +56,7 @@ import android.widget.ViewSwitcher;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.FileCache;
+import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.common.Utils;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.LatLon;
@@ -134,6 +135,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		
 		// Get references to various views and form elements
 		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
+		
+		// Ensure proper content positioning to prevent action bar overlap
+		ThemeUtils.setupContentPositioning(this);
 		mSendTime		= (CheckBox)	findViewById(R.id.sendTime);
 	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
 	   	mDate			= (DatePicker)		findViewById(R.id.logDate);
