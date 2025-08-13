@@ -49,11 +49,11 @@ public class TrigDetailsOSMapTab extends Activity {
 	private static final int GRID_SIZE = 3; // 3x3 grid
 	private static final int FINAL_IMAGE_SIZE = TILE_SIZE * 2; // 2x tile size as requested
 	
-	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom}
+	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700}
 	private static final MapConfig[] MAP_CONFIGS = {
-		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 10, 16),
-		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 12, 18),
-		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 12, 18)
+		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false),
+		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false),
+		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 8, 12, true)
 	};
 	
 	private static class MapConfig {
@@ -62,13 +62,15 @@ public class TrigDetailsOSMapTab extends Activity {
 		final boolean needsApiKey;
 		final int minZoom;
 		final int maxZoom;
+		final boolean is27700; // Uses British National Grid projection
 		
-		MapConfig(String name, String baseUrl, boolean needsApiKey, int minZoom, int maxZoom) {
+		MapConfig(String name, String baseUrl, boolean needsApiKey, int minZoom, int maxZoom, boolean is27700) {
 			this.name = name;
 			this.baseUrl = baseUrl;
 			this.needsApiKey = needsApiKey;
 			this.minZoom = minZoom;
 			this.maxZoom = maxZoom;
+			this.is27700 = is27700;
 		}
 	}
 
@@ -156,8 +158,20 @@ public class TrigDetailsOSMapTab extends Activity {
 				}
 				
 				// Convert lat/lon to tile coordinates
-				int centerX = lonToTileX(lon, zoom);
-				int centerY = latToTileY(lat, zoom);
+				int centerX, centerY;
+				if (config.is27700) {
+					// For EPSG:27700 (British National Grid), use different conversion
+					centerX = lonToTileX27700(lon, zoom);
+					centerY = latToTileY27700(lat, zoom);
+					Log.d(TAG, String.format("EPSG:27700 coords for %s zoom %d: lat=%.6f,lon=%.6f -> tile=%d,%d", 
+						config.name, zoom, lat, lon, centerX, centerY));
+				} else {
+					// For Web Mercator (EPSG:3857)
+					centerX = lonToTileX(lon, zoom);
+					centerY = latToTileY(lat, zoom);
+					Log.d(TAG, String.format("Web Mercator coords for %s zoom %d: lat=%.6f,lon=%.6f -> tile=%d,%d", 
+						config.name, zoom, lat, lon, centerX, centerY));
+				}
 				
 				// Create 3x3 grid of tiles
 				Bitmap compositeBitmap = Bitmap.createBitmap(
@@ -181,8 +195,14 @@ public class TrigDetailsOSMapTab extends Activity {
 				}
 				
 				// Calculate the exact pixel position of the trigpoint within the center tile
-				double pixelX = lonToPixelX(lon, zoom) - (centerX * TILE_SIZE);
-				double pixelY = latToPixelY(lat, zoom) - (centerY * TILE_SIZE);
+				double pixelX, pixelY;
+				if (config.is27700) {
+					pixelX = lonToPixelX27700(lon, zoom) - (centerX * TILE_SIZE);
+					pixelY = latToPixelY27700(lat, zoom) - (centerY * TILE_SIZE);
+				} else {
+					pixelX = lonToPixelX(lon, zoom) - (centerX * TILE_SIZE);
+					pixelY = latToPixelY(lat, zoom) - (centerY * TILE_SIZE);
+				}
 				
 				// Adjust for the center tile position in our 3x3 grid
 				int centerPixelX = TILE_SIZE + (int)pixelX;
@@ -270,6 +290,32 @@ public class TrigDetailsOSMapTab extends Activity {
 	// Manual implementation of asinh for older Java versions
 	private double asinh(double x) {
 		return Math.log(x + Math.sqrt(x * x + 1.0));
+	}
+	
+	// EPSG:27700 (British National Grid) coordinate conversion methods
+	// These are simplified and may not be 100% accurate for all areas
+	private int lonToTileX27700(double lon, int zoom) {
+		// Simplified conversion for UK area
+		// EPSG:27700 bounds approximately: west=-8.5, east=2.0
+		double normalizedX = (lon + 8.5) / 10.5; // Normalize to 0-1
+		return (int) Math.floor(normalizedX * Math.pow(2.0, zoom));
+	}
+	
+	private int latToTileY27700(double lat, int zoom) {
+		// Simplified conversion for UK area  
+		// EPSG:27700 bounds approximately: south=49.5, north=61.0
+		double normalizedY = 1.0 - ((lat - 49.5) / 11.5); // Normalize to 0-1, flip Y
+		return (int) Math.floor(normalizedY * Math.pow(2.0, zoom));
+	}
+	
+	private double lonToPixelX27700(double lon, int zoom) {
+		double normalizedX = (lon + 8.5) / 10.5;
+		return normalizedX * Math.pow(2.0, zoom) * TILE_SIZE;
+	}
+	
+	private double latToPixelY27700(double lat, int zoom) {
+		double normalizedY = 1.0 - ((lat - 49.5) / 11.5);
+		return normalizedY * Math.pow(2.0, zoom) * TILE_SIZE;
 	}
 	
 	private void setupGallery() {
