@@ -28,7 +28,7 @@
         <!-- Fix for action bar content overlap -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:fitsSystemWindows">false</item>
         
         <!-- Ensure proper content insets -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
