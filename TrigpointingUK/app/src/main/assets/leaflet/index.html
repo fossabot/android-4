@@ -244,6 +244,16 @@
         tileErrorCount++;
         const zoom = map.getZoom();
         
+        // Check if this is an OS layer and the API key is missing/empty
+        const isOSLayer = layerName.includes('OS ');
+        const isApiKeyMissing = !osKey || osKey.trim() === '';
+        
+        if (isOSLayer && isApiKeyMissing) {
+          // Show helpful message about missing API key
+          showErrorFeedback(`${layerName}: API key required. Please set your Ordnance Survey API key in Settings → Map Settings`);
+          return;
+        }
+        
         // Check if zoom is outside optimal range
         let zoomMessage = '';
         if (minZoom !== undefined && maxZoom !== undefined) {

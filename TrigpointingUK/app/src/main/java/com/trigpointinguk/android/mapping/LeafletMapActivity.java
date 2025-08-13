@@ -35,6 +35,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.FileCache;
+import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.DownloadTrigsActivity;
 import com.trigpointinguk.android.filter.Filter;
 import com.trigpointinguk.android.types.Condition;
@@ -54,6 +55,9 @@ public class LeafletMapActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        
+        // Ensure proper content positioning to prevent action bar overlap
+        ThemeUtils.setupContentPositioning(this);
 
         // Initialize database helper
         try {

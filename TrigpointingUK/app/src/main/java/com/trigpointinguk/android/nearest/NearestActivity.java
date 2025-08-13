@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
+import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.filter.Filter;
 import com.trigpointinguk.android.filter.FilterActivity;
 import com.trigpointinguk.android.trigdetails.TrigDetailsActivity;
@@ -98,6 +99,9 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 
 		// find view references
 		mStrLocation 			= (TextView)  findViewById(R.id.trigListLocation);
+		
+		// Ensure proper content positioning to prevent action bar overlap
+		ThemeUtils.setupContentPositioning(this);
 		mStrFilter	 			= (TextView)  findViewById(R.id.trigListHeader);
 		mNorthText	 			= (TextView)  findViewById(R.id.north);
 		mCompassArrow			= (ImageView) findViewById(R.id.compassArrow);
@@ -350,7 +354,7 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 			Cursor c = null;
 			try {
 				c = mDb.fetchTrigList(mCurrentLocation);
-				startManagingCursor(c);
+				// startManagingCursor is deprecated - cursor will be managed manually
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

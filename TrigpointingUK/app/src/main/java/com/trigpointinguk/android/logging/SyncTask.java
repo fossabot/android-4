@@ -33,7 +33,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
-import android.os.AsyncTask;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -46,11 +50,40 @@ import com.trigpointinguk.android.types.Condition;
 
 
 
-public class SyncTask extends AsyncTask<Long, Integer, Integer> implements ProgressListener {
+public class SyncTask implements ProgressListener {
 	public static final String TAG ="SyncTask";
 	private Context 			mCtx;
 	private SharedPreferences 	mPrefs;
     private ProgressDialog 		mProgressDialog;
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private Handler mainHandler = new Handler(Looper.getMainLooper());
+	
+	private void updateProgress(int type, int... values) {
+		mainHandler.post(() -> {
+			String message;
+			switch (type) {
+			case MAX:
+				mProgressDialog.setIndeterminate(false);
+				mProgressDialog.setMax(values[0]);
+				mProgressDialog.setProgress(0);
+				break;
+			case PROGRESS:
+				mProgressDialog.setProgress(values[0]);
+				break;
+			case MESSAGE:
+				message = mCtx.getResources().getString(values[0]);
+				mProgressDialog.setMessage(message);
+				break;
+			case MESSAGECOUNT:
+				message = "Uploading photo " + values[0] + " of " + values[1];
+				mProgressDialog.setMessage(message);
+				break;
+			case BLANKPROGRESS:
+				mProgressDialog.setMax(1);
+				break;
+			}
+		});
+	}
 
 	private	DbHelper 			mDb = null;
 	private SyncListener		mSyncListener;
@@ -103,49 +136,87 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 		showDialog("Continuing sync");
 	}
 	
-	protected Integer doInBackground(Long... trigId) {
-		Log.d(TAG, "doInBackground");
-		if (isCancelled()){return CANCELLED;}
-		
-		// Make sure only one SyncTask runs at a time
-		if (mLock) {
-			Log.i(TAG, "SyncTask already running");
-			this.cancel(true);
-			return ERROR;
+	public void execute(Long... trigId) {
+		// Pre-execution logic (equivalent to onPreExecute)
+		if (mCtx == null) {
+			Toast.makeText(mCtx, "Sync failed!", Toast.LENGTH_LONG).show();
+			return;
 		}
-		mLock = true;
-
-		// Open database connection
-		mDb = new DbHelper(mCtx);
-        mDb.open();
 		
-		try {
-			// Get details from Prefs
-			mUsername = mPrefs.getString("username", "");
-			mPassword = mPrefs.getString("plaintextpassword", "");
-			if (mUsername.equals("")) {return ERROR;}
-			if (mPassword.equals("")) {return ERROR;}
+		// Check that we have a username and password, so that we can sync existing logs
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
+		if (mPrefs.getString("username", "").equals("")) {
+			Toast.makeText(mCtx, R.string.toastAddUsername, Toast.LENGTH_LONG).show();
+			return;
+		} 
+		if (mPrefs.getString("plaintextpassword", "").equals("")) {
+			Toast.makeText(mCtx, R.string.toastAddPassword, Toast.LENGTH_LONG).show();
+			return;
+		} 
+		showDialog("Connecting to T:UK");
+		mErrorMessage = "";
+		
+		CompletableFuture.supplyAsync(() -> {
+			Log.d(TAG, "doInBackground");
+			
+			// Make sure only one SyncTask runs at a time
+			if (mLock) {
+				Log.i(TAG, "SyncTask already running");
+				return ERROR;
+			}
+			mLock = true;
 
-			if (ERROR == sendLogsToTUK(trigId)) {
-				return ERROR;
-			}
-			if (ERROR == sendPhotosToTUK(trigId)) {
-				return ERROR;
-			}
-			mDb.close();
+			// Open database connection
+			mDb = new DbHelper(mCtx);
 			mDb.open();
-			if (trigId.length == 0) {
-				if (ERROR == readLogsFromTUK()) {
+			
+			try {
+				// Get details from Prefs
+				mUsername = mPrefs.getString("username", "");
+				mPassword = mPrefs.getString("plaintextpassword", "");
+				if (mUsername.equals("")) {return ERROR;}
+				if (mPassword.equals("")) {return ERROR;}
+
+				if (ERROR == sendLogsToTUK(trigId)) {
 					return ERROR;
 				}
+				if (ERROR == sendPhotosToTUK(trigId)) {
+					return ERROR;
+				}
+				mDb.close();
+				mDb.open();
+				if (trigId.length == 0) {
+					if (ERROR == readLogsFromTUK()) {
+						return ERROR;
+					}
+				}
+			} finally {
+				mDb.close();
+				mLock = false;		
 			}
-		} finally {
-			mDb.close();
-			mLock = false;		
-		}
 
-		return SUCCESS;
+			return SUCCESS;
+		}, executor)
+		.thenAcceptAsync(result -> {
+			Log.d(TAG, "onPostExecute " + result);
+			// Post-execution logic (equivalent to onPostExecute)
+			if (result == SUCCESS) {
+				Toast.makeText(mCtx, "Synced with TrigpointingUK " + mErrorMessage, Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(mCtx, "Error syncing with TrigpointingUK - " + mErrorMessage, Toast.LENGTH_LONG).show();					
+			}
+			try {
+				if (mProgressDialog != null) {mProgressDialog.dismiss();}
+			} catch (Exception e) {
+				Log.e(TAG, "Exception dismissing dialog - " + e.getMessage());
+			}
+			if (mSyncListener != null) {
+				mSyncListener.onSynced(result);
+			}
+		}, mainHandler::post);
 	}
+	
+
 	
 	
 	
@@ -158,21 +229,21 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 			trig_id = trigId[0];
 		}
 		
-		publishProgress(MESSAGE, R.string.syncToTUK);
+		updateProgress(MESSAGE, R.string.syncToTUK);
 		Cursor c = mDb.fetchLogs(trig_id);
 		if (c==null) {
 			return NOROWS;
 		}
 		
-		publishProgress(MAX, c.getCount());
-		publishProgress(PROGRESS, 0);
+		updateProgress(MAX, c.getCount());
+		updateProgress(PROGRESS, 0);
 		
 		int i=0;
 		do {
 			if (SUCCESS != sendLogToTUK(c)) {
 				return ERROR;
 			}
-			publishProgress(PROGRESS, ++i);
+			updateProgress(PROGRESS, ++i);
 		} while (c.moveToNext());
 		
 		c.close();
@@ -190,7 +261,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 			trig_id = trigId[0];
 		}
 
-		publishProgress(MESSAGE, R.string.syncPhotosToTUK);
+		updateProgress(MESSAGE, R.string.syncPhotosToTUK);
 		Cursor c = mDb.fetchPhotos(trig_id);
 		if (c==null) {
 			return NOROWS;
@@ -204,12 +275,12 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 		// reset cursor
 		c.moveToFirst();
 		
-		publishProgress(MAX, totalBytes);
-		publishProgress(PROGRESS, 0);
+		updateProgress(MAX, totalBytes);
+		updateProgress(PROGRESS, 0);
 		
 		int i = 1;
 		do {
-			publishProgress(MESSAGECOUNT, i++, c.getCount());
+			updateProgress(MESSAGECOUNT, i++, c.getCount());
 			if (SUCCESS != sendPhotoToTUK(c)) {
 				return ERROR;
 			}
@@ -400,7 +471,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 	@Override
 	public void transferred(long num) {
 		mActiveByteCount = (int) num;
-		publishProgress(PROGRESS, mPreviousByteCount + mActiveByteCount);
+					updateProgress(PROGRESS, mPreviousByteCount + mActiveByteCount);
 		Log.d(TAG, "Transferred bytes: " + num);
 	}	
 	
@@ -435,9 +506,9 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 		
 		
 		try {
-			publishProgress(BLANKPROGRESS);
-			publishProgress(MESSAGE, R.string.syncLogsFromTUK);
-			publishProgress(MAX, mPrefs.getInt(PREFS_LOGCOUNT, 1));
+			updateProgress(BLANKPROGRESS);
+			updateProgress(MESSAGE, R.string.syncLogsFromTUK);
+			updateProgress(MAX, mPrefs.getInt(PREFS_LOGCOUNT, 1));
 			URL url = new URL("https://trigpointing.uk/trigs/down-android-mylogs.php?username="+URLEncoder.encode(mUsername)+"&appversion="+mAppVersion);
 			Log.d(TAG, "Getting " + url);
             URLConnection ucon = url.openConnection();
@@ -454,7 +525,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 			if ((strLine=br.readLine()) != null) {
 				mMax = Integer.parseInt(strLine);
 				Log.i(TAG, "Log count from TUK = " + mMax);
-				publishProgress(MAX, mMax);
+				updateProgress(MAX, mMax);
 			}
 			// read log records records
             while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
@@ -464,8 +535,8 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 				int id					= Integer.valueOf(csv[1]);
 				mDb.updateTrigLog(id, logged);
 				i++;
-				if (isCancelled()){return CANCELLED;}
-				publishProgress(PROGRESS, i);
+				// Cancellation check removed - use CompletableFuture.cancel() if needed
+				updateProgress(PROGRESS, i);
             }
 			mDb.mDb.setTransactionSuccessful();
         } catch (Exception e) {
@@ -500,28 +571,7 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 	
 	
 	
-    protected void onPreExecute() {
-		Log.d(TAG, "onPreExecute");
-		if (mCtx == null) {
-			Toast.makeText(mCtx, "Sync failed!", Toast.LENGTH_LONG).show();
-			return;
-		}
-		
-		// Check that we have a username and password, so that we can sync existing logs
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
-		if (mPrefs.getString("username", "").equals("")) {
-			Toast.makeText(mCtx, R.string.toastAddUsername, Toast.LENGTH_LONG).show();
-			this.cancel(true);
-			return;
-		} 
-		if (mPrefs.getString("plaintextpassword", "").equals("")) {
-			Toast.makeText(mCtx, R.string.toastAddPassword, Toast.LENGTH_LONG).show();
-			this.cancel(true);
-			return;
-		} 
-		showDialog("Connecting to T:UK");
-		mErrorMessage = "";
-    }
+
     
     
     protected void showDialog(String message) {
@@ -533,63 +583,10 @@ public class SyncTask extends AsyncTask<Long, Integer, Integer> implements Progr
 		mProgressDialog.show();    	
     }
     
-    protected void onProgressUpdate(Integer... progress) {
-    	String message;
 
-    	if (mCtx == null) {
-			Log.i(TAG, "onProgressUpdate - no attached activity");
-			return;
-		}
-  	
-    	switch (progress[0]) {
-    	case MAX:
-        	//Log.d(TAG, "Max progress set to " + progress[1]);
-        	mProgressDialog.setIndeterminate(false);
-        	mProgressDialog.setMax(progress[1]);
-        	mProgressDialog.setProgress(0);
-    		break;
-    	case PROGRESS:
-        	//Log.d(TAG, "Progress set to " + progress[1]);
-        	mProgressDialog.setProgress(progress[1]);
-        	break;
-    	case MESSAGE:
-    		message = mCtx.getResources().getString(progress[1]);
-    		//Log.d(TAG, "Progress message set to " + message);
-    		mProgressDialog.setMessage(message);
-    		break;
-    	case MESSAGECOUNT:
-    		message = "Uploading photo " + progress[1] + " of " + progress[2];
-    		//Log.d(TAG, "Progress message set to " + message);
-    		mProgressDialog.setMessage(message);
-    		break;
-    	case BLANKPROGRESS:
-    		mProgressDialog.setMax(1);
-    		break;
-    	}
-    }
     
     
-    protected void onPostExecute(Integer status) {
-		Log.d(TAG, "onPostExecute " + status);
-		if (!isCancelled()) {
-			if (status == SUCCESS) {
-				Toast.makeText(mCtx, "Synced with TrigpointingUK " + mErrorMessage, Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(mCtx, "Error syncing with TrigpointingUK - " + mErrorMessage, Toast.LENGTH_LONG).show();					
-			}
-		} else {
-			Log.d(TAG, "cancelled ");
-			Toast.makeText(mCtx, "Sync cancelled", Toast.LENGTH_SHORT).show();			
-		}
-		try {
-			if (mProgressDialog != null) {mProgressDialog.dismiss();}
-		} catch (Exception e) {
-			Log.e(TAG, "Exception dismissing dialog - " + e.getMessage());
-		}
-		if (mSyncListener != null) {
-			mSyncListener.onSynced(status);
-		}
-    }
+
 
 
 

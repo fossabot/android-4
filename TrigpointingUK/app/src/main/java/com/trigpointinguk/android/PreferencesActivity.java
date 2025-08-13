@@ -3,11 +3,12 @@ package com.trigpointinguk.android;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
+import com.trigpointinguk.android.common.ThemeUtils;
 
 public class PreferencesActivity extends AppCompatActivity {
     public static final String PREFS_NAME = "TUKPrefsFile";
@@ -26,6 +27,9 @@ public class PreferencesActivity extends AppCompatActivity {
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
+		
+		// Ensure proper content positioning to prevent action bar overlap
+		ThemeUtils.setupContentPositioning(this);
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {

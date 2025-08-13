@@ -4,11 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Gallery for OS maps -->
-    <Gallery
+    <!-- RecyclerView for OS maps -->
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trigosgallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:spacing="8dp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout> 

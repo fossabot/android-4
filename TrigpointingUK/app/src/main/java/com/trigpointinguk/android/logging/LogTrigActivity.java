@@ -10,12 +10,17 @@ import java.util.List;
 
 // import org.acra.ErrorReporter;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -27,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.MotionEvent;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,7 +42,8 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
-import android.widget.Gallery;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,6 +56,7 @@ import android.widget.ViewSwitcher;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.FileCache;
+import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.common.Utils;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.LatLon;
@@ -56,10 +64,8 @@ import com.trigpointinguk.android.types.LatLon.UNITS;
 import com.trigpointinguk.android.types.PhotoSubject;
 import com.trigpointinguk.android.types.TrigPhoto;
 
-public class LogTrigActivity extends Activity implements OnDateChangedListener, LocationListener, SyncListener {
+public class LogTrigActivity extends AppCompatActivity implements OnDateChangedListener, LocationListener, SyncListener {
 	private static final String TAG			= "LogTrigActivity";
-    private static final int    CHOOSE_PHOTO  = 1;
-    private static final int    EDIT_PHOTO  = 2;
     private SharedPreferences 	mPrefs;
 
     private LatLon.UNITS		mUnits;
@@ -69,7 +75,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	private LatLon				mTrigLocation;
 	
     private ViewSwitcher 		mSwitcher;
-    private ToggleButton		mSendTime;
+    private CheckBox			mSendTime;
     private DatePicker			mDate;
     private TimePicker			mTime;
     private EditText			mGridref;
@@ -79,7 +85,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     private EditText			mComment;
     private CheckBox			mAdminFlag;
     private CheckBox			mUserFlag;
-    private Gallery				mGallery;
+    private RecyclerView			mGallery;
     private TextView			mLocationError;
     
     private DbHelper 			mDb;
@@ -89,6 +95,10 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 
     private ProgressDialog		mProgressDialog;
     private LocationManager 	mLocationManager;
+    
+    	// Photo picker constants
+	private static final int CHOOSE_PHOTO = 1;
+	private static final int EDIT_PHOTO = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +106,13 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.logtrig);
 		
-		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
+        // This activity is embedded inside TrigDetailsActivity TabHost.
+        // Hide the activity action bar to avoid a double header.
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+		
+			// Photo picker launchers will be handled by onActivityResult method
 		
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -123,7 +136,10 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 		
 		// Get references to various views and form elements
 		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
-		mSendTime		= (ToggleButton)	findViewById(R.id.sendTime);
+		
+		// Ensure proper content positioning to prevent action bar overlap
+		ThemeUtils.setupContentPositioning(this);
+		mSendTime		= (CheckBox)	findViewById(R.id.sendTime);
 	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
 	   	mDate			= (DatePicker)		findViewById(R.id.logDate);
 	   	mGridref 		= (EditText)		findViewById(R.id.logGridref);
@@ -131,14 +147,43 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	   	mFb 			= (EditText)		findViewById(R.id.logFB);
 	   	mCondition		= (Spinner)			findViewById(R.id.logCondition);
 	   	mScore			= (RatingBar)		findViewById(R.id.logScore);
-	   	mComment		= (EditText)		findViewById(R.id.logComment);
-	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
-	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
-	    mGallery 		= (Gallery) 		findViewById(R.id.logGallery);
-
+	   	
+	   			// Ensure minimum 1 star rating
+	   	mScore.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+	   		@Override
+	   		public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+	   			if (fromUser && rating < 1.0f) {
+	   				ratingBar.setRating(1.0f);
+	   			}
+	   		}
+	   	});
 	    
+	   	// Setup CheckBox listener for time logging
+	   	mSendTime.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+	   		@Override
+	   		public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
+	   			updateTimeVisibility();
+	   		}
+	   	});
+	   	mComment		= (EditText)		findViewById(R.id.logComment);
+	   	
     	// Setup time picker options which cannot be set in the config xml
  		mTime.setIs24HourView(true);
+ 		
+ 		// Force DatePicker to spinner mode only (hide calendar)
+ 		try {
+ 			mDate.setCalendarViewShown(false);
+ 			mDate.setSpinnersShown(true);
+ 		} catch (Exception e) {
+ 			Log.w(TAG, "Could not force DatePicker to spinner mode: " + e.getMessage());
+ 		}
+	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
+	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
+	            mGallery 		= (RecyclerView) findViewById(R.id.logGallery);
+        mGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+	    
+
 
 		// Setup condition spinner
  		List<Condition> loggableConditions = new ArrayList<Condition>(Arrays.asList(Condition.values()));
@@ -154,13 +199,28 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
         	
 		
 		// Setup listener on gallery photos
-	    mGallery.setOnItemClickListener(new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	            Log.i(TAG, "Clicked photo icon number : " + position);
-	            Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
-	            i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
-	            startActivityForResult(i, EDIT_PHOTO);
+	    mGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+	        @Override
+	        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+	            View child = rv.findChildViewUnder(e.getX(), e.getY());
+	            if (child != null) {
+	                int position = rv.getChildAdapterPosition(child);
+	                if (position != RecyclerView.NO_POSITION) {
+	                    Log.i(TAG, "Clicked photo icon number : " + position);
+	                    Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
+	                    i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
+	                    startActivityForResult(i, EDIT_PHOTO);
+	                    return true;
+	                }
+	            }
+	            return false;
 	        }
+
+	        @Override
+	        public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+
+	        @Override
+	        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
 	    });
 
 		
@@ -179,8 +239,14 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 
 		// Check to see whether log already exists
 		mHaveLog = (mDb.fetchLog(mTrigId) != null);
-		if (!mHaveLog) {
-			mSwitcher.showNext();
+		
+		// Set initial ViewSwitcher state:
+		// - If no log exists, show the "Log this trigpoint" button (index 0)
+		// - If log exists, show the form (index 1)
+		if (mHaveLog) {
+			mSwitcher.setDisplayedChild(1); // Show form
+		} else {
+			mSwitcher.setDisplayedChild(0); // Show button
 		}
 		
 		
@@ -201,7 +267,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	        	Log.i(TAG, "Create Log");
 	        	createNewLog();
 				populateFields();
-	        	mSwitcher.showNext();
+	        	mSwitcher.setDisplayedChild(1); // Show form
 	        	mHaveLog = true;
 			}
 		});	
@@ -213,7 +279,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			public void onClick(View arg0) {
 	        	Log.i(TAG, "Delete Log");
 	        	deleteLog();
-	        	mSwitcher.showNext();
+	        	mSwitcher.setDisplayedChild(0); // Show button
 	        	mHaveLog = false;
 			}
 		});	
@@ -227,13 +293,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			}
 		});	
 
-		// Setup change listener for sendTime button
-		mSendTime.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-	        	updateTimeVisibility();
-			}
-		});	
+
 
 
 		
@@ -255,6 +315,13 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			}
 		});	
 
+		// Setup change listener for sendTime button
+		mSendTime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+	        	updateTimeVisibility();
+			}
+		});	
 
 		
 		// check new grid references
@@ -287,21 +354,93 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			mLocationError.setText(e.getMessage());
 			mLocationError.setTextColor(getResources().getColor(R.color.errorcolour));
 		}		
-	} 
+	}
+	
+	private void tryPrePopulateGridReference() {
+		if (mLocationManager == null) {
+			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		}
+		
+		try {
+			// Check if GPS is enabled
+			if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				Log.d(TAG, "GPS not enabled, cannot pre-populate grid reference");
+				return;
+			}
+			
+			// Get last known location
+			Location lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (lastLocation != null) {
+				// Check if location is recent (within last 10 minutes)
+				long locationAge = System.currentTimeMillis() - lastLocation.getTime();
+				if (locationAge < 10 * 60 * 1000) { // 10 minutes in milliseconds
+					LatLon ll = new LatLon(lastLocation);
+					mGridref.setText(ll.getOSGB10());
+					checkDistance();
+					Log.d(TAG, "Pre-populated grid reference with GPS: " + ll.getOSGB10());
+				} else {
+					Log.d(TAG, "Last GPS location too old (" + (locationAge / 60000) + " minutes), not using");
+				}
+			} else {
+				Log.d(TAG, "No last known GPS location available");
+			}
+		} catch (SecurityException e) {
+			Log.w(TAG, "No location permission, cannot pre-populate grid reference");
+		} catch (Exception e) {
+			Log.e(TAG, "Error trying to pre-populate grid reference", e);
+		}
+	}
     
 	@Override
 	protected void onPause() {
-		Log.i(TAG, "onPause");
+		Log.i(TAG, "onPause - calling saveLog");
 		super.onPause();
 		saveLog();
+	}
+	
+	@Override
+	protected void onStop() {
+		Log.i(TAG, "onStop");
+		super.onStop();
 	}
 
 	@Override
 	protected void onResume() {
-		Log.i(TAG, "onResume");
+		Log.i(TAG, "onResume - calling populateFields");
 		super.onResume();
 		if (mTrigId != null) {
 			populateFields();
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		Log.i(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode + ", data=" + (data != null ? "present" : "null"));
+		
+		if (requestCode == CHOOSE_PHOTO) {
+			Log.i(TAG, "Processing CHOOSE_PHOTO result");
+			if (resultCode == RESULT_OK && data != null) {
+				Log.i(TAG, "Photo picker returned OK with data");
+				createPhoto(data);
+			} else if (resultCode == RESULT_CANCELED) {
+				Log.i(TAG, "Photo picker was cancelled by user");
+			} else {
+				Log.w(TAG, "Photo picker returned unexpected result: " + resultCode);
+			}
+		} else if (requestCode == EDIT_PHOTO) {
+			Log.i(TAG, "Processing EDIT_PHOTO result");
+			if (resultCode == RESULT_OK) {
+				Log.i(TAG, "Photo editing returned OK, updating gallery");
+				updateGallery();
+			} else if (resultCode == RESULT_CANCELED) {
+				Log.i(TAG, "Photo editing was cancelled by user");
+			} else {
+				Log.i(TAG, "Photo editing returned unexpected result: " + resultCode);
+			}
+		} else {
+			Log.w(TAG, "Unknown request code: " + requestCode);
 		}
 	}
 
@@ -325,37 +464,32 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	}
 
 	
-    // service request to choose a photo
+    // service request to choose a photo using modern approach
     private void choosePhoto() {
-    	Log.i(TAG, "Get a photo from the gallery");
-    	Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+    	Log.i(TAG, "Get a photo from the gallery using modern picker");
+    	
+    	// Use ACTION_GET_CONTENT for maximum compatibility
+    	Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
     	photoPickerIntent.setType("image/*");
+    	photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+    	Log.i(TAG, "Using ACTION_GET_CONTENT for photo selection");
+    	
+    	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
     	startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
     }
  
     
     
     
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data); 
-    	switch (requestCode) {
-    	case CHOOSE_PHOTO:
-    		createPhoto(requestCode, resultCode, data);
-    		break;
-    	case EDIT_PHOTO:
-    		updateGallery();
-    		break;
-    	}
-	}	
+
 	
     
     
-	private void createPhoto (int requestCode, int resultCode, Intent data) {
+	private void createPhoto (Intent data) {
 		// Photo chosen - create DB entry and send user to edit activity
 		Log.i(TAG, "createPhoto");
-		if(resultCode == RESULT_OK){  
-			Uri selectedImageUri = data.getData();
+		Uri selectedImageUri = data.getData();
+		if (selectedImageUri != null) {
     		Log.i(TAG, "Photo URI - " + selectedImageUri);
     		
     		// create a database record for the new photo
@@ -387,12 +521,16 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     		mDb.updatePhoto(photoId, mTrigId, "", "", thumbPath, photoPath, PhotoSubject.NOSUBJECT, 0);
     		Log.i(TAG, "Updated photo - " + photoId);
     		
+    		// Update the gallery immediately to show the new thumbnail
+    		updateGallery();
+    		
     		// edit the other fields for the new photo
             Intent i = new Intent(this, LogPhotoActivity.class);
             i.putExtra(DbHelper.PHOTO_ID, photoId);
             startActivityForResult(i, EDIT_PHOTO);
+		} else {
+			Log.w(TAG, "No image URI received from picker");
 		}
-    		
 	}
 
 	
@@ -409,16 +547,24 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     							 c.getInt(c.getColumnIndex(DbHelper.LOG_DAY)), 
     							 this);
 
+
+    	
+    	// set Text fields    	
+    	mComment.setText 		(c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)));
+    	String gridref = c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF));
+    	mGridref.setText		(gridref);
+    	mFb.setText 			(c.getString(c.getColumnIndex(DbHelper.LOG_FB)));
+    	
+    	// Pre-populate grid reference with GPS if blank and GPS available
+    	if (gridref == null || gridref.trim().isEmpty()) {
+    		tryPrePopulateGridReference();
+    	}
+    	
     	// set Time
     	mSendTime.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);
     	mTime.setCurrentHour  	(c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR)));
     	mTime.setCurrentMinute 	(c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES)));
     	updateTimeVisibility();
-    	
-    	// set Text fields    	
-    	mComment.setText 		(c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)));
-    	mGridref.setText		(c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF)));
-    	mFb.setText 			(c.getString(c.getColumnIndex(DbHelper.LOG_FB)));
     	
     	// set Flags
     	mAdminFlag.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);
@@ -436,11 +582,12 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     	updateGallery();
     	checkDistance();
 
-    }
+        }
     
     private void updateTimeVisibility () {
     	mTime.setEnabled(mSendTime.isChecked());
     }
+
     
     private void updateGallery() {
 		Log.i(TAG, "updateGallery");
@@ -456,7 +603,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 			c.close();		
 		}
 		
-		mGallery.setAdapter(new LogTrigGalleryAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
+		mGallery.setAdapter(new LogTrigRecyclerAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
 	}
 
     
@@ -509,7 +656,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
     			"", 
     			"", 
     			Condition.CONDITIONNOTLOGGED, 
-    			5, 
+    			3, // Start with 3 stars default
     			"", 
     			0, 
     			0);
@@ -628,7 +775,7 @@ public class LogTrigActivity extends Activity implements OnDateChangedListener, 
 	@Override
 	public void onSynced(int status) {
     	if (status == SyncTask.SUCCESS) {
-    		mSwitcher.showNext();
+    		mSwitcher.setDisplayedChild(0); // Show button after successful sync
         	mHaveLog = false;
     	}
 	}

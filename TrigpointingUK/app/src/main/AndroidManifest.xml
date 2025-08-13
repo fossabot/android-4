@@ -22,43 +22,73 @@
         android:label="@string/app_name" 
         android:name="MainApplication"
         android:allowBackup="true"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        android:theme="@style/Theme.TrigpointingUK"
         android:networkSecurityConfig="@xml/network_security_config"
-        tools:targetApi="31">
+        >
         <activity android:label="@string/app_name" android:name="MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".nearest.NearestActivity"></activity>
+        <activity 
+            android:name=".nearest.NearestActivity"
+            android:exported="false" />
         <activity 
             android:name="DownloadTrigsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity android:name="PreferencesActivity"></activity>
-        <activity android:configChanges="keyboardHidden|orientation" android:name=".mapping.DownloadMapsActivity"></activity>
-        <activity android:name=".trigdetails.TrigDetailsActivity"></activity>
-        <activity android:name=".trigdetails.TrigDetailsAlbumTab"></activity>
-        <activity android:name=".trigdetails.TrigDetailsInfoTab"></activity>
-        <activity android:name=".trigdetails.TrigDetailsLoglistTab"></activity>
-        <activity android:name=".trigdetails.TrigDetailsOSMapTab"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity 
+            android:name="PreferencesActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".mapping.DownloadMapsActivity"
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation" />
+        <activity 
+            android:name=".trigdetails.TrigDetailsActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".trigdetails.TrigDetailsAlbumTab"
+            android:exported="false" />
+        <activity 
+            android:name=".trigdetails.TrigDetailsInfoTab"
+            android:exported="false" />
+        <activity 
+            android:name=".trigdetails.TrigDetailsLoglistTab"
+            android:exported="false" />
+        <activity 
+            android:name=".trigdetails.TrigDetailsOSMapTab"
+            android:exported="false" />
 
 
 
-        <activity android:name=".mapping.LeafletMapActivity"></activity>
+        <activity 
+            android:name=".mapping.LeafletMapActivity"
+            android:exported="false" />
         <meta-data android:value="6668b1358f29457b88baf287a692ae97" android:name="CLOUDMADE_KEY"></meta-data>
         <meta-data android:value="AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5" android:name="BING_KEY"></meta-data>
-        <activity android:name="HelpPageActivity"></activity>
-        <activity android:name=".common.DisplayBitmapActivity"></activity>
-        <activity android:name=".logging.LogTrigActivity"></activity>
-        <activity android:name=".logging.LogPhotoActivity"></activity>
-        <activity android:name=".filter.FilterActivity"></activity>
-        <activity android:name=".filter.TrigpointTypesActivity"></activity>
-        <activity android:name=".filter.FilterFoundActivity"></activity>
+        <activity 
+            android:name="HelpPageActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".common.DisplayBitmapActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".logging.LogTrigActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity 
+            android:name=".logging.LogPhotoActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".filter.FilterActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".filter.TrigpointTypesActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".filter.FilterFoundActivity"
+            android:exported="false" />
     </application>
 </manifest>

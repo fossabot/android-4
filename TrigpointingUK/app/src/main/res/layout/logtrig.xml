@@ -1,115 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ViewSwitcher
         android:id="@+id/logswitcher"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        
+        <!-- First view: Log this trigpoint button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp">
+            
+            <Button
+                android:id="@+id/addLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Log this trigpoint"
+                android:textSize="18sp"
+                android:padding="16dp" />
+                
+        </LinearLayout>
 
-    <ToggleButton
-        android:id="@+id/sendTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send Time" />
+        <!-- Second view: Full logging form -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TimePicker
-        android:id="@+id/logTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <DatePicker
-        android:id="@+id/logDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/logGridref"
+    <!-- Date and Time Container - Responsive Layout -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Grid Reference" />
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:layout_marginBottom="8dp">
+
+        <!-- Date Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date:"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <DatePicker
+                android:id="@+id/logDate"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                android:spinnersShown="true" />
+
+        </LinearLayout>
+
+        <!-- Time Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time:"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TimePicker
+                    android:id="@+id/logTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:timePickerMode="spinner" />
+
+                <CheckBox
+                    android:id="@+id/sendTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Log time?"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Grid Reference:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
+
+        <EditText
+            android:id="@+id/logGridref"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="Grid Reference"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/logGetLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Update" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/locationError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Location Error" />
+        android:text=""
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/logFB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Found By" />
+        android:hint="Flush Bracket"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Condition:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
 
     <Spinner
         android:id="@+id/logCondition"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
 
     <RatingBar
         android:id="@+id/logScore"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/logComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Comment" />
+        android:hint="Comment"
+        android:minLines="3"
+        android:gravity="top"
+        android:layout_marginBottom="8dp" />
 
     <CheckBox
         android:id="@+id/logAdminFlag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Admin Flag" />
+        android:text="Admin Flag"
+        android:layout_marginBottom="4dp" />
 
     <CheckBox
         android:id="@+id/logUserFlag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Flag" />
+        android:text="User Flag"
+        android:layout_marginBottom="8dp" />
 
-    <Gallery
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Photos:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/logGallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="80dp"
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/logAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Photo" />
+        android:text="Add Photo"
+        android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/addLog"
-        android:layout_width="wrap_content"
+    <!-- Action buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Log" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
 
-    <Button
-        android:id="@+id/logDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Log" />
+        <Button
+            android:id="@+id/logDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delete Log"
+            android:layout_marginEnd="8dp" />
 
-    <Button
-        android:id="@+id/logGetLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Location" />
+        <Button
+            android:id="@+id/logUploadNow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Upload Now"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp" />
 
-    <Button
-        android:id="@+id/logUploadNow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Now" />
+        <Button
+            android:id="@+id/logSyncLater"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sync Later"
+            android:layout_marginStart="8dp" />
 
-    <Button
-        android:id="@+id/logSyncLater"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sync Later" />
+    </LinearLayout>
 
-</LinearLayout> 
+        </LinearLayout>  <!-- End of form layout -->
+    </ViewSwitcher>
+
+</LinearLayout>
+</ScrollView> 
