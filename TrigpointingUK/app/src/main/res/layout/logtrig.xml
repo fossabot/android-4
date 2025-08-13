@@ -71,6 +71,8 @@
         android:layout_width="wrap_content"
         android:layout_height="160dp"
         android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        android:spinnersShown="true"
         android:layout_marginBottom="8dp" />
 
     <TextView

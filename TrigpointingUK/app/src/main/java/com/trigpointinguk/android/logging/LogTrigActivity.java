@@ -177,6 +177,14 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	   	
     	// Setup time picker options which cannot be set in the config xml
  		mTime.setIs24HourView(true);
+ 		
+ 		// Force DatePicker to spinner mode only (hide calendar)
+ 		try {
+ 			mDate.setCalendarViewShown(false);
+ 			mDate.setSpinnersShown(true);
+ 		} catch (Exception e) {
+ 			Log.w(TAG, "Could not force DatePicker to spinner mode: " + e.getMessage());
+ 		}
 	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
 	    mGallery 		= (Gallery) 		findViewById(R.id.logGallery);
