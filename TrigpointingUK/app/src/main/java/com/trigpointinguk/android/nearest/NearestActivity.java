@@ -350,7 +350,7 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 			Cursor c = null;
 			try {
 				c = mDb.fetchTrigList(mCurrentLocation);
-				startManagingCursor(c);
+				// startManagingCursor is deprecated - cursor will be managed manually
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
