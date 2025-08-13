@@ -116,13 +116,39 @@ public class DisplayBitmapActivity extends AppCompatActivity {
 		Handler mainHandler = new Handler(Looper.getMainLooper());
 		
 		CompletableFuture.supplyAsync(() -> {
-			// download photo, or obtain from cache
-			return mBitmapLoader.getBitmap(mUrl, false);
+			// Check if it's a local file path or HTTP URL
+			if (mUrl.startsWith("/") || mUrl.startsWith("file://")) {
+				// Load from local file directly
+				String filePath = mUrl.startsWith("file://") ? mUrl.substring(7) : mUrl;
+				Log.d(TAG, "Loading local file: " + filePath);
+				
+				try {
+					Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+					if (bitmap != null) {
+						Log.d(TAG, "Successfully loaded local file");
+						return bitmap;
+					} else {
+						Log.w(TAG, "Failed to decode local file: " + filePath);
+					}
+				} catch (Exception e) {
+					Log.e(TAG, "Error loading local file: " + filePath, e);
+				}
+				return null;
+			} else {
+				// Download photo from HTTP URL, or obtain from cache
+				Log.d(TAG, "Loading HTTP URL: " + mUrl);
+				return mBitmapLoader.getBitmap(mUrl, false);
+			}
 		}, executor)
 		.thenAcceptAsync(bitmap -> {
-			mBitmap = bitmap;
-			mZoomView.setImage(mBitmap);
-			resetZoomState();
+			if (bitmap != null) {
+				mBitmap = bitmap;
+				mZoomView.setImage(mBitmap);
+				resetZoomState();
+			} else {
+				Log.e(TAG, "Failed to load bitmap from: " + mUrl);
+				// Keep the loading placeholder image
+			}
 		}, mainHandler::post);
 	}    
     
