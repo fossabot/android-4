@@ -74,7 +74,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	private LatLon				mTrigLocation;
 	
     private ViewSwitcher 		mSwitcher;
+    private ToggleButton		mSendTime;
     private DatePicker			mDate;
+    private TimePicker			mTime;
     private EditText			mGridref;
     private EditText			mFb;
     private Spinner				mCondition;
@@ -153,6 +155,8 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		
 		// Get references to various views and form elements
 		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
+		mSendTime		= (ToggleButton)	findViewById(R.id.sendTime);
+	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
 	   	mDate			= (DatePicker)		findViewById(R.id.logDate);
 	   	mGridref 		= (EditText)		findViewById(R.id.logGridref);
 	   	mLocationError 	= (TextView)		findViewById(R.id.locationError);
@@ -170,6 +174,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	   		}
 	   	});
 	   	mComment		= (EditText)		findViewById(R.id.logComment);
+	   	
+    	// Setup time picker options which cannot be set in the config xml
+ 		mTime.setIs24HourView(true);
 	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
 	    mGallery 		= (Gallery) 		findViewById(R.id.logGallery);
@@ -292,6 +299,13 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			}
 		});	
 
+		// Setup change listener for sendTime button
+		mSendTime.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+	        	updateTimeVisibility();
+			}
+		});	
 
 		
 		// check new grid references
@@ -499,6 +513,12 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     		tryPrePopulateGridReference();
     	}
     	
+    	// set Time
+    	mSendTime.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);
+    	mTime.setCurrentHour  	(c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR)));
+    	mTime.setCurrentMinute 	(c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES)));
+    	updateTimeVisibility();
+    	
     	// set Flags
     	mAdminFlag.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);
     	mUserFlag.setChecked 	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGUSERS))  > 0);
@@ -515,8 +535,11 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     	updateGallery();
     	checkDistance();
 
-    }
+        }
     
+    private void updateTimeVisibility () {
+    	mTime.setEnabled(mSendTime.isChecked());
+    }
 
     
     private void updateGallery() {
@@ -552,9 +575,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     			mDate.getYear(), 
     			mDate.getMonth(), 
     			mDate.getDayOfMonth(),
-    			0, // No longer sending time
-				0, // Default hour
-				0, // Default minute 
+    			mSendTime.isChecked()?1:0,
+				mTime.getCurrentHour(), 
+				mTime.getCurrentMinute(), 
 				mGridref.getText().toString(), 
 				mFb.getText().toString(), 
 				(Condition) mCondition.getSelectedItem(), 
@@ -580,9 +603,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     			now.get(Calendar.YEAR), 
     			now.get(Calendar.MONTH), 
     			now.get(Calendar.DAY_OF_MONTH),
-    			0, // No longer sending time
-    			0, // Default hour
-    			0, // Default minute 
+    			1,
+    			now.get(Calendar.HOUR_OF_DAY), 
+    			now.get(Calendar.MINUTE), 
     			"", 
     			"", 
     			Condition.CONDITIONNOTLOGGED, 

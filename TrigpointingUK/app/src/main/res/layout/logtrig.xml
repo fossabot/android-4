@@ -38,6 +38,27 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+    <ToggleButton
+        android:id="@+id/sendTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Time"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time:"
+        android:textSize="14sp"
+        android:layout_marginBottom="4dp" />
+
+    <TimePicker
+        android:id="@+id/logTime"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        android:timePickerMode="spinner"
+        android:layout_marginBottom="8dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
