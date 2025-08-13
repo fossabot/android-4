@@ -391,19 +391,27 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		Log.i(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode + ", data=" + (data != null ? "present" : "null"));
 		
 		if (requestCode == CHOOSE_PHOTO) {
+			Log.i(TAG, "Processing CHOOSE_PHOTO result");
 			if (resultCode == RESULT_OK && data != null) {
 				Log.i(TAG, "Photo picker returned OK with data");
 				createPhoto(data);
+			} else if (resultCode == RESULT_CANCELED) {
+				Log.i(TAG, "Photo picker was cancelled by user");
 			} else {
 				Log.w(TAG, "Photo picker returned unexpected result: " + resultCode);
 			}
 		} else if (requestCode == EDIT_PHOTO) {
+			Log.i(TAG, "Processing EDIT_PHOTO result");
 			if (resultCode == RESULT_OK) {
 				Log.i(TAG, "Photo editing returned OK, updating gallery");
 				updateGallery();
+			} else if (resultCode == RESULT_CANCELED) {
+				Log.i(TAG, "Photo editing was cancelled by user");
 			} else {
-				Log.i(TAG, "Photo editing cancelled or failed");
+				Log.i(TAG, "Photo editing returned unexpected result: " + resultCode);
 			}
+		} else {
+			Log.w(TAG, "Unknown request code: " + requestCode);
 		}
 	}
 
@@ -431,23 +439,12 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private void choosePhoto() {
     	Log.i(TAG, "Get a photo from the gallery using modern picker");
     	
-    	Intent photoPickerIntent;
-    	
-    	// Use modern Photo Picker for Android 13+ or Storage Access Framework for older versions
-    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    		// Android 13+ - Use the built-in Photo Picker
-    		photoPickerIntent = new Intent(Intent.ACTION_PICK);
-    		photoPickerIntent.setType("image/*");
-    		photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpeg", "image/png", "image/webp"});
-    		Log.i(TAG, "Using modern Photo Picker (Android 13+)");
-    	} else {
-    		// Older Android - Use Storage Access Framework
-    		photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-    		photoPickerIntent.setType("image/*");
-    		photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-    		photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-    		Log.i(TAG, "Using Storage Access Framework (Android < 13)");
-    	}
+    	// Always use Storage Access Framework for better reliability
+    	Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+    	photoPickerIntent.setType("image/*");
+    	photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+    	photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    	Log.i(TAG, "Using Storage Access Framework for photo selection");
     	
     	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
     	startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
