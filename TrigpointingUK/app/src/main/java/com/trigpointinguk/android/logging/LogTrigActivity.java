@@ -617,7 +617,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     			"", 
     			"", 
     			Condition.CONDITIONNOTLOGGED, 
-    			1, // Start with 1 star minimum
+    			3, // Start with 3 stars default
     			"", 
     			0, 
     			0);

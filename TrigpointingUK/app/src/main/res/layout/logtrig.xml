@@ -38,57 +38,83 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Time:"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp" />
-
+    <!-- Date and Time Container - Responsive Layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:baselineAligned="false"
         android:layout_marginBottom="8dp">
 
-        <TimePicker
-            android:id="@+id/logTime"
+        <!-- Date Section -->
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="160dp"
-            android:layout_weight="1"
-            android:timePickerMode="spinner" />
-
-        <ToggleButton
-            android:id="@+id/sendTime"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="Log Time"
-            android:textOn="Log Time"
-            android:textOff="Log Time"
-            android:layout_marginStart="16dp"
-            android:minWidth="80dp"
-            android:background="@drawable/toggle_button_background"
-            android:textColor="@color/toggle_button_text"
-            android:padding="12dp" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date:"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <DatePicker
+                android:id="@+id/logDate"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                android:spinnersShown="true" />
+
+        </LinearLayout>
+
+        <!-- Time Section -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time:"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TimePicker
+                    android:id="@+id/logTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:timePickerMode="spinner" />
+
+                <ToggleButton
+                    android:id="@+id/sendTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Log Time"
+                    android:textOn="Log Time"
+                    android:textOff="Log Time"
+                    android:minHeight="48dp"
+                    android:background="@drawable/toggle_button_background"
+                    android:textColor="@color/toggle_button_text"
+                    android:padding="12dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date:"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp" />
-
-    <DatePicker
-        android:id="@+id/logDate"
-        android:layout_width="wrap_content"
-        android:layout_height="160dp"
-        android:datePickerMode="spinner"
-        android:calendarViewShown="false"
-        android:spinnersShown="true"
-        android:layout_marginBottom="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
