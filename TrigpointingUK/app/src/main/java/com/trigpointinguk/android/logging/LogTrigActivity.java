@@ -374,6 +374,12 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		super.onPause();
 		saveLog();
 	}
+	
+	@Override
+	protected void onStop() {
+		Log.i(TAG, "onStop");
+		super.onStop();
+	}
 
 	@Override
 	protected void onResume() {
@@ -439,12 +445,11 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private void choosePhoto() {
     	Log.i(TAG, "Get a photo from the gallery using modern picker");
     	
-    	// Always use Storage Access Framework for better reliability
-    	Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+    	// Use ACTION_GET_CONTENT for maximum compatibility
+    	Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
     	photoPickerIntent.setType("image/*");
     	photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-    	photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-    	Log.i(TAG, "Using Storage Access Framework for photo selection");
+    	Log.i(TAG, "Using ACTION_GET_CONTENT for photo selection");
     	
     	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
     	startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
