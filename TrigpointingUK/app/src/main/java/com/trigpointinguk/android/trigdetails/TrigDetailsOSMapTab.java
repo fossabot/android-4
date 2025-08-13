@@ -326,7 +326,8 @@ public class TrigDetailsOSMapTab extends Activity {
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Intent i = new Intent(TrigDetailsOSMapTab.this, DisplayBitmapActivity.class);
-				i.putExtra("URL", "file://" + mImagePaths[position]);
+				// Pass the file path directly, DisplayBitmapActivity should handle local files
+				i.putExtra("URL", mImagePaths[position]);
 				Log.i(TAG, "Clicked OSMap at path: " + mImagePaths[position]);
 				startActivity(i);
 			}

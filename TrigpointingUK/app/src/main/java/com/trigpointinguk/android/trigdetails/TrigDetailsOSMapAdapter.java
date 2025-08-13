@@ -48,12 +48,26 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
         
         // Check if it's a file path or URL
         if (mUrls[position].startsWith("/") || mUrls[position].startsWith("file://")) {
-            // Load from local file
+            // Load from local file directly (bypass LazyImageLoader for local files)
             String filePath = mUrls[position].startsWith("file://") ? 
                 mUrls[position].substring(7) : mUrls[position];
-            imageLoader.DisplayImage("file://" + filePath, imageView);
+            
+            try {
+                android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(filePath);
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                    Log.d("TrigDetailsOSMapAdapter", "Successfully loaded local file: " + filePath);
+                } else {
+                    Log.w("TrigDetailsOSMapAdapter", "Failed to decode local file: " + filePath);
+                    // Set a placeholder or default image
+                    imageView.setImageResource(R.drawable.imageloading);
+                }
+            } catch (Exception e) {
+                Log.e("TrigDetailsOSMapAdapter", "Error loading local file: " + filePath, e);
+                imageView.setImageResource(R.drawable.imageloading);
+            }
         } else {
-            // Load from URL (legacy support)
+            // Load from URL using LazyImageLoader (legacy support)
             imageLoader.DisplayImage(mUrls[position], imageView);
         }
 
