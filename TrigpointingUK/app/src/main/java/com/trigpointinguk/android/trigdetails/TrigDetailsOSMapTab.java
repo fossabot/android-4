@@ -51,9 +51,10 @@ public class TrigDetailsOSMapTab extends Activity {
 	
 	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700}
 	private static final MapConfig[] MAP_CONFIGS = {
-		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false),
-		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false),
-		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 8, 12, true)
+		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 6, 10, false),
+		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 6, 10, false)
+		// Temporarily disable OS_Leisure until we figure out the coordinate system
+		//new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 6, 10, true)
 	};
 	
 	private static class MapConfig {
