@@ -15,19 +15,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.sonyericsson.zoom.DynamicZoomControl;
-import com.sonyericsson.zoom.ImageZoomView;
-import com.sonyericsson.zoom.LongPressZoomListener;
 import com.trigpointinguk.android.R;
 
 public class DisplayBitmapActivity extends AppCompatActivity {
 	private static final String TAG="DisplayBitmapActivity";
 
     private static final int MENU_ID_RESET = 0;
-    private ImageZoomView 			mZoomView;
-    private DynamicZoomControl 		mZoomControl;
+    private ZoomableImageView 		mZoomableImageView;
     private Bitmap 					mBitmap;
-    private LongPressZoomListener 	mZoomListener;
     private String					mUrl;
     private BitmapLoader 			mBitmapLoader; 
     
@@ -48,18 +43,11 @@ public class DisplayBitmapActivity extends AppCompatActivity {
 		mUrl = extras.getString("URL");
 		Log.i(TAG, "Loading URL: "+mUrl);
 
-        // setup zoom control
-        mZoomControl = new DynamicZoomControl();
-        mZoomListener = new LongPressZoomListener(getApplicationContext());
-        mZoomListener.setZoomControl(mZoomControl);
+        // Setup ZoomableImageView
+        mZoomableImageView = findViewById(R.id.zoomable_image_view);
         
-        mZoomView = (ImageZoomView)findViewById(R.id.zoomview);
-        mZoomView.setZoomState(mZoomControl.getZoomState());
-        mZoomView.setOnTouchListener(mZoomListener);
-        
-        mZoomView.setImage(BitmapFactory.decodeResource(getResources(), R.drawable.imageloading));
-        mZoomControl.setAspectQuotient(mZoomView.getAspectQuotient());
-        resetZoomState();
+        // Set loading image
+        mZoomableImageView.setImageResource(R.drawable.imageloading);
 
 		mBitmapLoader = new BitmapLoader(this);
 		loadBitmap();
@@ -71,8 +59,7 @@ public class DisplayBitmapActivity extends AppCompatActivity {
         super.onDestroy();
 
         if (mBitmap != null) {mBitmap.recycle();}
-        mZoomView.setOnTouchListener(null);
-        mZoomControl.getZoomState().deleteObservers();
+        // PhotoView handles its own cleanup
     }
 
     @Override
@@ -98,13 +85,12 @@ public class DisplayBitmapActivity extends AppCompatActivity {
     }
 
     /**
-     * Reset zoom state and notify observers
+     * Reset zoom state to fit image to screen
      */
     private void resetZoomState() {
-        mZoomControl.getZoomState().setPanX(0.5f);
-        mZoomControl.getZoomState().setPanY(0.5f);
-        mZoomControl.getZoomState().setZoom(1f);
-        mZoomControl.getZoomState().notifyObservers();
+        if (mZoomableImageView != null) {
+            mZoomableImageView.resetZoom();
+        }
     }
 
 
@@ -143,8 +129,8 @@ public class DisplayBitmapActivity extends AppCompatActivity {
 		.thenAcceptAsync(bitmap -> {
 			if (bitmap != null) {
 				mBitmap = bitmap;
-				mZoomView.setImage(mBitmap);
-				resetZoomState();
+				mZoomableImageView.setImageBitmap(mBitmap);
+				Log.d(TAG, "Successfully set bitmap to ZoomableImageView");
 			} else {
 				Log.e(TAG, "Failed to load bitmap from: " + mUrl);
 				// Keep the loading placeholder image
