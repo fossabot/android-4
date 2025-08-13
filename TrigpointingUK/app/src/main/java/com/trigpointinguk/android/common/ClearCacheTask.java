@@ -2,6 +2,7 @@ package com.trigpointinguk.android.common;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -12,10 +13,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.DbHelper;
+import com.trigpointinguk.android.DownloadTrigsActivity;
+import com.trigpointinguk.android.logging.SyncTask;
+import com.trigpointinguk.android.logging.SyncListener;
 
 
 
-public class ClearCacheTask {
+public class ClearCacheTask implements SyncListener {
 	public static final String TAG ="ClearCacheTask";
 	private Context mCtx;
     private ProgressDialog mProgressDialog;
@@ -83,7 +87,10 @@ public class ClearCacheTask {
 			.thenAcceptAsync(result -> {
 				Log.d(TAG, "onPostExecute " + result);
 				if (!isCancelled) {
-					Toast.makeText(mCtx, "Cleared "+result+" cache files", Toast.LENGTH_LONG).show();
+					Toast.makeText(mCtx, "Cleared "+result+" cache files. Starting trigpoint download...", Toast.LENGTH_LONG).show();
+					
+					// Automatically trigger trigpoint data download
+					triggerTrigpointDownload();
 				} else {
 					Toast.makeText(mCtx, "Cancelled!", Toast.LENGTH_LONG).show();					
 				}
@@ -94,5 +101,35 @@ public class ClearCacheTask {
     public void cancel() {
 		isCancelled = true;
 		executor.shutdown();
+	}
+	
+	private void triggerTrigpointDownload() {
+		Log.d(TAG, "triggerTrigpointDownload: Starting DownloadTrigsActivity");
+		
+		// Launch DownloadTrigsActivity which will download trigpoint data
+		Intent intent = new Intent(mCtx, DownloadTrigsActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Required when starting from non-Activity context
+		mCtx.startActivity(intent);
+	}
+	
+	// SyncListener interface implementation
+	@Override
+	public void onSynced(int status) {
+		Log.d(TAG, "onSynced: User data sync completed with status " + status);
+		
+		switch (status) {
+			case SyncTask.SUCCESS:
+				Toast.makeText(mCtx, "User data sync completed successfully", Toast.LENGTH_SHORT).show();
+				break;
+			case SyncTask.ERROR:
+				Toast.makeText(mCtx, "User data sync failed", Toast.LENGTH_SHORT).show();
+				break;
+			case SyncTask.NOROWS:
+				Toast.makeText(mCtx, "No user data to sync", Toast.LENGTH_SHORT).show();
+				break;
+			default:
+				Toast.makeText(mCtx, "User data sync completed", Toast.LENGTH_SHORT).show();
+				break;
+		}
 	}
 }

@@ -35,6 +35,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.FileCache;
+import com.trigpointinguk.android.DownloadTrigsActivity;
 import com.trigpointinguk.android.filter.Filter;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
@@ -472,8 +473,12 @@ public class LeafletMapActivity extends AppCompatActivity {
                     builder.setTitle("Clear Cache");
                     builder.setMessage("Cache cleared successfully.\n" +
                                      "WebView tiles, " + mapImageFiles + " static map images, and " + 
-                                     webViewTileFiles + " bulk download tiles removed.");
-                    builder.setPositiveButton("OK", null);
+                                     webViewTileFiles + " bulk download tiles removed.\n\n" +
+                                     "Starting trigpoint data download...");
+                    builder.setPositiveButton("OK", (dialog, which) -> {
+                        // Trigger trigpoint download after user acknowledges
+                        triggerTrigpointDownload();
+                    });
                     builder.show();
                 });
             } catch (Exception e) {
@@ -487,6 +492,14 @@ public class LeafletMapActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+    
+    private void triggerTrigpointDownload() {
+        Log.d(TAG, "triggerTrigpointDownload: Starting DownloadTrigsActivity");
+        
+        // Launch DownloadTrigsActivity which will download trigpoint data and sync user data
+        Intent intent = new Intent(this, DownloadTrigsActivity.class);
+        startActivity(intent);
     }
 }
 
