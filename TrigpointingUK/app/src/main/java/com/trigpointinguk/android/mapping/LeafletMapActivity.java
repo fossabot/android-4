@@ -34,6 +34,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
+import com.trigpointinguk.android.common.FileCache;
 import com.trigpointinguk.android.filter.Filter;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
@@ -190,18 +191,8 @@ public class LeafletMapActivity extends AppCompatActivity {
             );
             return true;
         } else if (item.getItemId() == R.id.menu_clear_cache) {
-            webView.evaluateJavascript(
-                "clearTileCache().then(result => {" +
-                "  if (typeof result === 'boolean') {" +
-                "    AndroidPrefs.showDialog('Clear Cache', result ? 'Cache cleared successfully' : 'Failed to clear cache');" +
-                "  } else if (result && result.partial) {" +
-                "    AndroidPrefs.showDialog('Clear Cache', result.message);" +
-                "  } else {" +
-                "    AndroidPrefs.showDialog('Clear Cache', 'Cache clear operation completed');" +
-                "  }" +
-                "});", 
-                null
-            );
+            // Clear both WebView tile cache and static map images cache
+            clearAllCaches();
             return true;
         } else if (item.getItemId() == R.id.menu_download_tiles) {
             // For now, use a placeholder URL - this would be your website URL
@@ -452,6 +443,50 @@ public class LeafletMapActivity extends AppCompatActivity {
         }
         
 
+    }
+    
+    private void clearAllCaches() {
+        // Clear WebView tile cache via JavaScript
+        webView.evaluateJavascript(
+            "clearTileCache().then(result => {" +
+            "  console.log('WebView tile cache cleared:', result);" +
+            "});", 
+            null
+        );
+        
+        // Clear static map images cache and webview tiles cache in background thread
+        new Thread(() -> {
+            try {
+                FileCache mapImagesCache = new FileCache(this, "map_images");
+                int mapImageFiles = mapImagesCache.clear();
+                Log.d(TAG, "Cleared " + mapImageFiles + " static map image files");
+                
+                FileCache webViewTilesCache = new FileCache(this, "webview_tiles");
+                int webViewTileFiles = webViewTilesCache.clear();
+                Log.d(TAG, "Cleared " + webViewTileFiles + " webview tile files");
+                
+                int totalFiles = mapImageFiles + webViewTileFiles;
+                
+                runOnUiThread(() -> {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
+                    builder.setTitle("Clear Cache");
+                    builder.setMessage("Cache cleared successfully.\n" +
+                                     "WebView tiles, " + mapImageFiles + " static map images, and " + 
+                                     webViewTileFiles + " bulk download tiles removed.");
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+                });
+            } catch (Exception e) {
+                Log.e(TAG, "Error clearing static map images cache", e);
+                runOnUiThread(() -> {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
+                    builder.setTitle("Clear Cache");
+                    builder.setMessage("Cache partially cleared. Some files may not have been removed.");
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+                });
+            }
+        }).start();
     }
 }
 

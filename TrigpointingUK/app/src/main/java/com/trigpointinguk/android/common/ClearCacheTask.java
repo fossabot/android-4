@@ -45,6 +45,16 @@ public class ClearCacheTask {
 		c += cache.clear();
 		if (isCancelled){return 0;}
 		
+		// Clear static map images cache (used by TrigDetails OS Map Tab)
+		cache = new FileCache(mCtx, "map_images");
+		c += cache.clear();
+		if (isCancelled){return 0;}
+		
+		// Clear WebView tiles cache (used by bulk download functionality)
+		cache = new FileCache(mCtx, "webview_tiles");
+		c += cache.clear();
+		if (isCancelled){return 0;}
+		
 		// Also delete the database
 		try {
 			DbHelper db = new DbHelper(mCtx);
