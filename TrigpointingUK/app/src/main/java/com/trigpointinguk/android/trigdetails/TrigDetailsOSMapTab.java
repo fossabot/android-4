@@ -51,10 +51,9 @@ public class TrigDetailsOSMapTab extends Activity {
 	
 	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700}
 	private static final MapConfig[] MAP_CONFIGS = {
-		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 6, 10, false),
-		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 6, 10, false)
-		// Temporarily disable OS_Leisure until we figure out the coordinate system
-		//new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 6, 10, true)
+		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false),
+		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false),
+		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true)
 	};
 	
 	private static class MapConfig {
@@ -162,8 +161,8 @@ public class TrigDetailsOSMapTab extends Activity {
 				int centerX, centerY;
 				if (config.is27700) {
 					// For EPSG:27700 (British National Grid), use different conversion
-					centerX = lonToTileX27700(lon, zoom);
-					centerY = latToTileY27700(lat, zoom);
+					centerX = lonToTileX27700(lat, lon, zoom);
+					centerY = latToTileY27700(lat, lon, zoom);
 					Log.d(TAG, String.format("EPSG:27700 coords for %s zoom %d: lat=%.6f,lon=%.6f -> tile=%d,%d", 
 						config.name, zoom, lat, lon, centerX, centerY));
 				} else {
@@ -198,8 +197,8 @@ public class TrigDetailsOSMapTab extends Activity {
 				// Calculate the exact pixel position of the trigpoint within the center tile
 				double pixelX, pixelY;
 				if (config.is27700) {
-					pixelX = lonToPixelX27700(lon, zoom) - (centerX * TILE_SIZE);
-					pixelY = latToPixelY27700(lat, zoom) - (centerY * TILE_SIZE);
+					pixelX = lonToPixelX27700(lat, lon, zoom) - (centerX * TILE_SIZE);
+					pixelY = latToPixelY27700(lat, lon, zoom) - (centerY * TILE_SIZE);
 				} else {
 					pixelX = lonToPixelX(lon, zoom) - (centerX * TILE_SIZE);
 					pixelY = latToPixelY(lat, zoom) - (centerY * TILE_SIZE);
@@ -294,29 +293,117 @@ public class TrigDetailsOSMapTab extends Activity {
 	}
 	
 	// EPSG:27700 (British National Grid) coordinate conversion methods
-	// These are simplified and may not be 100% accurate for all areas
-	private int lonToTileX27700(double lon, int zoom) {
-		// Simplified conversion for UK area
-		// EPSG:27700 bounds approximately: west=-8.5, east=2.0
-		double normalizedX = (lon + 8.5) / 10.5; // Normalize to 0-1
-		return (int) Math.floor(normalizedX * Math.pow(2.0, zoom));
+	// Based on Leaflet configuration: resolutions, origin, and bounds
+	private static final double[] OSGB_RESOLUTIONS = {896, 448, 224, 112, 56, 28, 14, 7, 3.5, 1.75, 0.875, 0.4375, 0.21875};
+	private static final double OSGB_ORIGIN_X = -238375.0;
+	private static final double OSGB_ORIGIN_Y = 1376256.0;
+	private static final double OSGB_BOUNDS_MIN_X = -238375.0;
+	private static final double OSGB_BOUNDS_MIN_Y = 0.0;
+	private static final double OSGB_BOUNDS_MAX_X = 900000.0;
+	private static final double OSGB_BOUNDS_MAX_Y = 1376256.0;
+	
+	private int lonToTileX27700(double lat, double lon, int zoom) {
+		// Convert WGS84 lon/lat to OSGB36 easting/northing (simplified transformation)
+		double[] osgb = wgs84ToOsgb36(lat, lon);
+		double easting = osgb[0];
+		
+		// Use OSGB tile coordinate system
+		if (zoom >= OSGB_RESOLUTIONS.length) zoom = OSGB_RESOLUTIONS.length - 1;
+		double resolution = OSGB_RESOLUTIONS[zoom];
+		
+		int tileX = (int) Math.floor((easting - OSGB_ORIGIN_X) / (resolution * TILE_SIZE));
+		return tileX;
 	}
 	
-	private int latToTileY27700(double lat, int zoom) {
-		// Simplified conversion for UK area  
-		// EPSG:27700 bounds approximately: south=49.5, north=61.0
-		double normalizedY = 1.0 - ((lat - 49.5) / 11.5); // Normalize to 0-1, flip Y
-		return (int) Math.floor(normalizedY * Math.pow(2.0, zoom));
+	private int latToTileY27700(double lat, double lon, int zoom) {
+		// Convert WGS84 lon/lat to OSGB36 easting/northing
+		double[] osgb = wgs84ToOsgb36(lat, lon);
+		double northing = osgb[1];
+		
+		// Use OSGB tile coordinate system  
+		if (zoom >= OSGB_RESOLUTIONS.length) zoom = OSGB_RESOLUTIONS.length - 1;
+		double resolution = OSGB_RESOLUTIONS[zoom];
+		
+		int tileY = (int) Math.floor((OSGB_ORIGIN_Y - northing) / (resolution * TILE_SIZE));
+		return tileY;
 	}
 	
-	private double lonToPixelX27700(double lon, int zoom) {
-		double normalizedX = (lon + 8.5) / 10.5;
-		return normalizedX * Math.pow(2.0, zoom) * TILE_SIZE;
+	private double lonToPixelX27700(double lat, double lon, int zoom) {
+		double[] osgb = wgs84ToOsgb36(lat, lon);
+		double easting = osgb[0];
+		
+		if (zoom >= OSGB_RESOLUTIONS.length) zoom = OSGB_RESOLUTIONS.length - 1;
+		double resolution = OSGB_RESOLUTIONS[zoom];
+		
+		return (easting - OSGB_ORIGIN_X) / resolution;
 	}
 	
-	private double latToPixelY27700(double lat, int zoom) {
-		double normalizedY = 1.0 - ((lat - 49.5) / 11.5);
-		return normalizedY * Math.pow(2.0, zoom) * TILE_SIZE;
+	private double latToPixelY27700(double lat, double lon, int zoom) {
+		double[] osgb = wgs84ToOsgb36(lat, lon);
+		double northing = osgb[1];
+		
+		if (zoom >= OSGB_RESOLUTIONS.length) zoom = OSGB_RESOLUTIONS.length - 1;
+		double resolution = OSGB_RESOLUTIONS[zoom];
+		
+		return (OSGB_ORIGIN_Y - northing) / resolution;
+	}
+	
+	// Simplified WGS84 to OSGB36 transformation (approximate for UK)
+	// Returns [easting, northing] in metres
+	private double[] wgs84ToOsgb36(double lat, double lon) {
+		// This is a simplified transformation suitable for the UK area
+		// For production use, you'd want a proper coordinate transformation library
+		
+		// Approximate transformation parameters for UK
+		double a = 6377563.396;      // OSGB36 semi-major axis
+		double b = 6356256.909;      // OSGB36 semi-minor axis
+		double f0 = 0.9996012717;    // Scale factor on central meridian
+		double lat0 = Math.toRadians(49);     // Latitude of true origin
+		double lon0 = Math.toRadians(-2);     // Longitude of true origin
+		double N0 = -100000;         // Northing of true origin
+		double E0 = 400000;          // Easting of true origin
+		
+		double latRad = Math.toRadians(lat);
+		double lonRad = Math.toRadians(lon);
+		
+		double e2 = 1 - (b * b) / (a * a);
+		double n = (a - b) / (a + b);
+		double n2 = n * n;
+		double n3 = n * n * n;
+		
+		double cosLat = Math.cos(latRad);
+		double sinLat = Math.sin(latRad);
+		double tanLat = Math.tan(latRad);
+		
+		double nu = a * f0 / Math.sqrt(1 - e2 * sinLat * sinLat);
+		double rho = a * f0 * (1 - e2) / Math.pow(1 - e2 * sinLat * sinLat, 1.5);
+		double eta2 = nu / rho - 1;
+		
+		double dLon = lonRad - lon0;
+		double dLon2 = dLon * dLon;
+		double dLon3 = dLon2 * dLon;
+		double dLon4 = dLon3 * dLon;
+		double dLon5 = dLon4 * dLon;
+		double dLon6 = dLon5 * dLon;
+		
+		double M = b * f0 * ((1 + n + (5/4) * n2 + (5/4) * n3) * (latRad - lat0)
+			- (3 * n + 3 * n2 + (21/8) * n3) * Math.sin(latRad - lat0) * Math.cos(latRad + lat0)
+			+ ((15/8) * n2 + (15/8) * n3) * Math.sin(2 * (latRad - lat0)) * Math.cos(2 * (latRad + lat0))
+			- (35/24) * n3 * Math.sin(3 * (latRad - lat0)) * Math.cos(3 * (latRad + lat0)));
+		
+		double I = M + N0;
+		double II = (nu / 2) * sinLat * cosLat;
+		double III = (nu / 24) * sinLat * Math.pow(cosLat, 3) * (5 - tanLat * tanLat + 9 * eta2);
+		double IIIA = (nu / 720) * sinLat * Math.pow(cosLat, 5) * (61 - 58 * tanLat * tanLat + Math.pow(tanLat, 4));
+		
+		double IV = nu * cosLat;
+		double V = (nu / 6) * Math.pow(cosLat, 3) * (nu / rho - tanLat * tanLat);
+		double VI = (nu / 120) * Math.pow(cosLat, 5) * (5 - 18 * tanLat * tanLat + Math.pow(tanLat, 4) + 14 * eta2 - 58 * tanLat * tanLat * eta2);
+		
+		double northing = I + II * dLon2 + III * dLon4 + IIIA * dLon6;
+		double easting = E0 + IV * dLon + V * dLon3 + VI * dLon5;
+		
+		return new double[]{easting, northing};
 	}
 	
 	private void setupGallery() {
