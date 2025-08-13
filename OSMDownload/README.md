@@ -92,7 +92,6 @@ The downloader only fetches tiles covering the UK region, dramatically reducing 
 - **Heavy usage**: Zoom 0-14 (8.9 GB) - High detail for serious users
 - **Maximum practical**: Zoom 0-16 (142 GB) - Only for extreme offline needs
 
-**10M Tile Limit**: Cumulative tiles stay under 10 million through zoom 16 (9.46M tiles).
 
 ## Output Structure
 

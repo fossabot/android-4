@@ -371,8 +371,8 @@
         }
       }
       
-      // Fall back to UK center
-      console.log('No cached location, using UK center');
+      // Fall back to UK centre
+      console.log('No cached location, using UK centre');
       return {
         center: [54.0, -2.0],
         zoom: 7
@@ -386,15 +386,15 @@
     // Layer instances
     let osmLayer, outdoorLayer, leisureLayer, outdoor27700Layer;
 
-    function initializeLayers() {
+    function initialiseLayers() {
       osmLayer = createOSM();
       outdoorLayer = createOSOutdoor();
       leisureLayer = createOSLeisure();
       outdoor27700Layer = createOSOutdoor27700();
     }
 
-    function initializeMap() {
-      initializeLayers();
+    function initialiseMap() {
+      initialiseLayers();
       
       // Determine initial layer and CRS based on preference
       let initialLayer = osmLayer;
@@ -417,7 +417,7 @@
         const view27700 = getInitialMapView('27700');
         map = L.map('map', { crs: initialCRS, center: view27700.center, zoom: view27700.zoom });
         currentCRS = '27700';
-        initializeLayers(); // Recreate layers for new map
+        initialiseLayers(); // Recreate layers for new map
       } else {
         currentCRS = '3857';
       }
@@ -445,9 +445,9 @@
       setTimeout(() => {
         setupTrigpointingControl();
         loadControlPreferences();
-        initializeMarkers();
+        initialiseMarkers();
         
-        // Auto-center on GPS location when first visiting
+        // Auto-centre on GPS location when first visiting
         autoLocateOnFirstVisit();
       }, 100);
       
@@ -526,7 +526,7 @@
       currentCRS = to27700 ? '27700' : '3857';
       
       // Recreate layers - layer control removed, using custom control instead
-      initializeLayers();
+      initialiseLayers();
       
       // Re-add scale control after CRS switch
       L.control.scale({
@@ -567,7 +567,7 @@
       setTimeout(() => {
         setupTrigpointingControl();
         loadControlPreferences();
-        initializeMarkers(); // Reinitialize markers after CRS switch
+        initialiseMarkers(); // Reinitialise markers after CRS switch
         
         // Check if control state was restored properly during creation
         console.log('Checking control state after CRS switch. PendingControlExpansion:', pendingControlExpansion);
@@ -691,10 +691,10 @@
               </div>
             </div>
             
-            <!-- Marker Color Section -->
+            <!-- Marker Colour Section -->
             <div class="control-section">
               <button class="section-header" data-section="markercolor">
-                <span>🎨 Marker Colors</span>
+                <span>🎨 Marker Colours</span>
                 <span class="toggle-icon">▼</span>
               </button>
               <div class="section-content collapsed" id="markercolor-content">
@@ -873,7 +873,7 @@
       document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
         radio.addEventListener('change', function() {
           if (this.checked) {
-            console.log('JS Control - Marker color changed to:', this.value);
+            console.log('JS Control - Marker colour changed to:', this.value);
             currentMarkerColor = this.value;
             localStorage.setItem('leaflet_marker_color', this.value);
             if (markersLayer) {
@@ -973,14 +973,14 @@
     }
 
     function updateMarkerColors(colorScheme) {
-      console.log('Updating marker colors:', colorScheme);
+      console.log('Updating marker colours:', colorScheme);
       
       // Update the JavaScript control radio buttons
       document.querySelectorAll('input[name="markercolor"]').forEach(radio => {
         radio.checked = (radio.value === colorScheme);
       });
       
-      // Update current marker color and reload markers
+      // Update current marker colour and reload markers
       currentMarkerColor = colorScheme;
       localStorage.setItem('leaflet_marker_color', colorScheme);
       if (markersLayer) {
@@ -1180,8 +1180,8 @@
       }
     }
 
-    function initializeMarkers() {
-      console.log('MARKER DEBUG: initializeMarkers() called');
+    function initialiseMarkers() {
+      console.log('MARKER DEBUG: initialiseMarkers() called');
       console.log('MARKER DEBUG: Current CRS:', currentCRS);
       console.log('MARKER DEBUG: Map exists:', !!map);
       
@@ -1253,7 +1253,7 @@
           
           console.log(`Creating marker for ${trig.name} at [${trig.lat}, ${trig.lon}] in CRS: ${currentCRS}`);
           console.log(`Current map bounds:`, map.getBounds());
-          console.log(`Map center:`, map.getCenter());
+          console.log(`Map centre:`, map.getCenter());
           
           const marker = L.marker(coords, {
             icon: createTrigIcon(trig)
@@ -1312,7 +1312,7 @@
       
       // Get type-specific icon
       const iconUrl = getTrigIconUrl(trig.type, color, trig.flagged, iconStyle);
-      console.log(`Creating icon for ${trig.name}: type=${trig.type}, color=${color}, style=${iconStyle}, size=${iconSize}px, iconUrl=${iconUrl}`);
+      console.log(`Creating icon for ${trig.name}: type=${trig.type}, colour=${color}, style=${iconStyle}, size=${iconSize}px, iconUrl=${iconUrl}`);
       
       return L.icon({
         iconUrl: iconUrl,
@@ -1323,7 +1323,7 @@
     }
 
     function getConditionColor(condition) {
-      // Match OSMdroid MapIcon color logic using single-letter codes
+      // Match OSMdroid MapIcon colour logic using single-letter codes
       switch (condition) {
         case 'U': // Unknown
         case 'Z': // Condition not logged 
@@ -1377,7 +1377,7 @@
         
         return `icons/${iconName}`;
       } else {
-        // Use colored logo icons (existing system)
+        // Use coloured logo icons (existing system)
         // Map database type codes to icon type names
         const typeMap = {
           'PI': 'pillar',
@@ -1388,7 +1388,7 @@
         // Default to passive for any unknown types
         const iconType = typeMap[type] || 'passive';
         
-        // Build icon path based on type, color, and highlight state
+        // Build icon path based on type, colour, and highlight state
         const highlight = flagged ? '_h' : '';
         const iconName = `mapicon_${iconType}_${color}${highlight}.png`;
         
@@ -1397,10 +1397,10 @@
       }
     }
 
-    initializeMap();
+    initialiseMap();
 
     function autoLocateOnFirstVisit() {
-      // Check if we should auto-center on first visit
+      // Check if we should auto-centre on first visit
       const hasAutoLocated = sessionStorage.getItem('leaflet_auto_located');
       if (!hasAutoLocated) {
         console.log('First visit to map - attempting auto-location');

@@ -234,7 +234,7 @@ public class DownloadTrigsActivity extends AppCompatActivity implements SyncList
 		mainHandler.post(() -> {
 			switch (status) {
 			case SyncTask.SUCCESS:
-				mStatus.setText("Sync complete! All data synchronized.");
+				mStatus.setText("Sync complete! All data synchronised.");
 				break;
 			case SyncTask.NOROWS:
 				mStatus.setText("Sync complete! No data to sync.");

@@ -260,7 +260,7 @@ public class LeafletMapActivity extends AppCompatActivity {
 
     public void updateMarkerColor(String color) {
         webView.evaluateJavascript("if (typeof updateMarkerColors === 'function') updateMarkerColors('" + color + "');", null);
-        Log.d(TAG, "Updated marker color to: " + color);
+        Log.d(TAG, "Updated marker colour to: " + color);
     }
 
     public void updateTrigpointType(String type) {
@@ -275,7 +275,7 @@ public class LeafletMapActivity extends AppCompatActivity {
 
     private String queryTrigpoints(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
         if (dbHelper == null) {
-            Log.e(TAG, "Database helper not initialized");
+            Log.e(TAG, "Database helper not initialised");
             return "[]";
         }
 
@@ -392,7 +392,7 @@ public class LeafletMapActivity extends AppCompatActivity {
         
         @JavascriptInterface
         public void getTrigpointData(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
-            Log.d(TAG, String.format("getTrigpointData: bounds=(%.6f,%.6f,%.6f,%.6f) type=%s found=%s color=%s", south, west, north, east, trigpointType, filterFound, colorScheme));
+            Log.d(TAG, String.format("getTrigpointData: bounds=(%.6f,%.6f,%.6f,%.6f) type=%s found=%s colour=%s", south, west, north, east, trigpointType, filterFound, colorScheme));
             
             // Run database query on background thread
             new Thread(() -> {
