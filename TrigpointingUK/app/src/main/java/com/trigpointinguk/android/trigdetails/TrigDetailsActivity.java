@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
+import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.logging.LogTrigActivity;
 
 public class TrigDetailsActivity extends AppCompatActivity {
@@ -30,6 +31,9 @@ public class TrigDetailsActivity extends AppCompatActivity {
 	    if (getSupportActionBar() != null) {
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	    }
+	    
+	    // Ensure proper content positioning to prevent action bar overlap
+	    ThemeUtils.setupContentPositioning(this);
 
 		Bundle extras = getIntent().getExtras();
         //mPrefs = PreferenceManager.getDefaultSharedPreferences(this);

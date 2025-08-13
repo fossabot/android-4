@@ -70,7 +70,41 @@ public class ThemeUtils {
         // Ensure the content view has proper positioning
         View contentView = activity.findViewById(android.R.id.content);
         if (contentView != null) {
-            applyActionBarPadding(contentView, activity);
+            // Use a more conservative approach - add consistent top margin
+            // that accounts for action bar height plus some breathing room
+            int actionBarHeight = getActionBarHeight(activity);
+            int statusBarHeight = getStatusBarHeight(activity);
+            int totalTopSpace = actionBarHeight + statusBarHeight + 24; // 24dp additional spacing
+            
+            if (contentView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
+                params.topMargin = totalTopSpace;
+                contentView.setLayoutParams(params);
+            }
         }
+    }
+    
+    /**
+     * Apply consistent top margin to a specific view
+     */
+    public static void applyConsistentTopMargin(View view, Context context) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            int actionBarHeight = getActionBarHeight(context);
+            int statusBarHeight = getStatusBarHeight(context);
+            int totalTopSpace = actionBarHeight + statusBarHeight + 24; // 24dp additional spacing
+            
+            params.topMargin = totalTopSpace;
+            view.setLayoutParams(params);
+        }
+    }
+    
+    /**
+     * Get the recommended top margin for consistent spacing
+     */
+    public static int getRecommendedTopMargin(Context context) {
+        int actionBarHeight = getActionBarHeight(context);
+        int statusBarHeight = getStatusBarHeight(context);
+        return actionBarHeight + statusBarHeight + 24; // 24dp additional spacing
     }
 }
