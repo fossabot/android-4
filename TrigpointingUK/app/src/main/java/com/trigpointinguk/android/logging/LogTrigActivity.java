@@ -128,7 +128,10 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			new ActivityResultCallback<ActivityResult>() {
 				@Override
 				public void onActivityResult(ActivityResult result) {
-					updateGallery();
+					// Only update gallery if photo was saved (not cancelled)
+					if (result.getResultCode() == RESULT_OK) {
+						updateGallery();
+					}
 				}
 			}
 		);
@@ -484,6 +487,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     		// update the database record with the new photos
     		mDb.updatePhoto(photoId, mTrigId, "", "", thumbPath, photoPath, PhotoSubject.NOSUBJECT, 0);
     		Log.i(TAG, "Updated photo - " + photoId);
+    		
+    		// Update the gallery immediately to show the new thumbnail
+    		updateGallery();
     		
     		// edit the other fields for the new photo
             Intent i = new Intent(this, LogPhotoActivity.class);
