@@ -45,7 +45,17 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
         
         // Add logging to debug map loading
         Log.d("TrigDetailsOSMapAdapter", "Loading map image at position " + position + ": " + mUrls[position]);
-        imageLoader.DisplayImage(mUrls[position], imageView);
+        
+        // Check if it's a file path or URL
+        if (mUrls[position].startsWith("/") || mUrls[position].startsWith("file://")) {
+            // Load from local file
+            String filePath = mUrls[position].startsWith("file://") ? 
+                mUrls[position].substring(7) : mUrls[position];
+            imageLoader.DisplayImage("file://" + filePath, imageView);
+        } else {
+            // Load from URL (legacy support)
+            imageLoader.DisplayImage(mUrls[position], imageView);
+        }
 
         imageView.setLayoutParams(new Gallery.LayoutParams(300, 300));
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
