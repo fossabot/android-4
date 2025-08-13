@@ -31,11 +31,7 @@ android {
         disable 'MissingTranslation'
     }
     
-    packaging {
-        resources {
-            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt']
-        }
-    }
+    // Removed deprecated excludes; rely on default packaging behavior
 }
 
 dependencies {
