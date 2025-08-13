@@ -96,7 +96,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private LocationManager 	mLocationManager;
     
     // Modern photo picker launchers
-    private ActivityResultLauncher<Intent> mPhotoPickerLauncher;
+    private ActivityResultLauncher<String> mPhotoPickerLauncher;
     private ActivityResultLauncher<Intent> mEditPhotoLauncher;
 	
 	@Override
@@ -110,22 +110,25 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		
-		// Initialize modern photo picker launchers
-		mPhotoPickerLauncher = registerForActivityResult(
-			new ActivityResultContracts.StartActivityForResult(),
-			new ActivityResultCallback<ActivityResult>() {
-				@Override
-				public void onActivityResult(ActivityResult result) {
-					Log.i(TAG, "Photo picker result: " + result.getResultCode() + ", data: " + (result.getData() != null ? "present" : "null"));
-					if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-						Log.i(TAG, "Calling createPhoto with data");
-						createPhoto(result.getData());
-					} else {
-						Log.w(TAG, "Photo picker returned unexpected result: " + result.getResultCode());
-					}
+			// Initialize modern photo picker launchers
+	mPhotoPickerLauncher = registerForActivityResult(
+		new ActivityResultContracts.GetContent(),
+		new ActivityResultCallback<Uri>() {
+			@Override
+			public void onActivityResult(Uri uri) {
+				Log.i(TAG, "Photo picker result URI: " + (uri != null ? uri.toString() : "null"));
+				if (uri != null) {
+					Log.i(TAG, "Calling createPhoto with URI");
+					// Create a mock Intent with the URI for compatibility
+					Intent data = new Intent();
+					data.setData(uri);
+					createPhoto(data);
+				} else {
+					Log.w(TAG, "Photo picker returned null URI");
 				}
 			}
-		);
+		}
+	);
 		
 		mEditPhotoLauncher = registerForActivityResult(
 			new ActivityResultContracts.StartActivityForResult(),
@@ -430,26 +433,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private void choosePhoto() {
     	Log.i(TAG, "Get a photo from the gallery using modern picker");
     	
-    	Intent photoPickerIntent;
-    	
-    	// Use modern Photo Picker for Android 13+ or Storage Access Framework for older versions
-    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    		// Android 13+ - Use the built-in Photo Picker
-    		photoPickerIntent = new Intent(Intent.ACTION_PICK);
-    		photoPickerIntent.setType("image/*");
-    		photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpeg", "image/png", "image/webp"});
-    		Log.i(TAG, "Using modern Photo Picker (Android 13+)");
-    	} else {
-    		// Older Android - Use Storage Access Framework
-    		photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-    		photoPickerIntent.setType("image/*");
-    		photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-    		photoPickerIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-    		Log.i(TAG, "Using Storage Access Framework (Android < 13)");
-    	}
-    	
-    	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
-    	mPhotoPickerLauncher.launch(photoPickerIntent);
+    	// Use the modern GetContent contract which handles all the complexity
+    	Log.i(TAG, "Using GetContent contract for photo selection");
+    	mPhotoPickerLauncher.launch("image/*");
     }
  
     
