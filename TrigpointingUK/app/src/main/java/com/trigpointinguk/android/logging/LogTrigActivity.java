@@ -11,16 +11,18 @@ import java.util.List;
 // import org.acra.ErrorReporter;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.ProgressDialog;
+import androidx.appcompat.app.AlertDialog;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.util.TypedValue;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -34,14 +36,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.MotionEvent;
 import android.view.View.OnFocusChangeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
+
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.widget.RatingBar;
@@ -49,7 +51,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 import android.view.MenuItem;
 import android.widget.ViewSwitcher;
 
@@ -93,7 +94,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     
     private	List<TrigPhoto> 	mPhotos; 
 
-    private ProgressDialog		mProgressDialog;
+    private AlertDialog      mProgressDialog;
+    private ProgressBar      mProgressBar;
+    private TextView         mProgressText;
     private LocationManager 	mLocationManager;
     
     	// Photo picker constants
@@ -165,8 +168,8 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	   			updateTimeVisibility();
 	   		}
 	   	});
-	   	mComment		= (EditText)		findViewById(R.id.logComment);
-	   	
+		   mComment		= (EditText)		findViewById(R.id.logComment);
+
     	// Setup time picker options which cannot be set in the config xml
  		mTime.setIs24HourView(true);
  		
@@ -265,7 +268,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			@Override
 			public void onClick(View arg0) {
 	        	Log.i(TAG, "Create Log");
-	        	createNewLog();
+				createNewLog();
 				populateFields();
 	        	mSwitcher.setDisplayedChild(1); // Show form
 	        	mHaveLog = true;
@@ -715,9 +718,8 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	
 	
 	   private void getLocation() {
-	    	Log.i(TAG, "Start location listener and put up dialog box");
-	    
-		    mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		    Log.i(TAG, "Start location listener and put up dialog box");
+			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		    
 		    if (!mLocationManager.isProviderEnabled (LocationManager.GPS_PROVIDER)) {
 				Log.w(TAG, "GPS not enabled in system settings!");
@@ -726,19 +728,45 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		    }
 
 		    // Start listening for GPS updates
-		    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,1.0f, this);
+           if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+               // TODO: Consider calling
+               //    ActivityCompat#requestPermissions
+               // here to request the missing permissions, and then overriding
+               //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+               //                                          int[] grantResults)
+               // to handle the case where the user grants the permission. See the documentation
+               // for ActivityCompat#requestPermissions for more details.
+               return;
+           }
+           mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,1.0f, this);
 
-			mProgressDialog = new ProgressDialog(this);
-			mProgressDialog.setMessage("Getting accurate GPS fix...");
-			mProgressDialog.setIndeterminate(true);
-			mProgressDialog.setCancelable(true);
-			mProgressDialog.show();
-			mProgressDialog.setOnCancelListener (new DialogInterface.OnCancelListener() {
-				@Override
-				public void onCancel(DialogInterface arg0) {
-					Toast.makeText(LogTrigActivity.this, "Cancelled Get location", Toast.LENGTH_SHORT).show();
-					mLocationManager.removeUpdates(LogTrigActivity.this);
-				}});
+		   LinearLayout container = new LinearLayout(this);
+		   container.setOrientation(LinearLayout.VERTICAL);
+		   int paddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24,
+                    getResources().getDisplayMetrics());
+		   container.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+
+		   mProgressText = new TextView(this);
+		   mProgressText.setText("Getting accurate GPS fix...");
+		   container.addView(mProgressText, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+		   mProgressBar = new ProgressBar(this);
+		   mProgressBar.setIndeterminate(true);
+		   container.addView(mProgressBar, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+		   mProgressDialog = new AlertDialog.Builder(this)
+                    .setView(container)
+                    .setCancelable(true)
+                    .create();
+		   mProgressDialog.show();
+		   mProgressDialog.setOnCancelListener (new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface arg0) {
+                    Toast.makeText(LogTrigActivity.this, "Cancelled Get location", Toast.LENGTH_SHORT).show();
+                    mLocationManager.removeUpdates(LogTrigActivity.this);
+                }});
 	    }
 	    
 

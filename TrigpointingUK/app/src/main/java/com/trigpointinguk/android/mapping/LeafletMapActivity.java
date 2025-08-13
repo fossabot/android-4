@@ -38,8 +38,6 @@ import com.trigpointinguk.android.common.FileCache;
 import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.DownloadTrigsActivity;
 import com.trigpointinguk.android.filter.Filter;
-import com.trigpointinguk.android.types.Condition;
-import com.trigpointinguk.android.types.Trig;
 
 public class LeafletMapActivity extends AppCompatActivity {
     private static final String TAG = "LeafletMapActivity";

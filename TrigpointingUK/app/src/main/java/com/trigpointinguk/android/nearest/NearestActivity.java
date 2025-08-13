@@ -1,6 +1,5 @@
 package com.trigpointinguk.android.nearest;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +40,6 @@ import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.filter.Filter;
-import com.trigpointinguk.android.filter.FilterActivity;
 import com.trigpointinguk.android.trigdetails.TrigDetailsActivity;
 import com.trigpointinguk.android.types.LatLon;
 
@@ -114,7 +112,7 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 			mDb.open();
 		} catch (SQLException e) {
 			e.printStackTrace();
-        	Toast.makeText(this, "Error opening database.  Please try again shortly.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Error opening database.  Please try again shortly.", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		
@@ -469,8 +467,8 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 	        	mHeading = orientation[0] * 180.0/Math.PI; // orientation contains: azimuth[0], pitch[1] and roll[2]
 	        	//Log.d(TAG, "Heading = " + mHeading);
 	        	mListAdapter.setHeading(mHeading);
-	        	mListAdapter.notifyDataSetChanged();
-			    mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
+				mListAdapter.notifyDataSetChanged();
+				mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
 	        }
 	    }
 	}

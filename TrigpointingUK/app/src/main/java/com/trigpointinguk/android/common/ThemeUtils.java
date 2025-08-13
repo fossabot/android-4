@@ -1,14 +1,10 @@
 package com.trigpointinguk.android.common;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 public class ThemeUtils {
     
@@ -23,60 +19,17 @@ public class ThemeUtils {
         }
         return actionBarHeight;
     }
-    
-    /**
-     * Get the status bar height
-     */
-    public static int getStatusBarHeight(Context context) {
-        int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = context.getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-    
-    /**
-     * Apply proper top margin to a view to account for action bar
-     */
-    public static void applyActionBarMargin(View view, Context context) {
-        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            int actionBarHeight = getActionBarHeight(context);
-            int statusBarHeight = getStatusBarHeight(context);
-            
-            // Add margin to account for action bar and status bar
-            params.topMargin = actionBarHeight + statusBarHeight + 16; // 16dp additional padding
-            view.setLayoutParams(params);
-        }
-    }
-    
-    /**
-     * Apply proper top padding to a view to account for action bar
-     */
-    public static void applyActionBarPadding(View view, Context context) {
-        int actionBarHeight = getActionBarHeight(context);
-        int statusBarHeight = getStatusBarHeight(context);
-        
-        // Add padding to account for action bar and status bar
-        int topPadding = actionBarHeight + statusBarHeight + 16; // 16dp additional padding
-        view.setPadding(view.getPaddingLeft(), topPadding, view.getPaddingRight(), view.getPaddingBottom());
-    }
-    
-    /**
-     * Ensure an activity has proper content positioning
-     */
+
     public static void setupContentPositioning(AppCompatActivity activity) {
         View contentView = activity.findViewById(android.R.id.content);
-        if (contentView instanceof ViewGroup) {
-            ViewGroup contentGroup = (ViewGroup) contentView;
+        if (contentView instanceof ViewGroup contentGroup) {
             if (contentGroup.getChildCount() > 0) {
                 View rootChild = contentGroup.getChildAt(0);
 
                 int actionBarHeight = getActionBarHeight(activity);
-                // Add approximately one line height of padding (16dp)
+                // Nudge content downward a bit more than before (about one line = 16dp)
                 int extraPaddingPx = Math.round(TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 8,
+                        TypedValue.COMPLEX_UNIT_DIP, 24,
                         activity.getResources().getDisplayMetrics()));
 
                 int desiredTopPadding = actionBarHeight + extraPaddingPx;
@@ -92,29 +45,5 @@ public class ThemeUtils {
                 }
             }
         }
-    }
-    
-    /**
-     * Apply consistent top margin to a specific view
-     */
-    public static void applyConsistentTopMargin(View view, Context context) {
-        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            int actionBarHeight = getActionBarHeight(context);
-            int statusBarHeight = getStatusBarHeight(context);
-            int totalTopSpace = actionBarHeight + statusBarHeight + 24; // 24dp additional spacing
-            
-            params.topMargin = totalTopSpace;
-            view.setLayoutParams(params);
-        }
-    }
-    
-    /**
-     * Get the recommended top margin for consistent spacing
-     */
-    public static int getRecommendedTopMargin(Context context) {
-        int actionBarHeight = getActionBarHeight(context);
-        int statusBarHeight = getStatusBarHeight(context);
-        return actionBarHeight + statusBarHeight + 24; // 24dp additional spacing
     }
 }

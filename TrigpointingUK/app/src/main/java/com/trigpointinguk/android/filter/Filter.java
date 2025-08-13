@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.trigpointinguk.android.DbHelper;
-import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
 

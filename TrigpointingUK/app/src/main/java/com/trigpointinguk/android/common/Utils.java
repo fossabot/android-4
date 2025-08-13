@@ -27,7 +27,7 @@ public class Utils {
               os.write(bytes, 0, count);
             }
         }
-        catch(Exception ex){}
+        catch(Exception ignored){}
     }
     
     
@@ -41,11 +41,8 @@ public class Utils {
         // Find the correct scale value. It should be the power of 2.
         int width_tmp = o.outWidth, height_tmp = o.outHeight;
         int scale = 1;
-        while (true) {
-            if (width_tmp / 2 < requiredSize
-               || height_tmp / 2 < requiredSize) {
-                break;
-            }
+        while (width_tmp / 2 >= requiredSize
+                && height_tmp / 2 >= requiredSize) {
             width_tmp /= 2;
             height_tmp /= 2;
             scale *= 2;

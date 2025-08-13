@@ -8,9 +8,8 @@ import android.webkit.WebView;
 public class HelpPageActivity extends AppCompatActivity {
 
 	public static final String PAGE="PAGE";
-    private WebView mWebView;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.helppage);
@@ -24,7 +23,7 @@ public class HelpPageActivity extends AppCompatActivity {
 		if (extras == null) {return;}
 		String url = String.format("file:///android_asset/%s", extras.getString(PAGE));
 
-		mWebView = (WebView) findViewById(R.id.helppage);
+        WebView mWebView = findViewById(R.id.helppage);
 		mWebView.loadUrl(url);
 
 		

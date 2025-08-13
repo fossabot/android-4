@@ -11,12 +11,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.trigpointinguk.android.common.ThemeUtils;
 
 public class PreferencesActivity extends AppCompatActivity {
-    public static final String PREFS_NAME = "TUKPrefsFile";
-    public static final String TAG = "PreferenceActivity";
-    public static final String PREFERENCETYPE = "PreferenceType"; 
-    public static final int MAINPREFERENCES = 1; 
-    public static final int FILTERPREFERENCES = 2; 
-    private int mPreferenceType = MAINPREFERENCES;
+	public static final String TAG = "PreferenceActivity";
+    public static final String PREFERENCETYPE = "PreferenceType";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +29,8 @@ public class PreferencesActivity extends AppCompatActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			mPreferenceType = extras.getInt(PREFERENCETYPE);
-		}
+            extras.getInt(PREFERENCETYPE);
+        }
 		
 		// Load the appropriate preference fragment
 		if (savedInstanceState == null) {
@@ -53,7 +49,7 @@ public class PreferencesActivity extends AppCompatActivity {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		String plaintext = prefs.getString("password", "");
-		if (!plaintext.equals("")) {
+		if (!plaintext.isEmpty()) {
 			Editor editor = prefs.edit();
 			editor.putString("plaintextpassword", plaintext);
 			editor.remove("password");

@@ -1,6 +1,4 @@
 package com.trigpointinguk.android.common;
-
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -17,15 +15,13 @@ import com.trigpointinguk.android.DownloadTrigsActivity;
 import com.trigpointinguk.android.logging.SyncTask;
 import com.trigpointinguk.android.logging.SyncListener;
 
-
-
 public class ClearCacheTask implements SyncListener {
 	public static final String TAG ="ClearCacheTask";
-	private Context mCtx;
-    private ProgressDialog mProgressDialog;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private Handler mainHandler = new Handler(Looper.getMainLooper());
-    private boolean isCancelled = false;
+	private final Context mCtx;
+    // Replaced deprecated ProgressDialog with lightweight toasts
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final boolean isCancelled = false;
 
 	
     public ClearCacheTask(Context pCtx) {
@@ -43,23 +39,19 @@ public class ClearCacheTask implements SyncListener {
 		
 		cache = new FileCache(mCtx, "images");
 		c += cache.clear();
-		if (isCancelled){return 0;}
-		
+
 		cache = new FileCache(mCtx, "strings");
 		c += cache.clear();
-		if (isCancelled){return 0;}
-		
-		// Clear static map images cache (used by TrigDetails OS Map Tab)
+
+        // Clear static map images cache (used by TrigDetails OS Map Tab)
 		cache = new FileCache(mCtx, "map_images");
 		c += cache.clear();
-		if (isCancelled){return 0;}
-		
-		// Clear WebView tiles cache (used by bulk download functionality)
+
+        // Clear WebView tiles cache (used by bulk download functionality)
 		cache = new FileCache(mCtx, "webview_tiles");
 		c += cache.clear();
-		if (isCancelled){return 0;}
-		
-		// Also delete the database
+
+        // Also delete the database
 		try {
 			DbHelper db = new DbHelper(mCtx);
 			db.deleteDatabase();
@@ -73,14 +65,8 @@ public class ClearCacheTask implements SyncListener {
     public void execute() {
 		Log.d(TAG, "execute");
 		
-		// Show progress dialog on main thread
-		mainHandler.post(() -> {
-			mProgressDialog = new ProgressDialog(mCtx);
-			mProgressDialog.setMessage("Clearing cache");
-			mProgressDialog.setIndeterminate(true);
-			mProgressDialog.setCancelable(false);
-			mProgressDialog.show();
-		});
+		// Notify start on main thread (ProgressDialog is deprecated)
+		mainHandler.post(() -> Toast.makeText(mCtx, "Clearing cache…", Toast.LENGTH_SHORT).show());
 		
 		// Execute background work
 		CompletableFuture.supplyAsync(this::doInBackground, executor)
@@ -94,15 +80,10 @@ public class ClearCacheTask implements SyncListener {
 				} else {
 					Toast.makeText(mCtx, "Cancelled!", Toast.LENGTH_LONG).show();					
 				}
-				if (mProgressDialog != null) {mProgressDialog.dismiss();}
+				// No modal dialog to dismiss
 			}, mainHandler::post);
     }
-    
-    public void cancel() {
-		isCancelled = true;
-		executor.shutdown();
-	}
-	
+
 	private void triggerTrigpointDownload() {
 		Log.d(TAG, "triggerTrigpointDownload: Starting DownloadTrigsActivity");
 		

@@ -9,26 +9,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import java.nio.charset.StandardCharsets;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -41,11 +27,23 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.util.TypedValue;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
-import com.trigpointinguk.android.common.CountingMultipartEntity;
 import com.trigpointinguk.android.common.CountingMultipartEntity.ProgressListener;
+import com.trigpointinguk.android.common.ProgressRequestBody;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import com.trigpointinguk.android.types.Condition;
 
 
@@ -54,35 +52,50 @@ public class SyncTask implements ProgressListener {
 	public static final String TAG ="SyncTask";
 	private Context 			mCtx;
 	private SharedPreferences 	mPrefs;
-    private ProgressDialog 		mProgressDialog;
+    private AlertDialog 		progressDialog;
+    private ProgressBar 		progressBar;
+    private TextView   		progressText;
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	private Handler mainHandler = new Handler(Looper.getMainLooper());
 	
 	private void updateProgress(int type, int... values) {
-		mainHandler.post(() -> {
-			String message;
-			switch (type) {
-			case MAX:
-				mProgressDialog.setIndeterminate(false);
-				mProgressDialog.setMax(values[0]);
-				mProgressDialog.setProgress(0);
-				break;
-			case PROGRESS:
-				mProgressDialog.setProgress(values[0]);
-				break;
-			case MESSAGE:
-				message = mCtx.getResources().getString(values[0]);
-				mProgressDialog.setMessage(message);
-				break;
-			case MESSAGECOUNT:
-				message = "Uploading photo " + values[0] + " of " + values[1];
-				mProgressDialog.setMessage(message);
-				break;
-			case BLANKPROGRESS:
-				mProgressDialog.setMax(1);
-				break;
-			}
-		});
+        mainHandler.post(() -> {
+            String message;
+            if (progressDialog == null) {
+                showDialog("");
+            }
+            switch (type) {
+            case MAX:
+                if (progressBar != null) {
+                    progressBar.setIndeterminate(false);
+                    progressBar.setMax(values[0]);
+                    progressBar.setProgress(0);
+                }
+                break;
+            case PROGRESS:
+                if (progressBar != null) {
+                    progressBar.setProgress(values[0]);
+                }
+                break;
+            case MESSAGE:
+                message = mCtx.getResources().getString(values[0]);
+                if (progressText != null) {
+                    progressText.setText(message);
+                }
+                break;
+            case MESSAGECOUNT:
+                message = "Uploading photo " + values[0] + " of " + values[1];
+                if (progressText != null) {
+                    progressText.setText(message);
+                }
+                break;
+            case BLANKPROGRESS:
+                if (progressBar != null) {
+                    progressBar.setMax(1);
+                }
+                break;
+            }
+        });
 	}
 
 	private	DbHelper 			mDb = null;
@@ -125,15 +138,15 @@ public class SyncTask implements ProgressListener {
 	}
 	
 	public void detach() {
-		mCtx = null;
-		mSyncListener = null;
-		mProgressDialog.dismiss();
+        mCtx = null;
+        mSyncListener = null;
+        if (progressDialog != null) { progressDialog.dismiss(); }
 	}
 	
 	public void attach(Context pCtx, SyncListener listener) {
 		this.mCtx = pCtx;
 		this.mSyncListener = listener;
-		showDialog("Continuing sync");
+        showDialog("Continuing sync");
 	}
 	
 	public void execute(Long... trigId) {
@@ -196,8 +209,8 @@ public class SyncTask implements ProgressListener {
 			}
 
 			return SUCCESS;
-		}, executor)
-		.thenAcceptAsync(result -> {
+        }, executor)
+        .thenAcceptAsync(result -> {
 			Log.d(TAG, "onPostExecute " + result);
 			// Post-execution logic (equivalent to onPostExecute)
 			if (result == SUCCESS) {
@@ -206,14 +219,14 @@ public class SyncTask implements ProgressListener {
 				Toast.makeText(mCtx, "Error syncing with TrigpointingUK - " + mErrorMessage, Toast.LENGTH_LONG).show();					
 			}
 			try {
-				if (mProgressDialog != null) {mProgressDialog.dismiss();}
-			} catch (Exception e) {
+                if (progressDialog != null) {progressDialog.dismiss();}
+            } catch (Exception e) {
 				Log.e(TAG, "Exception dismissing dialog - " + e.getMessage());
 			}
 			if (mSyncListener != null) {
 				mSyncListener.onSynced(result);
 			}
-		}, mainHandler::post);
+        }, r -> mainHandler.post(r));
 	}
 	
 
@@ -299,49 +312,39 @@ public class SyncTask implements ProgressListener {
 		
 		long trigId = c.getInt(c.getColumnIndex(DbHelper.LOG_ID));
 		
-		// Set up post variables
-	    List <NameValuePair> nameValuePairs = new ArrayList <NameValuePair> (10);
-	    nameValuePairs.add(new BasicNameValuePair("username"	, mUsername));
-	    nameValuePairs.add(new BasicNameValuePair("password"	, mPassword));
-	    nameValuePairs.add(new BasicNameValuePair("id"			, c.getString(c.getColumnIndex(DbHelper.LOG_ID))));
-    	nameValuePairs.add(new BasicNameValuePair("year"		, c.getString(c.getColumnIndex(DbHelper.LOG_YEAR))));
-    	nameValuePairs.add(new BasicNameValuePair("month"		, c.getString(c.getColumnIndex(DbHelper.LOG_MONTH))));
-    	nameValuePairs.add(new BasicNameValuePair("day"			, c.getString(c.getColumnIndex(DbHelper.LOG_DAY))));
-    	nameValuePairs.add(new BasicNameValuePair("sendtime"	, c.getString(c.getColumnIndex(DbHelper.LOG_SENDTIME))));
-    	nameValuePairs.add(new BasicNameValuePair("hour"		, c.getString(c.getColumnIndex(DbHelper.LOG_HOUR))));
-    	nameValuePairs.add(new BasicNameValuePair("minutes"		, c.getString(c.getColumnIndex(DbHelper.LOG_MINUTES))));
-    	nameValuePairs.add(new BasicNameValuePair("comment"		, c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT))));
-    	nameValuePairs.add(new BasicNameValuePair("gridref"		, c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF))));
-    	nameValuePairs.add(new BasicNameValuePair("fb"			, c.getString(c.getColumnIndex(DbHelper.LOG_FB))));
-    	nameValuePairs.add(new BasicNameValuePair("adminflag"	, c.getString(c.getColumnIndex(DbHelper.LOG_FLAGADMINS))));
-    	nameValuePairs.add(new BasicNameValuePair("userflag"	, c.getString(c.getColumnIndex(DbHelper.LOG_FLAGUSERS))));
-    	nameValuePairs.add(new BasicNameValuePair("score"		, c.getString(c.getColumnIndex(DbHelper.LOG_SCORE))));
-    	nameValuePairs.add(new BasicNameValuePair("condition"	, c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION))));
-    	nameValuePairs.add(new BasicNameValuePair("sendemail"	, String.valueOf(mPrefs.getBoolean("sendLogEmails",false))));
-    	nameValuePairs.add(new BasicNameValuePair("appversion"  , String.valueOf(mAppVersion)));
-	    
+        // Build form body
+        FormBody formBody = new FormBody.Builder(StandardCharsets.UTF_8)
+                .add("username", mUsername)
+                .add("password", mPassword)
+                .add("id", c.getString(c.getColumnIndex(DbHelper.LOG_ID)))
+                .add("year", c.getString(c.getColumnIndex(DbHelper.LOG_YEAR)))
+                .add("month", c.getString(c.getColumnIndex(DbHelper.LOG_MONTH)))
+                .add("day", c.getString(c.getColumnIndex(DbHelper.LOG_DAY)))
+                .add("sendtime", c.getString(c.getColumnIndex(DbHelper.LOG_SENDTIME)))
+                .add("hour", c.getString(c.getColumnIndex(DbHelper.LOG_HOUR)))
+                .add("minutes", c.getString(c.getColumnIndex(DbHelper.LOG_MINUTES)))
+                .add("comment", c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)))
+                .add("gridref", c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF)))
+                .add("fb", c.getString(c.getColumnIndex(DbHelper.LOG_FB)))
+                .add("adminflag", c.getString(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)))
+                .add("userflag", c.getString(c.getColumnIndex(DbHelper.LOG_FLAGUSERS)))
+                .add("score", c.getString(c.getColumnIndex(DbHelper.LOG_SCORE)))
+                .add("condition", c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION)))
+                .add("sendemail", String.valueOf(mPrefs.getBoolean("sendLogEmails", false)))
+                .add("appversion", String.valueOf(mAppVersion))
+                .build();
 		try {
-			// Send the request
-			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost( "https://trigpointing.uk/trigs/android-sync-log.php" );
-		    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-		    Log.d(TAG, nameValuePairs.toString());
-		    HttpResponse response = client.execute(post);
-		    
-		    // Get the response
-		    InputStream ips  = response.getEntity().getContent();
-	        BufferedReader buf = new BufferedReader(new InputStreamReader(ips,"UTF-8"));
-	        
-	        // Handle HTTP errors
-	        if(response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK) {
-	            Log.e(TAG, "RC error - " + response.getStatusLine().getReasonPhrase());
-	            return ERROR;
-	        }
-
-	        // Single line JSON response from T:UK server
-	        String reply = buf.readLine();
-	        buf.close();
-	        ips.close();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://trigpointing.uk/trigs/android-sync-log.php")
+                    .post(formBody)
+                    .build();
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, "RC error - " + response.code());
+                    return ERROR;
+                }
+                String reply = response.body() != null ? response.body().string() : null;
 	        Log.d(TAG, "Reply from T:UK - " + reply);
 	        if (reply == null || reply == "") {
 	        	Log.e(TAG, "No response received from T:UK");
@@ -369,17 +372,15 @@ public class SyncTask implements ProgressListener {
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 				return ERROR;
-			}
+            }
+        }
 
-		} catch (ClientProtocolException e) {
-            return ERROR;
-		} catch (IOException e) {
+        } catch (IOException e) {
             return ERROR;
 		} catch (NumberFormatException e) {
 			Log.e(TAG, "Unable to convert log_id received from T:UK into integer");
 			return ERROR;
 		}
-
 		return SUCCESS;
 	}
 	
@@ -391,44 +392,39 @@ public class SyncTask implements ProgressListener {
 		Long	photoId 	= c.getLong  (c.getColumnIndex(DbHelper.PHOTO_ID));
     	String 	photoPath 	= c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO));
     	String 	thumbPath 	= c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
-		
+
 		try {
-			// Send the request
-			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost( "https://trigpointing.uk/trigs/android-sync-photo.php" );
-		    
-		    //MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			MultipartEntity entity = new CountingMultipartEntity(this);
-    	    entity.addPart("username"	, new StringBody(mUsername));
-    	    entity.addPart("password"	, new StringBody(mPassword));
-    	    entity.addPart("photoid"	, new StringBody(photoId.toString()));
-    	    entity.addPart("tlog_id"	, new StringBody(c.getString(c.getColumnIndex(DbHelper.PHOTO_TUKLOGID))));
-    	    entity.addPart("trig"		, new StringBody(c.getString(c.getColumnIndex(DbHelper.PHOTO_TRIG))));
-    	    entity.addPart("name"		, new StringBody(c.getString(c.getColumnIndex(DbHelper.PHOTO_NAME))));
-    	    entity.addPart("descr"		, new StringBody(c.getString(c.getColumnIndex(DbHelper.PHOTO_DESCR))));
-    	    entity.addPart("subject"	, new StringBody(c.getString(c.getColumnIndex(DbHelper.PHOTO_SUBJECT))));
-    	    entity.addPart("ispublic"	, new StringBody(c.getString(c.getColumnIndex(DbHelper.PHOTO_ISPUBLIC))));
-            entity.addPart("photo"		, new FileBody(new File (photoPath), "image/jpeg"));
-        	entity.addPart("appversion" , new StringBody(String.valueOf(mAppVersion)));
+            OkHttpClient client = new OkHttpClient();
 
+            MediaType JPEG = MediaType.parse("image/jpeg");
+            File photoFile = new File(photoPath);
+            RequestBody photoBody = new ProgressRequestBody(photoFile, JPEG, this);
 
-            post.setEntity(entity);
-            HttpResponse response = client.execute(post);
-            
-		    // Get the response
-		    InputStream ips  = response.getEntity().getContent();
-	        BufferedReader buf = new BufferedReader(new InputStreamReader(ips,"UTF-8"));
-	        
-	        // Handle HTTP errors
-	        if(response.getStatusLine().getStatusCode()!=HttpStatus.SC_OK) {
-	            Log.e(TAG, "RC error - " + response.getStatusLine().getReasonPhrase());
-	            return ERROR;
-	        }
+            MultipartBody.Builder mb = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("username", mUsername)
+                    .addFormDataPart("password", mPassword)
+                    .addFormDataPart("photoid", photoId.toString())
+                    .addFormDataPart("tlog_id", c.getString(c.getColumnIndex(DbHelper.PHOTO_TUKLOGID)))
+                    .addFormDataPart("trig", c.getString(c.getColumnIndex(DbHelper.PHOTO_TRIG)))
+                    .addFormDataPart("name", c.getString(c.getColumnIndex(DbHelper.PHOTO_NAME)))
+                    .addFormDataPart("descr", c.getString(c.getColumnIndex(DbHelper.PHOTO_DESCR)))
+                    .addFormDataPart("subject", c.getString(c.getColumnIndex(DbHelper.PHOTO_SUBJECT)))
+                    .addFormDataPart("ispublic", c.getString(c.getColumnIndex(DbHelper.PHOTO_ISPUBLIC)))
+                    .addFormDataPart("appversion", String.valueOf(mAppVersion))
+                    .addFormDataPart("photo", photoFile.getName(), photoBody);
 
-	        // Single line JSON response from T:UK server
-	        String reply = buf.readLine();
-	        buf.close();
-	        ips.close();
+            Request request = new Request.Builder()
+                    .url("https://trigpointing.uk/trigs/android-sync-photo.php")
+                    .post(mb.build())
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, "RC error - " + response.code());
+                    return ERROR;
+                }
+                String reply = response.body() != null ? response.body().string() : null;
 	        Log.i(TAG, "Reply from T:UK - " + reply);
 	        if (reply == null || reply == "") {
 	        	Log.e(TAG, "No response received from T:UK");
@@ -454,17 +450,15 @@ public class SyncTask implements ProgressListener {
 	        } catch (JSONException e1) {
 				e1.printStackTrace();
 				return ERROR;
-			}
+            }
+        }
 
-		} catch (ClientProtocolException e) {
-            return ERROR;
-		} catch (IOException e) {
+        } catch (IOException e) {
             return ERROR;
 		} catch (NumberFormatException e) {
 			Log.e(TAG, "Unable to convert tukPhotoId received from T:UK into integer");
 			return ERROR;
 		}
-
 		return SUCCESS;
 	}
 	
@@ -528,7 +522,7 @@ public class SyncTask implements ProgressListener {
 				updateProgress(MAX, mMax);
 			}
 			// read log records records
-            while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
+			while ((strLine = br.readLine()) != null && !strLine.trim().equals(""))   {
             	//Log.i(TAG,strLine);
 				String[] csv=strLine.split("\t");
 				Condition logged		= Condition.fromCode(csv[0]);
@@ -575,12 +569,28 @@ public class SyncTask implements ProgressListener {
     
     
     protected void showDialog(String message) {
-		mProgressDialog = new ProgressDialog(mCtx);
-		mProgressDialog.setIndeterminate(false);
-		mProgressDialog.setCancelable(true);
-		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		mProgressDialog.setMessage(message);
-		mProgressDialog.show();    	
+        // Build a simple dialog with a horizontal ProgressBar and a message
+        LinearLayout container = new LinearLayout(mCtx);
+        container.setOrientation(LinearLayout.VERTICAL);
+        int paddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24,
+                mCtx.getResources().getDisplayMetrics());
+        container.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+
+        progressText = new TextView(mCtx);
+        progressText.setText(message);
+        container.addView(progressText, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        progressBar = new ProgressBar(mCtx, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setIndeterminate(false);
+        container.addView(progressBar, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        progressDialog = new AlertDialog.Builder(mCtx)
+                .setView(container)
+                .setCancelable(true)
+                .create();
+        progressDialog.show();
     }
     
 

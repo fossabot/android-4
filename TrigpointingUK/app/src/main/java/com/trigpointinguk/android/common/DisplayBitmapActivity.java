@@ -1,6 +1,5 @@
 package com.trigpointinguk.android.common;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -48,8 +47,7 @@ public class DisplayBitmapActivity extends AppCompatActivity {
         
         // Set loading image
         mZoomableImageView.setImageResource(R.drawable.imageloading);
-
-		mBitmapLoader = new BitmapLoader(this);
+        mBitmapLoader = new BitmapLoader(this);
 		loadBitmap();
     
     }

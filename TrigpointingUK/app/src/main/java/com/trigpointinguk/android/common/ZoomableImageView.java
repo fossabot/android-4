@@ -2,15 +2,14 @@ package com.trigpointinguk.android.common;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
 /**
@@ -18,12 +17,10 @@ import androidx.appcompat.widget.AppCompatImageView;
  * Modern implementation using standard Android gesture detection
  */
 public class ZoomableImageView extends AppCompatImageView {
-    private static final String TAG = "ZoomableImageView";
-    
+
     // Matrix for transformations
-    private Matrix mMatrix = new Matrix();
-    private Matrix mSavedMatrix = new Matrix();
-    
+    private final Matrix mMatrix = new Matrix();
+
     // Scale limits
     private static final float MIN_SCALE = 1.0f;
     private static final float MAX_SCALE = 10.0f;
@@ -127,14 +124,7 @@ public class ZoomableImageView extends AppCompatImageView {
         
         setImageMatrix(mMatrix);
     }
-    
-    /**
-     * Get current scale factor
-     */
-    public float getCurrentScale() {
-        return mCurrentScale;
-    }
-    
+
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
@@ -166,7 +156,7 @@ public class ZoomableImageView extends AppCompatImageView {
     
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        public boolean onScroll(MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
             // Only pan if zoomed in
             if (mCurrentScale > MIN_SCALE) {
                 mMatrix.postTranslate(-distanceX, -distanceY);
@@ -178,7 +168,7 @@ public class ZoomableImageView extends AppCompatImageView {
         }
         
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
+        public boolean onDoubleTap(@NonNull MotionEvent e) {
             if (mCurrentScale > MIN_SCALE) {
                 // If zoomed in, reset to fit
                 resetZoom();
@@ -199,7 +189,7 @@ public class ZoomableImageView extends AppCompatImageView {
         }
         
         @Override
-        public boolean onDown(MotionEvent e) {
+        public boolean onDown(@NonNull MotionEvent e) {
             return true;
         }
     }

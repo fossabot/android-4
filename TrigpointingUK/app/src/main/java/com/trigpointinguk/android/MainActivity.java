@@ -2,7 +2,6 @@ package com.trigpointinguk.android;
 
 // import org.acra.ErrorReporter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.trigpointinguk.android.common.ClearCacheTask;
 import com.trigpointinguk.android.common.ThemeUtils;
-import com.trigpointinguk.android.filter.FilterActivity;
 import com.trigpointinguk.android.logging.SyncListener;
 import com.trigpointinguk.android.logging.SyncTask;
 import com.trigpointinguk.android.mapping.DownloadMapsActivity;

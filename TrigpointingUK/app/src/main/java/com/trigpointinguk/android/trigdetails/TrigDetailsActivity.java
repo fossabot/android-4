@@ -3,14 +3,11 @@ package com.trigpointinguk.android.trigdetails;
 import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TabHost;
 import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.logging.LogTrigActivity;

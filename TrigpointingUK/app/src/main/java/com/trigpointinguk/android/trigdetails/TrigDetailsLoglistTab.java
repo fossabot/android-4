@@ -44,7 +44,7 @@ public class TrigDetailsLoglistTab extends ListActivity {
 
         // attach the array adapter
 		mTrigLogs = new ArrayList<TrigLog>();
-        mTrigLogsAdapter = new TrigDetailsLoglistAdapter(TrigDetailsLoglistTab.this, R.layout.triglogrow, mTrigLogs); 
+		mTrigLogsAdapter = new TrigDetailsLoglistAdapter(TrigDetailsLoglistTab.this, R.layout.triglogrow, mTrigLogs);
 		setListAdapter(mTrigLogsAdapter);
 
 		// find view for empty list notification

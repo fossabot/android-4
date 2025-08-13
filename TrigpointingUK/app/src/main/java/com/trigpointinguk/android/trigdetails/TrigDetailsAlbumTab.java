@@ -45,7 +45,7 @@ public class TrigDetailsAlbumTab extends ListActivity {
 
         // attach the array adapter
 		mTrigPhotos = new ArrayList<TrigPhoto>();
-        mTrigAlbumAdapter = new TrigDetailsAlbumAdapter(TrigDetailsAlbumTab.this, R.layout.trigalbumrow, mTrigPhotos); 
+		mTrigAlbumAdapter = new TrigDetailsAlbumAdapter(TrigDetailsAlbumTab.this, R.layout.trigalbumrow, mTrigPhotos);
 		setListAdapter(mTrigAlbumAdapter);
 
 		// find view for empty list notification
