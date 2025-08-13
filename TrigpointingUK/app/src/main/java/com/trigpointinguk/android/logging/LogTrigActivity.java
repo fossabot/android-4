@@ -32,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.MotionEvent;
 import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -41,7 +42,8 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
-import android.widget.Gallery;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -82,7 +84,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private EditText			mComment;
     private CheckBox			mAdminFlag;
     private CheckBox			mUserFlag;
-    private Gallery				mGallery;
+    private RecyclerView			mGallery;
     private TextView			mLocationError;
     
     private DbHelper 			mDb;
@@ -172,7 +174,8 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
  		}
 	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
-	    mGallery 		= (Gallery) 		findViewById(R.id.logGallery);
+	            mGallery 		= (RecyclerView) findViewById(R.id.logGallery);
+        mGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 	    
 
@@ -191,13 +194,28 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
         	
 		
 		// Setup listener on gallery photos
-	    mGallery.setOnItemClickListener(new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	            Log.i(TAG, "Clicked photo icon number : " + position);
-	            Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
-	            i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
-	            startActivityForResult(i, EDIT_PHOTO);
+	    mGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+	        @Override
+	        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+	            View child = rv.findChildViewUnder(e.getX(), e.getY());
+	            if (child != null) {
+	                int position = rv.getChildAdapterPosition(child);
+	                if (position != RecyclerView.NO_POSITION) {
+	                    Log.i(TAG, "Clicked photo icon number : " + position);
+	                    Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
+	                    i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
+	                    startActivityForResult(i, EDIT_PHOTO);
+	                    return true;
+	                }
+	            }
+	            return false;
 	        }
+
+	        @Override
+	        public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+
+	        @Override
+	        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
 	    });
 
 		
@@ -580,7 +598,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			c.close();		
 		}
 		
-		mGallery.setAdapter(new LogTrigGalleryAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
+		mGallery.setAdapter(new LogTrigRecyclerAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
 	}
 
     

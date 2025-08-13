@@ -29,7 +29,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Gallery;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import android.widget.Toast;
 
 import com.trigpointinguk.android.DbHelper;
@@ -462,17 +463,19 @@ public class TrigDetailsOSMapTab extends Activity {
 	}
 	
 	private void setupGallery() {
-		Gallery gallery = (Gallery) findViewById(R.id.trigosgallery);
+		RecyclerView gallery = (RecyclerView) findViewById(R.id.trigosgallery);
 		
 		// Use the instance adapter (either newly created or existing)
 		if (mAdapter != null) {
+			gallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 			gallery.setAdapter(mAdapter);
 		}
 		
-		gallery.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+		mAdapter.setOnItemClickListener(new TrigDetailsOSMapAdapter.OnItemClickListener() {
+			@Override
+			public void onItemClick(int position) {
 				// Get the current URL from the adapter (may be placeholder or actual image)
-				if (mAdapter != null && position < mAdapter.getCount()) {
+				                                if (mAdapter != null && position < mAdapter.getItemCount()) {
 					String url = mAdapter.getUrlAtPosition(position);
 					
 					// Only allow clicks on actual images (not placeholders)

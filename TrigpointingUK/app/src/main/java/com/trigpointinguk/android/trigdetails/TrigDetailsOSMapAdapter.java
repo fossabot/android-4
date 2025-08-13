@@ -5,15 +5,20 @@ import android.content.res.TypedArray;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Gallery;
 import android.widget.ImageView;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.LazyImageLoader;
 
-public class TrigDetailsOSMapAdapter extends BaseAdapter {
+public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSMapAdapter.ViewHolder> {
+    
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    
+    private OnItemClickListener mClickListener;
     private static final String TAG = "TrigDetailsOSMapAdapter";
     private static final String PLACEHOLDER_URL = "PLACEHOLDER";
     
@@ -30,27 +35,42 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
         TypedArray attr = context.obtainStyledAttributes(R.styleable.TrigpointingUK);
         mGalleryItemBackground = attr.getResourceId(R.styleable.TrigpointingUK_android_galleryItemBackground, 0);
     }
-
-    public int getCount() {
-        return mUrls.length;
+    
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mClickListener = listener;
     }
 
-    public Object getItem(int position) {
-        return position;
-    }
-
-    public long getItemId(int position) {
-        return position;
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ImageView imageView = new ImageView(mContext);
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(300, 300));
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageView.setBackgroundResource(mGalleryItemBackground);
+        
+        // Set click listener
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mClickListener != null) {
+                    int position = (int) v.getTag();
+                    mClickListener.onItemClick(position);
+                }
+            }
+        });
+        
+        return new ViewHolder(imageView);
     }
     
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView = new ImageView(mContext);
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // Set position tag for click handling
+        holder.imageView.setTag(position);
         
         Log.d(TAG, "Loading map image at position " + position + ": " + mUrls[position]);
         
         // Handle placeholder items
         if (PLACEHOLDER_URL.equals(mUrls[position])) {
-            imageView.setImageResource(R.drawable.imageloading);
+            holder.imageView.setImageResource(R.drawable.imageloading);
             Log.d(TAG, "Showing placeholder at position " + position);
         }
         // Check if it's a file path or URL
@@ -62,27 +82,35 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
             try {
                 android.graphics.Bitmap bitmap = android.graphics.BitmapFactory.decodeFile(filePath);
                 if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
+                    holder.imageView.setImageBitmap(bitmap);
                     Log.d("TrigDetailsOSMapAdapter", "Successfully loaded local file: " + filePath);
                 } else {
                     Log.w("TrigDetailsOSMapAdapter", "Failed to decode local file: " + filePath);
                     // Set a placeholder or default image
-                    imageView.setImageResource(R.drawable.imageloading);
+                    holder.imageView.setImageResource(R.drawable.imageloading);
                 }
             } catch (Exception e) {
                 Log.e("TrigDetailsOSMapAdapter", "Error loading local file: " + filePath, e);
-                imageView.setImageResource(R.drawable.imageloading);
+                holder.imageView.setImageResource(R.drawable.imageloading);
             }
         } else {
             // Load from URL using LazyImageLoader (legacy support)
-            imageLoader.DisplayImage(mUrls[position], imageView);
+            imageLoader.DisplayImage(mUrls[position], holder.imageView);
         }
-
-        imageView.setLayoutParams(new Gallery.LayoutParams(300, 300));
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setBackgroundResource(mGalleryItemBackground);
-
-        return imageView;
+    }
+    
+    @Override
+    public int getItemCount() {
+        return mUrls.length;
+    }
+    
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        
+        public ViewHolder(View itemView) {
+            super(itemView);
+            imageView = (ImageView) itemView;
+        }
     }
     
     /**
@@ -92,8 +120,8 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
         if (position >= 0 && position < mUrls.length) {
             mUrls[position] = imagePath;
             Log.d(TAG, "Updated position " + position + " with: " + imagePath);
-            // Notify adapter of change - this will trigger getView() for this position
-            notifyDataSetChanged();
+            // Notify adapter of change - this will trigger onBindViewHolder() for this position
+            notifyItemChanged(position);
         }
     }
     

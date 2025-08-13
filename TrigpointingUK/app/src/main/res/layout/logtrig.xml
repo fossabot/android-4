@@ -213,7 +213,7 @@
         android:textSize="14sp"
         android:layout_marginBottom="4dp" />
 
-    <Gallery
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/logGallery"
         android:layout_width="match_parent"
         android:layout_height="80dp"
