@@ -220,6 +220,9 @@ public class TrigDetailsOSMapTab extends Activity {
 					cropLeft, cropTop, FINAL_IMAGE_SIZE, FINAL_IMAGE_SIZE);
 				compositeBitmap.recycle();
 				
+				// Add blue circle marker at center of image
+				finalBitmap = addCenterMarker(finalBitmap);
+				
 				// Save to cache
 				try (FileOutputStream out = new FileOutputStream(cachedFile)) {
 					finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -404,6 +407,48 @@ public class TrigDetailsOSMapTab extends Activity {
 		double easting = E0 + IV * dLon + V * dLon3 + VI * dLon5;
 		
 		return new double[]{easting, northing};
+	}
+	
+	/**
+	 * Adds a small blue circle marker at the center of the image to indicate trigpoint location
+	 * @param originalBitmap The bitmap to add the marker to
+	 * @return A new bitmap with the blue circle marker added
+	 */
+	private Bitmap addCenterMarker(Bitmap originalBitmap) {
+		// Create a mutable copy of the bitmap
+		Bitmap markedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+		
+		// Create canvas to draw on the bitmap
+		Canvas canvas = new Canvas(markedBitmap);
+		
+		// Calculate circle parameters
+		int imageWidth = markedBitmap.getWidth();
+		int imageHeight = markedBitmap.getHeight();
+		float centerX = imageWidth / 2.0f;
+		float centerY = imageHeight / 2.0f;
+		float circleRadius = imageWidth * 0.025f; // 5% of image width diameter = 2.5% radius
+		
+		// Create paint for the blue circle
+		Paint circlePaint = new Paint();
+		circlePaint.setColor(0xFF0066CC); // Blue color
+		circlePaint.setStyle(Paint.Style.STROKE);
+		circlePaint.setStrokeWidth(3.0f);
+		circlePaint.setAntiAlias(true);
+		
+		// Create paint for inner circle (semi-transparent fill)
+		Paint fillPaint = new Paint();
+		fillPaint.setColor(0x400066CC); // Semi-transparent blue
+		fillPaint.setStyle(Paint.Style.FILL);
+		fillPaint.setAntiAlias(true);
+		
+		// Draw the filled circle first, then the outline
+		canvas.drawCircle(centerX, centerY, circleRadius, fillPaint);
+		canvas.drawCircle(centerX, centerY, circleRadius, circlePaint);
+		
+		Log.d(TAG, String.format("Added center marker: circle at (%.1f, %.1f) radius %.1f", 
+			centerX, centerY, circleRadius));
+		
+		return markedBitmap;
 	}
 	
 	private void setupGallery() {
