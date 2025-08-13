@@ -93,9 +93,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private ProgressDialog		mProgressDialog;
     private LocationManager 	mLocationManager;
     
-    	// Photo picker launchers
-	private ActivityResultLauncher<Intent> mPhotoPickerLauncher;
-	private ActivityResultLauncher<Intent> mEditPhotoLauncher;
+    	// Photo picker constants
+	private static final int CHOOSE_PHOTO = 1;
+	private static final int EDIT_PHOTO = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,35 +108,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 		
-			// Initialize modern photo picker launchers
-		mPhotoPickerLauncher = registerForActivityResult(
-			new ActivityResultContracts.StartActivityForResult(),
-			new ActivityResultCallback<ActivityResult>() {
-				@Override
-				public void onActivityResult(ActivityResult result) {
-					Log.i(TAG, "Photo picker result: " + result.getResultCode() + ", data: " + (result.getData() != null ? "present" : "null"));
-					if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-						Log.i(TAG, "Calling createPhoto with data");
-						createPhoto(result.getData());
-					} else {
-						Log.w(TAG, "Photo picker returned unexpected result: " + result.getResultCode());
-					}
-				}
-			}
-		);
-		
-		mEditPhotoLauncher = registerForActivityResult(
-			new ActivityResultContracts.StartActivityForResult(),
-			new ActivityResultCallback<ActivityResult>() {
-				@Override
-				public void onActivityResult(ActivityResult result) {
-					// Only update gallery if photo was saved (not cancelled)
-					if (result.getResultCode() == RESULT_OK) {
-						updateGallery();
-					}
-				}
-			}
-		);
+			// Photo picker launchers will be handled by onActivityResult method
 		
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -224,7 +196,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	            Log.i(TAG, "Clicked photo icon number : " + position);
 	            Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
 	            i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
-	            mEditPhotoLauncher.launch(i);
+	            startActivityForResult(i, EDIT_PHOTO);
 	        }
 	    });
 
@@ -411,6 +383,29 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 			populateFields();
 		}
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		
+		Log.i(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode + ", data=" + (data != null ? "present" : "null"));
+		
+		if (requestCode == CHOOSE_PHOTO) {
+			if (resultCode == RESULT_OK && data != null) {
+				Log.i(TAG, "Photo picker returned OK with data");
+				createPhoto(data);
+			} else {
+				Log.w(TAG, "Photo picker returned unexpected result: " + resultCode);
+			}
+		} else if (requestCode == EDIT_PHOTO) {
+			if (resultCode == RESULT_OK) {
+				Log.i(TAG, "Photo editing returned OK, updating gallery");
+				updateGallery();
+			} else {
+				Log.i(TAG, "Photo editing cancelled or failed");
+			}
+		}
+	}
 
     @Override
 	protected void onDestroy() {
@@ -455,7 +450,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     	}
     	
     	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
-    	mPhotoPickerLauncher.launch(photoPickerIntent);
+    	startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
     }
  
     
@@ -507,7 +502,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     		// edit the other fields for the new photo
             Intent i = new Intent(this, LogPhotoActivity.class);
             i.putExtra(DbHelper.PHOTO_ID, photoId);
-            mEditPhotoLauncher.launch(i);
+            startActivityForResult(i, EDIT_PHOTO);
 		} else {
 			Log.w(TAG, "No image URI received from picker");
 		}
