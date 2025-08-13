@@ -106,10 +106,11 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.logtrig);
 		
-		// Enable back button in action bar
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		}
+        // This activity is embedded inside TrigDetailsActivity TabHost.
+        // Hide the activity action bar to avoid a double header.
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 		
 			// Photo picker launchers will be handled by onActivityResult method
 		

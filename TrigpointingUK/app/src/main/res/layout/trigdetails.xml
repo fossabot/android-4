@@ -5,79 +5,30 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <!-- Custom tab bar container -->
-    <LinearLayout
-        android:id="@+id/tab_bar_container"
+    <TabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary"
-        android:padding="8dp"
-        android:layout_marginTop="16dp">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
-        <!-- Info tab button -->
-        <ImageView
-            android:id="@+id/tab_info"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_info_details"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="4dp"
-            android:contentDescription="Info tab" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <!-- Logs tab button -->
-        <ImageView
-            android:id="@+id/tab_logs"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_agenda"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="4dp"
-            android:contentDescription="Logs tab" />
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        <!-- Album tab button -->
-        <ImageView
-            android:id="@+id/tab_album"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_gallery"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="4dp"
-            android:contentDescription="Album tab" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-        <!-- Map tab button -->
-        <ImageView
-            android:id="@+id/tab_map"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_mapmode"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="4dp"
-            android:contentDescription="Map tab" />
+        </LinearLayout>
 
-        <!-- My Log tab button -->
-        <ImageView
-            android:id="@+id/tab_mylog"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_menu_edit"
-            android:background="?android:attr/selectableItemBackground"
-            android:padding="4dp"
-            android:contentDescription="My Log tab" />
+    </TabHost>
 
-    </LinearLayout>
-
-    <!-- Content area for tab content -->
-    <FrameLayout
-        android:id="@+id/tab_content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white" />
-
-</LinearLayout> 
+</LinearLayout>

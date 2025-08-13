@@ -67,25 +67,28 @@ public class ThemeUtils {
      * Ensure an activity has proper content positioning
      */
     public static void setupContentPositioning(AppCompatActivity activity) {
-        // For now, we'll use a more conservative approach
-        // The theme's fitsSystemWindows="true" should handle most cases
-        // We'll only apply additional positioning if absolutely necessary
-        
-        // Check if we need to apply additional positioning
         View contentView = activity.findViewById(android.R.id.content);
-        if (contentView != null) {
-            // Only apply additional positioning if the content view doesn't have
-            // proper top margin already
-            if (contentView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
-                if (params.topMargin == 0) {
-                    // Apply minimal positioning to ensure content is visible
-                    int actionBarHeight = getActionBarHeight(activity);
-                    int statusBarHeight = getStatusBarHeight(activity);
-                    int totalTopSpace = actionBarHeight + statusBarHeight + 16; // 16dp additional spacing
-                    
-                    params.topMargin = totalTopSpace;
-                    contentView.setLayoutParams(params);
+        if (contentView instanceof ViewGroup) {
+            ViewGroup contentGroup = (ViewGroup) contentView;
+            if (contentGroup.getChildCount() > 0) {
+                View rootChild = contentGroup.getChildAt(0);
+
+                int actionBarHeight = getActionBarHeight(activity);
+                // Add approximately one line height of padding (16dp)
+                int extraPaddingPx = Math.round(TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, 8,
+                        activity.getResources().getDisplayMetrics()));
+
+                int desiredTopPadding = actionBarHeight + extraPaddingPx;
+
+                // Only increase if current padding is less than desired
+                if (rootChild.getPaddingTop() < desiredTopPadding) {
+                    rootChild.setPadding(
+                            rootChild.getPaddingLeft(),
+                            desiredTopPadding,
+                            rootChild.getPaddingRight(),
+                            rootChild.getPaddingBottom()
+                    );
                 }
             }
         }
