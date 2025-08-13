@@ -63,8 +63,6 @@ import com.trigpointinguk.android.types.TrigPhoto;
 
 public class LogTrigActivity extends AppCompatActivity implements OnDateChangedListener, LocationListener, SyncListener {
 	private static final String TAG			= "LogTrigActivity";
-    private static final int    CHOOSE_PHOTO  = 1;
-    private static final int    EDIT_PHOTO  = 2;
     private SharedPreferences 	mPrefs;
 
     private LatLon.UNITS		mUnits;
@@ -74,7 +72,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	private LatLon				mTrigLocation;
 	
     private ViewSwitcher 		mSwitcher;
-    private ToggleButton		mSendTime;
+    private CheckBox			mSendTime;
     private DatePicker			mDate;
     private TimePicker			mTime;
     private EditText			mGridref;
@@ -95,9 +93,9 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
     private ProgressDialog		mProgressDialog;
     private LocationManager 	mLocationManager;
     
-    // Modern photo picker launchers
-    private ActivityResultLauncher<Intent> mPhotoPickerLauncher;
-    private ActivityResultLauncher<Intent> mEditPhotoLauncher;
+    	// Photo picker launchers
+	private ActivityResultLauncher<Intent> mPhotoPickerLauncher;
+	private ActivityResultLauncher<Intent> mEditPhotoLauncher;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +160,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		
 		// Get references to various views and form elements
 		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
-		mSendTime		= (ToggleButton)	findViewById(R.id.sendTime);
+		mSendTime		= (CheckBox)	findViewById(R.id.sendTime);
 	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
 	   	mDate			= (DatePicker)		findViewById(R.id.logDate);
 	   	mGridref 		= (EditText)		findViewById(R.id.logGridref);
@@ -171,13 +169,21 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 	   	mCondition		= (Spinner)			findViewById(R.id.logCondition);
 	   	mScore			= (RatingBar)		findViewById(R.id.logScore);
 	   	
-	   	// Ensure minimum 1 star rating
+	   			// Ensure minimum 1 star rating
 	   	mScore.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
 	   		@Override
 	   		public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 	   			if (fromUser && rating < 1.0f) {
 	   				ratingBar.setRating(1.0f);
 	   			}
+	   		}
+	   	});
+	    
+	   	// Setup CheckBox listener for time logging
+	   	mSendTime.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+	   		@Override
+	   		public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
+	   			updateTimeVisibility();
 	   		}
 	   	});
 	   	mComment		= (EditText)		findViewById(R.id.logComment);
