@@ -67,19 +67,26 @@ public class ThemeUtils {
      * Ensure an activity has proper content positioning
      */
     public static void setupContentPositioning(AppCompatActivity activity) {
-        // Ensure the content view has proper positioning
+        // For now, we'll use a more conservative approach
+        // The theme's fitsSystemWindows="true" should handle most cases
+        // We'll only apply additional positioning if absolutely necessary
+        
+        // Check if we need to apply additional positioning
         View contentView = activity.findViewById(android.R.id.content);
         if (contentView != null) {
-            // Use a more conservative approach - add consistent top margin
-            // that accounts for action bar height plus some breathing room
-            int actionBarHeight = getActionBarHeight(activity);
-            int statusBarHeight = getStatusBarHeight(activity);
-            int totalTopSpace = actionBarHeight + statusBarHeight + 24; // 24dp additional spacing
-            
+            // Only apply additional positioning if the content view doesn't have
+            // proper top margin already
             if (contentView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) contentView.getLayoutParams();
-                params.topMargin = totalTopSpace;
-                contentView.setLayoutParams(params);
+                if (params.topMargin == 0) {
+                    // Apply minimal positioning to ensure content is visible
+                    int actionBarHeight = getActionBarHeight(activity);
+                    int statusBarHeight = getStatusBarHeight(activity);
+                    int totalTopSpace = actionBarHeight + statusBarHeight + 16; // 16dp additional spacing
+                    
+                    params.topMargin = totalTopSpace;
+                    contentView.setLayoutParams(params);
+                }
             }
         }
     }
