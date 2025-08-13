@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -41,6 +42,8 @@ public class TrigDetailsOSMapTab extends Activity {
 	private long mTrigId;
 	private DbHelper mDb;
 	private String[] mImagePaths;
+	private TrigDetailsOSMapAdapter mAdapter;
+	private AtomicInteger mNextPosition = new AtomicInteger(0);
 	private ExecutorService mExecutor;
 	private Handler mMainHandler;
 	
@@ -106,38 +109,52 @@ public class TrigDetailsOSMapTab extends Activity {
 	}
 	
 	private void generateCachedImages(double lat, double lon) {
-		List<String> imagePaths = new ArrayList<>();
-		List<CompletableFuture<String>> tasks = new ArrayList<>();
-		
-		// Generate images for each map configuration at different zoom levels
+		// Calculate total expected images
+		int expectedImageCount = 0;
 		for (MapConfig config : MAP_CONFIGS) {
 			for (int zoom = config.minZoom; zoom <= config.maxZoom; zoom += 2) {
-				tasks.add(generateTileBasedImage(mTrigId, lat, lon, config, zoom)
-					.thenApply(path -> {
-						if (path != null) {
-							synchronized (imagePaths) {
-								imagePaths.add(path);
-							}
-						}
-						return path;
-					}));
+				expectedImageCount++;
 			}
 		}
 		
-		CompletableFuture.allOf(tasks.toArray(new CompletableFuture[0]))
-			.thenRun(() -> {
-				mMainHandler.post(() -> {
-					mImagePaths = imagePaths.toArray(new String[0]);
-					setupGallery();
-				});
-			})
-			.exceptionally(throwable -> {
-				Log.e(TAG, "Error generating cached images", throwable);
-				mMainHandler.post(() -> {
-					Toast.makeText(this, "Error generating map images", Toast.LENGTH_SHORT).show();
-				});
-				return null;
-			});
+		Log.d(TAG, "Expecting " + expectedImageCount + " total images");
+		
+		// Create adapter with placeholders immediately and show gallery
+		mAdapter = TrigDetailsOSMapAdapter.createWithPlaceholders(this, expectedImageCount);
+		setupGallery();
+		
+		// Start generating images progressively
+		for (MapConfig config : MAP_CONFIGS) {
+			for (int zoom = config.minZoom; zoom <= config.maxZoom; zoom += 2) {
+				// Create effectively final copies for lambda capture
+				final MapConfig finalConfig = config;
+				final int finalZoom = zoom;
+				
+				generateTileBasedImage(mTrigId, lat, lon, finalConfig, finalZoom)
+					.thenAccept(imagePath -> {
+						if (imagePath != null) {
+							// Update the next available position
+							int position = mNextPosition.getAndIncrement();
+							mMainHandler.post(() -> {
+								mAdapter.updateImageAtPosition(position, imagePath);
+								int remaining = mAdapter.getPendingCount();
+								Log.d(TAG, "Updated position " + position + ", " + remaining + " images remaining");
+								
+								if (remaining == 0) {
+									Log.d(TAG, "All images loaded!");
+									Toast.makeText(this, "All map images loaded", Toast.LENGTH_SHORT).show();
+								}
+							});
+						} else {
+							Log.w(TAG, "Failed to generate image for " + finalConfig.name + " zoom " + finalZoom);
+						}
+					})
+					.exceptionally(throwable -> {
+						Log.e(TAG, "Error generating image for " + finalConfig.name + " zoom " + finalZoom, throwable);
+						return null;
+					});
+			}
+		}
 	}
 	
 	private CompletableFuture<String> generateTileBasedImage(long trigId, double lat, double lon, 
@@ -446,15 +463,29 @@ public class TrigDetailsOSMapTab extends Activity {
 	
 	private void setupGallery() {
 		Gallery gallery = (Gallery) findViewById(R.id.trigosgallery);
-		gallery.setAdapter(new TrigDetailsOSMapAdapter(this, mImagePaths));
+		
+		// Use the instance adapter (either newly created or existing)
+		if (mAdapter != null) {
+			gallery.setAdapter(mAdapter);
+		}
 		
 		gallery.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Intent i = new Intent(TrigDetailsOSMapTab.this, DisplayBitmapActivity.class);
-				// Pass the file path directly, DisplayBitmapActivity should handle local files
-				i.putExtra("URL", mImagePaths[position]);
-				Log.i(TAG, "Clicked OSMap at path: " + mImagePaths[position]);
-				startActivity(i);
+				// Get the current URL from the adapter (may be placeholder or actual image)
+				if (mAdapter != null && position < mAdapter.getCount()) {
+					String url = mAdapter.getUrlAtPosition(position);
+					
+					// Only allow clicks on actual images (not placeholders)
+					if (!"PLACEHOLDER".equals(url)) {
+						Intent i = new Intent(TrigDetailsOSMapTab.this, DisplayBitmapActivity.class);
+						i.putExtra("URL", url);
+						Log.i(TAG, "Clicked OSMap at path: " + url);
+						startActivity(i);
+					} else {
+						Log.d(TAG, "Clicked on placeholder at position " + position + " - ignoring");
+						Toast.makeText(TrigDetailsOSMapTab.this, "Image still loading...", Toast.LENGTH_SHORT).show();
+					}
+				}
 			}
 		});
 	}

@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import java.util.Arrays;
 
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.LazyImageLoader;
 
 public class TrigDetailsOSMapAdapter extends BaseAdapter {
+    private static final String TAG = "TrigDetailsOSMapAdapter";
+    private static final String PLACEHOLDER_URL = "PLACEHOLDER";
     
     private String[] mUrls;
     public LazyImageLoader imageLoader;
@@ -43,11 +46,15 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(mContext);
         
-        // Add logging to debug map loading
-        Log.d("TrigDetailsOSMapAdapter", "Loading map image at position " + position + ": " + mUrls[position]);
+        Log.d(TAG, "Loading map image at position " + position + ": " + mUrls[position]);
         
+        // Handle placeholder items
+        if (PLACEHOLDER_URL.equals(mUrls[position])) {
+            imageView.setImageResource(R.drawable.imageloading);
+            Log.d(TAG, "Showing placeholder at position " + position);
+        }
         // Check if it's a file path or URL
-        if (mUrls[position].startsWith("/") || mUrls[position].startsWith("file://")) {
+        else if (mUrls[position].startsWith("/") || mUrls[position].startsWith("file://")) {
             // Load from local file directly (bypass LazyImageLoader for local files)
             String filePath = mUrls[position].startsWith("file://") ? 
                 mUrls[position].substring(7) : mUrls[position];
@@ -76,5 +83,49 @@ public class TrigDetailsOSMapAdapter extends BaseAdapter {
         imageView.setBackgroundResource(mGalleryItemBackground);
 
         return imageView;
+    }
+    
+    /**
+     * Update a specific position with a new URL (for progressive loading)
+     */
+    public void updateImageAtPosition(int position, String imagePath) {
+        if (position >= 0 && position < mUrls.length) {
+            mUrls[position] = imagePath;
+            Log.d(TAG, "Updated position " + position + " with: " + imagePath);
+            // Notify adapter of change - this will trigger getView() for this position
+            notifyDataSetChanged();
+        }
+    }
+    
+    /**
+     * Get the number of placeholder items still pending
+     */
+    public int getPendingCount() {
+        int count = 0;
+        for (String url : mUrls) {
+            if (PLACEHOLDER_URL.equals(url)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    /**
+     * Create an adapter with all placeholder items initially
+     */
+    public static TrigDetailsOSMapAdapter createWithPlaceholders(Context context, int expectedCount) {
+        String[] placeholders = new String[expectedCount];
+        Arrays.fill(placeholders, PLACEHOLDER_URL);
+        return new TrigDetailsOSMapAdapter(context, placeholders);
+    }
+    
+    /**
+     * Get the URL at a specific position
+     */
+    public String getUrlAtPosition(int position) {
+        if (position >= 0 && position < mUrls.length) {
+            return mUrls[position];
+        }
+        return null;
     }
 }
