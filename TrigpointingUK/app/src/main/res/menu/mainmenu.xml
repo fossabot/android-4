@@ -21,6 +21,10 @@
         android:title="Clear Cache"
         android:icon="@drawable/ic_menu_delete" />
     <item
+        android:id="@+id/test_crash"
+        android:title="Test Crash (Crashlytics)"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel" />
+    <item
         android:id="@+id/exit"
         android:title="Exit"
         android:icon="@drawable/ic_menu_delete" />
