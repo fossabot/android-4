@@ -46,13 +46,13 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 		Log.i(TAG, "Trig_id = "+mTrigId);
 
         // Find ListView and set up adapter
-		mListView = (ListView) findViewById(android.R.id.list);
+		mListView = findViewById(android.R.id.list);
 		mTrigPhotos = new ArrayList<TrigPhoto>();
 		mTrigAlbumAdapter = new TrigDetailsAlbumAdapter(TrigDetailsAlbumTab.this, R.layout.trigalbumrow, mTrigPhotos);
 		mListView.setAdapter(mTrigAlbumAdapter);
 
 		// find view for empty list notification
-		mEmptyView = (TextView) findViewById(android.R.id.empty);
+		mEmptyView = findViewById(android.R.id.empty);
 		mListView.setEmptyView(mEmptyView);
 		
 		// Set up click listener

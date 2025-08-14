@@ -15,8 +15,8 @@ import com.trigpointinguk.android.common.LazyImageLoader;
 import com.trigpointinguk.android.types.TrigPhoto;
 
 public class TrigDetailsAlbumAdapter extends ArrayAdapter<TrigPhoto> {
-	private ArrayList<TrigPhoto> mPhotos;
-	private Context 			 mContext;
+	private final ArrayList<TrigPhoto> mPhotos;
+	private final Context 			 mContext;
     public  LazyImageLoader      imageLoader;
 	
 	public TrigDetailsAlbumAdapter(Context context, int rowResourceId, ArrayList<TrigPhoto> photos) {
@@ -45,10 +45,10 @@ public class TrigDetailsAlbumAdapter extends ArrayAdapter<TrigPhoto> {
 			row = convertView;
 		}
 		 		
-		TextView  tn = (TextView)  row.findViewById(R.id.photoName);
-		TextView  td = (TextView)  row.findViewById(R.id.photoDescr);
-		TextView  tu = (TextView)  row.findViewById(R.id.photoDateUser);
-		ImageView ta = (ImageView) row.findViewById(R.id.photoIcon);
+		TextView  tn = row.findViewById(R.id.photoName);
+		TextView  td = row.findViewById(R.id.photoDescr);
+		TextView  tu = row.findViewById(R.id.photoDateUser);
+		ImageView ta = row.findViewById(R.id.photoIcon);
 
 		TrigPhoto tp = getItem(position);
 		tn.setText(tp.getName());

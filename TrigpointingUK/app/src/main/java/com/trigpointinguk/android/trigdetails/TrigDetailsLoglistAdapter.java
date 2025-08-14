@@ -14,8 +14,8 @@ import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.types.TrigLog;
 
 public class TrigDetailsLoglistAdapter extends ArrayAdapter<TrigLog> {
-	private ArrayList<TrigLog>   mLogs;
-	private Context 			 mContext;
+	private final ArrayList<TrigLog>   mLogs;
+	private final Context 			 mContext;
 	
 	public TrigDetailsLoglistAdapter(Context context, int rowResourceId, ArrayList<TrigLog> logs) {
 		super(context, rowResourceId, logs);
@@ -42,9 +42,9 @@ public class TrigDetailsLoglistAdapter extends ArrayAdapter<TrigLog> {
 			row = convertView;
 		}
 		 		
-		TextView  tu = (TextView)  row.findViewById(R.id.logDateUser);
-		TextView  tt = (TextView)  row.findViewById(R.id.logText);
-		ImageView tc = (ImageView) row.findViewById(R.id.trigLogCondition);
+		TextView  tu = row.findViewById(R.id.logDateUser);
+		TextView  tt = row.findViewById(R.id.logText);
+		ImageView tc = row.findViewById(R.id.trigLogCondition);
 
 		TrigLog tl = getItem(position);
 		if (tl.getText() != null && !tl.getText().equals("")) {

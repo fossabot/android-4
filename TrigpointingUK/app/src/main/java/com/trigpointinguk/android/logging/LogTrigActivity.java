@@ -137,18 +137,18 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 
 		
 		// Get references to various views and form elements
-		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
+		mSwitcher 		= findViewById(R.id.logswitcher);
 		
 		// Ensure proper content positioning to prevent action bar overlap
 		// Content positioning is now handled by BaseActivity
-		mSendTime		= (CheckBox)	findViewById(R.id.sendTime);
-	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
-	   	mDate			= (DatePicker)		findViewById(R.id.logDate);
-	   	mGridref 		= (EditText)		findViewById(R.id.logGridref);
-	   	mLocationError 	= (TextView)		findViewById(R.id.locationError);
-	   	mFb 			= (EditText)		findViewById(R.id.logFB);
-	   	mCondition		= (Spinner)			findViewById(R.id.logCondition);
-	   	mScore			= (RatingBar)		findViewById(R.id.logScore);
+		mSendTime		= findViewById(R.id.sendTime);
+	   	mTime			= findViewById(R.id.logTime);
+	   	mDate			= findViewById(R.id.logDate);
+	   	mGridref 		= findViewById(R.id.logGridref);
+	   	mLocationError 	= findViewById(R.id.locationError);
+	   	mFb 			= findViewById(R.id.logFB);
+	   	mCondition		= findViewById(R.id.logCondition);
+	   	mScore			= findViewById(R.id.logScore);
 	   	
 	   			// Ensure minimum 1 star rating
 	   	mScore.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -167,7 +167,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	   			updateTimeVisibility();
 	   		}
 	   	});
-		   mComment		= (EditText)		findViewById(R.id.logComment);
+		   mComment		= findViewById(R.id.logComment);
 
     	// Setup time picker options which cannot be set in the config xml
  		mTime.setIs24HourView(true);
@@ -179,9 +179,9 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
  		} catch (Exception e) {
  			Log.w(TAG, "Could not force DatePicker to spinner mode: " + e.getMessage());
  		}
-	   	mAdminFlag		= (CheckBox)		findViewById(R.id.logAdminFlag);
-	   	mUserFlag		= (CheckBox)		findViewById(R.id.logUserFlag);
-	            mGallery 		= (RecyclerView) findViewById(R.id.logGallery);
+	   	mAdminFlag		= findViewById(R.id.logAdminFlag);
+	   	mUserFlag		= findViewById(R.id.logUserFlag);
+	            mGallery 		= findViewById(R.id.logGallery);
         mGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 	    
@@ -253,7 +253,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		
 		
 		// Setup button to add photo
-		Button takePhotoBtn = (Button) findViewById(R.id.logAddPhoto);
+		Button takePhotoBtn = findViewById(R.id.logAddPhoto);
 		takePhotoBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -262,7 +262,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		});	
 
 		// Setup button to create a new log
-		Button addLogBtn = (Button) findViewById(R.id.addLog);
+		Button addLogBtn = findViewById(R.id.addLog);
 		addLogBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -275,7 +275,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		});	
 
 		// Setup button to delete the log
-		Button deleteLogBtn = (Button) findViewById(R.id.logDelete);
+		Button deleteLogBtn = findViewById(R.id.logDelete);
 		deleteLogBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -287,7 +287,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		});	
 
 		// Setup button to add the current location
-		Button locationBtn = (Button) findViewById(R.id.logGetLocation);
+		Button locationBtn = findViewById(R.id.logGetLocation);
 		locationBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -300,7 +300,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 
 		
 		// Setup button to upload the log
-		Button uploadBtn = (Button) findViewById(R.id.logUploadNow);
+		Button uploadBtn = findViewById(R.id.logUploadNow);
 		uploadBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -309,7 +309,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		});	
 
 		// Setup button to sync the log later (ie do nothing!)
-		Button syncLaterBtn = (Button) findViewById(R.id.logSyncLater);
+		Button syncLaterBtn = findViewById(R.id.logSyncLater);
 		syncLaterBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -501,8 +501,8 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     		
     		// shrink the photo and store on SD card
 			String cachedir  = new FileCache(this, "logphotos").getCacheDir().getAbsolutePath();
-			String photoPath = new String(cachedir + "/" + photoId + "_I.jpg");
-			String thumbPath = new String(cachedir + "/" + photoId + "_T.jpg");
+			String photoPath = cachedir + "/" + photoId + "_I.jpg";
+			String thumbPath = cachedir + "/" + photoId + "_T.jpg";
 			Log.d(TAG, photoPath + " - " + thumbPath);
 			try {
 				Bitmap bThumb = Utils.decodeUri(this, selectedImageUri,  100);

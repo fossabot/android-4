@@ -652,10 +652,9 @@ public class DbHelper {
 		initialValues.put(PHOTO_TUKLOGID    , 0);
 		return mDb.insert(PHOTO_TABLE, null, initialValues);
 	}
-;
 
-	
-	/**
+
+    /**
 	 * Update a photo.  If the record is
 	 * successfully updated return the new rowId, otherwise return
 	 * a -1 to indicate failure.
@@ -775,7 +774,7 @@ public class DbHelper {
     	String condition = null;
     	if (trig_id != null) {
     		// only a single trig
-    		condition = new String (PHOTO_TRIG + "=" + trig_id);
+    		condition = PHOTO_TRIG + "=" + trig_id;
     	}
     	
         Cursor mCursor =
@@ -822,11 +821,8 @@ public class DbHelper {
 		Cursor c = null;
 		try {
 			c =  mDb.query(MARK_TABLE, new String[] {MARK_ID}, MARK_ID + "=" + trig_id, null, null, null, null);
-			if (c.getCount() == 0 ) {
-				return false;
-			}
-			return true;
-		} finally {
+            return c.getCount() != 0;
+        } finally {
 			if (c != null) {
 				c.close();
 			}

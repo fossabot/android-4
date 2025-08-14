@@ -45,13 +45,13 @@ public class TrigDetailsLoglistTab extends BaseTabActivity {
 		Log.i(TAG, "Trig_id = "+mTrigId);
 
         // Find ListView and set up adapter
-		mListView = (ListView) findViewById(android.R.id.list);
+		mListView = findViewById(android.R.id.list);
 		mTrigLogs = new ArrayList<TrigLog>();
 		mTrigLogsAdapter = new TrigDetailsLoglistAdapter(TrigDetailsLoglistTab.this, R.layout.triglogrow, mTrigLogs);
 		mListView.setAdapter(mTrigLogsAdapter);
 
 		// find view for empty list notification
-		mEmptyView = (TextView) findViewById(android.R.id.empty);
+		mEmptyView = findViewById(android.R.id.empty);
 		mListView.setEmptyView(mEmptyView);
 		
 		// get list of logs

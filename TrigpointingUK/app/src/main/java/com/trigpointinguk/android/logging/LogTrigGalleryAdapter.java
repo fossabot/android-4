@@ -14,9 +14,9 @@ import com.trigpointinguk.android.types.TrigPhoto;
 
 public class LogTrigGalleryAdapter extends BaseAdapter {
     
-    private TrigPhoto[] mPhotos;
-	private int mGalleryItemBackground; 
-	private Context mContext;
+    private final TrigPhoto[] mPhotos;
+	private final int mGalleryItemBackground;
+	private final Context mContext;
     
     public LogTrigGalleryAdapter(Context context, TrigPhoto[] photos) {
         mPhotos=photos;

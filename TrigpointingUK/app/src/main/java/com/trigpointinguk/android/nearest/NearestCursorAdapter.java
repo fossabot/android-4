@@ -23,7 +23,7 @@ import com.trigpointinguk.android.types.Trig;
 
 public class NearestCursorAdapter extends SimpleCursorAdapter {
 
-	private LayoutInflater mInflater;
+	private final LayoutInflater mInflater;
 	private int mNameIndex;
 	private int mLatIndex;
 	private int mLonIndex;
@@ -33,7 +33,7 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 	private int mUnsyncedIndex;
 	private int mMarkedIndex;
 	private Location mCurrentLocation;
-	private LatLon.UNITS mUnits;
+	private final LatLon.UNITS mUnits;
 	//private static final String TAG = "NearestCursorAdapter";
 	private double mHeading = 0;
 	private double mOrientationOffset = 0;
@@ -73,12 +73,12 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		TextView  tn = (TextView)  view.findViewById(R.id.trigName);
-		TextView  td = (TextView)  view.findViewById(R.id.trigDistance);
-		ImageView ta = (ImageView) view.findViewById(R.id.trigArrow);
-		ImageView tc = (ImageView) view.findViewById(R.id.trigCondition);
-		ImageView tt = (ImageView) view.findViewById(R.id.trigType);
-		ImageView tl = (ImageView) view.findViewById(R.id.trigLogged);
+		TextView  tn = view.findViewById(R.id.trigName);
+		TextView  td = view.findViewById(R.id.trigDistance);
+		ImageView ta = view.findViewById(R.id.trigArrow);
+		ImageView tc = view.findViewById(R.id.trigCondition);
+		ImageView tt = view.findViewById(R.id.trigType);
+		ImageView tl = view.findViewById(R.id.trigLogged);
 		
 		tn.setText(cursor.getString(mNameIndex));
 		tc.setImageResource(Condition.fromCode(cursor.getString(mConditionIndex)).icon());
