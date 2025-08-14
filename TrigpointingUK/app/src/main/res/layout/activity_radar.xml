@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/radar_arrow"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@android:drawable/arrow_up_float"
+        android:contentDescription="Direction arrow" />
+
+    <TextView
+        android:id="@+id/radar_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:text="0 m" />
+
+    <TextView
+        android:id="@+id/radar_accuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="±0 m" />
+
+    <TextView
+        android:id="@+id/radar_calibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="@android:color/holo_orange_dark"
+        android:text="Move your phone in a figure-8 to calibrate the compass"
+        android:visibility="gone" />
+
+</LinearLayout>
+
