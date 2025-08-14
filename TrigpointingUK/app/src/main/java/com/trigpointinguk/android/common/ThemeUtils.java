@@ -21,29 +21,20 @@ public class ThemeUtils {
     }
 
     public static void setupContentPositioning(AppCompatActivity activity) {
-        View contentView = activity.findViewById(android.R.id.content);
-        if (contentView instanceof ViewGroup contentGroup) {
-            if (contentGroup.getChildCount() > 0) {
-                View rootChild = contentGroup.getChildAt(0);
-
-                int actionBarHeight = getActionBarHeight(activity);
-                // Nudge content downward a bit more than before (about one line = 16dp)
-                int extraPaddingPx = Math.round(TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 24,
-                        activity.getResources().getDisplayMetrics()));
-
-                int desiredTopPadding = actionBarHeight + extraPaddingPx;
-
-                // Only increase if current padding is less than desired
-                if (rootChild.getPaddingTop() < desiredTopPadding) {
-                    rootChild.setPadding(
-                            rootChild.getPaddingLeft(),
-                            desiredTopPadding,
-                            rootChild.getPaddingRight(),
-                            rootChild.getPaddingBottom()
-                    );
-                }
-            }
-        }
+        // When using windowActionBar=true in the theme (which we are),
+        // the Android framework automatically handles content positioning
+        // below the action bar. We should not add any manual padding
+        // as this causes device-specific layout issues.
+        
+        // The theme already has:
+        // - windowActionBar=true (shows the action bar)
+        // - windowNoTitle=false (ensures title is shown)
+        // - fitsSystemWindows=false (we handle our own insets)
+        
+        // Therefore, we don't need to manually adjust padding.
+        // The system will automatically position content below the action bar.
+        
+        // Note: If specific activities need custom positioning, they should
+        // handle it individually rather than applying a global padding adjustment.
     }
 }

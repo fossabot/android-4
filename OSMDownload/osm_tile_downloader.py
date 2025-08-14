@@ -3,15 +3,16 @@
 OSM Tile Downloader for TrigpointingUK Leaflet Maps
 ===================================================
 
-Downloads OpenStreetMap tiles from Mapnik provider for offline use with Leaflet maps.
+Downloads web map tiles for offline use with Leaflet maps. Multiple tile
+providers are supported via `--provider` or a custom `--tile-url-template`.
 Supports resumable downloads, zoom level ranges, and configurable rate limiting.
 ONLY downloads tiles that intersect with the UK (including Northern Ireland).
 
 Usage:
-    python osm_tile_downloader.py --min-zoom 0 --max-zoom 10 --start-tile 0 --limit 1000
+    python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 10 --start-tile 0 --limit 1000
 
 Features:
-- Downloads tiles in standard z/x/y.png directory structure
+- Downloads tiles in Leaflet-friendly z/x/y.png directory structure, namespaced by provider
 - UK-specific bounding box (-8.5°W to 2.0°E, 49.5°N to 61.0°N)
 - Optimized for Leaflet WebView cache integration
 - Resumable downloads (skips existing tiles)
@@ -29,12 +30,47 @@ import argparse
 import requests
 import math
 from pathlib import Path
-from urllib.parse import urljoin
-from typing import Generator, Tuple
+from urllib.parse import urlparse
+from typing import Generator, Tuple, Optional, Dict
 import logging
 
+# Providers
+# Note: Only Web Mercator (EPSG:3857) providers are included here.
+# 27700/OSGB providers require different tiling math and are not supported by this downloader yet.
+PROVIDERS: Dict[str, Dict[str, str]] = {
+    "osm": {
+        "name": "OpenStreetMap",
+        "slug": "OpenStreetMap",
+        "url": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    },
+    "stamen-toner": {
+        "name": "Stamen Toner",
+        "slug": "StamenToner",
+        "url": "https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png",
+    },
+    "stamen-terrain": {
+        "name": "Stamen Terrain",
+        "slug": "StamenTerrain",
+        "url": "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png",
+    },
+    "carto-positron": {
+        "name": "Carto Positron",
+        "slug": "CartoPositron",
+        "url": "https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+    },
+    "carto-darkmatter": {
+        "name": "Carto DarkMatter",
+        "slug": "CartoDarkMatter",
+        "url": "https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png",
+    },
+    "os-outdoor-3857": {
+        "name": "OS Outdoor (3857)",
+        "slug": "OS_Outdoor_3857",
+        "url": "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key={key}",
+    },
+}
+
 # Configuration
-MAPNIK_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 USER_AGENT = "TrigpointingUK OSM Downloader (https://github.com/trigpointinguk/android)"
 TILES_DIR = "tiles"
 LOG_FILE = "download.log"
@@ -48,17 +84,47 @@ DEFAULT_MIN_DELAY = 0.5  # Minimum delay between requests (seconds)
 DEFAULT_MAX_DELAY = 2.0  # Maximum delay between requests (seconds)
 
 class OSMTileDownloader:
-    def __init__(self, tiles_dir: str = TILES_DIR, min_delay: float = DEFAULT_MIN_DELAY, 
-                 max_delay: float = DEFAULT_MAX_DELAY):
+    def __init__(self, tiles_dir: str = TILES_DIR, min_delay: float = DEFAULT_MIN_DELAY,
+                 max_delay: float = DEFAULT_MAX_DELAY, provider: str = "osm",
+                 tile_url_template: Optional[str] = None, provider_slug: Optional[str] = None,
+                 api_key: Optional[str] = None):
         self.tiles_dir = Path(tiles_dir)
         self.min_delay = min_delay
         self.max_delay = max_delay
         self.session = requests.Session()
         self.session.headers.update({'User-Agent': USER_AGENT})
-        
-        # Create tiles directory
-        self.tiles_dir.mkdir(exist_ok=True)
-        
+
+        # Resolve provider configuration
+        self.provider_key = provider
+        self.provider_name = PROVIDERS.get(provider, {}).get("name", provider)
+        default_template = PROVIDERS.get(provider, {}).get("url")
+        self.tile_url_template = tile_url_template or default_template
+        if not self.tile_url_template:
+            raise ValueError(f"No tile URL template available for provider '{provider}'. "
+                             f"Specify --tile-url-template explicitly.")
+
+        # Inject API key if required
+        if "{key}" in self.tile_url_template:
+            if not api_key:
+                raise ValueError("This provider requires an API key. Supply --api-key.")
+            self.tile_url_template = self.tile_url_template.replace("{key}", api_key)
+
+        # Provider directory slug
+        if provider_slug:
+            self.provider_slug = provider_slug
+        elif provider in PROVIDERS:
+            self.provider_slug = PROVIDERS[provider]["slug"]
+        else:
+            # Derive a slug from the hostname or provider key
+            try:
+                host = urlparse(self.tile_url_template).hostname or provider
+            except Exception:
+                host = provider
+            self.provider_slug = host.replace('.', '_')
+
+        # Create base/provider directory
+        (self.tiles_dir / self.provider_slug).mkdir(parents=True, exist_ok=True)
+
         # Setup logging
         logging.basicConfig(
             level=logging.INFO,
@@ -69,7 +135,11 @@ class OSMTileDownloader:
             ]
         )
         self.logger = logging.getLogger(__name__)
-        
+
+        self.logger.info(f"Using provider: {self.provider_name} [{self.provider_key}]")
+        self.logger.info(f"Provider slug: {self.provider_slug}")
+        self.logger.info(f"Tile URL template: {self.tile_url_template}")
+
         # Statistics
         self.downloaded_count = 0
         self.skipped_count = 0
@@ -155,8 +225,8 @@ class OSMTileDownloader:
                     tile_count += 1
     
     def get_tile_path(self, z: int, x: int, y: int) -> Path:
-        """Get the local file path for a tile."""
-        return self.tiles_dir / str(z) / str(x) / f"{y}.png"
+        """Get the local file path for a tile (namespaced by provider)."""
+        return self.tiles_dir / self.provider_slug / str(z) / str(x) / f"{y}.png"
     
     def tile_exists(self, z: int, x: int, y: int) -> bool:
         """Check if a tile already exists locally."""
@@ -176,7 +246,7 @@ class OSMTileDownloader:
             self.skipped_count += 1
             return True, False  # Success but not downloaded
         
-        url = MAPNIK_TILE_URL.format(z=z, x=x, y=y)
+        url = self.tile_url_template.format(z=z, x=x, y=y)
         tile_path = self.get_tile_path(z, x, y)
         
         try:
@@ -223,7 +293,7 @@ class OSMTileDownloader:
         """
         total_tiles = self.tiles_for_zoom_range(min_zoom, max_zoom)
         
-        self.logger.info(f"Starting download: zoom {min_zoom}-{max_zoom} (UK region only)")
+        self.logger.info(f"Starting download: provider '{self.provider_name}' zoom {min_zoom}-{max_zoom} (UK region only)")
         self.logger.info(f"UK bounding box: {UK_BBOX[0]}°W to {UK_BBOX[2]}°E, {UK_BBOX[1]}°N to {UK_BBOX[3]}°N")
         self.logger.info(f"Total UK tiles in range: {total_tiles:,}")
         if start_tile > 0:
@@ -289,21 +359,33 @@ class OSMTileDownloader:
     
     def get_stats(self) -> dict:
         """Get download statistics."""
-        stats = {}
-        
-        # Count existing tiles by zoom level
-        for zoom_dir in self.tiles_dir.iterdir():
-            if zoom_dir.is_dir() and zoom_dir.name.isdigit():
-                zoom = int(zoom_dir.name)
-                tile_count = 0
-                
-                for x_dir in zoom_dir.iterdir():
-                    if x_dir.is_dir() and x_dir.name.isdigit():
-                        tile_count += len([f for f in x_dir.iterdir() 
-                                         if f.suffix == '.png' and f.stat().st_size > 0])
-                
-                stats[zoom] = tile_count
-        
+        stats: Dict[str, Dict[int, int]] = {}
+
+        # Look for provider subdirectories. If none, fall back to legacy structure.
+        provider_dirs = [d for d in self.tiles_dir.iterdir() if d.is_dir() and not d.name.isdigit()]
+
+        def count_zoom_levels(base_dir: Path) -> Dict[int, int]:
+            by_zoom: Dict[int, int] = {}
+            for zoom_dir in base_dir.iterdir():
+                if zoom_dir.is_dir() and zoom_dir.name.isdigit():
+                    zoom = int(zoom_dir.name)
+                    tile_count = 0
+                    for x_dir in zoom_dir.iterdir():
+                        if x_dir.is_dir() and x_dir.name.isdigit():
+                            tile_count += len([
+                                f for f in x_dir.iterdir()
+                                if f.suffix == '.png' and f.stat().st_size > 0
+                            ])
+                    by_zoom[zoom] = tile_count
+            return by_zoom
+
+        if provider_dirs:
+            for pdir in provider_dirs:
+                stats[pdir.name] = count_zoom_levels(pdir)
+        else:
+            # Legacy: tiles directly under tiles_dir
+            stats[self.provider_slug] = count_zoom_levels(self.tiles_dir)
+
         return stats
 
 def main():
@@ -312,20 +394,31 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Download zoom levels 0-5
-  python osm_tile_downloader.py --min-zoom 0 --max-zoom 5
+  # Download OSM zoom levels 0-5
+  python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 5
   
   # Resume download starting from tile 1000, download 500 more tiles
-  python osm_tile_downloader.py --min-zoom 0 --max-zoom 10 --start-tile 1000 --limit 500
+  python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 10 --start-tile 1000 --limit 500
   
   # Download with custom rate limiting
-  python osm_tile_downloader.py --min-zoom 8 --max-zoom 12 --min-delay 1.0 --max-delay 3.0
+  python osm_tile_downloader.py --provider stamen-toner --min-zoom 8 --max-zoom 12 --min-delay 1.0 --max-delay 3.0
+  
+  # Download from a custom template (overrides provider URL)
+  python osm_tile_downloader.py --provider mytiles --tile-url-template "https://example.com/{z}/{x}/{y}.png"
   
   # Show statistics only
   python osm_tile_downloader.py --stats
         """
     )
     
+    parser.add_argument('--provider', default='osm', choices=sorted(list(PROVIDERS.keys())) + ['custom'],
+                       help='Tile provider to use (default: osm). Use custom with --tile-url-template for arbitrary servers')
+    parser.add_argument('--tile-url-template', default=None,
+                       help='Custom tile URL template, e.g. https://server/{z}/{x}/{y}.png')
+    parser.add_argument('--provider-slug', default=None,
+                       help='Directory name to namespace this provider (default: derived from provider/template)')
+    parser.add_argument('--api-key', default=None,
+                       help='API key, if required by provider template (use {key} placeholder in template)')
     parser.add_argument('--min-zoom', type=int, default=0,
                        help='Minimum zoom level (default: 0)')
     parser.add_argument('--max-zoom', type=int, default=10,
@@ -349,22 +442,31 @@ Examples:
     downloader = OSMTileDownloader(
         tiles_dir=args.tiles_dir,
         min_delay=args.min_delay,
-        max_delay=args.max_delay
+        max_delay=args.max_delay,
+        provider=args.provider,
+        tile_url_template=args.tile_url_template,
+        provider_slug=args.provider_slug,
+        api_key=args.api_key,
     )
     
     if args.stats:
         # Show statistics
-        stats = downloader.get_stats()
-        if stats:
-            print("Current tile statistics:")
-            total_tiles = 0
-            for zoom in sorted(stats.keys()):
-                count = stats[zoom]
-                total_tiles += count
-                max_tiles = downloader.num_tiles_at_zoom(zoom)
-                percentage = (count / max_tiles) * 100 if max_tiles > 0 else 0
-                print(f"  Zoom {zoom:2d}: {count:8,} / {max_tiles:8,} tiles ({percentage:5.1f}%)")
-            print(f"  Total:    {total_tiles:8,} tiles")
+        all_stats = downloader.get_stats()
+        if all_stats:
+            print("Current tile statistics (by provider):")
+            grand_total = 0
+            for provider_slug, stats in all_stats.items():
+                print(f"\nProvider: {provider_slug}")
+                total_tiles = 0
+                for zoom in sorted(stats.keys()):
+                    count = stats[zoom]
+                    total_tiles += count
+                    max_tiles = downloader.num_tiles_at_zoom(zoom)
+                    percentage = (count / max_tiles) * 100 if max_tiles > 0 else 0
+                    print(f"  Zoom {zoom:2d}: {count:8,} / {max_tiles:8,} tiles ({percentage:5.1f}%)")
+                print(f"  Total:    {total_tiles:8,} tiles")
+                grand_total += total_tiles
+            print(f"\nGrand total across providers: {grand_total:,} tiles")
         else:
             print("No tiles found in tiles directory")
         return
