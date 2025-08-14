@@ -104,8 +104,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         populateCounts();
         
         Log.i(TAG, "onCreate: MainActivity setup complete");
-        
-        // Content positioning is now handled by BaseActivity
     }
 
     private void setupActivityResultLaunchers() {
@@ -250,6 +248,9 @@ public class MainActivity extends BaseActivity implements SyncListener {
 		} else if (itemId == R.id.clearcache) {
 			new ClearCacheTask(MainActivity.this).execute();        	
 			return true;
+        } else if (itemId == R.id.test_crash) {
+            // Intentionally crash the app to verify crash reporting
+            throw new RuntimeException("Test Crash (menu-triggered)");
 		} else if (itemId == R.id.exit) {
 			// Show confirmation dialog before exiting
 			new AlertDialog.Builder(this)
