@@ -38,6 +38,8 @@ import com.trigpointinguk.android.common.FileCache;
 import com.trigpointinguk.android.DownloadTrigsActivity;
 import com.trigpointinguk.android.filter.Filter;
 
+import java.nio.charset.StandardCharsets;
+
 public class LeafletMapActivity extends BaseActivity {
     private static final String TAG = "LeafletMapActivity";
     private WebView webView;
@@ -109,25 +111,20 @@ public class LeafletMapActivity extends BaseActivity {
     }
 
     private String buildLeafletUrl(String osKey, String leafletMapStyle) {
-        try {
-            StringBuilder url = new StringBuilder("file:///android_asset/leaflet/index.html");
-            boolean hasParams = false;
-            
-            if (!osKey.isEmpty()) {
-                url.append("?os_key=").append(java.net.URLEncoder.encode(osKey, "UTF-8"));
-                hasParams = true;
-            }
-            
-            if (!leafletMapStyle.isEmpty()) {
-                url.append(hasParams ? "&" : "?");
-                url.append("initial_style=").append(java.net.URLEncoder.encode(leafletMapStyle, "UTF-8"));
-            }
-            
-            return url.toString();
-        } catch (java.io.UnsupportedEncodingException e) {
-            Log.e(TAG, "Error encoding URL parameters", e);
-            return "file:///android_asset/leaflet/index.html";
+        StringBuilder url = new StringBuilder("file:///android_asset/leaflet/index.html");
+        boolean hasParams = false;
+
+        if (!osKey.isEmpty()) {
+            url.append("?os_key=").append(java.net.URLEncoder.encode(osKey, StandardCharsets.UTF_8));
+            hasParams = true;
         }
+
+        if (!leafletMapStyle.isEmpty()) {
+            url.append(hasParams ? "&" : "?");
+            url.append("initial_style=").append(java.net.URLEncoder.encode(leafletMapStyle, StandardCharsets.UTF_8));
+        }
+
+        return url.toString();
     }
 
     private boolean ensureLocationPermission() {

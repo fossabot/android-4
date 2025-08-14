@@ -39,7 +39,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private DbHelper mDb;
 	private String[] mImagePaths;
 	private TrigDetailsOSMapAdapter mAdapter;
-	private AtomicInteger mNextPosition = new AtomicInteger(0);
+	private final AtomicInteger mNextPosition = new AtomicInteger(0);
 	private ExecutorService mExecutor;
 	private Handler mMainHandler;
 	
@@ -458,7 +458,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	}
 	
 	private void setupGallery() {
-		RecyclerView gallery = (RecyclerView) findViewById(R.id.trigosgallery);
+		RecyclerView gallery = findViewById(R.id.trigosgallery);
 		
 		// Use the instance adapter (either newly created or existing)
 		if (mAdapter != null) {

@@ -63,10 +63,10 @@ public class DownloadMapsActivity extends BaseActivity {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		mStatus 		= (TextView)	findViewById(R.id.downloadMapsStatus);
-		mProgress 		= (ProgressBar)	findViewById(R.id.downloadMapsProgress);
-		mDownloadBtn	= (Button)		findViewById(R.id.btnDownloadMaps);
-		mTileSource 	= (Spinner)		findViewById(R.id.downloadMapsTileSource);  
+		mStatus 		= findViewById(R.id.downloadMapsStatus);
+		mProgress 		= findViewById(R.id.downloadMapsProgress);
+		mDownloadBtn	= findViewById(R.id.btnDownloadMaps);
+		mTileSource 	= findViewById(R.id.downloadMapsTileSource);
 
 		mStatus.setText(R.string.downloadMapsIdleStatus);
 		mProgress.setProgress(0);

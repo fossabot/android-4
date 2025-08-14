@@ -30,10 +30,10 @@ public class LatLon implements Serializable {
 	private static final double WGSMIN = 6356752.3141;
 	private static final double WGSECC = ((WGSMAJ * WGSMAJ) - (WGSMIN * WGSMIN)) / (WGSMAJ * WGSMAJ);
 		
-	public enum UNITS {KM, MILES, METRES, YARDS};
-	
-	
-	public LatLon() {
+	public enum UNITS {KM, MILES, METRES, YARDS}
+
+
+    public LatLon() {
 	}
 	public LatLon(Double lat, Double lon) {
 		this.mLat=lat;
@@ -93,7 +93,7 @@ public class LatLon implements Serializable {
 		int smallc  = small % 5;
 		
 		eastings += 500000* (bigc-2) + 100000*(smallc);
-		northings += 500000* (3-bigr) + 100000*(4-smallr);
+		northings += 500000L * (3-bigr) + 100000*(4-smallr);
 
 		mEastings = Double.valueOf(eastings);
 		mNorthings = Double.valueOf(northings);

@@ -55,8 +55,8 @@ public class SyncTask implements ProgressListener {
     private AlertDialog 		progressDialog;
     private ProgressBar 		progressBar;
     private TextView   		progressText;
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
-	private Handler mainHandler = new Handler(Looper.getMainLooper());
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final Handler mainHandler = new Handler(Looper.getMainLooper());
 	
 	private void updateProgress(int type, int... values) {
         mainHandler.post(() -> {

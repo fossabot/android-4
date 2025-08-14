@@ -94,12 +94,12 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		);
 
 		// find view references
-		mStrLocation 			= (TextView)  findViewById(R.id.trigListLocation);
+		mStrLocation 			= findViewById(R.id.trigListLocation);
 		
 		// Content positioning is now handled by BaseActivity
-		mStrFilter	 			= (TextView)  findViewById(R.id.trigListHeader);
-		mNorthText	 			= (TextView)  findViewById(R.id.north);
-		mCompassArrow			= (ImageView) findViewById(R.id.compassArrow);
+		mStrFilter	 			= findViewById(R.id.trigListHeader);
+		mNorthText	 			= findViewById(R.id.north);
+		mCompassArrow			= findViewById(R.id.compassArrow);
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
@@ -421,11 +421,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			return true;
 		} else if (isNewer && !isLessAccurate) {
 			return true;
-		} else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-			return true;
-		}
-		return false;
-	}
+		} else return isNewer && !isSignificantlyLessAccurate && isFromSameProvider;
+    }
 
 	/** Checks whether two providers are the same */
 	private boolean isSameProvider(String provider1, String provider2) {
@@ -455,11 +452,11 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		if (!mUsingCompass) {return;}
 		
 		if (mGravity != null && mGeomagnetic != null) {
-	    	float R[] = new float[9];
-	        float I[] = new float[9];
+	    	float[] R = new float[9];
+	        float[] I = new float[9];
 	        boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
 	        if (success) {
-	        	float orientation[] = new float[3];
+	        	float[] orientation = new float[3];
 	        	SensorManager.getOrientation(R, orientation);
 	        	mHeading = orientation[0] * 180.0/Math.PI; // orientation contains: azimuth[0], pitch[1] and roll[2]
 	        	//Log.d(TAG, "Heading = " + mHeading);

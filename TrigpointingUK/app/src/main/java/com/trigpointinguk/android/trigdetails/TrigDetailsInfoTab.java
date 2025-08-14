@@ -69,7 +69,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		// get application preferences
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		mMark = (CheckBox) findViewById(R.id.mark);
+		mMark = findViewById(R.id.mark);
 		mMark.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -112,36 +112,36 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		TextView tv;
 		ImageView iv;
 		
-		tv = (TextView)  findViewById(R.id.triginfo_name);
+		tv = findViewById(R.id.triginfo_name);
 		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_NAME)));
 
-		tv = (TextView)  findViewById(R.id.triginfo_waypoint);
+		tv = findViewById(R.id.triginfo_waypoint);
 		tv.setText(mWaypoint);
 		
-		iv = (ImageView) findViewById(R.id.triginfo_condition_icon);
+		iv = findViewById(R.id.triginfo_condition_icon);
 		iv.setImageResource(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).icon());
 
-		tv = (TextView) findViewById(R.id.triginfo_condition);
+		tv = findViewById(R.id.triginfo_condition);
 		tv.setText(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).toString());
 
 		LatLon ll = new LatLon(c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT)), c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON)));
 
-		tv = (TextView)  findViewById(R.id.triginfo_gridref);
+		tv = findViewById(R.id.triginfo_gridref);
 		tv.setText(ll.getOSGB10());
 		
-		tv = (TextView)  findViewById(R.id.triginfo_wgs84);
+		tv = findViewById(R.id.triginfo_wgs84);
 		tv.setText(ll.getWGS());
 		
-		tv = (TextView) findViewById(R.id.triginfo_current);
+		tv = findViewById(R.id.triginfo_current);
 		tv.setText(Trig.Current.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CURRENT))).toString());
 
-		tv = (TextView) findViewById(R.id.triginfo_historic);
+		tv = findViewById(R.id.triginfo_historic);
 		tv.setText(Trig.Historic.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_HISTORIC))).toString());
 
-		tv = (TextView) findViewById(R.id.triginfo_type);
+		tv = findViewById(R.id.triginfo_type);
 		tv.setText(Trig.Physical.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_TYPE))).toString());
 
-		tv = (TextView) findViewById(R.id.triginfo_fb);
+		tv = findViewById(R.id.triginfo_fb);
 		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_FB)));
 
 		c.close();
@@ -224,7 +224,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 			dialog = new Dialog(this);
 			dialog.setContentView(R.layout.radardialog);
 			dialog.setTitle(R.string.radartitle);
-			Button yes = (Button) dialog.findViewById(R.id.yes);
+			Button yes = dialog.findViewById(R.id.yes);
 			yes.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -234,7 +234,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 					startActivity(intent);
 				}
 			});
-			Button no = (Button) dialog.findViewById(R.id.no);
+			Button no = dialog.findViewById(R.id.no);
 			no.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

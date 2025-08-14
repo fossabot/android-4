@@ -11,10 +11,10 @@ import com.trigpointinguk.android.types.TrigPhoto;
 
 public class LogTrigRecyclerAdapter extends RecyclerView.Adapter<LogTrigRecyclerAdapter.ViewHolder> {
     
-    private TrigPhoto[] mPhotos;
-    private Context mContext;
-    private int mGalleryItemBackground;
-    private LazyImageLoader imageLoader;
+    private final TrigPhoto[] mPhotos;
+    private final Context mContext;
+    private final int mGalleryItemBackground;
+    private final LazyImageLoader imageLoader;
     
     public LogTrigRecyclerAdapter(Context context, TrigPhoto[] photos) {
         mContext = context;

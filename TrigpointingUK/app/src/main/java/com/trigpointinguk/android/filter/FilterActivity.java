@@ -25,8 +25,8 @@ public class FilterActivity extends BaseActivity {
 		setContentView(R.layout.filter);
 
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		mFilterType 	= (Spinner)		findViewById(R.id.filterType);  
-		mFilterRadio	= (RadioGroup)	findViewById(R.id.filterRadio);
+		mFilterType 	= findViewById(R.id.filterType);
+		mFilterRadio	= findViewById(R.id.filterRadio);
 
 		// Enable back button in action bar
 		if (getSupportActionBar() != null) {
@@ -70,7 +70,7 @@ public class FilterActivity extends BaseActivity {
 		Log.i(TAG, "onPause: Saving filter radio: " + filterRadio);
 		
 		// Get text of selected radiobox item
-		RadioButton btnSelected = (RadioButton) findViewById(checkedId);
+		RadioButton btnSelected = findViewById(checkedId);
 		if (btnSelected != null) {
 			String radioText = btnSelected.getText().toString();
 			editor.putString(Filter.FILTERRADIOTEXT, radioText);

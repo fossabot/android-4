@@ -22,10 +22,10 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
     private static final String TAG = "TrigDetailsOSMapAdapter";
     private static final String PLACEHOLDER_URL = "PLACEHOLDER";
     
-    private String[] mUrls;
+    private final String[] mUrls;
     public LazyImageLoader imageLoader;
-	private int mGalleryItemBackground; 
-	private Context mContext;
+	private final int mGalleryItemBackground;
+	private final Context mContext;
     
     public TrigDetailsOSMapAdapter(Context context, String[] urls) {
         mUrls=urls;

@@ -68,20 +68,20 @@ public class MainActivity extends BaseActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Setting up UI components");
         // Set up UI components
-        mPillarIcon = (ImageView) findViewById(R.id.countPillarImage);
-        mPillarCount = (TextView) findViewById(R.id.countPillarText);
-        mFbmIcon = (ImageView) findViewById(R.id.countFbmImage);
-        mFbmCount = (TextView) findViewById(R.id.countFbmText);
-        mPassiveIcon = (ImageView) findViewById(R.id.countPassiveImage);
-        mPassiveCount = (TextView) findViewById(R.id.countPassiveText);
-        mIntersectedIcon = (ImageView) findViewById(R.id.countIntersectedImage);
-        mIntersectedCount = (TextView) findViewById(R.id.countIntersectedText);
-        mUnsyncedIcon = (ImageView) findViewById(R.id.countUnsyncedImage);
-        mUnsyncedCount = (TextView) findViewById(R.id.countUnsyncedText);
-        mPhotosIcon = (ImageView) findViewById(R.id.countPhotosImage);
-        mPhotosCount = (TextView) findViewById(R.id.countPhotosText);
-        mSyncBtn = (Button) findViewById(R.id.btnSync);
-        mUserName = (TextView) findViewById(R.id.txtUserName);
+        mPillarIcon = findViewById(R.id.countPillarImage);
+        mPillarCount = findViewById(R.id.countPillarText);
+        mFbmIcon = findViewById(R.id.countFbmImage);
+        mFbmCount = findViewById(R.id.countFbmText);
+        mPassiveIcon = findViewById(R.id.countPassiveImage);
+        mPassiveCount = findViewById(R.id.countPassiveText);
+        mIntersectedIcon = findViewById(R.id.countIntersectedImage);
+        mIntersectedCount = findViewById(R.id.countIntersectedText);
+        mUnsyncedIcon = findViewById(R.id.countUnsyncedImage);
+        mUnsyncedCount = findViewById(R.id.countUnsyncedText);
+        mPhotosIcon = findViewById(R.id.countPhotosImage);
+        mPhotosCount = findViewById(R.id.countPhotosText);
+        mSyncBtn = findViewById(R.id.btnSync);
+        mUserName = findViewById(R.id.txtUserName);
         
         Log.i(TAG, "onCreate: Setting up preferences");
         mPrefs = getSharedPreferences("TrigpointingUK", MODE_PRIVATE);
@@ -144,7 +144,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
             result -> {
                 // Handle result from PreferencesActivity
                 if (result.getResultCode() == RESULT_OK) {
-                    TextView user = (TextView) findViewById(R.id.txtUserName);
+                    TextView user = findViewById(R.id.txtUserName);
                     user.setText(mPrefs.getString("username", ""));
                     
                     // Add user details to ACRA
@@ -157,7 +157,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
     }
     
     private void setupClickListeners() {
-        final Button btnNearest = (Button) findViewById(R.id.btnNearest);
+        final Button btnNearest = findViewById(R.id.btnNearest);
         btnNearest.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 			}
 		});
 
-        final Button btnLeafletMap = (Button) findViewById(R.id.btnLeafletMap);
+        final Button btnLeafletMap = findViewById(R.id.btnLeafletMap);
         btnLeafletMap.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,7 +296,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
 
 
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 	
 	private void updateUserDisplay() {
 		Log.i(TAG, "updateUserDisplay: Updating user display");
