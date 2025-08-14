@@ -11,6 +11,7 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 
 public class MainApplication extends Application {
@@ -28,6 +29,15 @@ public class MainApplication extends Application {
 		editor.putBoolean("acra.syslog.enable", false);
 		editor.apply();  
         
+        // Initialize Crashlytics user identity from preferences if available
+        try {
+            String username = prefs.getString("username", "");
+            if (username != null && !username.trim().isEmpty()) {
+                FirebaseCrashlytics.getInstance().setUserId(username);
+                Log.i(TAG, "Crashlytics user set to '" + username + "'");
+            }
+        } catch (Exception ignored) {}
+
         // Configure ACRA for modern Android
         // ACRA.init(this, new CoreConfigurationBuilder(this)
 //             .setBuildConfigClass(BuildConfig.class)

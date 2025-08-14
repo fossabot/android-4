@@ -32,6 +32,7 @@ import com.trigpointinguk.android.logging.SyncListener;
 import com.trigpointinguk.android.logging.SyncTask;
 import com.trigpointinguk.android.mapping.DownloadMapsActivity;
 import com.trigpointinguk.android.nearest.NearestActivity;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class MainActivity extends BaseActivity implements SyncListener {
     public static final String 	TAG ="MainActivity";
@@ -99,6 +100,13 @@ public class MainActivity extends BaseActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Updating user display");
         updateUserDisplay();
+        // Update Crashlytics user id at startup
+        try {
+            String username = PreferenceManager.getDefaultSharedPreferences(this).getString("username", "");
+            if (username != null && !username.trim().isEmpty()) {
+                FirebaseCrashlytics.getInstance().setUserId(username);
+            }
+        } catch (Exception ignored) {}
         
         Log.i(TAG, "onCreate: Populating counts");
         populateCounts();
@@ -148,6 +156,14 @@ public class MainActivity extends BaseActivity implements SyncListener {
                     // Add user details to ACRA
                     // ErrorReporter.getInstance().putCustomData("username", mPrefs.getString("username", ""));
                     
+                        // Also update Crashlytics user id when username changes
+                        try {
+                            String username = PreferenceManager.getDefaultSharedPreferences(this).getString("username", "");
+                            if (username != null && !username.trim().isEmpty()) {
+                                FirebaseCrashlytics.getInstance().setUserId(username);
+                            }
+                        } catch (Exception ignored) {}
+
                     populateCounts();
                 }
             }
