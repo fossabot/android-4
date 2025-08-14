@@ -2,7 +2,6 @@ package com.trigpointinguk.android.trigdetails;
 
 import java.util.ArrayList;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,17 +20,19 @@ import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
+import com.trigpointinguk.android.common.BaseActivity;
 import com.trigpointinguk.android.common.DisplayBitmapActivity;
 import com.trigpointinguk.android.common.StringLoader;
 import com.trigpointinguk.android.types.TrigPhoto;
 
-public class TrigDetailsAlbumTab extends ListActivity {
+public class TrigDetailsAlbumTab extends BaseActivity {
 	private long mTrigId;
 	private static final String TAG="TrigDetailsAlbumTab";
 	private StringLoader 			mStrLoader;
     private ArrayList<TrigPhoto> 	mTrigPhotos;
     private TrigDetailsAlbumAdapter mTrigAlbumAdapter;
-	private TextView 				mEmptyView; 
+	private TextView 				mEmptyView;
+	private ListView 				mListView;
 
     
     public void onCreate(Bundle savedInstanceState) {
@@ -43,13 +45,23 @@ public class TrigDetailsAlbumTab extends ListActivity {
 		mTrigId = extras.getLong(DbHelper.TRIG_ID);
 		Log.i(TAG, "Trig_id = "+mTrigId);
 
-        // attach the array adapter
+        // Find ListView and set up adapter
+		mListView = (ListView) findViewById(android.R.id.list);
 		mTrigPhotos = new ArrayList<TrigPhoto>();
 		mTrigAlbumAdapter = new TrigDetailsAlbumAdapter(TrigDetailsAlbumTab.this, R.layout.trigalbumrow, mTrigPhotos);
-		setListAdapter(mTrigAlbumAdapter);
+		mListView.setAdapter(mTrigAlbumAdapter);
 
 		// find view for empty list notification
 		mEmptyView = (TextView) findViewById(android.R.id.empty);
+		mListView.setEmptyView(mEmptyView);
+		
+		// Set up click listener
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				onListItemClick(mListView, view, position, id);
+			}
+		});
 
 		// get list of photos
         populatePhotos(false);	    
@@ -57,7 +69,6 @@ public class TrigDetailsAlbumTab extends ListActivity {
     
     
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
         String url = mTrigPhotos.get(position).getPhotoURL();
         Intent i = new Intent(this, DisplayBitmapActivity.class);
         i.putExtra("URL", url);

@@ -9,11 +9,11 @@ import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 
 import com.trigpointinguk.android.R;
 
-public class FilterActivity extends AppCompatActivity {
+public class FilterActivity extends BaseActivity {
 	private static final String TAG = "FilterActivity";
 	private SharedPreferences 	mPrefs;
 	private Spinner				mFilterType;

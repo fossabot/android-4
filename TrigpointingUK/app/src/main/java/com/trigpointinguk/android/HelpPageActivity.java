@@ -1,11 +1,11 @@
 package com.trigpointinguk.android;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-public class HelpPageActivity extends AppCompatActivity {
+public class HelpPageActivity extends BaseActivity {
 
 	public static final String PAGE="PAGE";
 

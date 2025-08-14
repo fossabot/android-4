@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,7 +28,7 @@ import com.google.android.gms.location.LocationServices;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 
-public class RadarActivity extends AppCompatActivity implements SensorEventListener {
+public class RadarActivity extends BaseActivity implements SensorEventListener {
 
     private FusedLocationProviderClient fusedLocationClient;
     private SensorManager sensorManager;

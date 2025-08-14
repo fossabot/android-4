@@ -8,11 +8,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 
 import com.trigpointinguk.android.R;
 
-public class TrigpointTypesActivity extends AppCompatActivity {
+public class TrigpointTypesActivity extends BaseActivity {
     private static final String TAG = "TrigpointTypesActivity";
     private SharedPreferences mPrefs;
     private RadioGroup mFilterTypeRadioGroup;
