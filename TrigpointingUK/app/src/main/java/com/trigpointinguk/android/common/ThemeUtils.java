@@ -2,14 +2,13 @@ package com.trigpointinguk.android.common;
 
 import android.content.Context;
 import android.util.TypedValue;
-import android.view.View;
-import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ThemeUtils {
     
     /**
      * Get the action bar height for proper content positioning
+     * This method is kept for reference but should not be needed with proper theme configuration
      */
     public static int getActionBarHeight(Context context) {
         int actionBarHeight = 0;
@@ -20,21 +19,21 @@ public class ThemeUtils {
         return actionBarHeight;
     }
 
+    /**
+     * Sets up proper content positioning for activities.
+     * 
+     * With the modernized Material Components theme and windowActionBarOverlay=false,
+     * the Android framework now automatically positions content below the action bar.
+     * This method is kept for compatibility but no longer needs to do anything.
+     * 
+     * The theme configuration handles:
+     * - Positioning content below the action bar (windowActionBarOverlay=false)
+     * - Proper status bar handling (windowDrawsSystemBarBackgrounds=true)
+     * - Consistent behavior across all devices
+     */
     public static void setupContentPositioning(AppCompatActivity activity) {
-        // When using windowActionBar=true in the theme (which we are),
-        // the Android framework automatically handles content positioning
-        // below the action bar. We should not add any manual padding
-        // as this causes device-specific layout issues.
-        
-        // The theme already has:
-        // - windowActionBar=true (shows the action bar)
-        // - windowNoTitle=false (ensures title is shown)
-        // - fitsSystemWindows=false (we handle our own insets)
-        
-        // Therefore, we don't need to manually adjust padding.
-        // The system will automatically position content below the action bar.
-        
-        // Note: If specific activities need custom positioning, they should
-        // handle it individually rather than applying a global padding adjustment.
+        // No manual adjustment needed - the Material Components theme with
+        // windowActionBarOverlay=false ensures content is properly positioned
+        // below the action bar on all devices.
     }
 }
