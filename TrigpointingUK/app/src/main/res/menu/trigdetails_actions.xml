@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_open_web"
+        android:title="Open on trigpointing.uk"
+        android:icon="@android:drawable/ic_menu_view"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/action_navigate"
+        android:title="Navigate to trigpoint"
+        android:icon="@android:drawable/ic_menu_directions"
+        android:showAsAction="never" />
+    <item
+        android:id="@+id/action_radar"
+        android:title="Guide me (radar)"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:showAsAction="never" />
+</menu>
+

@@ -49,10 +49,21 @@ public class TrigDetailsInfoTab extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.triginfo);
 
-        // get trig_id from extras
+        // Get trig_id robustly
         Bundle extras = getIntent().getExtras();
-		if (extras == null) {return;}
-		mTrigId = extras.getLong(DbHelper.TRIG_ID);
+        if (extras != null && extras.containsKey(DbHelper.TRIG_ID)) {
+            mTrigId = extras.getLong(DbHelper.TRIG_ID);
+        } else {
+            mTrigId = getIntent().getLongExtra(DbHelper.TRIG_ID, -1);
+        }
+        if (mTrigId <= 0 && getParent() != null && getParent().getIntent() != null) {
+            mTrigId = getParent().getIntent().getLongExtra(DbHelper.TRIG_ID, -1);
+        }
+        if (mTrigId <= 0) {
+            Log.w(TAG, "No trig ID provided to TrigDetailsInfoTab");
+            Toast.makeText(this, "Unable to load trig details", Toast.LENGTH_LONG).show();
+            return;
+        }
 		Log.i("TrigInfo", "Trig_id = "+mTrigId);
 
 		// get application preferences
@@ -82,10 +93,14 @@ public class TrigDetailsInfoTab extends Activity {
 	
 	private void populateFields() {
 		// get trig info from database
-		mDb = new DbHelper(TrigDetailsInfoTab.this);
-		mDb.open();		
-		Cursor c = mDb.fetchTrigInfo(mTrigId);
-		c.moveToFirst();
+        mDb = new DbHelper(TrigDetailsInfoTab.this);
+        mDb.open();        
+        Cursor c = mDb.fetchTrigInfo(mTrigId);
+        if (c == null || !c.moveToFirst()) {
+            if (c != null) c.close();
+            Toast.makeText(this, "Trig not found in database", Toast.LENGTH_LONG).show();
+            return;
+        }
 
 		mLatitude  = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
 		mLongitude = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
