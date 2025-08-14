@@ -8,17 +8,15 @@ import android.os.Bundle;
 import android.widget.TabHost;
 import android.view.MenuItem;
 import android.view.Menu;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.trigpointinguk.android.R;
-import com.trigpointinguk.android.common.ThemeUtils;
+import com.trigpointinguk.android.common.BaseActivity;
 import com.trigpointinguk.android.logging.LogTrigActivity;
 import com.trigpointinguk.android.DbHelper;
 import androidx.browser.customtabs.CustomTabsIntent;
 import android.widget.Toast;
 import android.database.Cursor;
 
-public class TrigDetailsActivity extends AppCompatActivity {
+public class TrigDetailsActivity extends BaseActivity {
 
 	private static final String TAG="TrigDetailsActivity";
     private LocalActivityManager mLocalActivityManager;
@@ -31,7 +29,7 @@ public class TrigDetailsActivity extends AppCompatActivity {
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	    }
 	    
-	    ThemeUtils.setupContentPositioning(this);
+	    // Content positioning is now handled by BaseActivity
 
         Bundle extras = getIntent().getExtras();
         long ensuredTrigId = getIntent().getLongExtra(DbHelper.TRIG_ID, -1);

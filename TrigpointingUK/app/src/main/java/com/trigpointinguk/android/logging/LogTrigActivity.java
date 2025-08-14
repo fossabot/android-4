@@ -10,7 +10,7 @@ import java.util.List;
 
 // import org.acra.ErrorReporter;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 import androidx.appcompat.app.AlertDialog;
 
 import android.Manifest;
@@ -57,7 +57,6 @@ import android.widget.ViewSwitcher;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.FileCache;
-import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.common.Utils;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.LatLon;
@@ -65,7 +64,7 @@ import com.trigpointinguk.android.types.LatLon.UNITS;
 import com.trigpointinguk.android.types.PhotoSubject;
 import com.trigpointinguk.android.types.TrigPhoto;
 
-public class LogTrigActivity extends AppCompatActivity implements OnDateChangedListener, LocationListener, SyncListener {
+public class LogTrigActivity extends BaseActivity implements OnDateChangedListener, LocationListener, SyncListener {
 	private static final String TAG			= "LogTrigActivity";
     private SharedPreferences 	mPrefs;
 
@@ -141,7 +140,7 @@ public class LogTrigActivity extends AppCompatActivity implements OnDateChangedL
 		mSwitcher 		= (ViewSwitcher)	findViewById(R.id.logswitcher);
 		
 		// Ensure proper content positioning to prevent action bar overlap
-		ThemeUtils.setupContentPositioning(this);
+		// Content positioning is now handled by BaseActivity
 		mSendTime		= (CheckBox)	findViewById(R.id.sendTime);
 	   	mTime			= (TimePicker)		findViewById(R.id.logTime);
 	   	mDate			= (DatePicker)		findViewById(R.id.logDate);

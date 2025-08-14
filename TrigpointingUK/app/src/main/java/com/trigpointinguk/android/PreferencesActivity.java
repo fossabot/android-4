@@ -6,11 +6,10 @@ import android.os.Bundle;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
-import com.trigpointinguk.android.common.ThemeUtils;
+import com.trigpointinguk.android.common.BaseActivity;
 
-public class PreferencesActivity extends AppCompatActivity {
+public class PreferencesActivity extends BaseActivity {
 	public static final String TAG = "PreferenceActivity";
     public static final String PREFERENCETYPE = "PreferenceType";
 
@@ -25,7 +24,7 @@ public class PreferencesActivity extends AppCompatActivity {
 		}
 		
 		// Ensure proper content positioning to prevent action bar overlap
-		ThemeUtils.setupContentPositioning(this);
+		// Content positioning is now handled by BaseActivity
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {

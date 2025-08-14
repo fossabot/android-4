@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.trigpointinguk.android.mapping.BoundingBox;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
@@ -35,11 +35,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.FileCache;
-import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.DownloadTrigsActivity;
 import com.trigpointinguk.android.filter.Filter;
 
-public class LeafletMapActivity extends AppCompatActivity {
+public class LeafletMapActivity extends BaseActivity {
     private static final String TAG = "LeafletMapActivity";
     private WebView webView;
     private static final int REQ_LOCATION = 2001;
@@ -54,8 +53,7 @@ public class LeafletMapActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         
-        // Ensure proper content positioning to prevent action bar overlap
-        ThemeUtils.setupContentPositioning(this);
+        // Content positioning is now handled by BaseActivity
 
         // Initialize database helper
         try {
