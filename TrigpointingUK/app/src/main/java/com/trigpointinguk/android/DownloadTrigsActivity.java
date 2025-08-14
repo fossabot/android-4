@@ -9,7 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.zip.GZIPInputStream;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -30,7 +30,7 @@ import com.trigpointinguk.android.logging.SyncListener;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.Trig;
 
-public class DownloadTrigsActivity extends AppCompatActivity implements SyncListener {
+public class DownloadTrigsActivity extends BaseActivity implements SyncListener {
 
 	private TextView 		mStatus;
 	private ProgressBar 	mProgress;

@@ -34,17 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
-import com.trigpointinguk.android.common.ThemeUtils;
+import com.trigpointinguk.android.common.BaseActivity;
 import com.trigpointinguk.android.filter.Filter;
 import com.trigpointinguk.android.trigdetails.TrigDetailsActivity;
 import com.trigpointinguk.android.types.LatLon;
 
 
-public class NearestActivity extends AppCompatActivity implements SensorEventListener {
+public class NearestActivity extends BaseActivity implements SensorEventListener {
 	private Cursor 					mCursor;
 	private Location 				mCurrentLocation;
 	private double 					mHeading = 0;
@@ -98,8 +96,7 @@ public class NearestActivity extends AppCompatActivity implements SensorEventLis
 		// find view references
 		mStrLocation 			= (TextView)  findViewById(R.id.trigListLocation);
 		
-		// Ensure proper content positioning to prevent action bar overlap
-		ThemeUtils.setupContentPositioning(this);
+		// Content positioning is now handled by BaseActivity
 		mStrFilter	 			= (TextView)  findViewById(R.id.trigListHeader);
 		mNorthText	 			= (TextView)  findViewById(R.id.north);
 		mCompassArrow			= (ImageView) findViewById(R.id.compassArrow);

@@ -13,7 +13,7 @@ import java.util.zip.ZipInputStream;
 
 // import org.acra.ErrorReporter;
 
-import android.app.Activity;
+import com.trigpointinguk.android.common.BaseActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.R;
 
-public class DownloadMapsActivity extends Activity {
+public class DownloadMapsActivity extends BaseActivity {
 	private TextView mStatus;
 	private ProgressBar mProgress;
 	private Button mDownloadBtn;
@@ -59,8 +59,8 @@ public class DownloadMapsActivity extends Activity {
 		setContentView(R.layout.mapdownload);
 
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
 		mStatus 		= (TextView)	findViewById(R.id.downloadMapsStatus);

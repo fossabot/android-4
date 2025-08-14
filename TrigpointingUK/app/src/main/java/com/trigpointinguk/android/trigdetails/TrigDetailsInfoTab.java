@@ -1,6 +1,6 @@
 package com.trigpointinguk.android.trigdetails;
 
-import android.app.Activity;
+import com.trigpointinguk.android.common.BaseTabActivity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.LatLon;
 import com.trigpointinguk.android.types.Trig;
 
-public class TrigDetailsInfoTab extends Activity {
+public class TrigDetailsInfoTab extends BaseTabActivity {
 	private static final String TAG="TrigDetailsInfoTab";
 	private long     mTrigId;
 	private DbHelper mDb;

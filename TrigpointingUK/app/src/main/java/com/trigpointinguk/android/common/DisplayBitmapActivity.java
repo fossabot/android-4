@@ -8,7 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import androidx.appcompat.app.AppCompatActivity;
+import com.trigpointinguk.android.common.BaseActivity;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.R;
 
-public class DisplayBitmapActivity extends AppCompatActivity {
+public class DisplayBitmapActivity extends BaseActivity {
 	private static final String TAG="DisplayBitmapActivity";
 
     private static final int MENU_ID_RESET = 0;

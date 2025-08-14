@@ -2,13 +2,13 @@ package com.trigpointinguk.android.trigdetails;
 
 import java.util.ArrayList;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.concurrent.CompletableFuture;
@@ -17,18 +17,20 @@ import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
+import com.trigpointinguk.android.common.BaseTabActivity;
 import com.trigpointinguk.android.common.StringLoader;
 import com.trigpointinguk.android.types.Condition;
 import com.trigpointinguk.android.types.TrigLog;
 
-public class TrigDetailsLoglistTab extends ListActivity {
+public class TrigDetailsLoglistTab extends BaseTabActivity {
 	private static final String TAG="TrigDetailsLoglistTab";
 	
 	private long 						mTrigId;
 	private StringLoader 				mStrLoader;
     private ArrayList<TrigLog> 			mTrigLogs;
     private TrigDetailsLoglistAdapter 	mTrigLogsAdapter;
-	private TextView 					mEmptyView; 
+	private TextView 					mEmptyView;
+	private ListView 					mListView;
 
 
 	
@@ -42,13 +44,15 @@ public class TrigDetailsLoglistTab extends ListActivity {
 		mTrigId = extras.getLong(DbHelper.TRIG_ID);
 		Log.i(TAG, "Trig_id = "+mTrigId);
 
-        // attach the array adapter
+        // Find ListView and set up adapter
+		mListView = (ListView) findViewById(android.R.id.list);
 		mTrigLogs = new ArrayList<TrigLog>();
 		mTrigLogsAdapter = new TrigDetailsLoglistAdapter(TrigDetailsLoglistTab.this, R.layout.triglogrow, mTrigLogs);
-		setListAdapter(mTrigLogsAdapter);
+		mListView.setAdapter(mTrigLogsAdapter);
 
 		// find view for empty list notification
 		mEmptyView = (TextView) findViewById(android.R.id.empty);
+		mListView.setEmptyView(mEmptyView);
 		
 		// get list of logs
         populateLogs(false);

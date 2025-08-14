@@ -1,6 +1,6 @@
 # OSM Tile Downloader for TrigpointingUK Leaflet Maps
 
-This Python application downloads OpenStreetMap tiles from the Mapnik provider for offline use with Leaflet maps in the TrigpointingUK Android application. **Only downloads tiles that intersect with the UK region** (including Northern Ireland), dramatically reducing download size compared to worldwide tiles.
+This Python application downloads map tiles for offline use with Leaflet maps in the TrigpointingUK Android application. It supports multiple providers (OpenStreetMap, Stamen, Carto, or a custom template). **Only downloads tiles that intersect with the UK region** (including Northern Ireland), dramatically reducing download size compared to worldwide tiles.
 
 ## Features
 
@@ -26,23 +26,23 @@ pip install -r requirements.txt
 ### Basic Examples
 
 ```bash
-# Light download - Overview + moderate detail (561 MB)
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 12
+# Light download - Overview + moderate detail (561 MB) for OSM
+python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 12
 
-# Standard download - Covers most mapping needs (2.2 GB)
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 13
+# Standard download - Covers most mapping needs (2.2 GB) for OSM
+python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 13
 
 # Testing - Small download for experimentation (225 KB)
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 5
+python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 5
 
 # Resume download starting from tile 1000, download only 500 more tiles
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 12 --start-tile 1000 --limit 500
+python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 12 --start-tile 1000 --limit 500
 
 # Download with slower rate limiting (be more respectful)
-python osm_tile_downloader.py --min-zoom 8 --max-zoom 12 --min-delay 1.0 --max-delay 3.0
+python osm_tile_downloader.py --provider stamen-toner --min-zoom 8 --max-zoom 12 --min-delay 1.0 --max-delay 3.0
 
 # Heavy usage - High detail (8.9 GB, takes time!)
-python osm_tile_downloader.py --min-zoom 0 --max-zoom 14
+python osm_tile_downloader.py --provider osm --min-zoom 0 --max-zoom 14
 ```
 
 ### Check Download Statistics
@@ -53,6 +53,9 @@ python osm_tile_downloader.py --stats
 
 ### Command Line Options
 
+- `--provider`: Tile provider (default: `osm`). Built-ins: `osm`, `stamen-toner`, `stamen-terrain`, `carto-positron`, `carto-darkmatter`. Use `custom` with `--tile-url-template` for others
+- `--tile-url-template`: Custom tile URL template, e.g. `https://server/{z}/{x}/{y}.png` (overrides provider template)
+- `--provider-slug`: Directory name to namespace this provider (default: derived from provider/template hostname)
 - `--min-zoom`: Minimum zoom level (default: 0)
 - `--max-zoom`: Maximum zoom level (default: 10)
 - `--start-tile`: Starting tile number for resuming downloads (default: 0)
@@ -93,27 +96,33 @@ The downloader only fetches tiles covering the UK region, dramatically reducing 
 - **Maximum practical**: Zoom 0-16 (142 GB) - Only for extreme offline needs
 
 
-## Output Structure
+## Output Structure (Leaflet cache friendly)
 
 Tiles are saved in the standard web mapping directory structure:
 ```
 tiles/
-├── 0/
-│   └── 0/
-│       └── 0.png
-├── 1/
+├── OpenStreetMap/
 │   ├── 0/
-│   │   ├── 0.png
-│   │   └── 1.png
-│   └── 1/
-│       ├── 0.png
-│       └── 1.png
-├── 2/
-│   ├── 0/
-│   │   ├── 0.png
-│   │   ├── 1.png
-│   │   ├── 2.png
-│   │   └── 3.png
+│   │   └── 0/
+│   │       └── 0.png
+│   ├── 1/
+│   │   ├── 0/
+│   │   │   ├── 0.png
+│   │   │   └── 1.png
+│   │   └── 1/
+│   │       ├── 0.png
+│   │       └── 1.png
+│   └── 2/
+│       ├── 0/
+│       │   ├── 0.png
+│       │   ├── 1.png
+│       │   ├── 2.png
+│       │   └── 3.png
+│       └── 1/
+│           ├── 0.png
+│           └── 1.png
+└── CartoPositron/
+    └── ...
 ...
 ```
 
@@ -121,28 +130,29 @@ tiles/
 
 Once you have downloaded tiles, create ZIP files for the Android Leaflet cache:
 
-### Method 1: Create a single ZIP file (recommended)
+### Method 1: Create a single ZIP file per provider (recommended)
 ```bash
 cd tiles
-zip -r ../osm_tiles.zip .
+zip -r ../osm_OpenStreetMap_tiles.zip OpenStreetMap
+zip -r ../osm_CartoPositron_tiles.zip CartoPositron
 ```
 
-### Method 2: Create separate ZIP files by zoom level
+### Method 2: Create separate ZIP files by zoom level for a provider
 ```bash
-cd tiles
+cd tiles/OpenStreetMap
 for zoom in */; do
-    zip -r "../osm_tiles_zoom_${zoom%/}.zip" "$zoom"
+    zip -r "../../osm_OpenStreetMap_zoom_${zoom%/}.zip" "$zoom"
 done
 ```
 
 ### Method 3: Create ZIP files for specific zoom ranges
 ```bash
-cd tiles
+cd tiles/OpenStreetMap
 # Zoom levels 0-8 (low detail for overview)
-zip -r ../osm_tiles_low.zip {0..8}
+zip -r ../../osm_OpenStreetMap_low.zip {0..8}
 
 # Zoom levels 9-12 (high detail for close-up)
-zip -r ../osm_tiles_high.zip {9..12}
+zip -r ../../osm_OpenStreetMap_high.zip {9..12}
 ```
 
 ## Web Server Setup for Leaflet
@@ -159,7 +169,7 @@ scp osm_tiles*.zip user@yourserver.com:/var/www/html/
 # https://yourserver.com/osm_tiles_high.zip
 ```
 
-The Android DownloadMapsActivity will extract ZIP files directly into the Leaflet WebView cache for offline use.
+The Android DownloadMapsActivity will extract ZIP files directly into the Leaflet WebView cache for offline use. Namespacing by provider makes it easy to distribute and load multiple providers side-by-side.
 
 ## Rate Limiting and Ethics
 

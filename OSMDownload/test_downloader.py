@@ -15,13 +15,16 @@ def run_test():
     print("=" * 50)
     
     # Test 1: Download just zoom level 0 (1 tile)
-    print("\nTest 1: Downloading zoom level 0 (1 tile)")
+    print("\nTest 1: Downloading zoom level 0 (1 tile) from OSM")
+    script_dir = Path(__file__).parent
+    downloader_script = str(script_dir / "osm_tile_downloader.py")
     result = subprocess.run([
-        sys.executable, "osm_tile_downloader.py",
+        sys.executable, downloader_script,
+        "--provider", "osm",
         "--min-zoom", "0",
         "--max-zoom", "0",
         "--limit", "5"
-    ], capture_output=True, text=True)
+    ], capture_output=True, text=True, cwd=str(script_dir))
     
     if result.returncode == 0:
         print("✓ Test 1 passed")
@@ -32,10 +35,12 @@ def run_test():
     
     # Test 2: Show statistics
     print("\nTest 2: Checking statistics")
+    script_dir = Path(__file__).parent
+    downloader_script = str(script_dir / "osm_tile_downloader.py")
     result = subprocess.run([
-        sys.executable, "osm_tile_downloader.py",
+        sys.executable, downloader_script,
         "--stats"
-    ], capture_output=True, text=True)
+    ], capture_output=True, text=True, cwd=str(script_dir))
     
     if result.returncode == 0:
         print("✓ Test 2 passed")
@@ -48,7 +53,7 @@ def run_test():
     
     # Test 3: Check if tile files exist
     print("\nTest 3: Verifying tile files exist")
-    tile_path = Path("tiles/0/0/0.png")
+    tile_path = Path(__file__).parent / "tiles/OpenStreetMap/0/0/0.png"
     if tile_path.exists() and tile_path.stat().st_size > 0:
         print(f"✓ Test 3 passed - tile exists: {tile_path}")
         print(f"  File size: {tile_path.stat().st_size} bytes")

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import com.trigpointinguk.android.common.BaseActivity;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -21,7 +21,7 @@ import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.types.PhotoSubject;
 
-public class LogPhotoActivity extends Activity {
+public class LogPhotoActivity extends BaseActivity {
 	
 	private static final String TAG			= "LogPhotoActivity";
     
@@ -44,8 +44,8 @@ public class LogPhotoActivity extends Activity {
 	    setContentView(R.layout.logphoto);
 
 		// Enable back button in action bar
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
 		Bundle extras = getIntent().getExtras();

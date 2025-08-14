@@ -26,16 +26,14 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.trigpointinguk.android.common.BaseActivity;
 import com.trigpointinguk.android.common.ClearCacheTask;
-import com.trigpointinguk.android.common.ThemeUtils;
 import com.trigpointinguk.android.logging.SyncListener;
 import com.trigpointinguk.android.logging.SyncTask;
 import com.trigpointinguk.android.mapping.DownloadMapsActivity;
 import com.trigpointinguk.android.nearest.NearestActivity;
 
-public class MainActivity extends AppCompatActivity implements SyncListener {
+public class MainActivity extends BaseActivity implements SyncListener {
     public static final String 	TAG ="MainActivity";
     public static final int 	NOTRIGS = 1;
 	private static final String RUNBEFORE = "RUNBEFORE";
@@ -107,8 +105,7 @@ public class MainActivity extends AppCompatActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: MainActivity setup complete");
         
-        // Ensure proper content positioning to prevent action bar overlap
-        ThemeUtils.setupContentPositioning(this);
+        // Content positioning is now handled by BaseActivity
     }
 
     private void setupActivityResultLaunchers() {
