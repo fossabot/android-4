@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.trigpointinguk.android.common.BaseActivity;
+import com.trigpointinguk.android.common.BaseTabActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -32,7 +32,7 @@ import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
 import com.trigpointinguk.android.common.DisplayBitmapActivity;
 
-public class TrigDetailsOSMapTab extends BaseActivity {
+public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private static final String TAG = "TrigDetailsOSMapTab";
 
 	private long mTrigId;

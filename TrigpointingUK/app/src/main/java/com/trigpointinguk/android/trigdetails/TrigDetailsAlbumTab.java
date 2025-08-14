@@ -20,12 +20,12 @@ import java.util.concurrent.Executors;
 
 import com.trigpointinguk.android.DbHelper;
 import com.trigpointinguk.android.R;
-import com.trigpointinguk.android.common.BaseActivity;
+import com.trigpointinguk.android.common.BaseTabActivity;
 import com.trigpointinguk.android.common.DisplayBitmapActivity;
 import com.trigpointinguk.android.common.StringLoader;
 import com.trigpointinguk.android.types.TrigPhoto;
 
-public class TrigDetailsAlbumTab extends BaseActivity {
+public class TrigDetailsAlbumTab extends BaseTabActivity {
 	private long mTrigId;
 	private static final String TAG="TrigDetailsAlbumTab";
 	private StringLoader 			mStrLoader;

@@ -10,7 +10,7 @@ import java.util.List;
 
 // import org.acra.ErrorReporter;
 
-import com.trigpointinguk.android.common.BaseActivity;
+import com.trigpointinguk.android.common.BaseTabActivity;
 import androidx.appcompat.app.AlertDialog;
 
 import android.Manifest;
@@ -64,7 +64,7 @@ import com.trigpointinguk.android.types.LatLon.UNITS;
 import com.trigpointinguk.android.types.PhotoSubject;
 import com.trigpointinguk.android.types.TrigPhoto;
 
-public class LogTrigActivity extends BaseActivity implements OnDateChangedListener, LocationListener, SyncListener {
+public class LogTrigActivity extends BaseTabActivity implements OnDateChangedListener, LocationListener, SyncListener {
 	private static final String TAG			= "LogTrigActivity";
     private SharedPreferences 	mPrefs;
 
