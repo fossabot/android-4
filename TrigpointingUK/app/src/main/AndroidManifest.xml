@@ -66,6 +66,9 @@
         <activity 
             android:name=".mapping.LeafletMapActivity"
             android:exported="false" />
+        <activity 
+            android:name=".common.WebViewActivity"
+            android:exported="false" />
         <activity
             android:name=".radar.RadarActivity"
             android:exported="false" />
