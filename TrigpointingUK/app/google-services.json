@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "900636600643",
+    "project_id": "trigpointinguk-61b2d",
+    "storage_bucket": "trigpointinguk-61b2d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900636600643:android:4403e611a93b948a3fa7f6",
+        "android_client_info": {
+          "package_name": "com.trigpointinguk.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_DI9CDqFYJPi3A4CJDSxcXJN2VdmNiqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

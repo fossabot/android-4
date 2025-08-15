@@ -3,7 +3,6 @@ package com.trigpointinguk.android;
 // import org.acra.ErrorReporter;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources.NotFoundException;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,7 +34,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class MainActivity extends BaseActivity implements SyncListener {
     public static final String 	TAG ="MainActivity";
-    public static final int 	NOTRIGS = 1;
 	private static final String RUNBEFORE = "RUNBEFORE";
 	private static final String AUTO_SYNC_RUN = "AUTO_SYNC_RUN";
     private SharedPreferences 	mPrefs;
@@ -58,7 +55,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
     // Modern activity result launchers
     private ActivityResultLauncher<Intent> nearestLauncher;
     private ActivityResultLauncher<Intent> mapLauncher;
-    private ActivityResultLauncher<Intent> searchLauncher;
     private ActivityResultLauncher<Intent> preferencesLauncher;
     
  	@Override
@@ -103,7 +99,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
         // Update Crashlytics user id at startup
         try {
             String username = PreferenceManager.getDefaultSharedPreferences(this).getString("username", "");
-            if (username != null && !username.trim().isEmpty()) {
+            if (!username.trim().isEmpty()) {
                 FirebaseCrashlytics.getInstance().setUserId(username);
             }
         } catch (Exception ignored) {}
@@ -117,32 +113,19 @@ public class MainActivity extends BaseActivity implements SyncListener {
     private void setupActivityResultLaunchers() {
         nearestLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                // Handle result from NearestActivity
-                if (result.getResultCode() == RESULT_OK) {
-                    // Handle successful result
-                }
-            }
+            result -> {}
         );
         
         mapLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                // Handle result from MapActivity
-                if (result.getResultCode() == RESULT_OK) {
-                    // Handle successful result
-                }
-            }
+            result -> {}
         );
-        
-        searchLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                // Handle result from FilterActivity
-                if (result.getResultCode() == RESULT_OK) {
-                    // Handle successful result
-                }
-            }
+
+        // Handle result from FilterActivity
+        // Handle successful result
+        ActivityResultLauncher<Intent> searchLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {}
         );
         
         preferencesLauncher = registerForActivityResult(
@@ -159,7 +142,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
                         // Also update Crashlytics user id when username changes
                         try {
                             String username = PreferenceManager.getDefaultSharedPreferences(this).getString("username", "");
-                            if (username != null && !username.trim().isEmpty()) {
+                            if (!username.trim().isEmpty()) {
                                 FirebaseCrashlytics.getInstance().setUserId(username);
                             }
                         } catch (Exception ignored) {}
@@ -172,52 +155,22 @@ public class MainActivity extends BaseActivity implements SyncListener {
     
     private void setupClickListeners() {
         final Button btnNearest = findViewById(R.id.btnNearest);
-        btnNearest.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Intent i = new Intent(MainActivity.this, NearestActivity.class);
-				nearestLauncher.launch(i);
-			}
-		});       
-        mSyncBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				doSync();
-			}
-		});
+        btnNearest.setOnClickListener(arg0 -> {
+            Intent i = new Intent(MainActivity.this, NearestActivity.class);
+            nearestLauncher.launch(i);
+        });
+        mSyncBtn.setOnClickListener(arg0 -> doSync());
 
         final Button btnLeafletMap = findViewById(R.id.btnLeafletMap);
-        btnLeafletMap.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, com.trigpointinguk.android.mapping.LeafletMapActivity.class);
-                mapLauncher.launch(i);
-            }
+        btnLeafletMap.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, com.trigpointinguk.android.mapping.LeafletMapActivity.class);
+            mapLauncher.launch(i);
         });
 
     }
-    
-    private void showNoTrigsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.dlgNoTrigs)
-               .setCancelable(true)
-               .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
-                       dialog.cancel();
-                       Intent i = new Intent(MainActivity.this, DownloadTrigsActivity.class);
-                       startActivity(i);
-                   }
-               })
-               .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
-                       dialog.cancel();
-                   }
-               });
-        builder.create().show();
-    }
 
- 	
- 		@Override
+
+	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putBoolean(RUNBEFORE, true);
 		super.onSaveInstanceState(outState);
@@ -324,7 +277,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 			
 			Log.i(TAG, "updateUserDisplay: Username from preferences: '" + username + "'");
 			
-			if (username != null && !username.trim().isEmpty()) {
+			if (!username.trim().isEmpty()) {
 				Log.i(TAG, "updateUserDisplay: Setting username to: " + username);
 				mUserName.setText(username);
 			} else {
@@ -480,8 +433,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 			String username = prefs.getString("username", "");
 			String password = prefs.getString("plaintextpassword", "");
 			
-			if (username != null && !username.trim().isEmpty() && 
-				password != null && !password.trim().isEmpty()) {
+			if (!username.trim().isEmpty() && !password.trim().isEmpty()) {
 				Log.i(TAG, "checkAndPerformAutoSync: Credentials found, performing auto sync");
 				// Mark that auto sync has been run
 				prefs.edit().putBoolean(AUTO_SYNC_RUN, true).apply();
@@ -489,7 +441,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 			} else {
 				Log.i(TAG, "checkAndPerformAutoSync: No credentials found, skipping auto sync");
 			}
-		} else if (autoSyncEnabled && autoSyncAlreadyRun) {
+		} else if (autoSyncEnabled) {
 			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled but already run this session");
 		} else {
 			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is disabled");
