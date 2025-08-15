@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.net.Uri;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +70,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	private static final String     USECOMPASS="useCompass";
 	private static final String TAG = "NearestActivity";
 	private static final int DETAILS = 1;
+    private static final int REQ_LOCATION = 1;
 	
 	// Modern activity result launcher
 	private ActivityResultLauncher<Intent> detailsLauncher;
@@ -161,7 +164,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			requestPermissions(new String[]{
 				android.Manifest.permission.ACCESS_FINE_LOCATION,
 				android.Manifest.permission.ACCESS_COARSE_LOCATION
-			}, 1);
+			}, REQ_LOCATION);
 			updateLocationHeader("permission_required");
 			return;
 		} else {
@@ -335,20 +338,53 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (requestCode == 1) {
-			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				// Permission granted, proceed with location access
+		if (requestCode == REQ_LOCATION) {
+			boolean granted = false;
+			if (grantResults != null && grantResults.length > 0) {
+				for (int res : grantResults) {
+					if (res == PackageManager.PERMISSION_GRANTED) {
+						granted = true;
+						break;
+					}
+				}
+			}
+			if (granted) {
 				mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 				Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
 				updateLocationHeader("cached");
 				if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
 			} else {
-				// Permission denied
+				boolean showRationaleFine = shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION);
+				boolean showRationaleCoarse = shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+				if (showRationaleFine || showRationaleCoarse) {
+					new androidx.appcompat.app.AlertDialog.Builder(this)
+							.setTitle("Location permission required")
+							.setMessage("This feature needs your location to find nearby trig points.")
+							.setPositiveButton("Try again", (d, which) -> requestPermissions(new String[]{
+									android.Manifest.permission.ACCESS_FINE_LOCATION,
+									android.Manifest.permission.ACCESS_COARSE_LOCATION
+							}, REQ_LOCATION))
+							.setNegativeButton("Cancel", (d, w) -> Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show())
+							.show();
+				} else {
+					new androidx.appcompat.app.AlertDialog.Builder(this)
+							.setTitle("Enable location in Settings")
+							.setMessage("Permission was permanently denied. Open App Settings to enable it.")
+							.setPositiveButton("Open Settings", (d, which) -> openAppSettings())
+							.setNegativeButton("Cancel", (d, w) -> Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show())
+							.show();
+				}
 				updateLocationHeader("permission_denied");
-				Toast.makeText(this, "Location permission is required to find nearest trig points", Toast.LENGTH_LONG).show();
 			}
 		}
+	}
+
+	private void openAppSettings() {
+		Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+		Uri uri = Uri.fromParts("package", getPackageName(), null);
+		intent.setData(uri);
+		startActivity(intent);
 	}
 
 
