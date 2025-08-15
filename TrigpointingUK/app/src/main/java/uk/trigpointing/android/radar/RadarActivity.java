@@ -34,6 +34,8 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor rotationVector;
 
+    private static final int REQ_LOCATION = 1001;
+
     private double targetLat;
     private double targetLon;
 
@@ -99,7 +101,9 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
     private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Location permission required", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQ_LOCATION);
             return;
         }
         LocationRequest req = new LocationRequest.Builder(1000L)
@@ -107,6 +111,27 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
                 .setMinUpdateIntervalMillis(500L)
                 .build();
         fusedLocationClient.requestLocationUpdates(req, locationCallback, getMainLooper());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_LOCATION) {
+            boolean granted = false;
+            if (grantResults != null && grantResults.length > 0) {
+                for (int res : grantResults) {
+                    if (res == PackageManager.PERMISSION_GRANTED) {
+                        granted = true;
+                        break;
+                    }
+                }
+            }
+            if (granted) {
+                startLocationUpdates();
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private final LocationCallback locationCallback = new LocationCallback() {

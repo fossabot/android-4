@@ -97,6 +97,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     private ProgressBar      mProgressBar;
     private TextView         mProgressText;
     private LocationManager 	mLocationManager;
+    private static final int REQ_LOCATION = 2001;
     
     	// Photo picker constants
 	private static final int CHOOSE_PHOTO = 1;
@@ -468,16 +469,21 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	
     // service request to choose a photo using modern approach
     private void choosePhoto() {
-    	Log.i(TAG, "Get a photo from the gallery using modern picker");
-    	
-    	// Use ACTION_GET_CONTENT for maximum compatibility
-    	Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-    	photoPickerIntent.setType("image/*");
-    	photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-    	Log.i(TAG, "Using ACTION_GET_CONTENT for photo selection");
-    	
-    	Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
-    	startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
+        Log.i(TAG, "Get a photo from the gallery using modern picker");
+        // Prefer Android Photo Picker (API 33+)
+        Intent photoPickerIntent = new Intent("android.provider.action.PICK_IMAGES");
+        photoPickerIntent.putExtra("android.provider.extra.PICK_IMAGES_MAX", 1);
+        if (photoPickerIntent.resolveActivity(getPackageManager()) == null) {
+            // Fallback for older devices
+            photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            photoPickerIntent.setType("image/*");
+            photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            Log.i(TAG, "Falling back to ACTION_GET_CONTENT for photo selection");
+        } else {
+            Log.i(TAG, "Using Photo Picker (PICK_IMAGES)");
+        }
+        Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
+        startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
     }
  
     
@@ -728,13 +734,9 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 
 		    // Start listening for GPS updates
            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-               // TODO: Consider calling
-               //    ActivityCompat#requestPermissions
-               // here to request the missing permissions, and then overriding
-               //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-               //                                          int[] grantResults)
-               // to handle the case where the user grants the permission. See the documentation
-               // for ActivityCompat#requestPermissions for more details.
+               ActivityCompat.requestPermissions(this,
+                       new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                       REQ_LOCATION);
                return;
            }
            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,1.0f, this);
@@ -806,6 +808,27 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         	mHaveLog = false;
     	}
 	}
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQ_LOCATION) {
+            boolean granted = false;
+            if (grantResults != null && grantResults.length > 0) {
+                for (int res : grantResults) {
+                    if (res == PackageManager.PERMISSION_GRANTED) {
+                        granted = true;
+                        break;
+                    }
+                }
+            }
+            if (granted) {
+                getLocation();
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
 
 

@@ -133,26 +133,13 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 
 		// Find a cached location
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		// Initialize sensors early so onResume/useCompass never sees nulls even if we return early
+		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+		accelerometer = mSensorManager != null ? mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) : null;
+		magnetometer = mSensorManager != null ? mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) : null;
 		
-		// Check for location permissions
-		if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-			checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// Request location permissions
-			requestPermissions(new String[]{
-				android.Manifest.permission.ACCESS_FINE_LOCATION,
-				android.Manifest.permission.ACCESS_COARSE_LOCATION
-			}, 1);
-			updateLocationHeader("permission_required");
-		} else {
-			// We have permission, proceed with location access
-			mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
-			updateLocationHeader("cached");
-			if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
-		}
-		
-		// Define a listener that responds to location updates
+		// Define a listener that responds to location updates (init early so it's never null)
 		mLocationListener = new LocationListener() {
 			public void onLocationChanged(Location location) {
 				mLocationCount++;
@@ -166,10 +153,28 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			public void onProviderEnabled(String provider) {}
 			public void onProviderDisabled(String provider) {}
 		};
+		
+		// Check for location permissions
+		if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+			checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			// Request location permissions
+			requestPermissions(new String[]{
+				android.Manifest.permission.ACCESS_FINE_LOCATION,
+				android.Manifest.permission.ACCESS_COARSE_LOCATION
+			}, 1);
+			updateLocationHeader("permission_required");
+			return;
+		} else {
+			// We have permission, proceed with location access
+			mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
+			updateLocationHeader("cached");
+			if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
+		}
+		
 
-		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-		accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+		// Sensors already initialized above
 		
 		// Is the screen rotated?
 		WindowManager windowManager =  (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -192,7 +197,15 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		editor.putBoolean(USECOMPASS, mUsingCompass);
 		editor.apply();
 		// stop listening to the GPS and compass
-		mLocationManager.removeUpdates(mLocationListener);
+		try {
+			if (mLocationManager != null && (
+					checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+					checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+				mLocationManager.removeUpdates(mLocationListener);
+			}
+		} catch (SecurityException ignore) {
+			// If we do not have permission yet, ignore
+		}
 		useCompass(false);
 		super.onPause();
 	}
@@ -209,6 +222,10 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*30, 250, mLocationListener);
 			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*300, 250, mLocationListener);
+		}
+		else {
+			// If returning here after a permission denial, ensure headers/UI reflect state
+			updateLocationHeader("permission_required");
 		}
 		// Decide whether to use the compass
 		useCompass(mPrefs.getBoolean(USECOMPASS, false));
