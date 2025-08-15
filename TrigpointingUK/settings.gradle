@@ -3,7 +3,14 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-
+        // Keep plugin repos centralized here
+    }
+    plugins {
+        id 'com.android.application' version '8.11.1'
+        id 'com.google.gms.google-services' version '4.4.3'
+        id 'com.google.firebase.crashlytics' version '3.0.6'
+        id 'com.google.firebase.firebase-perf' version '1.4.2'
+        // Add more plugin versions here if applied via module plugins {}
     }
 }
 
@@ -13,10 +20,11 @@ plugins {
 
 // Gradle 7+/AGP 8+: prefer centralized dependency resolution
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        maven { url = 'https://jitpack.io' }
 
     }
 }
