@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:900636600643:android:4403e611a93b948a3fa7f6",
+        "mobilesdk_app_id": "1:900636600643:android:0a53a0e3afba396c3fa7f6",
         "android_client_info": {
-          "package_name": "com.trigpointinguk.android"
+          "package_name": "uk.trigpointing.android"
         }
       },
       "oauth_client": [],

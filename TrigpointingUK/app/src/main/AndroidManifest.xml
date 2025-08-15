@@ -5,22 +5,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
-                     android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
-                     android:maxSdkVersion="32" />
+    <!-- Removed legacy storage permissions in favor of Photo Picker / SAF -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     
-    <!-- For Android 13+ -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Photo access handled via Android Photo Picker (no runtime storage permissions) -->
 
     <application 
         android:icon="@drawable/icon" 
         android:label="@string/app_name" 
-        android:name="MainApplication"
+        android:name="uk.trigpointing.android.MainApplication"
         android:allowBackup="true"
         android:theme="@style/Theme.TrigpointingUK"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -32,76 +29,76 @@
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
-        <activity android:label="@string/app_name" android:name="MainActivity" android:exported="true">
+        <activity android:label="@string/app_name" android:name="uk.trigpointing.android.MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity 
-            android:name=".nearest.NearestActivity"
+            android:name="uk.trigpointing.android.nearest.NearestActivity"
             android:exported="false" />
         <activity 
-            android:name="DownloadTrigsActivity"
+            android:name="uk.trigpointing.android.DownloadTrigsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="uk.trigpointing.android.MainActivity" />
         <activity 
-            android:name="PreferencesActivity"
+            android:name="uk.trigpointing.android.PreferencesActivity"
             android:exported="false" />
         <activity 
-            android:name=".mapping.DownloadMapsActivity"
+            android:name="uk.trigpointing.android.mapping.DownloadMapsActivity"
             android:exported="false"
             android:configChanges="keyboardHidden|orientation" />
         <activity 
-            android:name=".trigdetails.TrigDetailsActivity"
+            android:name="uk.trigpointing.android.trigdetails.TrigDetailsActivity"
             android:exported="false" />
         <activity 
-            android:name=".trigdetails.TrigDetailsAlbumTab"
+            android:name="uk.trigpointing.android.trigdetails.TrigDetailsAlbumTab"
             android:exported="false" />
         <activity 
-            android:name=".trigdetails.TrigDetailsInfoTab"
+            android:name="uk.trigpointing.android.trigdetails.TrigDetailsInfoTab"
             android:exported="false" />
         <activity 
-            android:name=".trigdetails.TrigDetailsLoglistTab"
+            android:name="uk.trigpointing.android.trigdetails.TrigDetailsLoglistTab"
             android:exported="false" />
         <activity 
-            android:name=".trigdetails.TrigDetailsOSMapTab"
+            android:name="uk.trigpointing.android.trigdetails.TrigDetailsOSMapTab"
             android:exported="false" />
 
 
 
         <activity 
-            android:name=".mapping.LeafletMapActivity"
+            android:name="uk.trigpointing.android.mapping.LeafletMapActivity"
             android:exported="false" />
         <activity 
-            android:name=".common.WebViewActivity"
+            android:name="uk.trigpointing.android.common.WebViewActivity"
             android:exported="false" />
         <activity
-            android:name=".radar.RadarActivity"
+            android:name="uk.trigpointing.android.radar.RadarActivity"
             android:exported="false" />
         <meta-data android:value="6668b1358f29457b88baf287a692ae97" android:name="CLOUDMADE_KEY"></meta-data>
         <meta-data android:value="AmX-6eFz_aE2rrhkXUprU3HRV2BNMrCYQoKodIFdfNEcZosjAEbsNetB00GFktP5" android:name="BING_KEY"></meta-data>
         <activity 
-            android:name="HelpPageActivity"
+            android:name="uk.trigpointing.android.HelpPageActivity"
             android:exported="false" />
         <activity 
-            android:name=".common.DisplayBitmapActivity"
+            android:name="uk.trigpointing.android.common.DisplayBitmapActivity"
             android:exported="false" />
         <activity 
-            android:name=".logging.LogTrigActivity"
+            android:name="uk.trigpointing.android.logging.LogTrigActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity 
-            android:name=".logging.LogPhotoActivity"
+            android:name="uk.trigpointing.android.logging.LogPhotoActivity"
             android:exported="false" />
         <activity 
-            android:name=".filter.FilterActivity"
+            android:name="uk.trigpointing.android.filter.FilterActivity"
             android:exported="false" />
         <activity 
-            android:name=".filter.TrigpointTypesActivity"
+            android:name="uk.trigpointing.android.filter.TrigpointTypesActivity"
             android:exported="false" />
         <activity 
-            android:name=".filter.FilterFoundActivity"
+            android:name="uk.trigpointing.android.filter.FilterFoundActivity"
             android:exported="false" />
     </application>
 </manifest>
