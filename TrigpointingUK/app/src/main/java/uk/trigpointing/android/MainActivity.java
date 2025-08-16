@@ -8,6 +8,11 @@ import android.content.SharedPreferences;
 import android.content.res.Resources.NotFoundException;
 import android.database.SQLException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +35,9 @@ import uk.trigpointing.android.logging.SyncListener;
 import uk.trigpointing.android.logging.SyncTask;
 import uk.trigpointing.android.mapping.DownloadMapsActivity;
 import uk.trigpointing.android.nearest.NearestActivity;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends BaseActivity implements SyncListener {
     public static final String 	TAG ="MainActivity";
@@ -99,7 +107,48 @@ public class MainActivity extends BaseActivity implements SyncListener {
         Log.i(TAG, "onCreate: Populating counts");
         populateCounts();
         
+        Log.i(TAG, "onCreate: Checking for OS API key");
+        checkAndFetchOsApiKey();
+        
         Log.i(TAG, "onCreate: MainActivity setup complete");
+    }
+
+    private void checkAndFetchOsApiKey() {
+        CompletableFuture.runAsync(() -> {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            String osApiKey = prefs.getString("os_api_key", "");
+
+            if (osApiKey != null && !osApiKey.trim().isEmpty()) {
+                Log.i(TAG, "OS API key already exists.");
+                return;
+            }
+
+            Log.i(TAG, "OS API key is missing. Fetching from URL...");
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url("https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/OS_API_KEY.txt")
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String apiKey = response.body().string().trim();
+                    if (!apiKey.isEmpty()) {
+                        prefs.edit().putString("os_api_key", apiKey).apply();
+                        Log.i(TAG, "OS API key fetched and saved successfully.");
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "OS API Key updated.", Toast.LENGTH_SHORT).show());
+                    } else {
+                        Log.e(TAG, "Fetched OS API key is empty.");
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to update OS API Key: Key file is empty.", Toast.LENGTH_LONG).show());
+                    }
+                } else {
+                    Log.e(TAG, "Failed to fetch OS API key. Response code: " + response.code());
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to update OS API Key: Server error.", Toast.LENGTH_LONG).show());
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error checking or fetching OS API key", e);
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "Failed to update OS API Key: Network error.", Toast.LENGTH_LONG).show());
+            }
+        }, executor);
     }
 
     private void setupActivityResultLaunchers() {

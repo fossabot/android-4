@@ -3,6 +3,8 @@ package uk.trigpointing.android;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
@@ -73,6 +75,25 @@ public class PreferencesActivity extends BaseActivity {
 		@Override
 		public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 			setPreferencesFromResource(R.xml.preferences, rootKey);
+
+			// Mask the OS API key value
+			EditTextPreference osApiKeyPreference = findPreference("os_api_key");
+			if (osApiKeyPreference != null) {
+				osApiKeyPreference.setSummaryProvider(preference -> {
+					String apiKey = ((EditTextPreference) preference).getText();
+					if (apiKey != null && !apiKey.isEmpty()) {
+						return "********";
+					} else {
+						return "Not set";
+					}
+				});
+
+				// Do not display the key in the edit dialog
+				osApiKeyPreference.setOnBindEditTextListener(editText -> {
+					editText.setText("");
+					editText.setHint("Enter new API key to change it");
+				});
+			}
 		}
 	}
 	
