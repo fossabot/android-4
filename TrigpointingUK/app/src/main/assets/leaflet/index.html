@@ -317,7 +317,7 @@
 
     // Tile layer factories
     function createOSM() {
-      const layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      const layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       });
       addTileErrorHandling(layer, 'OpenStreetMap');

@@ -1,7 +1,5 @@
 # OSM Download tiles - exclude from version control
-OSMDownload/tiles/
-OSMDownload/download.log
-OSMDownload/*.zip
+OSMDownload
 
 # Gradle cache files
 .gradle/
