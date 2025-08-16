@@ -15,8 +15,8 @@ android {
         applicationId "uk.trigpointing.android"
         minSdk = 27
         targetSdk = 36
-        versionCode 15
-        versionName "2.0.4"
+        versionCode 17
+        versionName "2.0.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

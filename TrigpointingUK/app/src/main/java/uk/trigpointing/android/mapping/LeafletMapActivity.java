@@ -578,13 +578,6 @@ public class LeafletMapActivity extends BaseActivity {
         return count;
     }
     
-    private void triggerTrigpointDownload() {
-        Log.d(TAG, "triggerTrigpointDownload: Starting DownloadTrigsActivity");
-        
-        // Launch DownloadTrigsActivity which will download trigpoint data and sync user data
-        Intent intent = new Intent(this, DownloadTrigsActivity.class);
-        startActivity(intent);
-    }
 }
 
 

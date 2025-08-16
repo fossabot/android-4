@@ -10,8 +10,6 @@
     <!-- Removed legacy storage permissions in favor of Photo Picker / SAF -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     
     <!-- Photo picker permissions - Android 13+ photo picker requires NO permissions! -->
     <!-- Only needed for Android 10 and below when using ACTION_GET_CONTENT -->
@@ -55,7 +53,7 @@
         <activity
             android:name=".mapping.DownloadMapsActivity"
             android:label="Download Maps"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".mapping.LeafletMapActivity" />
         <activity 
             android:name="uk.trigpointing.android.trigdetails.TrigDetailsActivity"
             android:label="@string/trigdetails_name"
@@ -109,9 +107,5 @@
         <activity 
             android:name="uk.trigpointing.android.filter.FilterFoundActivity"
             android:exported="false" />
-        <service
-            android:name=".mapping.DownloadService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
     </application>
 </manifest>
