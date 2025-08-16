@@ -13,9 +13,10 @@ import android.webkit.JavascriptInterface;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 import android.database.Cursor;
 
@@ -25,12 +26,23 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import uk.trigpointing.android.mapping.BoundingBox;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import uk.trigpointing.android.common.BaseActivity;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.webkit.WebViewClientCompat;
 
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
@@ -38,13 +50,12 @@ import uk.trigpointing.android.common.FileCache;
 import uk.trigpointing.android.DownloadTrigsActivity;
 import uk.trigpointing.android.filter.Filter;
 
-import java.nio.charset.StandardCharsets;
-
 public class LeafletMapActivity extends BaseActivity {
     private static final String TAG = "LeafletMapActivity";
     private WebView webView;
     private static final int REQ_LOCATION = 2001;
     private DbHelper dbHelper;
+    private File mTileCacheDir;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -54,10 +65,12 @@ public class LeafletMapActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        
-        // Content positioning is now handled by BaseActivity
 
-        // Initialize database helper
+        mTileCacheDir = new File(getCacheDir(), "map_tiles");
+        if (!mTileCacheDir.exists()) {
+            mTileCacheDir.mkdirs();
+        }
+
         try {
             dbHelper = new DbHelper(this);
             dbHelper.open();
@@ -72,33 +85,64 @@ public class LeafletMapActivity extends BaseActivity {
         ws.setDomStorageEnabled(true);
         ws.setBuiltInZoomControls(true);
         ws.setDisplayZoomControls(false);
-        
-        // Enable Service Worker support for file:// URLs
+        ws.setAllowFileAccess(true);
         ws.setAllowFileAccessFromFileURLs(true);
         ws.setAllowUniversalAccessFromFileURLs(true);
         ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        
-        // Enable aggressive caching for offline support
-        ws.setCacheMode(WebSettings.LOAD_DEFAULT); // Cache when possible
+        ws.setCacheMode(WebSettings.LOAD_DEFAULT);
         ws.setDatabaseEnabled(true);
         ws.setGeolocationEnabled(true);
-        
-        // Add JavaScript interface for saving preferences
+
         webView.addJavascriptInterface(new LeafletPreferencesInterface(), "AndroidPrefs");
-        
-        webView.setWebViewClient(new WebViewClient());
+
+        webView.setWebViewClient(new WebViewClientCompat() {
+            @Override
+            public WebResourceResponse shouldInterceptRequest(@NonNull WebView view, @NonNull WebResourceRequest request) {
+                String url = request.getUrl().toString();
+
+                if (url.contains("tile.openstreetmap.org") || url.contains("api.os.uk")) {
+                    try {
+                        String domain = request.getUrl().getHost();
+                        String path = request.getUrl().getPath();
+                        File tileFile = new File(mTileCacheDir, domain + path);
+
+                        if (tileFile.exists()) {
+                            Log.d(TAG, "Serving tile from local cache: " + tileFile.getPath());
+                            InputStream inputStream = new FileInputStream(tileFile);
+                            String mimeType = getMimeType(url);
+                            return new WebResourceResponse(mimeType, "UTF-8", inputStream);
+                        } else {
+                             Log.d(TAG, "Tile not in cache, fetching from network: " + url);
+                             return fetchAndCacheTile(url, tileFile);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error serving tile from cache", e);
+                    }
+                }
+
+                return super.shouldInterceptRequest(view, request);
+            }
+        });
+
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                // Auto-grant geolocation permission for this WebView session
                 callback.invoke(origin, true, false);
+            }
+
+            @Override
+            public boolean onConsoleMessage(android.webkit.ConsoleMessage consoleMessage) {
+                Log.d(TAG, "WebView Console: " + consoleMessage.message() + " -- From line "
+                        + consoleMessage.lineNumber() + " of "
+                        + consoleMessage.sourceId());
+                return super.onConsoleMessage(consoleMessage);
             }
         });
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String osKey = prefs.getString("os_api_key", "");
         String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
-        
+
         String url = buildLeafletUrl(osKey, leafletMapStyle);
         try {
             if (ensureLocationPermission()) {
@@ -110,16 +154,64 @@ public class LeafletMapActivity extends BaseActivity {
         }
     }
 
+    private WebResourceResponse fetchAndCacheTile(String urlString, File tileFile) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set a custom User-Agent to comply with tile server policies
+            connection.setRequestProperty("User-Agent", "TrigpointingUK-Android-App/1.0");
+
+            connection.connect();
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream inputStream = connection.getInputStream();
+                
+                // Ensure parent directories exist
+                File parentDir = tileFile.getParentFile();
+                if (parentDir != null && !parentDir.exists()) {
+                    parentDir.mkdirs();
+                }
+
+                // Write the tile to the cache file
+                FileOutputStream fileOutputStream = new FileOutputStream(tileFile);
+                byte[] buffer = new byte[1024];
+                int bufferLength;
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                    fileOutputStream.write(buffer, 0, bufferLength);
+                }
+                fileOutputStream.close();
+                
+                // Now that it's cached, serve it from the file
+                InputStream cachedInputStream = new FileInputStream(tileFile);
+                String mimeType = getMimeType(urlString);
+                return new WebResourceResponse(mimeType, connection.getContentEncoding(), cachedInputStream);
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error fetching and caching tile", e);
+        }
+        return null; // Let WebView handle the failed request
+    }
+    
+    private String getMimeType(String url) {
+        if (url.endsWith(".png")) {
+            return "image/png";
+        } else if (url.endsWith(".jpg") || url.endsWith(".jpeg")) {
+            return "image/jpeg";
+        }
+        return "application/octet-stream";
+    }
+
     private String buildLeafletUrl(String osKey, String leafletMapStyle) {
         StringBuilder url = new StringBuilder("file:///android_asset/leaflet/index.html");
         boolean hasParams = false;
 
-        if (!osKey.isEmpty()) {
+        if (osKey != null && !osKey.isEmpty()) {
             url.append("?os_key=").append(java.net.URLEncoder.encode(osKey, StandardCharsets.UTF_8));
             hasParams = true;
         }
 
-        if (!leafletMapStyle.isEmpty()) {
+        if (leafletMapStyle != null && !leafletMapStyle.isEmpty()) {
             url.append(hasParams ? "&" : "?");
             url.append("initial_style=").append(java.net.URLEncoder.encode(leafletMapStyle, StandardCharsets.UTF_8));
         }
@@ -169,6 +261,7 @@ public class LeafletMapActivity extends BaseActivity {
             webView.evaluateJavascript(
                 "getCacheStatus().then(status => {" +
                 "  if (status) {" +
+                "    console.log('Cache Status:', JSON.stringify(status));" +
                 "    if (status.error) {" +
                 "      AndroidPrefs.showCacheDialog(status.error, '');" +
                 "    } else {" +
@@ -178,13 +271,14 @@ public class LeafletMapActivity extends BaseActivity {
                 "      message += 'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n';" +
                 "      if (status.usagePercent !== undefined) message += 'Usage: ' + status.usagePercent + '%\\n';" +
                 "      if (status.cacheAge) message += 'Age: ' + status.cacheAge + '\\n';" +
+                "      if (status.firstTileUrl) message += '\\nFirst Tile:\\n' + status.firstTileUrl;" +
                 "      let note = status.note || '';" +
                 "      AndroidPrefs.showCacheDialog(message, note);" +
                 "    }" +
                 "  } else {" +
                 "    AndroidPrefs.showCacheDialog('Cache status not available', 'Check console for details');" +
                 "  }" +
-                "});", 
+                "});",
                 null
             );
             return true;

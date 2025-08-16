@@ -174,6 +174,7 @@
     </svg>
   </button>
   <script>
+    /*
     // Cache support detection and setup
     let cacheSupported = false;
     let cacheMode = 'none';
@@ -209,6 +210,7 @@
         localStorage.setItem('cached_tiles_count', '0');
       }
     }
+    */
 
     function getParam(name){ const url=new URL(window.location.href); return url.searchParams.get(name)||''; }
     const osKey = getParam('os_key');
@@ -230,6 +232,7 @@
     let tileErrorCount = 0;
     let tileSuccessCount = 0;
     
+    /*
     // Cache tile counter
     function updateTileCount() {
       if (cacheMode === 'webview') {
@@ -237,6 +240,7 @@
         localStorage.setItem('cached_tiles_count', (currentCount + 1).toString());
       }
     }
+    */
 
     // Add tile error handling and visual feedback
     function addTileErrorHandling(layer, layerName, minZoom, maxZoom) {
@@ -269,7 +273,7 @@
       
       layer.on('tileload', function(e) {
         tileSuccessCount++;
-        updateTileCount(); // Count tiles for cache tracking
+        // updateTileCount(); // Count tiles for cache tracking
         // Hide error feedback if tiles start loading successfully
         if (tileSuccessCount > 0 && errorTooltip) {
           hideErrorFeedback();

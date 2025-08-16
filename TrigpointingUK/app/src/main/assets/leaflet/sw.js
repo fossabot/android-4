@@ -297,12 +297,15 @@ async function getCacheStatus() {
   const cache = await caches.open(CACHE_NAME);
   const requests = await cache.keys();
   const cacheSize = await calculateCacheSize(cache);
-  
+  const firstTileUrl = requests.length > 0 ? requests[0].url : 'No tiles cached';
+  console.log('Service Worker: First cached tile URL:', firstTileUrl);
+
   return {
     tileCount: requests.length,
     totalSize: cacheSize,
     maxSize: MAX_CACHE_SIZE,
-    usagePercent: Math.round((cacheSize / MAX_CACHE_SIZE) * 100)
+    usagePercent: Math.round((cacheSize / MAX_CACHE_SIZE) * 100),
+    firstTileUrl: firstTileUrl
   };
 }
 
