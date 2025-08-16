@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.LinearLayout;
 import android.util.TypedValue;
 import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,6 +48,8 @@ import android.widget.EditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+// Removed unused Fragment-related imports; using getSupportFragmentManager directly
+// Removed direct Compose interop imports in Java; we host via FrameLayout/RecyclerView
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -63,6 +67,7 @@ import uk.trigpointing.android.types.LatLon;
 import uk.trigpointing.android.types.LatLon.UNITS;
 import uk.trigpointing.android.types.PhotoSubject;
 import uk.trigpointing.android.types.TrigPhoto;
+// no direct Compose imports in Java
 
 public class LogTrigActivity extends BaseTabActivity implements OnDateChangedListener, LocationListener, SyncListener {
 	private static final String TAG			= "LogTrigActivity";
@@ -92,6 +97,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     private boolean				mHaveLog;
     
     private	List<TrigPhoto> 	mPhotos; 
+    private PhotoManager        mPhotoManager;
 
     private AlertDialog      mProgressDialog;
     private ProgressBar      mProgressBar;
@@ -115,7 +121,11 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             getSupportActionBar().hide();
         }
 		
-			// Photo picker launchers will be handled by onActivityResult method
+		// Initialize PhotoManager with a coroutine scope
+		mPhotoManager = new PhotoManager(this, kotlinx.coroutines.GlobalScope.INSTANCE);
+		
+		// Note: ActivityResultLauncher doesn't work properly with LocalActivityManager
+		// We'll use the traditional onActivityResult approach instead
 		
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -182,7 +192,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
  		}
 	   	mAdminFlag		= findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= findViewById(R.id.logUserFlag);
-	            mGallery 		= findViewById(R.id.logGallery);
+            mGallery 		= findViewById(R.id.logGallery);
         mGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
 	    
@@ -208,11 +218,10 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	            View child = rv.findChildViewUnder(e.getX(), e.getY());
 	            if (child != null) {
 	                int position = rv.getChildAdapterPosition(child);
-	                if (position != RecyclerView.NO_POSITION) {
+	                if (position != RecyclerView.NO_POSITION && mPhotos != null && position < mPhotos.size()) {
 	                    Log.i(TAG, "Clicked photo icon number : " + position);
-	                    Intent i = new Intent(LogTrigActivity.this, LogPhotoActivity.class);
-	                    i.putExtra(DbHelper.PHOTO_ID, mPhotos.get(position).getLogID());
-	                    startActivityForResult(i, EDIT_PHOTO);
+	                    Long photoId = mPhotos.get(position).getLogID();
+	                    showPhotoMetadataDialog(photoId);
 	                    return true;
 	                }
 	            }
@@ -426,7 +435,36 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			Log.i(TAG, "Processing CHOOSE_PHOTO result");
 			if (resultCode == RESULT_OK && data != null) {
 				Log.i(TAG, "Photo picker returned OK with data");
-				createPhoto(data);
+				
+				List<Uri> selectedUris = new ArrayList<>();
+				
+				// Check for multiple selection via ClipData
+				if (data.getClipData() != null) {
+					int count = data.getClipData().getItemCount();
+					Log.i(TAG, "ClipData found with " + count + " items");
+					for (int i = 0; i < count; i++) {
+						Uri uri = data.getClipData().getItemAt(i).getUri();
+						if (uri != null) {
+							selectedUris.add(uri);
+							Log.d(TAG, "Added URI from ClipData: " + uri);
+						}
+					}
+				} else if (data.getData() != null) {
+					// Single selection
+					Uri uri = data.getData();
+					selectedUris.add(uri);
+					Log.i(TAG, "Single photo selected: " + uri);
+				} else {
+					Log.w(TAG, "No URI found in result data");
+				}
+				
+				if (!selectedUris.isEmpty()) {
+					Log.i(TAG, "Processing " + selectedUris.size() + " selected photo(s)");
+					handleSelectedPhotos(selectedUris);
+				} else {
+					Log.w(TAG, "No valid URIs found in result");
+					Toast.makeText(this, "No photos were selected", Toast.LENGTH_SHORT).show();
+				}
 			} else if (resultCode == RESULT_CANCELED) {
 				Log.i(TAG, "Photo picker was cancelled by user");
 			} else {
@@ -468,27 +506,147 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 
 	
     // service request to choose a photo using modern approach
-    private void choosePhoto() {
-        Log.i(TAG, "Get a photo from the gallery using modern picker");
-        // Prefer Android Photo Picker (API 33+)
-        Intent photoPickerIntent = new Intent("android.provider.action.PICK_IMAGES");
-        photoPickerIntent.putExtra("android.provider.extra.PICK_IMAGES_MAX", 1);
-        if (photoPickerIntent.resolveActivity(getPackageManager()) == null) {
-            // Fallback for older devices
-            photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            photoPickerIntent.setType("image/*");
-            photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            Log.i(TAG, "Falling back to ACTION_GET_CONTENT for photo selection");
+    public void choosePhoto() {
+        Log.i(TAG, "choosePhoto() called - Starting photo selection process");
+        
+        // When embedded in LocalActivityManager, we need the parent to launch the picker
+        // Get the parent activity (TrigDetailsActivity)
+        android.app.Activity parent = getParent();
+        if (parent != null) {
+            Log.i(TAG, "Found parent activity: " + parent.getClass().getSimpleName());
+            Log.i(TAG, "Requesting parent to launch photo picker");
+            
+            // Use the parent activity to launch the photo picker
+            try {
+                Intent intent;
+                if (android.os.Build.VERSION.SDK_INT >= 33) {
+                    // Android 13+ photo picker - NO PERMISSIONS REQUIRED!
+                    intent = new Intent("android.provider.action.PICK_IMAGES");
+                    intent.putExtra("android.provider.extra.PICK_IMAGES_MAX", 10);
+                    Log.d(TAG, "Using Android 13+ PICK_IMAGES intent (no permissions required)");
+                } else if (android.os.Build.VERSION.SDK_INT >= 30) {
+                    // Android 11-12: Use ACTION_GET_CONTENT without permissions
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    Log.d(TAG, "Using ACTION_GET_CONTENT for Android 11-12 (no permissions required)");
+                } else {
+                    // Android 10 and below: May need READ_EXTERNAL_STORAGE
+                    Log.d(TAG, "Android 10 or below, checking READ_EXTERNAL_STORAGE permission");
+                    if (ActivityCompat.checkSelfPermission(this, 
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Log.i(TAG, "READ_EXTERNAL_STORAGE permission not granted, requesting...");
+                        ActivityCompat.requestPermissions(this,
+                            new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+                            3001);
+                        return;
+                    }
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    Log.d(TAG, "Using ACTION_GET_CONTENT for Android 10 and below");
+                }
+                
+                // Check if the intent can be handled
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    Log.i(TAG, "Parent starting activity for result with request code: " + CHOOSE_PHOTO);
+                    parent.startActivityForResult(intent, CHOOSE_PHOTO);
+                } else {
+                    // Final fallback - single image picker
+                    Log.w(TAG, "Multi-select not available, falling back to single image picker");
+                    Intent singleIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    parent.startActivityForResult(singleIntent, CHOOSE_PHOTO);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to launch photo picker", e);
+                Toast.makeText(this, "Failed to open photo picker: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
         } else {
-            Log.i(TAG, "Using Photo Picker (PICK_IMAGES)");
+            Log.e(TAG, "No parent activity found! Cannot launch photo picker properly");
+            // Fallback to direct launch (might not work properly)
+            Log.w(TAG, "Attempting direct launch as fallback...");
+            try {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, CHOOSE_PHOTO);
+            } catch (Exception e) {
+                Log.e(TAG, "Fallback launch also failed", e);
+                Toast.makeText(this, "Cannot open photo picker in this context", Toast.LENGTH_LONG).show();
+            }
         }
-        Log.i(TAG, "Launching photo picker with intent: " + photoPickerIntent.getAction());
-        startActivityForResult(photoPickerIntent, CHOOSE_PHOTO);
     }
- 
     
+    // Handle photos selected from the modern picker
+    private void handleSelectedPhotos(List<Uri> uris) {
+        Log.i(TAG, "handleSelectedPhotos() called with " + uris.size() + " URIs");
+        
+        if (mTrigId == null || mTrigId == 0) {
+            Log.e(TAG, "Cannot add photos - mTrigId is null or 0: " + mTrigId);
+            Toast.makeText(this, "Please create a log entry first", Toast.LENGTH_LONG).show();
+            return;
+        }
+        
+        Log.d(TAG, "Processing photos for trigpoint ID: " + mTrigId);
+        
+        // Show progress dialog
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Processing photos...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Log.d(TAG, "Progress dialog shown");
+        
+        mPhotoManager.processSelectedPhotos(
+            mTrigId,
+            uris,
+            (Long photoId) -> {
+                // Photo added successfully, show metadata dialog
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    showPhotoMetadataDialog(photoId);
+                });
+                return kotlin.Unit.INSTANCE;
+            },
+            () -> {
+                // All photos processed
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    updateGallery();
+                    Toast.makeText(this, "Photos added successfully", Toast.LENGTH_SHORT).show();
+                });
+                return kotlin.Unit.INSTANCE;
+            },
+            (String error) -> {
+                // Error occurred
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Error: " + error, Toast.LENGTH_LONG).show();
+                });
+                return kotlin.Unit.INSTANCE;
+            }
+        );
+    }
     
-    
+    private void showPhotoMetadataDialog(Long photoId) {
+        PhotoMetadataDialog dialog = PhotoMetadataDialog.Companion.newInstance(photoId.longValue());
+        dialog.setCallbacks(
+            metadata -> {
+                // Metadata saved
+                updateGallery();
+                return kotlin.Unit.INSTANCE;
+            },
+            () -> {
+                // Photo deleted
+                updateGallery();
+                return kotlin.Unit.INSTANCE;
+            }
+        );
+        dialog.show(getSupportFragmentManager(), "photo_metadata");
+    }
 
 	
     
@@ -598,20 +756,39 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 
     
     private void updateGallery() {
-		Log.i(TAG, "updateGallery");
+		Log.i(TAG, "updateGallery() called for trigId: " + mTrigId);
 	    mPhotos = new ArrayList<TrigPhoto>(); 
 		Cursor c = mDb.fetchPhotos(mTrigId);
-		if (c!=null) {
+		if (c != null && c.moveToFirst()) {
+			Log.d(TAG, "Found photos in database, processing...");
+			int count = 0;
 			do {
 				TrigPhoto photo = new TrigPhoto();
-				photo.setLogID		(c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID)));
-				photo.setIconURL	(c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON)));
+				long photoId = c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID));
+				String iconUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
+				photo.setLogID(photoId);
+				photo.setIconURL(iconUrl);
 				mPhotos.add(photo);
+				count++;
+				Log.d(TAG, "Added photo to gallery - ID: " + photoId + ", Icon: " + iconUrl);
 			} while (c.moveToNext());
-			c.close();		
+			c.close();
+			Log.i(TAG, "Added " + count + " photos to gallery list");
+		} else {
+			Log.d(TAG, "No photos found in database for trigId: " + mTrigId);
 		}
 		
+		Log.d(TAG, "Setting adapter with " + mPhotos.size() + " photos");
 		mGallery.setAdapter(new LogTrigRecyclerAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
+		Log.d(TAG, "Gallery adapter updated successfully");
+	}
+
+	public void reloadPhotos() {
+		try {
+			updateGallery();
+		} catch (Exception e) {
+			Log.e(TAG, "Failed to reload photos", e);
+		}
 	}
 
     
@@ -826,6 +1003,16 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
                 getLocation();
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_LONG).show();
+            }
+        } else if (requestCode == 3001) {
+            // Photo permission request (Android 10 and below only)
+            if (grantResults != null && grantResults.length > 0 
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "READ_EXTERNAL_STORAGE permission granted");
+                choosePhoto();
+            } else {
+                Log.w(TAG, "READ_EXTERNAL_STORAGE permission denied");
+                Toast.makeText(this, "Photo access permission denied. Please grant storage permission to select photos.", Toast.LENGTH_LONG).show();
             }
         }
     }

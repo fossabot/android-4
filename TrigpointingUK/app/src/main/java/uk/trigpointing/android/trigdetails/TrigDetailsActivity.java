@@ -407,6 +407,49 @@ public class TrigDetailsActivity extends BaseActivity {
         }
         super.onDestroy();
     }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        android.util.Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode + ", data=" + (data != null ? "present" : "null"));
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        // Forward the result to the current activity in the LocalActivityManager
+        if (mLocalActivityManager != null) {
+            android.util.Log.d(TAG, "Forwarding activity result to LocalActivityManager");
+            try {
+                // Get the current activity ID from the TabHost
+                TabHost tabHost = findViewById(android.R.id.tabhost);
+                if (tabHost != null) {
+                    String currentTabTag = tabHost.getCurrentTabTag();
+                    android.util.Log.d(TAG, "Current tab: " + currentTabTag);
+                    
+                    // Get the activity for the current tab
+                    android.app.Activity currentActivity = mLocalActivityManager.getActivity(currentTabTag);
+                    if (currentActivity != null) {
+                        android.util.Log.d(TAG, "Forwarding result to activity: " + currentActivity.getClass().getSimpleName());
+                        // Use reflection to call the protected onActivityResult method
+                        try {
+                            java.lang.reflect.Method method = android.app.Activity.class.getDeclaredMethod(
+                                "onActivityResult", int.class, int.class, Intent.class);
+                            method.setAccessible(true);
+                            method.invoke(currentActivity, requestCode, resultCode, data);
+                            android.util.Log.d(TAG, "Successfully forwarded activity result via reflection");
+                        } catch (Exception reflectEx) {
+                            android.util.Log.e(TAG, "Failed to invoke onActivityResult via reflection", reflectEx);
+                        }
+                    } else {
+                        android.util.Log.w(TAG, "No activity found for current tab: " + currentTabTag);
+                    }
+                } else {
+                    android.util.Log.w(TAG, "TabHost not found, cannot forward activity result");
+                }
+            } catch (Exception e) {
+                android.util.Log.e(TAG, "Error forwarding activity result: " + e.getMessage(), e);
+            }
+        } else {
+            android.util.Log.w(TAG, "LocalActivityManager is null, cannot forward activity result");
+        }
+    }
 
     /**
      * Checks if the LocalActivityManager is in a valid state

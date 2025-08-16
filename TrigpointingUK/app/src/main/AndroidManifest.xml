@@ -5,12 +5,16 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Removed legacy storage permissions in favor of Photo Picker / SAF -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- Photo picker permissions - Android 13+ photo picker requires NO permissions! -->
+    <!-- Only needed for Android 10 and below when using ACTION_GET_CONTENT -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" 
+        android:maxSdkVersion="29" /> <!-- Only for Android 10 (API 29) and below -->
     
     <!-- Photo access handled via Android Photo Picker (no runtime storage permissions) -->
 
@@ -87,7 +91,8 @@
         <activity 
             android:name="uk.trigpointing.android.logging.LogTrigActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize" />
         <activity 
             android:name="uk.trigpointing.android.logging.LogPhotoActivity"
             android:exported="false" />

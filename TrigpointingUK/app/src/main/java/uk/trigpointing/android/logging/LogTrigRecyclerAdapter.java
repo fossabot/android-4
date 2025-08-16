@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.graphics.BitmapFactory;
+import java.io.File;
 import androidx.recyclerview.widget.RecyclerView;
 import uk.trigpointing.android.R;
 import uk.trigpointing.android.common.LazyImageLoader;
@@ -39,9 +41,23 @@ public class LogTrigRecyclerAdapter extends RecyclerView.Adapter<LogTrigRecycler
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         TrigPhoto photo = mPhotos[position];
-        if (photo != null && photo.getIconURL() != null) {
-            imageLoader.DisplayImage(photo.getIconURL(), holder.imageView);
+        if (photo == null) {return;}
+        String iconUrl = photo.getIconURL();
+        if (iconUrl == null) {return;}
+
+        // If this is a local file path, decode directly. Otherwise, use LazyImageLoader.
+        File potentialLocalFile = new File(iconUrl);
+        if (potentialLocalFile.exists()) {
+            holder.imageView.setImageBitmap(BitmapFactory.decodeFile(iconUrl));
+            return;
         }
+
+        if (iconUrl.startsWith("file:")) {
+            holder.imageView.setImageBitmap(BitmapFactory.decodeFile(iconUrl.replaceFirst("^file:", "")));
+            return;
+        }
+
+        imageLoader.DisplayImage(iconUrl, holder.imageView);
     }
     
     @Override
