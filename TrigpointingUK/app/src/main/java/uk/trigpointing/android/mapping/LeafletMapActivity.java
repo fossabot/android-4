@@ -36,6 +36,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.util.Objects;
 
 import uk.trigpointing.android.common.BaseActivity;
 import androidx.annotation.NonNull;
@@ -154,6 +156,44 @@ public class LeafletMapActivity extends BaseActivity {
         }
     }
 
+    private void showCacheStatus() {
+        new Thread(() -> {
+            long[] stats = getDirectoryStats(mTileCacheDir);
+            long totalSize = stats[0];
+            long fileCount = stats[1];
+
+            DecimalFormat df = new DecimalFormat("#.##");
+            String sizeInMB = df.format((double) totalSize / (1024 * 1024));
+            String message = "Tiles: " + fileCount + "\nSize: " + sizeInMB + " MB";
+
+            runOnUiThread(() -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
+                builder.setTitle("Cache Status");
+                builder.setMessage(message);
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            });
+        }).start();
+    }
+
+    private long[] getDirectoryStats(File directory) {
+        long size = 0;
+        long count = 0;
+        if (directory != null && directory.isDirectory() && directory.listFiles() != null) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
+                if (file.isFile()) {
+                    size += file.length();
+                    count++;
+                } else if (file.isDirectory()) {
+                    long[] subDirStats = getDirectoryStats(file);
+                    size += subDirStats[0];
+                    count += subDirStats[1];
+                }
+            }
+        }
+        return new long[]{size, count};
+    }
+
     private WebResourceResponse fetchAndCacheTile(String urlString, File tileFile) {
         try {
             URL url = new URL(urlString);
@@ -258,29 +298,7 @@ public class LeafletMapActivity extends BaseActivity {
             showMapControlsBottomSheet();
             return true;
         } else if (item.getItemId() == R.id.menu_cache_status) {
-            webView.evaluateJavascript(
-                "getCacheStatus().then(status => {" +
-                "  if (status) {" +
-                "    console.log('Cache Status:', JSON.stringify(status));" +
-                "    if (status.error) {" +
-                "      AndroidPrefs.showCacheDialog(status.error, '');" +
-                "    } else {" +
-                "      let message = '';" +
-                "      if (status.mode) message += 'Mode: ' + status.mode + '\\n';" +
-                "      message += 'Tiles: ' + status.tileCount + '\\n';" +
-                "      message += 'Size: ' + Math.round(status.totalSize/1024/1024) + ' MB\\n';" +
-                "      if (status.usagePercent !== undefined) message += 'Usage: ' + status.usagePercent + '%\\n';" +
-                "      if (status.cacheAge) message += 'Age: ' + status.cacheAge + '\\n';" +
-                "      if (status.firstTileUrl) message += '\\nFirst Tile:\\n' + status.firstTileUrl;" +
-                "      let note = status.note || '';" +
-                "      AndroidPrefs.showCacheDialog(message, note);" +
-                "    }" +
-                "  } else {" +
-                "    AndroidPrefs.showCacheDialog('Cache status not available', 'Check console for details');" +
-                "  }" +
-                "});",
-                null
-            );
+            showCacheStatus();
             return true;
         } else if (item.getItemId() == R.id.menu_clear_cache) {
             // Clear both WebView tile cache and static map images cache
@@ -538,51 +556,35 @@ public class LeafletMapActivity extends BaseActivity {
     }
     
     private void clearAllCaches() {
-        // Clear WebView tile cache via JavaScript
-        webView.evaluateJavascript(
-            "clearTileCache().then(result => {" +
-            "  console.log('WebView tile cache cleared:', result);" +
-            "});", 
-            null
-        );
-        
-        // Clear static map images cache and webview tiles cache in background thread
+        // Clear our custom tile cache
         new Thread(() -> {
-            try {
-                FileCache mapImagesCache = new FileCache(this, "map_images");
-                int mapImageFiles = mapImagesCache.clear();
-                Log.d(TAG, "Cleared " + mapImageFiles + " static map image files");
-                
-                FileCache webViewTilesCache = new FileCache(this, "webview_tiles");
-                int webViewTileFiles = webViewTilesCache.clear();
-                Log.d(TAG, "Cleared " + webViewTileFiles + " webview tile files");
-                
-                int totalFiles = mapImageFiles + webViewTileFiles;
-                
-                runOnUiThread(() -> {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
-                    builder.setTitle("Clear Cache");
-                    builder.setMessage("Cache cleared successfully.\n" +
-                                     "WebView tiles, " + mapImageFiles + " static map images, and " + 
-                                     webViewTileFiles + " bulk download tiles removed.\n\n" +
-                                     "Starting trigpoint data download...");
-                    builder.setPositiveButton("OK", (dialog, which) -> {
-                        // Trigger trigpoint download after user acknowledges
-                        triggerTrigpointDownload();
-                    });
-                    builder.show();
-                });
-            } catch (Exception e) {
-                Log.e(TAG, "Error clearing static map images cache", e);
-                runOnUiThread(() -> {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
-                    builder.setTitle("Clear Cache");
-                    builder.setMessage("Cache partially cleared. Some files may not have been removed.");
-                    builder.setPositiveButton("OK", null);
-                    builder.show();
-                });
-            }
+            int deletedCount = deleteRecursive(mTileCacheDir);
+            Log.d(TAG, "Cleared " + deletedCount + " tile files");
+
+            runOnUiThread(() -> {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);
+                builder.setTitle("Clear Cache");
+                builder.setMessage("Cleared " + deletedCount + " cached map tiles.");
+                builder.setPositiveButton("OK", null);
+                builder.show();
+            });
         }).start();
+
+        // Also clear WebView's own caches
+        webView.clearCache(true);
+    }
+
+    private int deleteRecursive(File fileOrDirectory) {
+        int count = 0;
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : Objects.requireNonNull(fileOrDirectory.listFiles())) {
+                count += deleteRecursive(child);
+            }
+        }
+        if (fileOrDirectory.delete()) {
+            count++;
+        }
+        return count;
     }
     
     private void triggerTrigpointDownload() {
