@@ -183,10 +183,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
 			Intent i = new Intent(MainActivity.this, DownloadTrigsActivity.class);
 			startActivity(i);
 			return true;
-		} else if (itemId == R.id.downloadmaps) {
-			Intent i = new Intent(MainActivity.this, DownloadMapsActivity.class);
-			startActivity(i);
-			return true;
 		} else if (itemId == R.id.prefs) {
 			Intent i = new Intent(MainActivity.this, PreferencesActivity.class);
 			// Use activity result launcher for preferences

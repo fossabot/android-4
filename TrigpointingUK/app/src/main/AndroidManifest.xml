@@ -10,6 +10,8 @@
     <!-- Removed legacy storage permissions in favor of Photo Picker / SAF -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     
     <!-- Photo picker permissions - Android 13+ photo picker requires NO permissions! -->
     <!-- Only needed for Android 10 and below when using ACTION_GET_CONTENT -->
@@ -48,14 +50,16 @@
             android:parentActivityName="uk.trigpointing.android.MainActivity" />
         <activity 
             android:name="uk.trigpointing.android.PreferencesActivity"
-            android:exported="false" />
-        <activity 
-            android:name="uk.trigpointing.android.mapping.DownloadMapsActivity"
-            android:exported="false"
-            android:configChanges="keyboardHidden|orientation" />
+            android:label="@string/preferences_name"
+            android:parentActivityName="uk.trigpointing.android.MainActivity" />
+        <activity
+            android:name=".mapping.DownloadMapsActivity"
+            android:label="Download Maps"
+            android:parentActivityName=".MainActivity" />
         <activity 
             android:name="uk.trigpointing.android.trigdetails.TrigDetailsActivity"
-            android:exported="false" />
+            android:label="@string/trigdetails_name"
+            android:parentActivityName="uk.trigpointing.android.MainActivity" />
         <activity 
             android:name="uk.trigpointing.android.trigdetails.TrigDetailsAlbumTab"
             android:exported="false" />
@@ -105,5 +109,9 @@
         <activity 
             android:name="uk.trigpointing.android.filter.FilterFoundActivity"
             android:exported="false" />
+        <service
+            android:name=".mapping.DownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
     </application>
 </manifest>

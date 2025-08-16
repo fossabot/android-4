@@ -110,4 +110,25 @@
     <string name="none">None</string>
     <string name="byLogged">By Logged</string>
     
+    <!-- Tab title strings -->
+    <string name="tab_info">Info</string>
+    <string name="tab_logs">Logs</string>
+    <string name="tab_album">Album</string>
+    <string name="tab_map">Map</string>
+    <string name="tab_mylog">My Log</string>
+    
+    <!-- Trig info strings -->
+    <string name="trig_name">Name</string>
+    <string name="trig_gridref">Grid Reference</string>
+    <string name="trig_condition">Condition</string>
+    <string name="trig_height">Height</string>
+    <string name="trig_type">Type</string>
+    <string name="trig_county">County</string>
+    <string name="trig_country">Country</string>
+    <string name="preferences_name">Settings</string>
+    <string name="trigdetails_name">Trigpoint Details</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    
 </resources>

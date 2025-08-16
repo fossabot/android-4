@@ -1,265 +1,224 @@
 package uk.trigpointing.android.mapping;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
-
-// import org.acra.ErrorReporter;
-
-import uk.trigpointing.android.common.BaseActivity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import uk.trigpointing.android.R;
+import uk.trigpointing.android.common.BaseActivity;
 
 public class DownloadMapsActivity extends BaseActivity {
-	private TextView mStatus;
-	private ProgressBar mProgress;
-	private Button mDownloadBtn;
-	private Spinner mTileSource;
 
-	private int mProgressMax=100;
-	private int mDownloadCount;
-	private boolean mRunning=false;
-	private static final String TAG = "DownloadMapsActivity";
-	private static final int STATUS_OK 			= 0;
-	private static final int STATUS_CORRUPT		= 1;
-	private static final int STATUS_CANCELLED	= 2;
-	private static final int STATUS_NOTFOUND	= 3;
-	private static final int STATUS_NOSPACE		= 4;
-	private static final int STATUS_IOERROR		= 5;
-	
+    private static final String TAG = "DownloadMapsActivity";
+    private static final String YAML_URL = "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/map_downloads.yaml";
 
-	
-	private CompletableFuture<Integer> mTask;
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private MapDownloadAdapter adapter;
+    private BroadcastReceiver progressReceiver;
+    private BroadcastReceiver completeReceiver;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.mapdownload);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_download_maps);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-		// Enable back button in action bar
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		}
+        recyclerView = findViewById(R.id.recyclerView);
+        progressBar = findViewById(R.id.progressBar);
 
-		mStatus 		= findViewById(R.id.downloadMapsStatus);
-		mProgress 		= findViewById(R.id.downloadMapsProgress);
-		mDownloadBtn	= findViewById(R.id.btnDownloadMaps);
-		mTileSource 	= findViewById(R.id.downloadMapsTileSource);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-		mStatus.setText(R.string.downloadMapsIdleStatus);
-		mProgress.setProgress(0);
+        fetchMapDownloads();
 
-		mDownloadBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				if (!mRunning) {
-					// find which item is selected
-					final int tilePos = mTileSource.getSelectedItemPosition();
-					// get the list of URLs
-					final String tileURL = getResources().getStringArray(R.array.downloadMapsArrayValues)[tilePos];
-					// get the number of tiles
-					mProgressMax = getResources().getIntArray(R.array.downloadMapsArrayTiles)[tilePos];
-					Log.i(TAG, "Downloading from: " + tileURL);
-					Log.i(TAG, "Expected tiles: " + mProgressMax);
-					mTask = downloadMaps(tileURL);
-				} else {
-					mTask.cancel(true);
-				}
-			}
-		});       
-	}
+        progressReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent != null && DownloadService.ACTION_PROGRESS.equals(intent.getAction())) {
+                    int progress = intent.getIntExtra(DownloadService.EXTRA_PROGRESS, 0);
+                    if (adapter != null) {
+                        adapter.updateProgress(progress);
+                    }
+                }
+            }
+        };
+        
+        completeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent != null && DownloadService.ACTION_COMPLETE.equals(intent.getAction())) {
+                    boolean success = intent.getBooleanExtra(DownloadService.EXTRA_SUCCESS, false);
+                    if (success) {
+                        Toast.makeText(context, "Map download complete!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Map download failed.", Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
+                }
+            }
+        };
+    }
 
-	
-	
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(progressReceiver, new IntentFilter(DownloadService.ACTION_PROGRESS));
+        LocalBroadcastManager.getInstance(this).registerReceiver(completeReceiver, new IntentFilter(DownloadService.ACTION_COMPLETE));
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(progressReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(completeReceiver);
+    }
 
-	@Override
-	protected void onDestroy() {
-		Log.i(TAG, "Destroyed");
-		if (mTask != null && !mTask.isDone()) {
-			mTask.cancel(true);
-		}
-		super.onDestroy();
-	}
+    private void fetchMapDownloads() {
+        progressBar.setVisibility(View.VISIBLE);
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(YAML_URL).build();
 
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(DownloadMapsActivity.this, "Failed to load map list", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to fetch YAML", e);
+                });
+            }
 
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String yamlString = response.body().string();
+                    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+                    try {
+                        MapDownload.MapDownloadsList list = mapper.readValue(yamlString, MapDownload.MapDownloadsList.class);
+                        runOnUiThread(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            adapter = new MapDownloadAdapter(list.maps);
+                            recyclerView.setAdapter(adapter);
+                        });
+                    } catch (IOException e) {
+                        onFailure(call, e);
+                    }
+                } else {
+                    onFailure(call, new IOException("Unexpected code " + response));
+                }
+            }
+        });
+    }
 
+    private class MapDownloadAdapter extends RecyclerView.Adapter<MapDownloadAdapter.ViewHolder> {
 
+        private final List<MapDownload> mapDownloads;
+        private int downloadingPosition = -1;
+        private int currentProgress = 0;
 
-	private CompletableFuture<Integer> downloadMaps(String tileURL) {
-		// Setup UI on main thread
-		mStatus.setText(R.string.downloadMapsInsertStatus);
-		mDownloadBtn.setText(R.string.btnCancel);
-		mTileSource.setEnabled(false);
-		mProgress.setMax(mProgressMax);
-		mProgress.setProgress(0);
-		mDownloadCount = 0;
-		mRunning = true;
-		
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-		Handler mainHandler = new Handler(Looper.getMainLooper());
-		
-		return CompletableFuture.supplyAsync(() -> {
-			// Use WebView cache directory for Leaflet tiles
-			String webViewCacheDir = getFilesDir().getPath() + "/webview_tiles/";
-			
-			Log.d(TAG, "WebView cache directory: " + webViewCacheDir);
-			
-			int i=0; // not using mDownloadcount in loop for performance reasons
+        public MapDownloadAdapter(List<MapDownload> mapDownloads) {
+            this.mapDownloads = mapDownloads;
+        }
 
-			String[] files = tileURL.split(",");
-			for (String file : files) {
-				try {
-					Log.i(TAG, "Getting : " + file);
-					URL url = new URL(file);
-					URLConnection ucon = url.openConnection();
-					InputStream is = ucon.getInputStream();
-					ZipInputStream zis = new ZipInputStream(is); 
-					ZipEntry ze; 
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_map_download, parent, false);
+            return new ViewHolder(view);
+        }
 
-					while ((ze = zis.getNextEntry()) != null) { 
-						Log.v(TAG, "Unzipping " + ze.getName()); 
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            MapDownload mapDownload = mapDownloads.get(position);
+            holder.mapName.setText(mapDownload.name);
+            holder.mapDescription.setText(mapDownload.description);
 
-						if(ze.isDirectory()) {
-							// Create directory structure
-							dirChecker(webViewCacheDir + ze.getName()); 
-						} else {
-							// Read tile data and write to WebView cache
-							byte[] tileData = readZipEntryData(zis);
-							zis.closeEntry();
-							writeToCache(webViewCacheDir + ze.getName(), tileData);
-							i++;
-						} 
-						if (i % 10 == 0) {
-							// Update progress on main thread
-							final int progress = i;
-							mainHandler.post(() -> {
-								mProgress.setProgress(progress);
-								mStatus.setText("Downloaded " + progress + " tiles to Leaflet cache");
-							});
-						}
-					} 
-					zis.close(); 
-					mDownloadCount=i;
-				} 
-				catch (ZipException e) {
-					Log.w(TAG, "Error: " + e);
-					// ErrorReporter.getInstance().handleSilentException(e); // ACRA temporarily disabled
-					mDownloadCount = i;
-					return STATUS_CORRUPT;					
-				}
-				catch (FileNotFoundException e) {
-					Log.w(TAG, "Error: " + e);
-					// ErrorReporter.getInstance().handleSilentException(e); // ACRA temporarily disabled
-					mDownloadCount = i;
-					return STATUS_NOTFOUND;										
-				}
-				catch (IOException e) {
-					Log.w(TAG, "Error: " + e);
-					Log.w(TAG, "Message: " + e.getMessage());
-					Log.w(TAG, "Cause: " + e.getCause());
-					// ErrorReporter.getInstance().handleSilentException(e); // ACRA temporarily disabled
-					mDownloadCount = i;
-					if (e.getMessage().equals("No space left on device")) {
-						return STATUS_NOSPACE;
-					}
-					return STATUS_IOERROR;
-				}
-			}
-			return STATUS_OK;
-		}, executor)
-		.thenApplyAsync(result -> {
-			mProgress.setProgress(mDownloadCount);
-			switch (result) {
-			case STATUS_OK:
-				mStatus.setText("Finished downloading " + mDownloadCount +" tiles");
-				break;
-			case STATUS_CORRUPT:
-				mStatus.setText("Error - corrupt file! " + mDownloadCount +" tiles");
-				break;
-			case STATUS_NOTFOUND:
-				mStatus.setText("Error - file not found! " + mDownloadCount +" tiles");
-				break;
-			case STATUS_CANCELLED:
-				mStatus.setText("Download Cancelled! " + mDownloadCount +" tiles");
-				break;
-			case STATUS_NOSPACE:
-				mStatus.setText("Error - out of space! " + mDownloadCount +" tiles");
-				break;
-			case STATUS_IOERROR:
-				mStatus.setText("Error - I/O failed! " + mDownloadCount +" tiles");
-				break;
-			default:
-				mStatus.setText("Error downloading! " + mDownloadCount + " tiles");
-			}
-			mDownloadBtn.setText(R.string.btnDownload);
-			mTileSource.setEnabled(true);
-			mRunning = false;
-			return result;
-		}, mainHandler::post);
-	}
-	
-	private byte[] readZipEntryData(ZipInputStream zis) throws IOException {
-		byte[] buffer = new byte[1024];
-		byte[] result = new byte[0];
-		int length;
-		
-		while ((length = zis.read(buffer)) > 0) {
-			byte[] newResult = new byte[result.length + length];
-			System.arraycopy(result, 0, newResult, 0, result.length);
-			System.arraycopy(buffer, 0, newResult, result.length, length);
-			result = newResult;
-		}
-		
-		return result;
-	}
-	
-	private void writeToCache(String filePath, byte[] data) throws IOException {
-		File file = new File(filePath);
-		file.getParentFile().mkdirs(); // Ensure directory exists
-		
-		try (FileOutputStream fout = new FileOutputStream(file)) {
-			fout.write(data);
-		}
-	}
-	
-	private void dirChecker(String dir) { 
-		File f = new File(dir); 
-		if(!f.isDirectory()) { 
-			f.mkdirs(); 
-		} 
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			// Handle back button in action bar
-			finish();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+            DecimalFormat df = new DecimalFormat("#.##");
+            String sizeInMB = df.format((double) mapDownload.fileSize / (1024 * 1024));
+            holder.mapSize.setText("Size: " + sizeInMB + " MB");
 
+            if (position == downloadingPosition) {
+                holder.downloadProgressBar.setVisibility(View.VISIBLE);
+                holder.downloadProgressBar.setProgress(currentProgress);
+                holder.downloadButton.setEnabled(false);
+            } else {
+                holder.downloadProgressBar.setVisibility(View.GONE);
+                holder.downloadButton.setEnabled(true);
+            }
+
+            holder.downloadButton.setOnClickListener(v -> {
+                downloadingPosition = holder.getAdapterPosition();
+                currentProgress = 0;
+                notifyDataSetChanged();
+
+                Intent intent = new Intent(v.getContext(), DownloadService.class);
+                intent.setAction(DownloadService.ACTION_DOWNLOAD);
+                intent.putExtra(DownloadService.EXTRA_URL, mapDownload.fileUrl);
+                intent.putExtra(DownloadService.EXTRA_MAP_NAME, mapDownload.name);
+                intent.putExtra(DownloadService.EXTRA_SOURCE_URL, mapDownload.sourceUrl);
+                v.getContext().startService(intent);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mapDownloads.size();
+        }
+        
+        public void updateProgress(int progress) {
+            if (downloadingPosition != -1) {
+                currentProgress = progress;
+                notifyItemChanged(downloadingPosition);
+                if (progress >= 100) {
+                    downloadingPosition = -1; // Reset
+                }
+            }
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView mapName;
+            public TextView mapDescription;
+            public TextView mapSize;
+            public Button downloadButton;
+            public ProgressBar downloadProgressBar;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                mapName = itemView.findViewById(R.id.mapName);
+                mapDescription = itemView.findViewById(R.id.mapDescription);
+                mapSize = itemView.findViewById(R.id.mapSize);
+                downloadButton = itemView.findViewById(R.id.downloadButton);
+                downloadProgressBar = itemView.findViewById(R.id.downloadProgressBar);
+            }
+        }
+    }
 }

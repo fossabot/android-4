@@ -51,6 +51,7 @@ import uk.trigpointing.android.R;
 import uk.trigpointing.android.common.FileCache;
 import uk.trigpointing.android.DownloadTrigsActivity;
 import uk.trigpointing.android.filter.Filter;
+import uk.trigpointing.android.mapping.DownloadMapsActivity;
 
 public class LeafletMapActivity extends BaseActivity {
     private static final String TAG = "LeafletMapActivity";
@@ -305,18 +306,8 @@ public class LeafletMapActivity extends BaseActivity {
             clearAllCaches();
             return true;
         } else if (item.getItemId() == R.id.menu_download_tiles) {
-            // For now, use a placeholder URL - this would be your website URL
-            String osmTilesUrl = "https://example.com/osm-tiles.zip";
-            webView.evaluateJavascript(
-                "downloadBulkTiles('" + osmTilesUrl + "')" +
-                ".then(result => {" +
-                "  AndroidPrefs.showDialog('Bulk Download', 'Completed: ' + result.message);" +
-                "})" +
-                ".catch(error => {" +
-                "  AndroidPrefs.showDialog('Bulk Download', 'Failed: ' + error.message);" +
-                "});", 
-                null
-            );
+            Intent intent = new Intent(this, DownloadMapsActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -15,6 +15,6 @@
         android:title="Clear Cache" />
     <item
         android:id="@+id/menu_download_tiles"
-        android:title="Download OSM Tiles" />
+        android:title="Offline Maps" />
         
 </menu>
