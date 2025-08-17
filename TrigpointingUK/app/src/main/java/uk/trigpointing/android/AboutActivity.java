@@ -1,6 +1,7 @@
 package uk.trigpointing.android;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,8 +26,14 @@ public class AboutActivity extends BaseActivity {
         TextView appNameVersion = findViewById(R.id.app_name_version);
         TextView buildDate = findViewById(R.id.build_date);
         try {
-            String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String versionName = packageInfo.versionName;
+            long versionCode;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                versionCode = packageInfo.getLongVersionCode();
+            } else {
+                versionCode = packageInfo.versionCode;
+            }
             appNameVersion.setText(getString(R.string.app_name_version, versionName, versionCode));
             buildDate.setText(getString(R.string.build_date, BuildConfig.BUILD_TIME));
         } catch (PackageManager.NameNotFoundException e) {
@@ -41,10 +48,13 @@ public class AboutActivity extends BaseActivity {
         });
 
         Button openSourceLicenses = findViewById(R.id.open_source_licenses);
-        openSourceLicenses.setOnClickListener(v -> new LibsBuilder()
-                .withActivityTitle("Open Source Licenses")
-                .withAboutVersionShown(true)
-                .start(this));
+        openSourceLicenses.setOnClickListener(v -> {
+            @SuppressWarnings("deprecation")
+            LibsBuilder builder = new LibsBuilder();
+            builder.withActivityTitle("Open Source Licenses")
+                    .withAboutVersionShown(true)
+                    .start(this);
+        });
 
         Button acknowledgements = findViewById(R.id.acknowledgements);
         acknowledgements.setOnClickListener(v -> {

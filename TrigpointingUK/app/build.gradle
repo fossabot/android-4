@@ -35,6 +35,11 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     
+    // Show detailed deprecation warnings
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+    
     lint {
         disable 'MissingTranslation'
     }
