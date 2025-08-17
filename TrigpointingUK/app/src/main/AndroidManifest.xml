@@ -57,12 +57,15 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".AcknowledgementsActivity"
             android:label="@string/acknowledgements"
             android:parentActivityName=".AboutActivity" />
+
+        <activity
+            android:name="com.mikepenz.aboutlibraries.ui.LibsActivity"
+            android:theme="@style/AboutLibrariesTheme" />
 
         <activity
             android:name=".mapping.DownloadMapsActivity"
