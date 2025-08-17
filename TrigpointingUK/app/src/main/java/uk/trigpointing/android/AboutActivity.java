@@ -23,14 +23,17 @@ public class AboutActivity extends BaseActivity {
         }
 
         TextView appNameVersion = findViewById(R.id.app_name_version);
+        TextView buildDate = findViewById(R.id.build_date);
         try {
             String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            appNameVersion.setText(getString(R.string.app_name_version, versionName));
+            int versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            appNameVersion.setText(getString(R.string.app_name_version, versionName, versionCode));
+            buildDate.setText(getString(R.string.build_date, BuildConfig.BUILD_TIME));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-        TextView privacyPolicy = findViewById(R.id.privacy_policy);
+        Button privacyPolicy = findViewById(R.id.privacy_policy);
         privacyPolicy.setOnClickListener(v -> {
             Intent intent = new Intent(this, uk.trigpointing.android.common.WebViewActivity.class);
             intent.putExtra(uk.trigpointing.android.common.WebViewActivity.EXTRA_URL, "https://trigpointing.uk/wiki/TrigpointingUK:Privacy_policy");

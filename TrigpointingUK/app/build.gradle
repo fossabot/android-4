@@ -19,6 +19,8 @@ android {
         versionCode 20
         versionName "2.0.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
+        buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
 
     buildTypes {
@@ -56,6 +58,7 @@ android {
     // Compose setup
     buildFeatures {
         compose true
+        buildConfig true
     }
     // Compose compiler plugin is added via Kotlin 2.0+; no manual extensionVersion needed
     packagingOptions {

@@ -27,17 +27,22 @@
             android:layout_marginTop="16dp"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="TrigpointingUK v2.0.0" />
+            tools:text="TrigpointingUK v2.0.9 (20)" />
 
         <TextView
+            android:id="@+id/build_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            tools:text="Built on 2025-08-17" />
+
+        <Button
             android:id="@+id/privacy_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/privacy_policy"
-            android:textColor="?android:attr/textColorLink"
-            android:clickable="true"
-            android:focusable="true" />
+            android:text="@string/privacy_policy" />
 
         <Button
             android:id="@+id/open_source_licenses"
