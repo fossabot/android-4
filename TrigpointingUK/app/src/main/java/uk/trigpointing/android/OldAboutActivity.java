@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-public class HelpPageActivity extends BaseActivity {
+public class OldAboutActivity extends BaseActivity {
 
 	public static final String PAGE="PAGE";
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.helppage);
+		setContentView(R.layout.old_about_page);
 		
 		// Enable back button in action bar
 		if (getSupportActionBar() != null) {

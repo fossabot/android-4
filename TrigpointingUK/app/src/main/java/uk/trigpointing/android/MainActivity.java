@@ -245,9 +245,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         } else if (itemId == R.id.action_about) {
-            Intent i = new Intent(this, HelpPageActivity.class);
-            i.putExtra(HelpPageActivity.PAGE, "about.html");
-            startActivity(i);
+            startActivity(new Intent(this, AboutActivity.class));
             return true;
         } else if (itemId == R.id.action_refresh) {
             startActivity(new Intent(this, DownloadTrigsActivity.class));
