@@ -223,6 +223,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean devMode = prefs.getBoolean("dev_mode", false);
 
+        // These items are always visible, so no changes needed for them.
+        // menu.findItem(R.id.action_settings).setVisible(true);
+        // menu.findItem(R.id.action_about).setVisible(true);
+
+        // These items are only visible in developer mode.
         menu.findItem(R.id.action_refresh).setVisible(devMode);
         menu.findItem(R.id.action_clearcache).setVisible(devMode);
         menu.findItem(R.id.action_cachestatus).setVisible(devMode);
@@ -238,6 +243,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
         if (itemId == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        } else if (itemId == R.id.action_about) {
+            Intent i = new Intent(this, HelpPageActivity.class);
+            i.putExtra(HelpPageActivity.PAGE, "about.html");
+            startActivity(i);
             return true;
         } else if (itemId == R.id.action_refresh) {
             startActivity(new Intent(this, DownloadTrigsActivity.class));
@@ -264,6 +274,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 	protected void onResume() {
 		Log.i(TAG, "onResume: Refreshing counts and user display");
 		super.onResume();
+		invalidateOptionsMenu();
 		updateUserDisplay();
 		populateCounts();
 		checkAndPopulateDatabase();
