@@ -32,7 +32,8 @@ public class AboutActivity extends BaseActivity {
 
         TextView privacyPolicy = findViewById(R.id.privacy_policy);
         privacyPolicy.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://trigpointing.uk/wiki/TrigpointingUK:Privacy_policy"));
+            Intent intent = new Intent(this, uk.trigpointing.android.common.WebViewActivity.class);
+            intent.putExtra(uk.trigpointing.android.common.WebViewActivity.EXTRA_URL, "https://trigpointing.uk/wiki/TrigpointingUK:Privacy_policy");
             startActivity(intent);
         });
 
