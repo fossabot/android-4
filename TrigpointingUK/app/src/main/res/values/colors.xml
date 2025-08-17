@@ -11,12 +11,12 @@
     <color name="syncNow">#00FF00</color>
     
     <!-- Material Design theme colors -->
-    <color name="colorPrimary">#2196F3</color>
-    <color name="colorPrimaryDark">#1976D2</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorPrimaryVariant">#1976D2</color>
-    <color name="colorSecondary">#FF4081</color>
-    <color name="colorSecondaryVariant">#C51162</color>
+    <color name="colorPrimary">#087008</color>
+    <color name="colorPrimaryDark">#054d05</color>
+    <color name="colorAccent">#087008</color>
+    <color name="colorPrimaryVariant">#054d05</color>
+    <color name="colorSecondary">#087008</color>
+    <color name="colorSecondaryVariant">#054d05</color>
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorOnPrimary">#FFFFFF</color>
