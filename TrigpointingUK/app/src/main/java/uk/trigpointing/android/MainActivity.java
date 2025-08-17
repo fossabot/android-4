@@ -23,6 +23,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -222,6 +224,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean devMode = prefs.getBoolean("dev_mode", false);
+        boolean loggedIn = !prefs.getString("username", "").isEmpty();
 
         // These items are always visible, so no changes needed for them.
         // menu.findItem(R.id.action_settings).setVisible(true);
@@ -233,6 +236,9 @@ public class MainActivity extends BaseActivity implements SyncListener {
         menu.findItem(R.id.action_cachestatus).setVisible(devMode);
         menu.findItem(R.id.action_testcrash).setVisible(devMode);
         menu.findItem(R.id.action_exit).setVisible(devMode);
+
+        menu.findItem(R.id.action_login).setVisible(!loggedIn);
+        menu.findItem(R.id.action_logout).setVisible(loggedIn);
 
         return true;
     }
@@ -246,6 +252,12 @@ public class MainActivity extends BaseActivity implements SyncListener {
             return true;
         } else if (itemId == R.id.action_about) {
             startActivity(new Intent(this, AboutActivity.class));
+            return true;
+        } else if (itemId == R.id.action_login) {
+            showLoginDialog();
+            return true;
+        } else if (itemId == R.id.action_logout) {
+            doLogout();
             return true;
         } else if (itemId == R.id.action_refresh) {
             startActivity(new Intent(this, DownloadTrigsActivity.class));
@@ -264,6 +276,45 @@ public class MainActivity extends BaseActivity implements SyncListener {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showLoginDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Login");
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_login, null);
+        builder.setView(view);
+
+        final EditText username = view.findViewById(R.id.username);
+        final EditText password = view.findViewById(R.id.password);
+
+        builder.setPositiveButton("Login", (dialog, which) -> {
+            String user = username.getText().toString();
+            String pass = password.getText().toString();
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("username", user);
+            editor.putString("password", pass);
+            editor.apply();
+
+            updateUserDisplay();
+            invalidateOptionsMenu();
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void doLogout() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove("username");
+        editor.remove("password");
+        editor.apply();
+
+        updateUserDisplay();
+        invalidateOptionsMenu();
     }
  
     

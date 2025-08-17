@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <PreferenceCategory android:title="User Settings">
-        <EditTextPreference
-            android:key="username"
-            android:title="Username"
-            android:summary="Enter your TrigpointingUK username" />
-        
-        <EditTextPreference
-            android:key="password"
-            android:title="Password"
-            android:summary="Enter your TrigpointingUK password"
-            android:inputType="textPassword" />
-    </PreferenceCategory>
-    
     <PreferenceCategory android:title="Sync Settings">
         <CheckBoxPreference
             android:key="auto_sync"
