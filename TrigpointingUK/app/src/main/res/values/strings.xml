@@ -15,7 +15,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="open_source_licenses">Open Source Licenses</string>
     <string name="acknowledgements">Acknowledgements</string>
-      <string name="acknowledgements_intro">This application would not be possible without the hard work of many people. Firstly, thanks are due to the many thousands of contributors to the various open-source projects used by this app.  Also to the whole OpenStreetMap community.\n\nIn particular, the TrigpointingUK project would not have been possible without the help of the following…</string>
+    <string name="acknowledgements_intro">This application would not be possible without the hard work of many people. Firstly, thanks are due to the many thousands of contributors to the various open-source projects used by this app.  Also to the whole OpenStreetMap community.\n\nIn particular, the TrigpointingUK project would not have been possible without the help of the following…</string>
     <string name="acknowledgements_list">- Brian Deegan
         \n- Adrian Dust
         \n- Ed Fielden
