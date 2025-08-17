@@ -15,11 +15,20 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="open_source_licenses">Open Source Licenses</string>
     <string name="acknowledgements">Acknowledgements</string>
-    <string name="acknowledgements_intro">This application would not be possible without the hard work of many people. I gratefully acknowledge the authors of the following software and content, and thank them for making their work available.</string>
-    <string name="acknowledgements_list">
-        - Bench Mark Database for the condition icons.\n
-        - The many contributors to OpenStreetMap.\n
-        - The developers of the various open-source libraries used in this app.
+      <string name="acknowledgements_intro">This application would not be possible without the hard work of many people. Firstly, thanks are due to the many thousands of contributors to the various open-source projects used by this app.  Also to the whole OpenStreetMap community.\n\nIn particular, the TrigpointingUK project would not have been possible without the help of the following…</string>
+    <string name="acknowledgements_list">- Brian Deegan
+        \n- Adrian Dust
+        \n- Ed Fielden
+        \n- Jon Glew
+        \n- Bernie Hughes
+        \n- Barry Hunter
+        \n- Martin Lycett
+        \n- Chris Ottley
+        \n- Geoff Robertshaw
+        \n- <b>Mark (The Cat) Thompson</b>
+        \n- John Ward
+        \n- Rob Woodall
+        \n- Graeme Paterson
     </string>
 
     <string name="pref_mapsforge_scale">Map scale factor</string>
