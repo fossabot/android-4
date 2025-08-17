@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import androidx.preference.PreferenceFragmentCompat;
 import uk.trigpointing.android.common.BaseActivity;
 
-public class PreferencesActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity {
 	public static final String TAG = "PreferenceActivity";
     public static final String PREFERENCETYPE = "PreferenceType";
 

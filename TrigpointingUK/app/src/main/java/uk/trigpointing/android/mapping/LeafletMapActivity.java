@@ -287,6 +287,13 @@ public class LeafletMapActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.leaflet_map_menu, menu);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean devMode = prefs.getBoolean("dev_mode", false);
+
+        menu.findItem(R.id.menu_clear_cache).setVisible(devMode);
+        menu.findItem(R.id.menu_cache_status).setVisible(devMode);
+
         return true;
     }
 

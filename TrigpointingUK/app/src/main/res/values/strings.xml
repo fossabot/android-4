@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TrigpointingUK</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh Trigpoint Database</string>
+    <string name="action_clearcache">Clear Cache</string>
+    <string name="action_cachestatus">Cache Status</string>
+    <string name="action_exit">Exit</string>
+
+    <string name="pref_mapsforge_scale">Map scale factor</string>
+    <string name="pref_mapsforge_scale_summary">Increase the size of map text and symbols. May require app restart.</string>
     <string name="downloadIdleStatus">Ready to download</string>
     <string name="downloadInsertStatus">Downloading...</string>
     <string name="btnDownload">Download</string>
@@ -130,5 +138,8 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    
+    <string name="title_activity_display_trigpoint">DisplayTrigpointActivity</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_download_maps">Download Maps</string>
+
 </resources>

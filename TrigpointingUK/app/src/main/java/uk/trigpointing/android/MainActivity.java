@@ -218,52 +218,45 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.mainmenu, menu);
-        return result;
-    }    
-    
-    
-		@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int itemId = item.getItemId();
-		
-		if (itemId == R.id.downloadtrigs) {
-			Intent i = new Intent(MainActivity.this, DownloadTrigsActivity.class);
-			startActivity(i);
-			return true;
-		} else if (itemId == R.id.prefs) {
-			Intent i = new Intent(MainActivity.this, PreferencesActivity.class);
-			// Use activity result launcher for preferences
-			preferencesLauncher.launch(i);
-			return true;
-		} else if (itemId == R.id.about) {
-			Intent i = new Intent(MainActivity.this, HelpPageActivity.class);
-			i.putExtra(HelpPageActivity.PAGE, "about.html");
-			startActivity(i);
-			return true;
-		} else if (itemId == R.id.clearcache) {
-			new ClearCacheTask(MainActivity.this).execute();        	
-			return true;
-        } else if (itemId == R.id.test_crash) {
-            // Intentionally crash the app to verify crash reporting
-            throw new RuntimeException("Test Crash (menu-triggered)");
-		} else if (itemId == R.id.exit) {
-			// Show confirmation dialog before exiting
-			new AlertDialog.Builder(this)
-				.setTitle("Exit Application")
-				.setMessage("Are you sure you want to exit?")
-				.setPositiveButton("Yes", (dialog, which) -> {
-					// Close the application
-					finish();
-					System.exit(0);
-				})
-				.setNegativeButton("No", null)
-				.show();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+        getMenuInflater().inflate(R.menu.mainmenu, menu);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean devMode = prefs.getBoolean("dev_mode", false);
+
+        menu.findItem(R.id.action_refresh).setVisible(devMode);
+        menu.findItem(R.id.action_clearcache).setVisible(devMode);
+        menu.findItem(R.id.action_cachestatus).setVisible(devMode);
+        menu.findItem(R.id.action_testcrash).setVisible(devMode);
+        menu.findItem(R.id.action_exit).setVisible(devMode);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        } else if (itemId == R.id.action_refresh) {
+            startActivity(new Intent(this, DownloadTrigsActivity.class));
+            return true;
+        } else if (itemId == R.id.action_clearcache) {
+            new ClearCacheTask(this).execute();
+            return true;
+        } else if (itemId == R.id.action_cachestatus) {
+            // Implement cache status functionality
+            return true;
+        } else if (itemId == R.id.action_testcrash) {
+            throw new RuntimeException("Test Crash");
+        } else if (itemId == R.id.action_exit) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
  
     
     

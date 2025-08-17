@@ -74,5 +74,14 @@
             android:entryValues="@array/filter_found_values"
             android:defaultValue="0" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Advanced">
+        <CheckBoxPreference
+            android:key="dev_mode"
+            android:title="Developer mode"
+            android:summary="Enable developer-only features"
+            android:defaultValue="false" />
+    </PreferenceCategory>
     
 </PreferenceScreen> 
