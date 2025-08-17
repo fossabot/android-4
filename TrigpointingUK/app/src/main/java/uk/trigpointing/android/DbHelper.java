@@ -243,6 +243,24 @@ public class DbHelper {
 		return mDb.delete(TRIG_TABLE, null, null) > 0;
 	}
 
+	public void clearUserLogs() {
+		Log.i(TAG, "clearUserLogs: Clearing all user logs, photos, and marks");
+		try {
+			// Delete all records from the log, photo, and mark tables
+			mDb.delete(LOG_TABLE, null, null);
+			mDb.delete(PHOTO_TABLE, null, null);
+			mDb.delete(MARK_TABLE, null, null);
+
+			// Reset the 'logged' status for all trigpoints
+			ContentValues args = new ContentValues();
+			args.put(TRIG_LOGGED, Condition.TRIGNOTLOGGED.code());
+			mDb.update(TRIG_TABLE, args, null, null);
+
+			Log.i(TAG, "clearUserLogs: User data cleared successfully");
+		} catch (SQLException e) {
+			Log.e(TAG, "clearUserLogs: Error clearing user data", e);
+		}
+	}
 	
 	/**
 	 * Return a Cursor suitable for the triglist screen

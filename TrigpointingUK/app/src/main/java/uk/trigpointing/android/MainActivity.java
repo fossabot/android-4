@@ -313,6 +313,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
         editor.remove("password");
         editor.apply();
 
+        DbHelper dbHelper = new DbHelper(this);
+        dbHelper.open();
+        dbHelper.clearUserLogs();
+        dbHelper.close();
+
         updateUserDisplay();
         invalidateOptionsMenu();
     }
