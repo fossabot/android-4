@@ -300,6 +300,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
             updateUserDisplay();
             invalidateOptionsMenu();
+            doSync();
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
@@ -361,14 +362,20 @@ public class MainActivity extends BaseActivity implements SyncListener {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			String username = prefs.getString("username", "");
 			
+			View countSection = findViewById(R.id.count_section);
+
 			Log.i(TAG, "updateUserDisplay: Username from preferences: '" + username + "'");
 			
 			if (!username.trim().isEmpty()) {
 				Log.i(TAG, "updateUserDisplay: Setting username to: " + username);
 				mUserName.setText(username);
+				countSection.setVisibility(View.VISIBLE);
+				mSyncBtn.setVisibility(View.VISIBLE);
 			} else {
 				Log.i(TAG, "updateUserDisplay: No username found, showing 'Not logged in'");
 				mUserName.setText("Not logged in");
+				countSection.setVisibility(View.INVISIBLE);
+				mSyncBtn.setVisibility(View.INVISIBLE);
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "updateUserDisplay: Error updating user display", e);
