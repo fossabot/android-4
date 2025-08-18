@@ -648,6 +648,7 @@ public class TrigDetailsActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 

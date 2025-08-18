@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
@@ -350,11 +351,15 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 				}
 			}
 			if (granted) {
-				mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-				if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
-				updateLocationHeader("cached");
-				if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
+				// Check permissions explicitly before calling getLastKnownLocation
+				if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+					ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+					mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+					if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
+					updateLocationHeader("cached");
+					if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
+				}
 			} else {
 				boolean showRationaleFine = shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION);
 				boolean showRationaleCoarse = shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_COARSE_LOCATION);
