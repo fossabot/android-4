@@ -32,7 +32,9 @@ public class AboutActivity extends BaseActivity {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                 versionCode = packageInfo.getLongVersionCode();
             } else {
-                versionCode = packageInfo.versionCode;
+                @SuppressWarnings("deprecation")
+                int legacyVersionCode = packageInfo.versionCode;
+                versionCode = legacyVersionCode;
             }
             appNameVersion.setText(getString(R.string.app_name_version, versionName, versionCode));
             buildDate.setText(getString(R.string.build_date, BuildConfig.BUILD_TIME));

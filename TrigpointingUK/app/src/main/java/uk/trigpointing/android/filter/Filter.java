@@ -2,7 +2,7 @@ package uk.trigpointing.android.filter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import uk.trigpointing.android.DbHelper;
