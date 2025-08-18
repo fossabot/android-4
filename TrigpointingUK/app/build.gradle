@@ -16,8 +16,8 @@ android {
         applicationId "uk.trigpointing.android"
         minSdk = 27
         targetSdk = 36
-        versionCode 21
-        versionName "2.0.10"
+        versionCode 22
+        versionName "2.0.11"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""

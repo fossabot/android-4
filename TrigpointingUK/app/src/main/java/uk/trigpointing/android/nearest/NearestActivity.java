@@ -181,10 +181,10 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 
 		// Sensors already initialized above
 		
-		// Is the screen rotated?
-		WindowManager windowManager =  (WindowManager) getSystemService(WINDOW_SERVICE);
-		Display display = windowManager.getDefaultDisplay();
-		mOrientation = display.getOrientation();
+		// Is the screen rotated? (using modern API instead of deprecated getDefaultDisplay/getOrientation)
+		WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+		// Use modern rotation detection
+		mOrientation = getResources().getConfiguration().orientation;
 		
 		Log.i(TAG, "getOrientation(): " + mOrientation);
 		mListAdapter.setOrientation(mOrientation);

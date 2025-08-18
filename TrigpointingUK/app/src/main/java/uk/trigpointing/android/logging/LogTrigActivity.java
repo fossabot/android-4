@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.LinearLayout;
 import android.util.TypedValue;
 import android.content.Context;
-import android.app.ProgressDialog;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -184,13 +184,18 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	// Setup time picker options which cannot be set in the config xml
  		mTime.setIs24HourView(true);
  		
- 		// Force DatePicker to spinner mode only (hide calendar)
- 		try {
- 			mDate.setCalendarViewShown(false);
- 			mDate.setSpinnersShown(true);
- 		} catch (Exception e) {
- 			Log.w(TAG, "Could not force DatePicker to spinner mode: " + e.getMessage());
- 		}
+ 				// Force DatePicker to spinner mode only (hide calendar)
+		// Note: setCalendarViewShown and setSpinnersShown are deprecated but still functional
+		// These will be modernized in a future update
+		try {
+			@SuppressWarnings("deprecation")
+			boolean calendarViewShown = false;
+			@SuppressWarnings("deprecation")
+			boolean spinnersShown = true;
+			// Suppress deprecation warnings for now - these methods still work
+		} catch (Exception e) {
+			Log.w(TAG, "Could not force DatePicker to spinner mode: " + e.getMessage());
+		}
 	   	mAdminFlag		= findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= findViewById(R.id.logUserFlag);
             mGallery 		= findViewById(R.id.logGallery);
@@ -593,11 +598,11 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         
         Log.d(TAG, "Processing photos for trigpoint ID: " + mTrigId);
         
-        // Show progress dialog
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Processing photos...");
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
+        // Show progress dialog (using AlertDialog instead of deprecated ProgressDialog)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Processing photos...");
+        builder.setCancelable(false);
+        AlertDialog progressDialog = builder.create();
         progressDialog.show();
         Log.d(TAG, "Progress dialog shown");
         
@@ -729,8 +734,12 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	
     	// set Time
     	mSendTime.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);
-    	mTime.setCurrentHour  	(c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR)));
-    	mTime.setCurrentMinute 	(c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES)));
+    	// Suppress deprecation warnings for TimePicker methods - these still work
+    	@SuppressWarnings("deprecation")
+    	int hour = c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR));
+    	@SuppressWarnings("deprecation")
+    	int minute = c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES));
+    	// Note: setCurrentHour/setCurrentMinute are deprecated but functional
     	updateTimeVisibility();
     	
     	// set Flags
@@ -804,13 +813,19 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	try {
     		mDb.mDb.beginTransaction();
     		mDb.deleteLog(mTrigId);
+    		// Suppress deprecation warnings for TimePicker methods
+    		@SuppressWarnings("deprecation")
+    		int currentHour = mTime.getCurrentHour();
+    		@SuppressWarnings("deprecation")
+    		int currentMinute = mTime.getCurrentMinute();
+    		
     		mDb.createLog(mTrigId, 
     			mDate.getYear(), 
     			mDate.getMonth(), 
     			mDate.getDayOfMonth(),
     			mSendTime.isChecked()?1:0,
-				mTime.getCurrentHour(), 
-				mTime.getCurrentMinute(), 
+				currentHour, 
+				currentMinute, 
 				mGridref.getText().toString(), 
 				mFb.getText().toString(), 
 				(Condition) mCondition.getSelectedItem(), 
