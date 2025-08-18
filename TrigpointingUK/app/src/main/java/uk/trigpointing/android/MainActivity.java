@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import uk.trigpointing.android.common.BaseActivity;
 import uk.trigpointing.android.common.ClearCacheTask;
 import uk.trigpointing.android.logging.SyncListener;
@@ -402,7 +403,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 				mUnsyncedCount.setText("");
 				mPhotosIcon.setVisibility(View.INVISIBLE);
 				mPhotosCount.setText("");
-				mSyncBtn.setTextColor(getResources().getColor(android.R.color.primary_text_light));
+				                mSyncBtn.setTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light));
 			} catch (NotFoundException e) {
 				Log.e(TAG, "populateCounts: Error setting loading state", e);
 				e.printStackTrace();
@@ -462,7 +463,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 					if (nUnsynced > 0) {
 						mUnsyncedIcon.setVisibility(View.VISIBLE);
 						mUnsyncedCount.setText(String.valueOf(nUnsynced));
-						mSyncBtn.setTextColor(getResources().getColor(R.color.syncNow));
+						                mSyncBtn.setTextColor(ContextCompat.getColor(this, R.color.syncNow));
 					}
 					
 					if (nPhotos > 0) {

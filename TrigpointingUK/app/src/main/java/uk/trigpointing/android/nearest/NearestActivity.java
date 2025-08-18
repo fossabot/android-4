@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
 import uk.trigpointing.android.common.BaseActivity;
@@ -242,12 +243,12 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		if (mUsingCompass) {
 			mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 		    mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-		    mNorthText.setTextColor(getResources().getColor(R.color.compassEnabled));
+		    					mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassEnabled));
 	    } else {
 		    mSensorManager.unregisterListener(this);
 		    mHeading = 0;
 		    mCompassArrow.setImageResource(mListAdapter.getArrow(0));
-		    mNorthText.setTextColor(getResources().getColor(R.color.compassDisabled));
+		    					mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassDisabled));
         	mListAdapter.setHeading(0);
         	mListAdapter.notifyDataSetChanged();
 		}

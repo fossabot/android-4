@@ -8,6 +8,7 @@ import android.location.Location;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,10 +88,10 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 		Boolean marked = (cursor.getString(mMarkedIndex) != null);
 		if (marked) {
 			tn.setTypeface(null, Typeface.BOLD);
-			tn.setTextColor(mContext.getResources().getColor(R.color.nearestMarkedColour));
+			tn.setTextColor(ContextCompat.getColor(mContext, R.color.nearestMarkedColour));
 		} else {
 			tn.setTypeface(null, Typeface.NORMAL);
-			tn.setTextColor(mContext.getResources().getColor(R.color.nearestUnmarkedColour));
+			tn.setTextColor(ContextCompat.getColor(mContext, R.color.nearestUnmarkedColour));
 		}
 		tt.setImageResource(Trig.Physical.fromCode(cursor.getString(mTypeIndex)).icon(marked));
 		

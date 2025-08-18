@@ -46,6 +46,7 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 // Removed unused Fragment-related imports; using getSupportFragmentManager directly
@@ -356,15 +357,15 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			Log.e(TAG, "Gridref " + dist.intValue() + " " + mUnits + " from database location");
 			if (dist >= 50) {
 				mLocationError.setText("Warning: " + dist.intValue() + mStrUnits + " from database location");
-				mLocationError.setTextColor(getResources().getColor(R.color.errorcolour));
+				mLocationError.setTextColor(ContextCompat.getColor(this, R.color.errorcolour));
 			} else {
 				mLocationError.setText(dist.intValue() + mStrUnits + " from database location");
-				mLocationError.setTextColor(getResources().getColor(R.color.okcolour));
+				mLocationError.setTextColor(ContextCompat.getColor(this, R.color.okcolour));
 			}
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 			mLocationError.setText(e.getMessage());
-			mLocationError.setTextColor(getResources().getColor(R.color.errorcolour));
+			mLocationError.setTextColor(ContextCompat.getColor(this, R.color.errorcolour));
 		}		
 	}
 	
