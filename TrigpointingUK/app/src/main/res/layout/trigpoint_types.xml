@@ -112,6 +112,20 @@
                 android:text="Not Logged"
                 android:padding="8dp" />
 
+            <RadioButton
+                android:id="@+id/radio_status_marked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Marked"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_status_unsynced"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unsynced"
+                android:padding="8dp" />
+
         </RadioGroup>
 
     </LinearLayout>

@@ -60,7 +60,9 @@ public class TrigpointTypesActivity extends BaseActivity {
         mStatusRadioButtons = new RadioButton[] {
             findViewById(R.id.radio_status_all),
             findViewById(R.id.radio_status_logged),
-            findViewById(R.id.radio_status_not_logged)
+            findViewById(R.id.radio_status_not_logged),
+            findViewById(R.id.radio_status_marked),
+            findViewById(R.id.radio_status_unsynced)
         };
         
         Log.i(TAG, "setupRadioButtons: Initialized " + mTypeRadioButtons.length + " type radio buttons and " + mStatusRadioButtons.length + " status radio buttons");
@@ -81,7 +83,7 @@ public class TrigpointTypesActivity extends BaseActivity {
         // Load logging status selection
         int currentStatus = mPrefs.getInt(Filter.FILTERRADIO, 0);
         
-        // Ensure currentStatus is within bounds (0=All, 1=Logged, 2=Not Logged)
+        // Ensure currentStatus is within bounds (0=All, 1=Logged, 2=Not Logged, 3=Marked, 4=Unsynced)
         if (currentStatus >= 0 && currentStatus < mStatusRadioButtons.length) {
             mStatusRadioButtons[currentStatus].setChecked(true);
         } else {
