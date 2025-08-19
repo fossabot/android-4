@@ -894,7 +894,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			return;
 		} 
 		saveLog();
-		new SyncTask(LogTrigActivity.this, this).execute(mTrigId);
+		new SyncTask(LogTrigActivity.this, this).execute(false, mTrigId);
     }
 
     

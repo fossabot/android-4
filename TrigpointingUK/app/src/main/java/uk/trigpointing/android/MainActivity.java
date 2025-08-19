@@ -340,7 +340,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
     private void doSync() {
 		Log.i(TAG, "doSync");
-		new SyncTask(MainActivity.this, MainActivity.this).execute();
+		new SyncTask(MainActivity.this, MainActivity.this).execute(false);
     }
     
 
@@ -531,7 +531,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 				Log.i(TAG, "checkAndPerformAutoSync: Credentials found, performing auto sync");
 				// Mark that auto sync has been run
 				prefs.edit().putBoolean(AUTO_SYNC_RUN, true).apply();
-				doSync();
+				new SyncTask(MainActivity.this, MainActivity.this).execute(false);
 			} else {
 				Log.i(TAG, "checkAndPerformAutoSync: No credentials found, skipping auto sync");
 			}

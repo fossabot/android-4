@@ -57,6 +57,7 @@ public class SyncTask implements ProgressListener {
     private TextView   		progressText;
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 	private final Handler mainHandler = new Handler(Looper.getMainLooper());
+	private boolean mIsAutoSyncAfterDownload = false;
 	
 	private void updateProgress(int type, int... values) {
         mainHandler.post(() -> {
@@ -150,22 +151,47 @@ public class SyncTask implements ProgressListener {
 	}
 	
 	public void execute(Long... trigId) {
+		execute(false, trigId);
+	}
+	
+	public void execute(boolean isAutoSyncAfterDownload, Long... trigId) {
+		mIsAutoSyncAfterDownload = isAutoSyncAfterDownload;
+		
 		// Pre-execution logic (equivalent to onPreExecute)
 		if (mCtx == null) {
 			Toast.makeText(mCtx, "Sync failed!", Toast.LENGTH_LONG).show();
+			if (mSyncListener != null) {
+				mSyncListener.onSynced(ERROR);
+			}
 			return;
 		}
 		
 		// Check that we have a username and password, so that we can sync existing logs
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
 		if (mPrefs.getString("username", "").equals("")) {
-			Toast.makeText(mCtx, R.string.toastAddUsername, Toast.LENGTH_LONG).show();
+			Log.i(TAG, "execute: No username found, calling onSynced with ERROR status");
+			// Only show toast if this isn't an automatic sync after download
+			if (!mIsAutoSyncAfterDownload) {
+				Toast.makeText(mCtx, R.string.toastAddUsername, Toast.LENGTH_LONG).show();
+			}
+			// Always call onSynced callback, even when credentials are missing
+			if (mSyncListener != null) {
+				mSyncListener.onSynced(ERROR);
+			}
 			return;
 		} 
 		if (mPrefs.getString("plaintextpassword", "").equals("")) {
-			Toast.makeText(mCtx, R.string.toastAddPassword, Toast.LENGTH_LONG).show();
+			Log.i(TAG, "execute: No password found, calling onSynced with ERROR status");
+			// Only show toast if this isn't an automatic sync after download
+			if (!mIsAutoSyncAfterDownload) {
+				Toast.makeText(mCtx, R.string.toastAddPassword, Toast.LENGTH_LONG).show();
+			}
+			// Always call onSynced callback, even when credentials are missing
+			if (mSyncListener != null) {
+				mSyncListener.onSynced(ERROR);
+			}
 			return;
-		} 
+		}
 		showDialog("Connecting to T:UK");
 		mErrorMessage = "";
 		

@@ -29,6 +29,7 @@ import uk.trigpointing.android.logging.SyncTask;
 import uk.trigpointing.android.logging.SyncListener;
 import uk.trigpointing.android.types.Condition;
 import uk.trigpointing.android.types.Trig;
+import android.content.Intent;
 
 public class DownloadTrigsActivity extends BaseActivity implements SyncListener {
 
@@ -186,8 +187,8 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 			case OK:
 				mStatus.setText("Download complete! " + mDownloadCount + " trigpoints downloaded. Starting sync...");
 				mProgress.setProgress(mProgressMax);
-				// Start sync after successful download
-				mainHandler.post(() -> new SyncTask(DownloadTrigsActivity.this, DownloadTrigsActivity.this).execute());
+				// Start sync after successful download with auto-sync flag
+				mainHandler.post(() -> new SyncTask(DownloadTrigsActivity.this, DownloadTrigsActivity.this).execute(true));
 				break;
 			case ERROR:
 				mStatus.setText("Download failed! Please try again.");
@@ -222,6 +223,7 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 		Log.i(TAG, "onSynced: Sync completed with status: " + status);
 		
 		mainHandler.post(() -> {
+			Log.i(TAG, "onSynced: Updating UI and scheduling return to MainActivity");
 			switch (status) {
 			case SyncTask.SUCCESS:
 				mStatus.setText("Sync complete! All data synchronised.");
@@ -230,7 +232,8 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 				mStatus.setText("Sync complete! No data to sync.");
 				break;
 			case SyncTask.ERROR:
-				mStatus.setText("Sync failed! Please check your credentials.");
+				// For first-time users, this is expected - show appropriate message
+				mStatus.setText("Sync skipped - no credentials yet. You can add them later in Settings.");
 				break;
 			case SyncTask.CANCELLED:
 				mStatus.setText("Sync cancelled.");
@@ -240,8 +243,16 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 				break;
 			}
 			
-			// Auto-close after 3 seconds
-			mainHandler.postDelayed(DownloadTrigsActivity.this::finish, 3000);
+			Log.i(TAG, "onSynced: Scheduling return to MainActivity in 1.5 seconds");
+			// Return to MainActivity after a shorter delay (1.5 seconds instead of 3)
+			mainHandler.postDelayed(() -> {
+				Log.i(TAG, "onSynced: Returning to MainActivity now");
+				finish();
+				// Ensure we return to MainActivity
+				Intent intent = new Intent(DownloadTrigsActivity.this, MainActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+			}, 1500);
 		});
 	}
 }
