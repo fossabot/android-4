@@ -14,9 +14,10 @@ import androidx.fragment.app.Fragment;
 
 import uk.trigpointing.android.R;
 
-public class FilterFoundTabFragment extends Fragment {
+public class FilterFoundTabFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private RadioGroup filterFoundRadioGroup;
+    private SharedPreferences prefs;
 
     @Nullable
     @Override
@@ -24,6 +25,11 @@ public class FilterFoundTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.tab_filter_found, container, false);
         
         filterFoundRadioGroup = view.findViewById(R.id.filterFoundRadioGroup);
+        
+        // Initialize preferences
+        if (getActivity() != null) {
+            prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        }
         
         // Load current selection
         loadCurrentSelection();
@@ -41,14 +47,26 @@ public class FilterFoundTabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // Register preference change listener
+        if (prefs != null) {
+            prefs.registerOnSharedPreferenceChangeListener(this);
+        }
         // Reload filter state when returning to this fragment (e.g., after changing filter on nearest page)
         loadCurrentSelection();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregister preference change listener
+        if (prefs != null) {
+            prefs.unregisterOnSharedPreferenceChangeListener(this);
+        }
+    }
+
     private void loadCurrentSelection() {
-        if (getActivity() == null || filterFoundRadioGroup == null) return;
+        if (getActivity() == null || filterFoundRadioGroup == null || prefs == null) return;
         
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String currentFound = prefs.getString("leaflet_filter_found", "all");
         
         int radioId = getRadioIdFromFound(currentFound);
@@ -86,9 +104,8 @@ public class FilterFoundTabFragment extends Fragment {
     }
 
     private void saveFound(String found) {
-        if (getActivity() == null) return;
+        if (getActivity() == null || prefs == null) return;
         
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("leaflet_filter_found", found);
         
@@ -133,7 +150,16 @@ public class FilterFoundTabFragment extends Fragment {
             case "notlogged": return "Not Logged";
             case "marked": return "Marked";
             case "unsynced": return "Unsynced";
-            default: return "All";
+            default:         return "All";
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // Listen for changes to the leaflet_filter_found preference
+        if ("leaflet_filter_found".equals(key)) {
+            // Reload the filter selection when preferences change
+            loadCurrentSelection();
         }
     }
 }
