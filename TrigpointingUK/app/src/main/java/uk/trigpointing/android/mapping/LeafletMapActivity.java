@@ -420,7 +420,7 @@ public class LeafletMapActivity extends BaseActivity {
         // Set filter found status based on filterFound parameter
         switch (filterFound) {
             case "all":
-                editor.putInt(Filter.FILTERRADIO, 0); // All
+                editor.putInt(Filter.FILTERRADIO, 0); // Logged or not
                 break;
             case "logged":
                 editor.putInt(Filter.FILTERRADIO, 1); // Logged
@@ -435,7 +435,7 @@ public class LeafletMapActivity extends BaseActivity {
                 editor.putInt(Filter.FILTERRADIO, 4); // Unsynced
                 break;
             default:
-                editor.putInt(Filter.FILTERRADIO, 0); // All
+                editor.putInt(Filter.FILTERRADIO, 0); // Logged or not
         }
         
         editor.apply();

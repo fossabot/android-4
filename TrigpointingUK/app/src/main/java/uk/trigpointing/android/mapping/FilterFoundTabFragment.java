@@ -177,12 +177,12 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
      */
     private String getFilterTextFromFound(String found) {
         switch (found) {
-            case "all": return "All";
+            case "all": return "Logged or not";
             case "logged": return "Logged";
             case "notlogged": return "Not Logged";
             case "marked": return "Marked";
             case "unsynced": return "Unsynced";
-            default:         return "All";
+            default:         return "Logged or not";
         }
     }
 

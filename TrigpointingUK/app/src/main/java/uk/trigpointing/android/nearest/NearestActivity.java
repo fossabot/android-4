@@ -295,7 +295,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		String typeText = getTypeTextFromIndex(filterType);
 		
 		// Get logging status text
-		String statusText = mPrefs.getString(Filter.FILTERRADIOTEXT, "All");
+		String statusText = mPrefs.getString(Filter.FILTERRADIOTEXT, "Logged or not");
 		
 		// Create two-line display
 		String headerText = typeText + "\n" + statusText;
