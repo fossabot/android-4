@@ -111,6 +111,12 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			useCompass(!mUsingCompass);
 		});
 		
+		// Set up trigpoint types filter click handler
+		mStrFilter.setOnClickListener(v -> {
+			Intent i = new Intent(NearestActivity.this, uk.trigpointing.android.filter.TrigpointTypesActivity.class);
+			detailsLauncher.launch(i);
+		});
+		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// create various objects
@@ -305,10 +311,6 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		if (itemId == android.R.id.home) {
 			// Handle back button in action bar
 			finish();
-			return true;
-		} else if (itemId == R.id.trigpoint_types) {
-			Intent i = new Intent(NearestActivity.this, uk.trigpointing.android.filter.TrigpointTypesActivity.class);
-			detailsLauncher.launch(i);
 			return true;
 		} else if (itemId == R.id.filter_found) {
 			Intent i = new Intent(NearestActivity.this, uk.trigpointing.android.filter.FilterFoundActivity.class);

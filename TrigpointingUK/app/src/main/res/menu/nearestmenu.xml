@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/trigpoint_types"
-        android:title="Trigpoint types"
-        android:icon="@drawable/ic_menu_search" />
-    <item
         android:id="@+id/filter_found"
         android:title="Filter found"
         android:icon="@drawable/ic_menu_search" />

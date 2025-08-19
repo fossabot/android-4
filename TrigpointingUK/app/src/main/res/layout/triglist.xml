@@ -32,7 +32,11 @@
             android:layout_weight="1"
             android:text="Filter: All"
             android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp" />
 
         <!-- North indicator with compass arrow -->
         <LinearLayout
