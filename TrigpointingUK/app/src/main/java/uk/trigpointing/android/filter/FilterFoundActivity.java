@@ -54,13 +54,35 @@ public class FilterFoundActivity extends BaseActivity {
     @Override
     protected void onPause() {
         Log.i(TAG, "onPause");
+        saveFilterState();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.i(TAG, "onStop");
+        // Save state in onStop as well to ensure synchronization
+        saveFilterState();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.i(TAG, "onDestroy");
+        // Save state in onDestroy as final backup
+        saveFilterState();
+        super.onDestroy();
+    }
+
+    private void saveFilterState() {
+        if (mPrefs == null || mFilterRadio == null) return;
         
         Editor editor = mPrefs.edit();
         
         // Get the correct radio button value based on the checked ID
         int filterRadio = 0; // Default to "All"
         int checkedId = mFilterRadio.getCheckedRadioButtonId();
-        Log.i(TAG, "onPause: Checked radio button ID: " + checkedId);
+        Log.i(TAG, "saveFilterState: Checked radio button ID: " + checkedId);
         
         if (checkedId == R.id.filterAll) {
             filterRadio = 0;
@@ -75,25 +97,23 @@ public class FilterFoundActivity extends BaseActivity {
         }
         
         editor.putInt(Filter.FILTERRADIO, filterRadio);
-        Log.i(TAG, "onPause: Saving filter radio: " + filterRadio);
+        Log.i(TAG, "saveFilterState: Saving filter radio: " + filterRadio);
         
         // Get text of selected radiobox item
         RadioButton btnSelected = findViewById(checkedId);
         if (btnSelected != null) {
             String radioText = btnSelected.getText().toString();
             editor.putString(Filter.FILTERRADIOTEXT, radioText);
-            Log.i(TAG, "onPause: Saving filter radio text: '" + radioText + "'");
+            Log.i(TAG, "saveFilterState: Saving filter radio text: '" + radioText + "'");
         }
         
         // Also update the leaflet map filter preference for synchronization
         String leafletFilterValue = convertToLeafletFilterValue(filterRadio);
         editor.putString("leaflet_filter_found", leafletFilterValue);
-        Log.i(TAG, "onPause: Syncing with leaflet filter: " + leafletFilterValue);
+        Log.i(TAG, "saveFilterState: Syncing with leaflet filter: " + leafletFilterValue);
     
         // Save to prefs
         editor.apply();
-        
-        super.onPause();
     }
 
     @Override

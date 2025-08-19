@@ -38,15 +38,30 @@ public class FilterFoundTabFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload filter state when returning to this fragment (e.g., after changing filter on nearest page)
+        loadCurrentSelection();
+    }
+
     private void loadCurrentSelection() {
-        if (getActivity() == null) return;
+        if (getActivity() == null || filterFoundRadioGroup == null) return;
         
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String currentFound = prefs.getString("leaflet_filter_found", "all");
         
         int radioId = getRadioIdFromFound(currentFound);
         if (radioId != -1) {
+            // Temporarily disable listener to avoid triggering change events during programmatic update
+            filterFoundRadioGroup.setOnCheckedChangeListener(null);
             filterFoundRadioGroup.check(radioId);
+            // Re-enable listener
+            filterFoundRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                String selectedFound = getFoundFromRadioId(checkedId);
+                saveFound(selectedFound);
+                notifyLeafletMap(selectedFound);
+            });
         }
     }
 
