@@ -36,6 +36,9 @@ public class TrigpointTypesActivity extends BaseActivity {
 
         // Load current selection
         loadCurrentSelection();
+        
+        // Set up automatic close on selection
+        setupAutoClose();
     }
 
     private void setupRadioButtons() {
@@ -66,11 +69,20 @@ public class TrigpointTypesActivity extends BaseActivity {
         
         Log.i(TAG, "Loaded filter type: " + currentType);
     }
-
-    @Override
-    protected void onPause() {
-        Log.i(TAG, "onPause");
-        
+    
+    private void setupAutoClose() {
+        mFilterTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            Log.i(TAG, "Radio button selection changed, saving and closing");
+            
+            // Save the selection immediately
+            saveCurrentSelection();
+            
+            // Close the activity
+            finish();
+        });
+    }
+    
+    private void saveCurrentSelection() {
         Editor editor = mPrefs.edit();
         
         // Find which radio button is selected
@@ -83,10 +95,18 @@ public class TrigpointTypesActivity extends BaseActivity {
         }
         
         editor.putInt(Filter.FILTERTYPE, filterType);
-        Log.i(TAG, "onPause: Saving filter type: " + filterType);
+        Log.i(TAG, "saveCurrentSelection: Saving filter type: " + filterType);
     
         // Save to prefs
         editor.apply();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i(TAG, "onPause");
+        
+        // Save current selection (fallback in case auto-close didn't trigger)
+        saveCurrentSelection();
         
         super.onPause();
     }
