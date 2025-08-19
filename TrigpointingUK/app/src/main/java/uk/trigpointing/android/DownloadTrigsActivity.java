@@ -233,7 +233,7 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 				break;
 			case SyncTask.ERROR:
 				// For first-time users, this is expected - show appropriate message
-				mStatus.setText("Sync skipped - no credentials yet. You can add them later in Settings.");
+				mStatus.setText("Sync skipped - Please login for a more personalised experience.");
 				break;
 			case SyncTask.CANCELLED:
 				mStatus.setText("Sync cancelled.");
