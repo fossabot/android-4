@@ -5,9 +5,9 @@
     <!-- Leaflet map styles for preferences -->
     <string-array name="leaflet_map_styles">
         <item>OpenStreetMap</item>
-        <item>ESRI Satellite</item>
-        <item>OS Outdoor (27700)</item>
-        <item>OS Leisure (27700)</item>
+        <item>Satellite</item>
+        <item>OS Digital</item>
+        <item>OS Paper</item>
     </string-array>
 
     <string-array name="leaflet_map_style_values">
