@@ -490,6 +490,14 @@ public class LeafletMapActivity extends BaseActivity {
         }
         
         @JavascriptInterface
+        public String getFilterFoundPreference() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
+            String filterFound = prefs.getString("leaflet_filter_found", "all");
+            Log.d(TAG, "Retrieved filter found preference: " + filterFound);
+            return filterFound;
+        }
+        
+        @JavascriptInterface
         public void getTrigpointData(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
             Log.d(TAG, String.format("getTrigpointData: bounds=(%.6f,%.6f,%.6f,%.6f) type=%s found=%s colour=%s", south, west, north, east, trigpointType, filterFound, colorScheme));
             

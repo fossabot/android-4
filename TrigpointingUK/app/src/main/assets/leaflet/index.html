@@ -1058,11 +1058,26 @@
         radio.checked = (radio.value === trigpointType);
       });
       
-      const filterFound = localStorage.getItem('leaflet_filter_found') || 'all';
+      // Try to get filter preference from Android first, fallback to localStorage
+      let filterFound = 'all';
+      try {
+        if (typeof AndroidPrefs !== 'undefined' && AndroidPrefs.getFilterFoundPreference) {
+          filterFound = AndroidPrefs.getFilterFoundPreference();
+        } else {
+          filterFound = localStorage.getItem('leaflet_filter_found') || 'all';
+        }
+      } catch (e) {
+        console.log('Could not get Android preference, using localStorage:', e);
+        filterFound = localStorage.getItem('leaflet_filter_found') || 'all';
+      }
+      
       currentFilterFound = filterFound;
       document.querySelectorAll('input[name="filterfound"]').forEach(radio => {
         radio.checked = (radio.value === filterFound);
       });
+      
+      // Sync localStorage with Android preference
+      localStorage.setItem('leaflet_filter_found', filterFound);
     }
 
     // Trigpoint marker management
