@@ -106,6 +106,11 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		mNorthText	 			= findViewById(R.id.north);
 		mCompassArrow			= findViewById(R.id.compassArrow);
 		
+		// Set up compass area click handler
+		findViewById(R.id.compassArea).setOnClickListener(v -> {
+			useCompass(!mUsingCompass);
+		});
+		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// create various objects
@@ -241,6 +246,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 
 	private void useCompass(boolean use) {
 		mUsingCompass = use;
+		mListAdapter.setUsingCompass(use);
 		if (mUsingCompass) {
 			mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 		    mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
@@ -307,9 +313,6 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		} else if (itemId == R.id.filter_found) {
 			Intent i = new Intent(NearestActivity.this, uk.trigpointing.android.filter.FilterFoundActivity.class);
 			detailsLauncher.launch(i);
-			return true;
-		} else if (itemId == R.id.heading) {
-			useCompass(!mUsingCompass);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

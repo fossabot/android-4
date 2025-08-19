@@ -8,8 +8,4 @@
         android:id="@+id/filter_found"
         android:title="Filter found"
         android:icon="@drawable/ic_menu_search" />
-    <item
-        android:id="@+id/heading"
-        android:title="@string/heading"
-        android:icon="@drawable/ic_menu_compass" />
 </menu> 

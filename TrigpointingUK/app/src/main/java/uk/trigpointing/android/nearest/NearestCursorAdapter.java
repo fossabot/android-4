@@ -38,6 +38,7 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 	//private static final String TAG = "NearestCursorAdapter";
 	private double mHeading = 0;
 	private double mOrientationOffset = 0;
+	private boolean mUsingCompass = false;
 	private Context mContext;
 	
 	
@@ -140,10 +141,14 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 	static final double anglePerDivision = 360.0 / nDivisions;
 	static final double halfAnglePerDivision = anglePerDivision / 2.0;
 	public int getArrow(double bearing) {
-		int division = (int) Math.floor(  (bearing + halfAnglePerDivision + mOrientationOffset) / anglePerDivision) % nDivisions;
+		// Only apply orientation offset when compass sensor is active
+		// When compass is disabled, North should always point to top of screen
+		double effectiveOrientationOffset = mUsingCompass ? mOrientationOffset : 0.0;
+		int division = (int) Math.floor(  (bearing + halfAnglePerDivision + effectiveOrientationOffset) / anglePerDivision) % nDivisions;
 		if (division < 0) {division += nDivisions;}
 		int arrowResource = R.drawable.arrow_00_n + division;
-		Log.d("NearestCursorAdapter", String.format("getArrow: bearing=%.1f°, division=%d, resource=%d", bearing, division, arrowResource));
+		Log.d("NearestCursorAdapter", String.format("getArrow: bearing=%.1f°, orientationOffset=%.1f°, effectiveOffset=%.1f°, division=%d, resource=%d", 
+			bearing, mOrientationOffset, effectiveOrientationOffset, division, arrowResource));
 		return arrowResource;
 	}	
 	
@@ -169,6 +174,10 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 
 	public void setHeading (double heading) {
 		mHeading = heading;		
+	}
+	
+	public void setUsingCompass(boolean usingCompass) {
+		mUsingCompass = usingCompass;
 	}
 	public void setOrientation (int orientation) {
 		switch (orientation) {
