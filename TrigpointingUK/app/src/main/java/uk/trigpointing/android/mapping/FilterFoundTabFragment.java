@@ -1,7 +1,12 @@
 package uk.trigpointing.android.mapping;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +23,7 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
 
     private RadioGroup filterFoundRadioGroup;
     private SharedPreferences prefs;
+    private BroadcastReceiver filterChangeReceiver;
 
     @Nullable
     @Override
@@ -51,6 +57,24 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
         if (prefs != null) {
             prefs.registerOnSharedPreferenceChangeListener(this);
         }
+        
+        // Set up broadcast receiver for filter changes
+        filterChangeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String filterValue = intent.getStringExtra("filter_value");
+                android.util.Log.d("FilterFoundTabFragment", "Received broadcast: filter_value=" + filterValue);
+                loadCurrentSelection();
+            }
+        };
+        
+        if (getActivity() != null) {
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
+                filterChangeReceiver, 
+                new IntentFilter("FILTER_FOUND_CHANGED")
+            );
+        }
+        
         // Reload filter state when returning to this fragment (e.g., after changing filter on nearest page)
         loadCurrentSelection();
     }
@@ -62,18 +86,26 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
         if (prefs != null) {
             prefs.unregisterOnSharedPreferenceChangeListener(this);
         }
+        
+        // Unregister broadcast receiver
+        if (filterChangeReceiver != null && getActivity() != null) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(filterChangeReceiver);
+        }
     }
 
     private void loadCurrentSelection() {
         if (getActivity() == null || filterFoundRadioGroup == null || prefs == null) return;
         
         String currentFound = prefs.getString("leaflet_filter_found", "all");
+        android.util.Log.d("FilterFoundTabFragment", "loadCurrentSelection: currentFound=" + currentFound);
         
         int radioId = getRadioIdFromFound(currentFound);
+        android.util.Log.d("FilterFoundTabFragment", "loadCurrentSelection: radioId=" + radioId);
         if (radioId != -1) {
             // Temporarily disable listener to avoid triggering change events during programmatic update
             filterFoundRadioGroup.setOnCheckedChangeListener(null);
             filterFoundRadioGroup.check(radioId);
+            android.util.Log.d("FilterFoundTabFragment", "loadCurrentSelection: checked radio " + radioId);
             // Re-enable listener
             filterFoundRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 String selectedFound = getFoundFromRadioId(checkedId);
@@ -156,8 +188,10 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        android.util.Log.d("FilterFoundTabFragment", "onSharedPreferenceChanged: key=" + key);
         // Listen for changes to the leaflet_filter_found preference
         if ("leaflet_filter_found".equals(key)) {
+            android.util.Log.d("FilterFoundTabFragment", "Detected leaflet_filter_found change, reloading selection");
             // Reload the filter selection when preferences change
             loadCurrentSelection();
         }

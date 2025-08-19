@@ -1,8 +1,10 @@
 package uk.trigpointing.android.filter;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
@@ -114,6 +116,12 @@ public class FilterFoundActivity extends BaseActivity {
     
         // Save to prefs
         editor.apply();
+        
+        // Broadcast the filter change to notify other components
+        Intent filterChangeIntent = new Intent("FILTER_FOUND_CHANGED");
+        filterChangeIntent.putExtra("filter_value", leafletFilterValue);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(filterChangeIntent);
+        Log.i(TAG, "saveFilterState: Broadcasted filter change: " + leafletFilterValue);
     }
 
     @Override
