@@ -332,14 +332,6 @@
       addTileErrorHandling(layer, 'ESRI.WorldImagery');
       return layer;
     }
-    function createOSOutdoor() {
-      const layer = L.tileLayer(`https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png?key=${osKey}`, {
-        attribution: '&copy; Ordnance Survey',
-        noWrap: true
-      });
-      addTileErrorHandling(layer, 'OS Outdoor (3857)', 6, 19);
-      return layer;
-    }
     function createOSLeisure() {
       const layer = L.tileLayer(
         `https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png?key=${osKey}`,
@@ -407,12 +399,11 @@
     // layersControl removed - using custom control instead
     
     // Layer instances
-    let osmLayer, esriLayer, outdoorLayer, leisureLayer, outdoor27700Layer;
+    let osmLayer, esriLayer, leisureLayer, outdoor27700Layer;
 
     function initialiseLayers() {
       osmLayer = createOSM();
       esriLayer = createESRIWorldImagery();
-      outdoorLayer = createOSOutdoor();
       leisureLayer = createOSLeisure();
       outdoor27700Layer = createOSOutdoor27700();
     }
@@ -705,10 +696,6 @@
                   <label for="js-esri">ESRI Satellite</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="mapstyle" value="OS Outdoor (3857)" id="js-outdoor3857">
-                  <label for="js-outdoor3857">OS Outdoor (3857)</label>
-                </div>
-                <div class="control-option">
                   <input type="radio" name="mapstyle" value="OS Outdoor (27700)" id="js-outdoor27700">
                   <label for="js-outdoor27700">OS Outdoor (27700)</label>
                 </div>
@@ -975,8 +962,6 @@
         map.removeLayer(osmLayer);
       } else if (currentLayerName === 'ESRI.WorldImagery' && map.hasLayer(esriLayer)) {
         map.removeLayer(esriLayer);
-      } else if (currentLayerName === 'OS Outdoor (3857)' && map.hasLayer(outdoorLayer)) {
-        map.removeLayer(outdoorLayer);
       } else if (currentLayerName === 'OS Outdoor (27700)' && map.hasLayer(outdoor27700Layer)) {
         map.removeLayer(outdoor27700Layer);
       } else if (currentLayerName === 'OS Leisure (27700)' && map.hasLayer(leisureLayer)) {
@@ -988,8 +973,6 @@
         osmLayer.addTo(map);
       } else if (layerName === 'ESRI.WorldImagery') {
         esriLayer.addTo(map);
-      } else if (layerName === 'OS Outdoor (3857)') {
-        outdoorLayer.addTo(map);
       } else if (layerName === 'OS Outdoor (27700)') {
         outdoor27700Layer.addTo(map);
       } else if (layerName === 'OS Leisure (27700)') {
