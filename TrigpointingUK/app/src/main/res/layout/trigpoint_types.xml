@@ -95,7 +95,7 @@
                 android:id="@+id/radio_status_all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All"
+                android:text="Logged or not"
                 android:padding="8dp" />
 
             <RadioButton
