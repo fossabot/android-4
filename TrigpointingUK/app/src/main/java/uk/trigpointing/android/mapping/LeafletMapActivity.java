@@ -302,9 +302,6 @@ public class LeafletMapActivity extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else if (item.getItemId() == R.id.menu_map_controls) {
-            showMapControlsBottomSheet();
-            return true;
         } else if (item.getItemId() == R.id.menu_cache_status) {
             showCacheStatus();
             return true;
@@ -320,36 +317,7 @@ public class LeafletMapActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showMapControlsBottomSheet() {
-        BottomSheetDialog bottomSheet = new BottomSheetDialog(this);
-        android.view.View view = getLayoutInflater().inflate(R.layout.leaflet_map_controls_bottom_sheet, null);
-        
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
-        
-        MapControlsTabAdapter adapter = new MapControlsTabAdapter(this);
-        viewPager.setAdapter(adapter);
-        
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            switch (position) {
-                case 0:
-                    tab.setText("Map Style");
-                    break;
-                case 1:
-                    tab.setText("Markers");
-                    break;
-                case 2:
-                    tab.setText("Trigpoint types");
-                    break;
-                case 3:
-                    tab.setText("Filter found");
-                    break;
-            }
-        }).attach();
-        
-        bottomSheet.setContentView(view);
-        bottomSheet.show();
-    }
+
 
     // Callback methods for tab fragments
     public void updateMapStyle(String style) {
