@@ -5,6 +5,7 @@
     <!-- Leaflet map styles for preferences -->
     <string-array name="leaflet_map_styles">
         <item>OpenStreetMap</item>
+        <item>ESRI Satellite</item>
         <item>OS Outdoor (3857)</item>
         <item>OS Outdoor (27700)</item>
         <item>OS Leisure (27700)</item>
@@ -12,6 +13,7 @@
 
     <string-array name="leaflet_map_style_values">
         <item>OpenStreetMap</item>
+        <item>ESRI.WorldImagery</item>
         <item>OS Outdoor (3857)</item>
         <item>OS Outdoor (27700)</item>
         <item>OS Leisure (27700)</item>
