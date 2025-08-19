@@ -290,10 +290,29 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	}
 
 	private void updateFilterHeader() {
-		// Filter icons removed - filter selection now available via context menu
-
-		mStrFilter.setText(mPrefs.getString(Filter.FILTERRADIOTEXT, "All") + " trigpoints");
-
+		// Get trigpoint type text
+		int filterType = mPrefs.getInt(Filter.FILTERTYPE, 0);
+		String typeText = getTypeTextFromIndex(filterType);
+		
+		// Get logging status text
+		String statusText = mPrefs.getString(Filter.FILTERRADIOTEXT, "All");
+		
+		// Create two-line display
+		String headerText = typeText + "\n" + statusText;
+		mStrFilter.setText(headerText);
+	}
+	
+	private String getTypeTextFromIndex(int filterType) {
+		switch (filterType) {
+			case 0: return "Pillars Only";
+			case 1: return "Pillars + FBM";
+			case 2: return "FBM Only";
+			case 3: return "Passive Stations";
+			case 4: return "Intersected Stations";
+			case 5: return "All except Intersected";
+			case 6: return "All Types";
+			default: return "All Types";
+		}
 	}
 	
 	@Override
@@ -311,10 +330,6 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		if (itemId == android.R.id.home) {
 			// Handle back button in action bar
 			finish();
-			return true;
-		} else if (itemId == R.id.filter_found) {
-			Intent i = new Intent(NearestActivity.this, uk.trigpointing.android.filter.FilterFoundActivity.class);
-			detailsLauncher.launch(i);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

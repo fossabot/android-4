@@ -16,7 +16,9 @@ public class TrigpointTypesActivity extends BaseActivity {
     private static final String TAG = "TrigpointTypesActivity";
     private SharedPreferences mPrefs;
     private RadioGroup mFilterTypeRadioGroup;
-    private RadioButton[] mRadioButtons;
+    private RadioGroup mFilterStatusRadioGroup;
+    private RadioButton[] mTypeRadioButtons;
+    private RadioButton[] mStatusRadioButtons;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,8 @@ public class TrigpointTypesActivity extends BaseActivity {
         setContentView(R.layout.trigpoint_types);
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mFilterTypeRadioGroup = findViewById(R.id.filterTypeRadioGroup);  
+        mFilterTypeRadioGroup = findViewById(R.id.filterTypeRadioGroup);
+        mFilterStatusRadioGroup = findViewById(R.id.filterStatusRadioGroup);  
 
         // Enable back button in action bar
         if (getSupportActionBar() != null) {
@@ -42,8 +45,8 @@ public class TrigpointTypesActivity extends BaseActivity {
     }
 
     private void setupRadioButtons() {
-        // Initialize array of radio buttons
-        mRadioButtons = new RadioButton[] {
+        // Initialize array of type radio buttons
+        mTypeRadioButtons = new RadioButton[] {
             findViewById(R.id.radio_pillars_only),
             findViewById(R.id.radio_pillars_fbm),
             findViewById(R.id.radio_fbm_only),
@@ -53,26 +56,56 @@ public class TrigpointTypesActivity extends BaseActivity {
             findViewById(R.id.radio_all_types)
         };
         
-        Log.i(TAG, "setupRadioButtons: Initialized " + mRadioButtons.length + " radio buttons");
+        // Initialize array of status radio buttons
+        mStatusRadioButtons = new RadioButton[] {
+            findViewById(R.id.radio_status_all),
+            findViewById(R.id.radio_status_logged),
+            findViewById(R.id.radio_status_not_logged)
+        };
+        
+        Log.i(TAG, "setupRadioButtons: Initialized " + mTypeRadioButtons.length + " type radio buttons and " + mStatusRadioButtons.length + " status radio buttons");
     }
 
     private void loadCurrentSelection() {
+        // Load trigpoint type selection
         int currentType = mPrefs.getInt(Filter.FILTERTYPE, 0);
         
         // Ensure currentType is within bounds
-        if (currentType >= 0 && currentType < mRadioButtons.length) {
-            mRadioButtons[currentType].setChecked(true);
+        if (currentType >= 0 && currentType < mTypeRadioButtons.length) {
+            mTypeRadioButtons[currentType].setChecked(true);
         } else {
             // Default to "All Types" if invalid selection
-            mRadioButtons[6].setChecked(true);
+            mTypeRadioButtons[6].setChecked(true);
         }
         
-        Log.i(TAG, "Loaded filter type: " + currentType);
+        // Load logging status selection
+        int currentStatus = mPrefs.getInt(Filter.FILTERRADIO, 0);
+        
+        // Ensure currentStatus is within bounds (0=All, 1=Logged, 2=Not Logged)
+        if (currentStatus >= 0 && currentStatus < mStatusRadioButtons.length) {
+            mStatusRadioButtons[currentStatus].setChecked(true);
+        } else {
+            // Default to "All" if invalid selection
+            mStatusRadioButtons[0].setChecked(true);
+        }
+        
+        Log.i(TAG, "Loaded filter type: " + currentType + ", filter status: " + currentStatus);
     }
     
     private void setupAutoClose() {
+        // Set up listeners for both radio groups
         mFilterTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            Log.i(TAG, "Radio button selection changed, saving and closing");
+            Log.i(TAG, "Trigpoint type selection changed, saving and closing");
+            
+            // Save the selection immediately
+            saveCurrentSelection();
+            
+            // Close the activity
+            finish();
+        });
+        
+        mFilterStatusRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            Log.i(TAG, "Filter status selection changed, saving and closing");
             
             // Save the selection immediately
             saveCurrentSelection();
@@ -85,17 +118,33 @@ public class TrigpointTypesActivity extends BaseActivity {
     private void saveCurrentSelection() {
         Editor editor = mPrefs.edit();
         
-        // Find which radio button is selected
+        // Find which trigpoint type radio button is selected
         int filterType = 0; // default
-        for (int i = 0; i < mRadioButtons.length; i++) {
-            if (mRadioButtons[i].isChecked()) {
+        for (int i = 0; i < mTypeRadioButtons.length; i++) {
+            if (mTypeRadioButtons[i].isChecked()) {
                 filterType = i;
                 break;
             }
         }
         
+        // Find which status radio button is selected
+        int filterStatus = 0; // default (All)
+        for (int i = 0; i < mStatusRadioButtons.length; i++) {
+            if (mStatusRadioButtons[i].isChecked()) {
+                filterStatus = i;
+                break;
+            }
+        }
+        
         editor.putInt(Filter.FILTERTYPE, filterType);
-        Log.i(TAG, "saveCurrentSelection: Saving filter type: " + filterType);
+        editor.putInt(Filter.FILTERRADIO, filterStatus);
+        
+        // Update the text values for display
+        String typeText = mTypeRadioButtons[filterType].getText().toString();
+        String statusText = mStatusRadioButtons[filterStatus].getText().toString();
+        editor.putString(Filter.FILTERRADIOTEXT, statusText); // Keep for compatibility
+        
+        Log.i(TAG, "saveCurrentSelection: Saving filter type: " + filterType + " (" + typeText + "), filter status: " + filterStatus + " (" + statusText + ")");
     
         // Save to prefs
         editor.apply();

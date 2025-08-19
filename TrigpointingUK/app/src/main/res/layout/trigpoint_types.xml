@@ -9,18 +9,21 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Trigpoint Types Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Select trigpoint types to display:"
             android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
 
         <RadioGroup
             android:id="@+id/filterTypeRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
 
             <RadioButton
                 android:id="@+id/radio_pillars_only"
@@ -69,6 +72,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="All Types"
+                android:padding="8dp" />
+
+        </RadioGroup>
+
+        <!-- Logging Status Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Filter by logging status:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <RadioGroup
+            android:id="@+id/filterStatusRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_status_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_status_logged"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logged"
+                android:padding="8dp" />
+
+            <RadioButton
+                android:id="@+id/radio_status_not_logged"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Not Logged"
                 android:padding="8dp" />
 
         </RadioGroup>
