@@ -5,6 +5,15 @@
     android:orientation="vertical"
     android:padding="24dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please enter your Trigpointing.UK website credentials. It is not currently possible to create an account using this app, only on the website."
+        android:textSize="12sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:layout_marginBottom="16dp"
+        android:lineSpacingMultiplier="1.2" />
+
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
