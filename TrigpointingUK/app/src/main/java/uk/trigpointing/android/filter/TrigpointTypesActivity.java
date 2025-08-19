@@ -146,10 +146,28 @@ public class TrigpointTypesActivity extends BaseActivity {
         String statusText = mStatusRadioButtons[filterStatus].getText().toString();
         editor.putString(Filter.FILTERRADIOTEXT, statusText); // Keep for compatibility
         
-        Log.i(TAG, "saveCurrentSelection: Saving filter type: " + filterType + " (" + typeText + "), filter status: " + filterStatus + " (" + statusText + ")");
+        // Update leaflet_filter_found for map screen synchronization
+        String leafletFilterValue = convertToLeafletFilterValue(filterStatus);
+        editor.putString("leaflet_filter_found", leafletFilterValue);
+        
+        Log.i(TAG, "saveCurrentSelection: Saving filter type: " + filterType + " (" + typeText + "), filter status: " + filterStatus + " (" + statusText + "), leaflet_filter_found: " + leafletFilterValue);
     
         // Save to prefs
         editor.apply();
+    }
+    
+    /**
+     * Convert the filter status values to LeafletMap filter values for synchronization
+     */
+    private String convertToLeafletFilterValue(int filterStatus) {
+        switch (filterStatus) {
+            case 0: return "all";       // Logged or not
+            case 1: return "logged";    // Logged  
+            case 2: return "notlogged"; // Not Logged
+            case 3: return "marked";    // Marked
+            case 4: return "unsynced";  // Unsynced
+            default: return "all";
+        }
     }
 
     @Override
