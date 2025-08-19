@@ -13,6 +13,7 @@ import uk.trigpointing.android.common.BaseActivity;
 import uk.trigpointing.android.logging.LogTrigActivity;
 import uk.trigpointing.android.DbHelper;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.activity.OnBackPressedCallback;
 import android.widget.Toast;
 import android.database.Cursor;
 
@@ -58,6 +59,15 @@ public class TrigDetailsActivity extends BaseActivity {
             
             android.util.Log.d(TAG, "Setting up tabs with trig ID: " + ensuredTrigId);
             setupTabs(extras, savedInstanceState);
+            
+            // Set up modern back navigation using OnBackPressedDispatcher
+            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    finish();
+                }
+            });
+            
             android.util.Log.d(TAG, "onCreate completed successfully");
         } catch (Exception e) {
             android.util.Log.e(TAG, "Error in onCreate: " + e.getMessage(), e);
@@ -646,11 +656,7 @@ public class TrigDetailsActivity extends BaseActivity {
         return new double[]{lat, lon};
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
+
 
     /**
      * Safely loads a drawable resource, returning null if it fails
