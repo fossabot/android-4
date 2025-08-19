@@ -5,12 +5,14 @@
         <CheckBoxPreference
             android:key="auto_sync"
             android:title="Auto Sync"
-            android:summary="Automatically sync when connected" />
+            android:summary="Automatically sync when connected"
+            android:defaultValue="true" />
         
         <CheckBoxPreference
             android:key="sync_photos"
             android:title="Sync Photos"
-            android:summary="Include photos in sync" />
+            android:summary="Include photos in sync"
+            android:defaultValue="true" />
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Map Settings">
@@ -52,14 +54,6 @@
             android:entries="@array/trigpoint_type_names"
             android:entryValues="@array/trigpoint_type_values"
             android:defaultValue="6" />
-
-        <ListPreference
-            android:key="filter_found_status"
-            android:title="Filter Found"
-            android:summary="Filter by logging status"
-            android:entries="@array/filter_found_names"
-            android:entryValues="@array/filter_found_values"
-            android:defaultValue="0" />
     </PreferenceCategory>
 
     <PreferenceCategory
