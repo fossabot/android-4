@@ -74,12 +74,51 @@ public class FilterFoundTabFragment extends Fragment {
         if (getActivity() == null) return;
         
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        prefs.edit().putString("leaflet_filter_found", found).apply();
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("leaflet_filter_found", found);
+        
+        // Also update the Filter.FILTERRADIO values for synchronization with nearest page
+        int filterRadio = convertToFilterRadioValue(found);
+        editor.putInt("filterRadio", filterRadio);
+        
+        // Update filter text for display purposes
+        String filterText = getFilterTextFromFound(found);
+        editor.putString("filterRadioText", filterText);
+        
+        editor.apply();
     }
 
     private void notifyLeafletMap(String found) {
         if (getActivity() instanceof LeafletMapActivity) {
             ((LeafletMapActivity) getActivity()).updateFilterFound(found);
+        }
+    }
+    
+    /**
+     * Convert leaflet filter values to FilterFoundActivity radio values for synchronization
+     */
+    private int convertToFilterRadioValue(String found) {
+        switch (found) {
+            case "all": return 0;      // filterAll
+            case "logged": return 1;   // filterLogged
+            case "notlogged": return 2; // filterNotLogged
+            case "marked": return 3;   // filterMarked
+            case "unsynced": return 4; // filterUnsynced
+            default: return 0;
+        }
+    }
+    
+    /**
+     * Get display text for filter option
+     */
+    private String getFilterTextFromFound(String found) {
+        switch (found) {
+            case "all": return "All";
+            case "logged": return "Logged";
+            case "notlogged": return "Not Logged";
+            case "marked": return "Marked";
+            case "unsynced": return "Unsynced";
+            default: return "All";
         }
     }
 }

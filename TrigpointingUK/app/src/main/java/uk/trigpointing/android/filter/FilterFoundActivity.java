@@ -84,6 +84,11 @@ public class FilterFoundActivity extends BaseActivity {
             editor.putString(Filter.FILTERRADIOTEXT, radioText);
             Log.i(TAG, "onPause: Saving filter radio text: '" + radioText + "'");
         }
+        
+        // Also update the leaflet map filter preference for synchronization
+        String leafletFilterValue = convertToLeafletFilterValue(filterRadio);
+        editor.putString("leaflet_filter_found", leafletFilterValue);
+        Log.i(TAG, "onPause: Syncing with leaflet filter: " + leafletFilterValue);
     
         // Save to prefs
         editor.apply();
@@ -98,5 +103,19 @@ public class FilterFoundActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    /**
+     * Convert the FilterFoundActivity radio values to LeafletMap filter values for synchronization
+     */
+    private String convertToLeafletFilterValue(int filterRadio) {
+        switch (filterRadio) {
+            case 0: return "all";      // filterAll
+            case 1: return "logged";   // filterLogged  
+            case 2: return "notlogged"; // filterNotLogged
+            case 3: return "marked";   // filterMarked
+            case 4: return "unsynced"; // filterUnsynced
+            default: return "all";
+        }
     }
 }
