@@ -296,7 +296,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("username", user);
-            editor.putString("password", pass);
+            editor.putString("plaintextpassword", pass);
             editor.apply();
 
             updateUserDisplay();
@@ -312,7 +312,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove("username");
-        editor.remove("password");
+        editor.remove("plaintextpassword");
         editor.apply();
 
         DbHelper dbHelper = new DbHelper(this);
