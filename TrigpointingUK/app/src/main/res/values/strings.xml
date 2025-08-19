@@ -48,8 +48,7 @@
     <string name="syncToTUK">Syncing to TUK...</string>
     <string name="syncPhotosToTUK">Syncing photos to TUK...</string>
     <string name="syncLogsFromTUK">Syncing logs from TUK...</string>
-    <string name="toastAddUsername">Please add username in preferences</string>
-    <string name="toastAddPassword">Please add password in preferences</string>
+    <string name="toastPleaseLogin">Please login for a more personalised experience</string>
     
     <!-- Filter related strings -->
     <string name="filterAll">All</string>

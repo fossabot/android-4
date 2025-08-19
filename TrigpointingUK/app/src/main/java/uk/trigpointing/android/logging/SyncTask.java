@@ -168,23 +168,14 @@ public class SyncTask implements ProgressListener {
 		
 		// Check that we have a username and password, so that we can sync existing logs
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
-		if (mPrefs.getString("username", "").equals("")) {
-			Log.i(TAG, "execute: No username found, calling onSynced with ERROR status");
+		String username = mPrefs.getString("username", "");
+		String password = mPrefs.getString("plaintextpassword", "");
+		
+		if (username.trim().isEmpty() || password.trim().isEmpty()) {
+			Log.i(TAG, "execute: Missing credentials, calling onSynced with ERROR status");
 			// Only show toast if this isn't an automatic sync after download
 			if (!mIsAutoSyncAfterDownload) {
-				Toast.makeText(mCtx, R.string.toastAddUsername, Toast.LENGTH_LONG).show();
-			}
-			// Always call onSynced callback, even when credentials are missing
-			if (mSyncListener != null) {
-				mSyncListener.onSynced(ERROR);
-			}
-			return;
-		} 
-		if (mPrefs.getString("plaintextpassword", "").equals("")) {
-			Log.i(TAG, "execute: No password found, calling onSynced with ERROR status");
-			// Only show toast if this isn't an automatic sync after download
-			if (!mIsAutoSyncAfterDownload) {
-				Toast.makeText(mCtx, R.string.toastAddPassword, Toast.LENGTH_LONG).show();
+				Toast.makeText(mCtx, R.string.toastPleaseLogin, Toast.LENGTH_LONG).show();
 			}
 			// Always call onSynced callback, even when credentials are missing
 			if (mSyncListener != null) {
@@ -213,8 +204,7 @@ public class SyncTask implements ProgressListener {
 				// Get details from Prefs
 				mUsername = mPrefs.getString("username", "");
 				mPassword = mPrefs.getString("plaintextpassword", "");
-				if (mUsername.equals("")) {return ERROR;}
-				if (mPassword.equals("")) {return ERROR;}
+				// Credentials already validated at the beginning of execute()
 
 				if (ERROR == sendLogsToTUK(trigId)) {
 					return ERROR;

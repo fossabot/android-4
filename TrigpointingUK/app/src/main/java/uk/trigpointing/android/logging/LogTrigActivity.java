@@ -885,14 +885,14 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	
     	// check for login credentials in prefs
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if (prefs.getString("username", "").equals("")) {
-			Toast.makeText(this, R.string.toastAddUsername, Toast.LENGTH_LONG).show();
+		String username = prefs.getString("username", "");
+		String password = prefs.getString("plaintextpassword", "");
+		
+		if (username.trim().isEmpty() || password.trim().isEmpty()) {
+			Toast.makeText(this, R.string.toastPleaseLogin, Toast.LENGTH_LONG).show();
 			return;
-		} 
-		if (prefs.getString("plaintextpassword", "").equals("")) {
-			Toast.makeText(this, R.string.toastAddPassword, Toast.LENGTH_LONG).show();
-			return;
-		} 
+		}
+		
 		saveLog();
 		new SyncTask(LogTrigActivity.this, this).execute(false, mTrigId);
     }
