@@ -347,7 +347,7 @@
           maxZoom: 13
         }
       );
-      addTileErrorHandling(layer, 'OS Leisure (27700)', 0, 13);
+      addTileErrorHandling(layer, 'OS Leisure', 0, 13);
       return layer;
     }
     function createOSOutdoor3857() {
@@ -359,23 +359,7 @@
           maxZoom: 18
         }
       );
-      addTileErrorHandling(layer, 'OS Outdoor (3857)', 0, 18);
-      return layer;
-    }
-    
-    function createOSOutdoor27700() {
-      const layer = L.tileLayer(
-        `https://api.os.uk/maps/raster/v1/zxy/Outdoor_27700/{z}/{x}/{y}.png?key=${osKey}`,
-        {
-          tileSize: 256,
-          noWrap: true,
-          continuousWorld: false,
-          attribution: '&copy; Ordnance Survey',
-          minZoom: 0,
-          maxZoom: 13
-        }
-      );
-      addTileErrorHandling(layer, 'OS Outdoor (27700)', 0, 13);
+      addTileErrorHandling(layer, 'OS Outdoor', 0, 18);
       return layer;
     }
 
@@ -419,14 +403,13 @@
     // layersControl removed - using custom control instead
     
     // Layer instances
-    let osmLayer, esriLayer, leisureLayer, outdoorLayer, outdoor27700Layer;
+    let osmLayer, esriLayer, leisureLayer, outdoorLayer;
 
     function initialiseLayers() {
       osmLayer = createOSM();
       esriLayer = createESRIWorldImagery();
       leisureLayer = createOSLeisure();
       outdoorLayer = createOSOutdoor3857();
-      outdoor27700Layer = createOSOutdoor27700();
     }
 
     function initialiseMap() {
@@ -436,13 +419,10 @@
       let initialLayer = osmLayer;
       let initialCRS = L.CRS.EPSG3857;
       
-      if (initialStyle === 'OS Outdoor (3857)') {
+      if (initialStyle === 'OS Outdoor') {
         initialLayer = outdoorLayer;
         initialCRS = L.CRS.EPSG3857;
-      } else if (initialStyle === 'OS Outdoor (27700)') {
-        initialLayer = outdoor27700Layer;
-        initialCRS = osgb;
-      } else if (initialStyle === 'OS Leisure (27700)') {
+      } else if (initialStyle === 'OS Leisure') {
         initialLayer = leisureLayer;
         initialCRS = osgb;
       }
@@ -578,11 +558,9 @@
       }).addTo(map);
       
       // Add the correct layer based on user selection
-      if (targetLayerName === 'OS Leisure (27700)') {
+      if (targetLayerName === 'OS Leisure') {
         leisureLayer.addTo(map);
-      } else if (targetLayerName === 'OS Outdoor (27700)') {
-        outdoor27700Layer.addTo(map);
-      } else if (targetLayerName === 'OS Outdoor (3857)') {
+      } else if (targetLayerName === 'OS Outdoor') {
         outdoorLayer.addTo(map);
       } else if (targetLayerName === 'ESRI.WorldImagery') {
         esriLayer.addTo(map);
@@ -719,16 +697,12 @@
                   <label for="js-esri">Satellite</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="mapstyle" value="OS Outdoor (3857)" id="js-outdoor3857">
-                  <label for="js-outdoor3857">OS Digital (Web Mercator)</label>
+                  <input type="radio" name="mapstyle" value="OS Outdoor" id="js-outdoor">
+                  <label for="js-outdoor">OS Digital</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="mapstyle" value="OS Outdoor (27700)" id="js-outdoor27700">
-                  <label for="js-outdoor27700">OS Digital (British Grid)</label>
-                </div>
-                <div class="control-option">
-                  <input type="radio" name="mapstyle" value="OS Leisure (27700)" id="js-leisure27700">
-                  <label for="js-leisure27700">OS Paper</label>
+                  <input type="radio" name="mapstyle" value="OS Leisure" id="js-leisure">
+                  <label for="js-leisure">OS Paper</label>
                 </div>
               </div>
             </div>
@@ -973,7 +947,7 @@
     function switchMapToLayer(layerName) {
       // Check if we need CRS switch
       const currentIs27700 = (currentCRS === '27700');
-      const targetIs27700 = (layerName === 'OS Leisure (27700)' || layerName === 'OS Outdoor (27700)');
+      const targetIs27700 = (layerName === 'OS Leisure');
       
       if (currentIs27700 !== targetIs27700) {
         // Need CRS switch - use existing mechanism
@@ -989,11 +963,9 @@
         map.removeLayer(osmLayer);
       } else if (currentLayerName === 'ESRI.WorldImagery' && map.hasLayer(esriLayer)) {
         map.removeLayer(esriLayer);
-      } else if (currentLayerName === 'OS Outdoor (3857)' && map.hasLayer(outdoorLayer)) {
+      } else if (currentLayerName === 'OS Outdoor' && map.hasLayer(outdoorLayer)) {
         map.removeLayer(outdoorLayer);
-      } else if (currentLayerName === 'OS Outdoor (27700)' && map.hasLayer(outdoor27700Layer)) {
-        map.removeLayer(outdoor27700Layer);
-      } else if (currentLayerName === 'OS Leisure (27700)' && map.hasLayer(leisureLayer)) {
+      } else if (currentLayerName === 'OS Leisure' && map.hasLayer(leisureLayer)) {
         map.removeLayer(leisureLayer);
       }
       
@@ -1002,11 +974,9 @@
         osmLayer.addTo(map);
       } else if (layerName === 'ESRI.WorldImagery') {
         esriLayer.addTo(map);
-      } else if (layerName === 'OS Outdoor (3857)') {
+      } else if (layerName === 'OS Outdoor') {
         outdoorLayer.addTo(map);
-      } else if (layerName === 'OS Outdoor (27700)') {
-        outdoor27700Layer.addTo(map);
-      } else if (layerName === 'OS Leisure (27700)') {
+      } else if (layerName === 'OS Leisure') {
         leisureLayer.addTo(map);
       }
       

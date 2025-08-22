@@ -17,25 +17,6 @@
         <item>OS Leisure (27700)</item>
     </string-array>
 
-    <!-- Download maps arrays -->
-    <string-array name="downloadMapsArrayValues">
-        <item>https://example.com/osm_tiles.zip</item>
-        <item>https://example.com/osm_tiles_low.zip</item>
-        <item>https://example.com/osm_tiles_high.zip</item>
-    </string-array>
-    
-    <string-array name="downloadMapsArrayNames">
-        <item>OSM Tiles Complete (All Zoom Levels)</item>
-        <item>OSM Tiles Low Detail (Zoom 0-8)</item>
-        <item>OSM Tiles High Detail (Zoom 9-12)</item>
-    </string-array>
-
-    <integer-array name="downloadMapsArrayTiles">
-        <item>1398101</item>
-        <item>87381</item>
-        <item>1310720</item>
-    </integer-array>
-
     <!-- Trigpoint type filter arrays -->
     <string-array name="trigpoint_type_names">
         <item>Pillars Only</item>
