@@ -16,8 +16,8 @@ android {
         applicationId "uk.trigpointing.android"
         minSdk = 27
         targetSdk = 36
-        versionCode 23
-        versionName "2.0.12"
+        versionCode 24
+        versionName "2.0.13"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
@@ -42,6 +42,7 @@ android {
     
     lint {
         disable 'MissingTranslation'
+        baseline = file("lint-baseline.xml")
     }
     
     // Make source sets explicit so IDEs reliably detect classpath
@@ -95,6 +96,7 @@ dependencies {
 
     // Images
     implementation 'io.coil-kt:coil-compose:2.7.0'
+    implementation 'io.coil-kt:coil:2.7.0'
     implementation 'androidx.exifinterface:exifinterface:1.4.1'
 
     // WorkManager for background uploads
@@ -116,6 +118,9 @@ dependencies {
     
     // HTTP client
     implementation 'com.squareup.okhttp3:okhttp:5.1.0'
+    
+    // JSON parsing
+    implementation 'com.google.code.gson:gson:2.11.0'
     
     // Logging - replacing slf4j-android-1.6.1-RC1.jar
     implementation 'org.slf4j:slf4j-android:1.7.36'

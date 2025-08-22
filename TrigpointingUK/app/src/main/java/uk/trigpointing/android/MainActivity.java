@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,12 @@ import uk.trigpointing.android.nearest.NearestActivity;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import uk.trigpointing.android.api.AuthApiClient;
+import uk.trigpointing.android.api.AuthPreferences;
+import uk.trigpointing.android.api.User;
+import coil.Coil;
+import coil.ImageLoader;
+import coil.request.ImageRequest;
 
 public class MainActivity extends BaseActivity implements SyncListener {
     public static final String 	TAG ="MainActivity";
@@ -61,6 +68,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
     private TextView			mPhotosCount;
     private Button				mSyncBtn;
     private TextView			mUserName;
+    private ImageView			mUserMapImage;
+    
+    // API authentication components
+    private AuthApiClient authApiClient;
+    private AuthPreferences authPreferences;
     
     // Modern activity result launchers
     private ActivityResultLauncher<Intent> nearestLauncher;
@@ -89,9 +101,14 @@ public class MainActivity extends BaseActivity implements SyncListener {
         mPhotosCount = findViewById(R.id.countPhotosText);
         mSyncBtn = findViewById(R.id.btnSync);
         mUserName = findViewById(R.id.txtUserName);
+        mUserMapImage = findViewById(R.id.userMapImage);
         
         Log.i(TAG, "onCreate: Setting up preferences");
         mPrefs = getSharedPreferences("TrigpointingUK", MODE_PRIVATE);
+        
+        // Initialize API authentication components
+        authApiClient = new AuthApiClient();
+        authPreferences = new AuthPreferences(this);
         
         // Reset auto sync flag on app startup
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -225,7 +242,9 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean devMode = prefs.getBoolean("dev_mode", false);
-        boolean loggedIn = !prefs.getString("username", "").isEmpty();
+        
+        // Check both API authentication and legacy authentication
+        boolean loggedIn = authPreferences.isLoggedIn() || !prefs.getString("username", "").isEmpty();
 
         // These items are always visible, so no changes needed for them.
         // menu.findItem(R.id.action_settings).setVisible(true);
@@ -280,6 +299,10 @@ public class MainActivity extends BaseActivity implements SyncListener {
     }
 
     private void showLoginDialog() {
+        showLoginDialog(null);
+    }
+
+    private void showLoginDialog(String errorMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Login");
 
@@ -289,32 +312,116 @@ public class MainActivity extends BaseActivity implements SyncListener {
         final EditText username = view.findViewById(R.id.username);
         final EditText password = view.findViewById(R.id.password);
 
-        builder.setPositiveButton("Login", (dialog, which) -> {
-            String user = username.getText().toString();
-            String pass = password.getText().toString();
+        // If there's an error message, add it to the dialog
+        if (errorMessage != null && !errorMessage.isEmpty()) {
+            TextView errorText = new TextView(this);
+            errorText.setText(errorMessage);
+            errorText.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+            errorText.setPadding(24, 8, 24, 16);
+            
+            // Create a new container to include the error message
+            LinearLayout container = new LinearLayout(this);
+            container.setOrientation(LinearLayout.VERTICAL);
+            container.addView(errorText);
+            container.addView(view);
+            builder.setView(container);
+        }
 
+        builder.setPositiveButton("Login", null); // Set to null initially
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Clear any stored authentication data on cancel
+            authPreferences.clearAuthData();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("username", user);
-            editor.putString("plaintextpassword", pass);
+            editor.remove("username");
+            editor.remove("plaintextpassword");
             editor.apply();
-
+            
             updateUserDisplay();
             invalidateOptionsMenu();
-            doSync();
+            dialog.cancel();
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
-        builder.show();
+        AlertDialog dialog = builder.create();
+        
+        // Override the positive button to handle authentication
+        dialog.setOnShowListener(dialogInterface -> {
+            Button loginButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            loginButton.setOnClickListener(v -> {
+                String user = username.getText().toString().trim();
+                String pass = password.getText().toString().trim();
+
+                if (user.isEmpty() || pass.isEmpty()) {
+                    Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Disable the login button and show progress
+                loginButton.setEnabled(false);
+                loginButton.setText("Logging in...");
+
+                // Authenticate with the new API
+                authApiClient.authenticate(user, pass, new AuthApiClient.AuthCallback() {
+                    @Override
+                    public void onSuccess(uk.trigpointing.android.api.AuthResponse authResponse) {
+                        runOnUiThread(() -> {
+                            Log.i(TAG, "API authentication successful for user: " + authResponse.getUser().getName());
+                            
+                            // Store the API authentication data
+                            authPreferences.storeAuthData(authResponse);
+                            
+                            // Also store legacy credentials for backward compatibility
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("username", user);
+                            editor.putString("plaintextpassword", pass);
+                            editor.apply();
+
+                            // Update UI and close dialog
+                            updateUserDisplay();
+                            invalidateOptionsMenu();
+                            dialog.dismiss();
+                            
+                            // Start sync
+                            doSync();
+                            
+                            Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        runOnUiThread(() -> {
+                            Log.w(TAG, "API authentication failed: " + errorMessage);
+                            
+                            // Re-enable the login button
+                            loginButton.setEnabled(true);
+                            loginButton.setText("Login");
+                            
+                            // Close current dialog and show new one with error
+                            dialog.dismiss();
+                            showLoginDialog(errorMessage);
+                        });
+                    }
+                });
+            });
+        });
+
+        dialog.show();
     }
 
     private void doLogout() {
+        // Clear new API authentication data
+        authPreferences.clearAuthData();
+        
+        // Clear legacy authentication data
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove("username");
         editor.remove("plaintextpassword");
         editor.apply();
 
+        // Clear user logs from database
         DbHelper dbHelper = new DbHelper(this);
         dbHelper.open();
         dbHelper.clearUserLogs();
@@ -322,6 +429,8 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
         updateUserDisplay();
         invalidateOptionsMenu();
+        
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show();
     }
  
     
@@ -359,29 +468,102 @@ public class MainActivity extends BaseActivity implements SyncListener {
 	private void updateUserDisplay() {
 		Log.i(TAG, "updateUserDisplay: Updating user display");
 		try {
-			// Get username from preferences
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			String username = prefs.getString("username", "");
-			
 			View countSection = findViewById(R.id.count_section);
-
-			Log.i(TAG, "updateUserDisplay: Username from preferences: '" + username + "'");
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			boolean devMode = prefs.getBoolean("dev_mode", false);
 			
-			if (!username.trim().isEmpty()) {
-				Log.i(TAG, "updateUserDisplay: Setting username to: " + username);
-				mUserName.setText(username);
+			String displayName;
+			boolean isLoggedIn = false;
+			
+			// Check if we have API authentication data first
+			if (authPreferences.isLoggedIn()) {
+				Log.i(TAG, "updateUserDisplay: User is logged in via API");
+				
+				if (devMode) {
+					displayName = authPreferences.getDisplayNameWithId();
+					Log.i(TAG, "updateUserDisplay: Developer mode - showing name with ID: " + displayName);
+				} else {
+					displayName = authPreferences.getDisplayName();
+					Log.i(TAG, "updateUserDisplay: Normal mode - showing name: " + displayName);
+				}
+				isLoggedIn = true;
+			} else {
+				// Fallback to legacy username for backward compatibility
+				String legacyUsername = prefs.getString("username", "");
+				if (!legacyUsername.trim().isEmpty()) {
+					Log.i(TAG, "updateUserDisplay: Using legacy username: " + legacyUsername);
+					displayName = legacyUsername;
+					if (devMode) {
+						displayName += " (legacy)";
+					}
+					isLoggedIn = true;
+				} else {
+					Log.i(TAG, "updateUserDisplay: No authentication found");
+					displayName = "Not logged in";
+					isLoggedIn = false;
+				}
+			}
+			
+			mUserName.setText(displayName);
+			
+			if (isLoggedIn) {
 				countSection.setVisibility(View.VISIBLE);
 				mSyncBtn.setVisibility(View.VISIBLE);
+				updateUserMap();
 			} else {
-				Log.i(TAG, "updateUserDisplay: No username found, showing 'Not logged in'");
-				mUserName.setText("Not logged in");
 				countSection.setVisibility(View.INVISIBLE);
 				mSyncBtn.setVisibility(View.INVISIBLE);
+				mUserMapImage.setVisibility(View.GONE);
 			}
+			
 		} catch (Exception e) {
 			Log.e(TAG, "updateUserDisplay: Error updating user display", e);
 			e.printStackTrace();
 			mUserName.setText("Not logged in");
+		}
+	}
+	
+	private void updateUserMap() {
+		Log.i(TAG, "updateUserMap: Updating user map image");
+		try {
+			// Only load map if user is logged in via API
+			if (authPreferences.isLoggedIn()) {
+				User user = authPreferences.getUser();
+				if (user != null) {
+					String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + user.getId() + "&v=y";
+					Log.i(TAG, "updateUserMap: Loading map for user ID " + user.getId() + " from URL: " + mapUrl);
+					
+					// Load the image using Coil
+					ImageRequest request = new ImageRequest.Builder(this)
+							.data(mapUrl)
+							.target(mUserMapImage)
+							.placeholder(android.R.drawable.ic_menu_mapmode) // Show placeholder while loading
+							.error(android.R.drawable.ic_dialog_alert) // Show error icon if loading fails
+							.build();
+					
+					// Show the ImageView and load the image
+					mUserMapImage.setVisibility(View.VISIBLE);
+					ImageLoader imageLoader = Coil.imageLoader(this);
+					imageLoader.enqueue(request);
+					
+					// Add click listener to open full map view
+					mUserMapImage.setOnClickListener(v -> {
+						String fullMapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + user.getId() + "&v=y";
+						android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(fullMapUrl));
+						startActivity(intent);
+					});
+				} else {
+					Log.w(TAG, "updateUserMap: User object is null, hiding map");
+					mUserMapImage.setVisibility(View.GONE);
+				}
+			} else {
+				Log.i(TAG, "updateUserMap: User not logged in via API, hiding map");
+				mUserMapImage.setVisibility(View.GONE);
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "updateUserMap: Error updating user map", e);
+			e.printStackTrace();
+			mUserMapImage.setVisibility(View.GONE);
 		}
 	}
 	
