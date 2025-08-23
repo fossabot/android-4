@@ -23,3 +23,7 @@ build/
 # Archive files
 *.tar.gz
 *.tar
+
+# Python
+__pycache__/
+venv/
