@@ -1,6 +1,10 @@
 # OSM Download tiles - exclude from version control
 OSMDownload
 
+# TileDownload output directories - exclude from version control
+TileDownload/map_tiles/
+TileDownload/zip_files/
+
 # Gradle cache files
 .gradle/
 TrigpointingUK/.gradle/
