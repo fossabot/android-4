@@ -104,9 +104,12 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         // Initialize database helper
         try {
             dbHelper = new DbHelper(this);
-            Log.i(TAG, "Database helper initialized successfully");
+            // Ensure database is opened
+            dbHelper.open();
+            Log.i(TAG, "Database helper initialized and opened successfully");
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize database helper", e);
+            dbHelper = null;
         }
         
         // Set up close button
@@ -366,6 +369,15 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
             
         } catch (Exception e) {
             Log.e(TAG, "Error loading nearby trigpoints", e);
+            
+            // Update UI with error message
+            runOnUiThread(() -> {
+                if (e instanceof NullPointerException && e.getMessage() != null && e.getMessage().contains("rawQuery")) {
+                    tvTrigpointCount.setText("Database not available. Please sync trigpoints first from the main screen.");
+                } else {
+                    tvTrigpointCount.setText("Error loading trigpoints: " + e.getMessage());
+                }
+            });
         }
     }
     
@@ -480,7 +492,12 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         }
         
         if (dbHelper != null) {
-            dbHelper.close();
+            try {
+                dbHelper.close();
+                Log.i(TAG, "Database helper closed successfully");
+            } catch (Exception e) {
+                Log.e(TAG, "Error closing database helper", e);
+            }
         }
     }
     
