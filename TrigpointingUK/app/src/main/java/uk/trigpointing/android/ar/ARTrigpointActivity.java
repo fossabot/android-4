@@ -92,6 +92,8 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         setContentView(R.layout.activity_ar_trigpoint);
         
         Log.i(TAG, "onCreate: Starting AR Trigpoint Activity");
+        Log.i(TAG, "onCreate: Process ID = " + android.os.Process.myPid());
+        Log.i(TAG, "onCreate: Thread ID = " + Thread.currentThread().getId());
         
         // Initialize UI components
         arSceneView = findViewById(R.id.arSceneView);
@@ -111,9 +113,12 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         btnClose.setOnClickListener(v -> finish());
         
         // Check permissions
+        Log.i(TAG, "onCreate: Checking permissions...");
         if (!hasPermissions()) {
+            Log.w(TAG, "onCreate: Permissions not granted, requesting...");
             requestPermissions();
         } else {
+            Log.i(TAG, "onCreate: Permissions OK, initializing AR...");
             initializeAR();
         }
     }
@@ -222,6 +227,16 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
             // Start location services
             startLocationServices();
             
+            // Add a test fallback after 5 seconds if no location is received
+            new android.os.Handler().postDelayed(() -> {
+                if (currentLocation == null) {
+                    Log.w(TAG, "No location received after 5 seconds, trying fallback");
+                    runOnUiThread(() -> {
+                        tvTrigpointCount.setText("No GPS location available. Check location permissions and GPS settings.");
+                    });
+                }
+            }, 5000);
+            
         } catch (UnavailableArcoreNotInstalledException e) {
             Toast.makeText(this, "Please install ARCore", Toast.LENGTH_LONG).show();
             finish();
@@ -247,8 +262,11 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "startLocationServices: Location permission not granted!");
             return;
         }
+        
+        Log.i(TAG, "startLocationServices: Location permission granted, setting up location updates...");
         
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
