@@ -1,0 +1,54 @@
+creator: "TrigpointingUK"
+version: "1.0.0"
+timestamp: "2025-08-16T19:00:00Z"
+email: "teasel.ian@gmail.com"
+maps:
+  - name: "Mapnik-7"
+    description: "Mapnik-7 is an OSM map of the UK at zoom levels 0-7. It is a low-resolution map suitable only for testing."
+    source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution: "© OpenStreetMap contributors"
+    minZoom: 0
+    maxZoom: 7
+    bounds: [-85.0511, -180, 85.0511, 180]
+    type: "tar"
+    format: "png"
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-7.tar"
+    file_size: "1085440"
+    file_timestamp: "2025-08-16T19:00:00Z"
+  - name: "Mapnik-9"
+    description: "Mapnik-9 is an OSM map of the UK at zoom levels 0-9. It is a low-resolution map."
+    source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution: "© OpenStreetMap contributors"
+    minZoom: 0
+    maxZoom: 9
+    bounds: [-85.0511, -180, 85.0511, 180]
+    type: "tar"
+    format: "png"
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-9.tar"
+    file_size: "10035200"
+    file_timestamp: "2025-08-16T19:00:00Z"
+  - name: "Mapnik-11"
+    description: "Mapnik-11 is an OSM map of the UK at zoom levels 0-11. It is a medium-resolution map."
+    source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution: "© OpenStreetMap contributors"
+    minZoom: 0
+    maxZoom: 11
+    bounds: [-85.0511, -180, 85.0511, 180]
+    type: "tar"
+    format: "png"
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-11.tar"
+    file_size: "91699200"
+    file_timestamp: "2025-08-16T19:00:00Z"
+  - name: "Mapnik-13"
+    description: "Mapnik-13 is an OSM map of the UK at zoom levels 0-13. It is a high-resolution map."
+    source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution: "© OpenStreetMap contributors"
+    minZoom: 0
+    maxZoom: 13
+    bounds: [-85.0511, -180, 85.0511, 180]
+    type: "tar"
+    format: "png"
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-13.tar"
+    file_size: "750899200"
+    file_timestamp: "2025-08-16T19:00:00Z"
+
