@@ -440,6 +440,11 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         float bearing = currentLocation.bearingTo(trigLocation);
         float distance = currentLocation.distanceTo(trigLocation);
         
+        // Android bearingTo() returns -180° to +180°, normalize to 0° to 360°
+        if (bearing < 0) {
+            bearing += 360;
+        }
+        
         // Convert bearing to radians
         double bearingRad = Math.toRadians(bearing);
         
