@@ -443,11 +443,30 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         // Convert bearing to radians
         double bearingRad = Math.toRadians(bearing);
         
-        // Calculate position in AR space (simplified - place markers in a circle around user)
-        // In a real implementation, you'd use ARCore's coordinate system
-        float x = (float) (Math.sin(bearingRad) * Math.min(distance / 100.0f, 10.0f)); // Scale distance
-        float z = (float) (-Math.cos(bearingRad) * Math.min(distance / 100.0f, 10.0f)); // Negative Z is forward
+        // Calculate position in AR space
+        // ARCore coordinate system: X = right, Y = up, Z = backward (camera looks toward negative Z)
+        // Android bearingTo(): 0° = North, 90° = East, 180° = South, 270° = West
+        
+        // Scale distance for AR display (max 10 units from camera)
+        float scaledDistance = Math.min(distance / 100.0f, 10.0f);
+        
+        // Convert bearing to AR coordinates:
+        // - sin(bearing) gives East-West component (positive X = East)
+        // - cos(bearing) gives North-South component, but we need to negate it
+        // Since camera looks toward negative Z, North (bearing 0°) should be negative Z
+        float x = (float) (Math.sin(bearingRad) * scaledDistance);      // East = positive X
+        float z = (float) (-Math.cos(bearingRad) * scaledDistance);     // North = negative Z (camera forward)
         float y = 0.5f; // Height above ground
+        
+        // Debug logging to help verify bearing calculations
+        String direction = "";
+        if (bearing >= 315 || bearing < 45) direction = "North";
+        else if (bearing >= 45 && bearing < 135) direction = "East"; 
+        else if (bearing >= 135 && bearing < 225) direction = "South";
+        else if (bearing >= 225 && bearing < 315) direction = "West";
+        
+        Log.d(TAG, String.format("Trigpoint %s: bearing=%.1f° (%s), distance=%.0fm, AR pos=(%.2f, %.2f, %.2f)", 
+            trig.getName(), bearing, direction, distance, x, y, z));
         
         // Create a simple text marker
         ViewRenderable.builder()
