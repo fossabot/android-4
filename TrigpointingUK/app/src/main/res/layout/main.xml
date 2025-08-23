@@ -208,37 +208,46 @@
         android:padding="16dp"
         android:layout_marginTop="16dp">
 
+        <!-- Top row: Nearest and Map buttons side by side -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/btnNearest"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:text="Nearest"
+                android:textSize="16sp"
+                android:layout_marginEnd="4dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorOnPrimary" />
+
+            <Button
+                android:id="@+id/btnLeafletMap"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:text="Map"
+                android:textSize="16sp"
+                android:layout_marginStart="4dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorOnPrimary" />
+
+        </LinearLayout>
+
+        <!-- Bottom row: Sync button -->
         <Button
             android:id="@+id/btnSync"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="Sync"
             android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/white"
-            android:textColor="@color/black" />
-
-
-
-        <Button
-            android:id="@+id/btnNearest"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Nearest"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/white"
-            android:textColor="@color/black" />
-
-        <Button
-            android:id="@+id/btnLeafletMap"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Map"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/white"
-            android:textColor="@color/black" />
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorOnPrimary" />
 
     </LinearLayout>
 
