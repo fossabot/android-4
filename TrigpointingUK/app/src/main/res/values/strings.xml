@@ -118,6 +118,7 @@
     <string name="cacheUsageFormat">Cache usage: %1$s (%2$d tiles)</string>
     <string name="clearCache">Clear cache</string>
     <string name="cacheCalculating">Calculating cache size...</string>
+    <string name="arView">AR View</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     

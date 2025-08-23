@@ -68,6 +68,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
     private TextView			mUnsyncedCount;
     private TextView			mPhotosCount;
     private Button				mSyncBtn;
+    private Button				mARViewBtn;
     private TextView			mUserName;
     private ImageView			mUserMapImage;
     
@@ -101,6 +102,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
         mPhotosIcon = findViewById(R.id.countPhotosImage);
         mPhotosCount = findViewById(R.id.countPhotosText);
         mSyncBtn = findViewById(R.id.btnSync);
+        mARViewBtn = findViewById(R.id.btnARView);
         mUserName = findViewById(R.id.txtUserName);
         mUserMapImage = findViewById(R.id.userMapImage);
         
@@ -221,6 +223,12 @@ public class MainActivity extends BaseActivity implements SyncListener {
         btnLeafletMap.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, uk.trigpointing.android.mapping.LeafletMapActivity.class);
             mapLauncher.launch(i);
+        });
+
+        // AR View button (developer mode only)
+        mARViewBtn.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, uk.trigpointing.android.ar.ARTrigpointActivity.class);
+            startActivity(i);
         });
 
     }
@@ -533,6 +541,13 @@ public class MainActivity extends BaseActivity implements SyncListener {
 				countSection.setVisibility(View.INVISIBLE);
 				mSyncBtn.setVisibility(View.INVISIBLE);
 				mUserMapImage.setVisibility(View.GONE);
+			}
+			
+			// Show AR View button only for developers
+			if (devMode) {
+				mARViewBtn.setVisibility(View.VISIBLE);
+			} else {
+				mARViewBtn.setVisibility(View.GONE);
 			}
 			
 		} catch (Exception e) {

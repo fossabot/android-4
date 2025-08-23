@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_background"
+    android:padding="8dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/trigpoint_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trigpoint Name"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/trigpoint_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0m"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:gravity="center" />
+
+</LinearLayout>

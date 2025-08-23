@@ -130,6 +130,10 @@ dependencies {
     // Maps - we'll need to replace the old maps.jar with Google Maps
     implementation 'com.google.android.gms:play-services-maps:19.2.0'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
+    
+    // ARCore for augmented reality
+    implementation 'com.google.ar:core:1.46.0'
+    implementation 'com.google.ar.sceneform:core:1.17.1'
     implementation 'com.google.firebase:firebase-analytics:23.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:20.0.0'
     implementation 'com.google.firebase:firebase-perf:22.0.0'
