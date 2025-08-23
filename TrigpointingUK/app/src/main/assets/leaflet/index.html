@@ -467,7 +467,7 @@
         loadControlPreferences();
         initialiseMarkers();
         
-        // Auto-centre on GPS location when first visiting
+        // Auto-centre on GPS location when first visiting and start location tracking by default
         autoLocateOnFirstVisit();
       }, 100);
       
@@ -1440,36 +1440,11 @@
       // Check if we should auto-centre on first visit
       const hasAutoLocated = sessionStorage.getItem('leaflet_auto_located');
       if (!hasAutoLocated) {
-        console.log('First visit to map - attempting auto-location');
+        console.log('First visit to map - starting location tracking by default');
         sessionStorage.setItem('leaflet_auto_located', 'true');
         
-        // Get location once for initial centering, but don't start continuous tracking
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(pos){
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            
-            console.log(`Auto-centering on initial location: ${lat}, ${lon}`);
-            
-            // Cache this location for future map initializations
-            const locationData = {
-              lat: lat,
-              lon: lon,
-              timestamp: Date.now()
-            };
-            localStorage.setItem('leaflet_last_location', JSON.stringify(locationData));
-            
-            // Center map on location
-            centerMapOnLocation(lat, lon);
-            
-          }, function(err){
-            console.log('Auto-location failed: ' + err.message);
-          }, {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 300000 // 5 minutes
-          });
-        }
+        // Start location tracking automatically on first visit
+        locate();
       }
     }
 
