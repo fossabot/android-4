@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import uk.trigpointing.android.common.BaseActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
+import android.content.SharedPreferences;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Config;
@@ -65,6 +68,8 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         public String getName() { return name; }
         public double getLat() { return lat; }
         public double getLon() { return lon; }
+        public String getType() { return type; }
+        public String getCondition() { return condition; }
     }
     private static final String TAG = "ARTrigpointActivity";
     private static final int CAMERA_PERMISSION_REQUEST = 1001;
@@ -435,8 +440,15 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
                 
                 // Set up the marker view with trigpoint data
                 View markerView = renderable.getView();
+                ImageView iconView = markerView.findViewById(R.id.trigpoint_icon);
                 TextView nameText = markerView.findViewById(R.id.trigpoint_name);
                 TextView distanceText = markerView.findViewById(R.id.trigpoint_distance);
+                
+                // Set the appropriate icon based on trigpoint type and user preferences
+                if (iconView != null) {
+                    int iconResource = getTrigpointIconResource(trig);
+                    iconView.setImageResource(iconResource);
+                }
                 
                 if (nameText != null) {
                     nameText.setText(trig.getName());
@@ -499,6 +511,22 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
                 Log.e(TAG, "Error closing database helper", e);
             }
         }
+    }
+    
+    /**
+     * Get the appropriate icon resource for a trigpoint based on its type and user preferences
+     */
+    private int getTrigpointIconResource(TrigpointData trigpoint) {
+        // Get user's map icon style preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String iconStyle = prefs.getString("map_icon_style", "medium");
+        boolean useSmallIcons = "small".equals(iconStyle);
+        
+        // Map trigpoint type to Physical enum and get appropriate icon
+        Trig.Physical physicalType = Trig.Physical.fromCode(trigpoint.getType());
+        
+        // Return appropriate icon based on user preference
+        return physicalType.icon(useSmallIcons);
     }
     
     // LocationListener methods
