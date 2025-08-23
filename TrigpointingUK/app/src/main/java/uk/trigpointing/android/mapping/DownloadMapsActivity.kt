@@ -22,13 +22,14 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import uk.trigpointing.android.R
+import uk.trigpointing.android.common.BaseActivity
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.DecimalFormat
 
-class DownloadMapsActivity : AppCompatActivity() {
+class DownloadMapsActivity : BaseActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
