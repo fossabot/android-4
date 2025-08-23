@@ -21,14 +21,15 @@
         android:layout_height="wrap_content"
         android:text="Trigpoint Name"
         android:textColor="@android:color/white"
-        android:textSize="120sp"
+        android:textSize="80sp"
         android:textStyle="bold"
-        android:maxLines="2"
-        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:ellipsize="none"
         android:gravity="center"
-        android:background="#80000000"
-        android:padding="20dp"
-        android:layout_marginTop="20dp" />
+        android:background="#CC000000"
+        android:padding="15dp"
+        android:layout_marginTop="15dp" />
 
     <!-- Distance with background for readability -->
     <TextView
@@ -37,10 +38,10 @@
         android:layout_height="wrap_content"
         android:text="0m"
         android:textColor="@android:color/white"
-        android:textSize="100sp"
+        android:textSize="60sp"
         android:gravity="center"
-        android:background="#80000000"
-        android:padding="20dp"
-        android:layout_marginTop="10dp" />
+        android:background="#CC000000"
+        android:padding="10dp"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

@@ -405,8 +405,20 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         }
         trigpointNodes.clear();
         
-        // Create new markers
-        for (TrigpointData trig : nearbyTrigpoints) {
+        // Sort trigpoints by distance (farthest first) so nearest appear on top
+        List<TrigpointData> sortedTrigpoints = new ArrayList<>(nearbyTrigpoints);
+        sortedTrigpoints.sort((t1, t2) -> {
+            float[] results1 = new float[1];
+            float[] results2 = new float[1];
+            Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+                    t1.getLat(), t1.getLon(), results1);
+            Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+                    t2.getLat(), t2.getLon(), results2);
+            return Float.compare(results2[0], results1[0]); // Reverse order: farthest first
+        });
+        
+        // Create markers for each trigpoint (farthest first, so nearest appear on top)
+        for (TrigpointData trig : sortedTrigpoints) {
             createTrigpointMarker(trig);
         }
     }
@@ -514,19 +526,17 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
     }
     
     /**
-     * Get the appropriate icon resource for a trigpoint based on its type and user preferences
+     * Get the appropriate icon resource for a trigpoint - using bright green icons for AR visibility
      */
     private int getTrigpointIconResource(TrigpointData trigpoint) {
-        // Get user's map icon style preference
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String iconStyle = prefs.getString("map_icon_style", "medium");
-        boolean useSmallIcons = "small".equals(iconStyle);
+        // For AR view, always use bright green "good condition" icons for visibility
+        // Ignore user preferences and condition - prioritize visibility in AR
         
-        // Map trigpoint type to Physical enum and get appropriate icon
+        // Map trigpoint type to Physical enum and get the bright green version
         Trig.Physical physicalType = Trig.Physical.fromCode(trigpoint.getType());
         
-        // Return appropriate icon based on user preference
-        return physicalType.icon(useSmallIcons);
+        // Always use the highlighted (bright green) version for AR visibility
+        return physicalType.icon(true); // true = use highlighted/bright version
     }
     
     // LocationListener methods
