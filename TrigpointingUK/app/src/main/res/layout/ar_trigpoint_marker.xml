@@ -29,7 +29,9 @@
         android:gravity="center"
         android:background="#CC000000"
         android:padding="15dp"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:minWidth="0dp"
+        android:maxWidth="2000dp" />
 
     <!-- Distance with background for readability -->
     <TextView

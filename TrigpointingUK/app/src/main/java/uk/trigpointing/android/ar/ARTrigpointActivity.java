@@ -232,6 +232,11 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
             
             Log.i(TAG, "ARCore session created successfully");
             
+            // Add frame update listener to make markers face the camera
+            arSceneView.getScene().addOnUpdateListener(frameTime -> {
+                updateMarkerOrientations();
+            });
+            
             // Start location services
             startLocationServices();
             
@@ -450,6 +455,9 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
                 markerNode.setRenderable(renderable);
                 markerNode.setLocalPosition(new Vector3(x, y, z));
                 
+                // Make the marker always face the camera (billboard effect)
+                // This will be updated each frame via updateMarkerOrientations()
+                
                 // Set up the marker view with trigpoint data
                 View markerView = renderable.getView();
                 ImageView iconView = markerView.findViewById(R.id.trigpoint_icon);
@@ -537,6 +545,36 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         
         // Always use the highlighted (bright green) version for AR visibility
         return physicalType.icon(true); // true = use highlighted/bright version
+    }
+    
+    /**
+     * Update all marker orientations to face the camera (billboard effect)
+     */
+    private void updateMarkerOrientations() {
+        if (arSceneView == null || arSceneView.getArFrame() == null) {
+            return;
+        }
+        
+        try {
+            // Get camera position and rotation
+            com.google.ar.core.Camera camera = arSceneView.getArFrame().getCamera();
+            com.google.ar.core.Pose cameraPose = camera.getPose();
+            
+            // Update each marker to face the camera
+            for (Node markerNode : trigpointNodes) {
+                if (markerNode != null) {
+                    // Calculate direction from marker to camera
+                    Vector3 markerPos = markerNode.getWorldPosition();
+                    Vector3 cameraPos = new Vector3(cameraPose.tx(), cameraPose.ty(), cameraPose.tz());
+                    Vector3 direction = Vector3.subtract(cameraPos, markerPos).normalized();
+                    
+                    // Set marker to look at camera
+                    markerNode.setLookDirection(direction);
+                }
+            }
+        } catch (Exception e) {
+            // Silently ignore errors during orientation updates
+        }
     }
     
     // LocationListener methods
