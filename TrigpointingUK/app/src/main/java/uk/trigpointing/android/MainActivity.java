@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.content.ContextCompat;
 import uk.trigpointing.android.common.BaseActivity;
 import uk.trigpointing.android.common.ClearCacheTask;
@@ -120,6 +121,9 @@ public class MainActivity extends BaseActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Setting up click listeners");
         setupClickListeners();
+        
+        Log.i(TAG, "onCreate: Setting up back button handling");
+        setupBackButtonHandling();
         
         Log.i(TAG, "onCreate: Updating user display");
         updateUserDisplay();
@@ -219,6 +223,21 @@ public class MainActivity extends BaseActivity implements SyncListener {
             mapLauncher.launch(i);
         });
 
+    }
+    
+    private void setupBackButtonHandling() {
+        // Handle back button press to prevent app from closing on main activity
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Show a toast to inform user that back button is disabled on main page
+                Toast.makeText(MainActivity.this, "Press home button to minimize app", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Back button pressed on main activity - staying on main page");
+                // Do nothing - this prevents the default back behavior (closing the app)
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+        Log.i(TAG, "setupBackButtonHandling: Back button handling configured");
     }
 
 
