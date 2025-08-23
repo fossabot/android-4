@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import uk.trigpointing.android.common.BaseActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -41,7 +42,7 @@ import uk.trigpointing.android.R;
 import uk.trigpointing.android.types.Trig;
 import uk.trigpointing.android.types.Condition;
 
-public class ARTrigpointActivity extends AppCompatActivity implements LocationListener {
+public class ARTrigpointActivity extends BaseActivity implements LocationListener {
     
     // Simple data holder for trigpoint information
     private static class TrigpointData {
@@ -99,7 +100,12 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
         btnClose = findViewById(R.id.btnClose);
         
         // Initialize database helper
-        dbHelper = new DbHelper(this);
+        try {
+            dbHelper = new DbHelper(this);
+            Log.i(TAG, "Database helper initialized successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to initialize database helper", e);
+        }
         
         // Set up close button
         btnClose.setOnClickListener(v -> finish());
@@ -255,7 +261,14 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
             }
             
             if (lastKnown != null) {
+                Log.i(TAG, "Using last known location: " + lastKnown.getLatitude() + ", " + lastKnown.getLongitude());
                 onLocationChanged(lastKnown);
+            } else {
+                Log.w(TAG, "No last known location available");
+                // Try to load trigpoints anyway with a default location for testing
+                runOnUiThread(() -> {
+                    tvTrigpointCount.setText("Waiting for GPS location...");
+                });
             }
             
         } catch (Exception e) {
@@ -265,13 +278,19 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
     
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Log.i(TAG, "onLocationChanged: New location received");
+        Log.i(TAG, "onLocationChanged: New location received - " + location.getLatitude() + ", " + location.getLongitude() + " accuracy: " + location.getAccuracy());
         currentLocation = location;
         loadNearbyTrigpoints();
     }
     
     private void loadNearbyTrigpoints() {
-        if (currentLocation == null || dbHelper == null) {
+        if (currentLocation == null) {
+            Log.w(TAG, "loadNearbyTrigpoints: No current location available");
+            return;
+        }
+        
+        if (dbHelper == null) {
+            Log.e(TAG, "loadNearbyTrigpoints: Database helper is null");
             return;
         }
         
@@ -280,11 +299,13 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
         try {
             // Query database for nearby trigpoints
             Cursor cursor = dbHelper.fetchTrigList(currentLocation);
+            Log.i(TAG, "loadNearbyTrigpoints: Database query completed, cursor: " + cursor);
             
             nearbyTrigpoints.clear();
             int count = 0;
             
             if (cursor != null && cursor.moveToFirst()) {
+                Log.i(TAG, "loadNearbyTrigpoints: Cursor has data, processing trigpoints...");
                 do {
                     if (count >= MAX_TRIGPOINTS) break;
                     
@@ -294,6 +315,8 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
                     double lon = cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LON));
                     String type = cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_TYPE));
                     String condition = cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_CONDITION));
+                    
+                    Log.d(TAG, "Processing trigpoint: " + name + " at " + lat + ", " + lon);
                     
                     // Calculate distance
                     Location trigLocation = new Location("trigpoint");
@@ -317,7 +340,9 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
             
             // Update UI
             runOnUiThread(() -> {
-                tvTrigpointCount.setText("Found " + nearbyTrigpoints.size() + " trigpoints within 5km");
+                String message = "Found " + nearbyTrigpoints.size() + " trigpoints within 5km";
+                Log.i(TAG, "Updating UI: " + message);
+                tvTrigpointCount.setText(message);
                 createTrigpointMarkers();
             });
             
@@ -327,7 +352,13 @@ public class ARTrigpointActivity extends AppCompatActivity implements LocationLi
     }
     
     private void createTrigpointMarkers() {
-        if (currentLocation == null || nearbyTrigpoints.isEmpty()) {
+        if (currentLocation == null) {
+            Log.w(TAG, "createTrigpointMarkers: No current location available");
+            return;
+        }
+        
+        if (nearbyTrigpoints.isEmpty()) {
+            Log.w(TAG, "createTrigpointMarkers: No nearby trigpoints to display");
             return;
         }
         
