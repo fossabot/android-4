@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import android.content.SharedPreferences;
+import android.view.MenuItem;
 
 import com.google.ar.core.ArCoreApk;
 import com.google.ar.core.Config;
@@ -81,7 +82,7 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
     private Session arSession;
     private TextView tvInstructions;
     private TextView tvTrigpointCount;
-    private Button btnClose;
+
     
     private DbHelper dbHelper;
     private LocationManager locationManager;
@@ -104,7 +105,6 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         arSceneView = findViewById(R.id.arSceneView);
         tvInstructions = findViewById(R.id.tvInstructions);
         tvTrigpointCount = findViewById(R.id.tvTrigpointCount);
-        btnClose = findViewById(R.id.btnClose);
         
         // Initialize database helper
         try {
@@ -117,8 +117,11 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
             dbHelper = null;
         }
         
-        // Set up close button
-        btnClose.setOnClickListener(v -> finish());
+        // Set up action bar with back arrow
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("AR View");
+        }
         
         // Check permissions
         Log.i(TAG, "onCreate: Checking permissions...");
@@ -586,4 +589,14 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
     
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle back arrow click
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
