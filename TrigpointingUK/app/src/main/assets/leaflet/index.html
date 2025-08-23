@@ -1442,7 +1442,34 @@
       if (!hasAutoLocated) {
         console.log('First visit to map - attempting auto-location');
         sessionStorage.setItem('leaflet_auto_located', 'true');
-        locate();
+        
+        // Get location once for initial centering, but don't start continuous tracking
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(pos){
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            
+            console.log(`Auto-centering on initial location: ${lat}, ${lon}`);
+            
+            // Cache this location for future map initializations
+            const locationData = {
+              lat: lat,
+              lon: lon,
+              timestamp: Date.now()
+            };
+            localStorage.setItem('leaflet_last_location', JSON.stringify(locationData));
+            
+            // Center map on location
+            centerMapOnLocation(lat, lon);
+            
+          }, function(err){
+            console.log('Auto-location failed: ' + err.message);
+          }, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 300000 // 5 minutes
+          });
+        }
       }
     }
 
@@ -1491,20 +1518,12 @@
         localStorage.setItem('leaflet_last_location', JSON.stringify(locationData));
         
         // Update or create location marker
+        const isFirstLocationFix = !locationMarker;
         updateLocationMarker(lat, lon, accuracy, heading);
         
-        // Center map on first location fix
-        if (!locationMarker) {
-          // Adjust zoom level based on current projection
-          let zoom;
-          if (currentCRS === '27700') {
-            zoom = 7; // Roughly equivalent to zoom 14 in Web Mercator
-          } else {
-            zoom = 14;
-          }
-          
-          console.log(`Setting initial view with zoom ${zoom} for CRS ${currentCRS}`);
-          map.setView([lat, lon], zoom);
+        // Center map and set appropriate zoom on first location fix
+        if (isFirstLocationFix) {
+          centerMapOnLocation(lat, lon);
         }
         
       }, function(err){
@@ -1545,6 +1564,25 @@
       console.log('Stopped location tracking');
     }
 
+    function centerMapOnLocation(lat, lon) {
+      // Smart zoom: use zoom 13 equivalent unless user is already zoomed in closer
+      let targetZoom;
+      if (currentCRS === '27700') {
+        // EPSG:27700 equivalent of zoom 13 in Web Mercator
+        targetZoom = 6;
+      } else {
+        // EPSG:3857 Web Mercator
+        targetZoom = 13;
+      }
+      
+      // Only change zoom if current zoom is less than target (zoomed out more)
+      const currentZoom = map.getZoom();
+      const finalZoom = currentZoom < targetZoom ? targetZoom : currentZoom;
+      
+      console.log(`Centering on location with zoom ${finalZoom} (current: ${currentZoom}, target: ${targetZoom}) for CRS ${currentCRS}`);
+      map.setView([lat, lon], finalZoom);
+    }
+
     function updateLocationMarker(lat, lon, accuracy, heading) {
       // Remove existing marker and circle
       if (locationMarker) {
@@ -1581,11 +1619,11 @@
         <div style="
           width: 20px; 
           height: 20px; 
-          background: #4285f4; 
-          border: 3px solid white; 
+          background: rgba(66, 133, 244, 0.9); 
+          border: 3px solid rgba(255, 255, 255, 0.95); 
           border-radius: 50%; 
           position: relative;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          box-shadow: 0 2px 6px rgba(0,0,0,0.4);
           transform: rotate(${rotation}deg);
         ">
           <div style="
@@ -1597,7 +1635,7 @@
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-bottom: 12px solid #4285f4;
+            border-bottom: 12px solid rgba(66, 133, 244, 0.9);
           "></div>
         </div>
       `;
