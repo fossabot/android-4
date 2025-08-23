@@ -1,6 +1,9 @@
 package uk.trigpointing.android.mapping
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -34,16 +37,32 @@ class DownloadMapsActivity : BaseActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var adapter: MapDownloadAdapter
+    private lateinit var cacheUsageText: TextView
+    private lateinit var clearCacheLink: TextView
+    private lateinit var tileCacheDir: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_download_maps)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Initialize tile cache directory
+        tileCacheDir = File(cacheDir, "map_tiles")
+        if (!tileCacheDir.exists()) {
+            tileCacheDir.mkdirs()
+        }
+
+        // Initialize UI components
         recyclerView = findViewById(R.id.recyclerView)
         progressBar = findViewById(R.id.progressBar)
+        cacheUsageText = findViewById(R.id.cacheUsageText)
+        clearCacheLink = findViewById(R.id.clearCacheLink)
+        
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        // Set up cache usage display and clear link
+        setupCacheUsage()
+        
         fetchMapDownloads()
     }
 
@@ -202,6 +221,70 @@ class DownloadMapsActivity : BaseActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setupCacheUsage() {
+        // Calculate and display cache usage in background
+        lifecycleScope.launch(Dispatchers.IO) {
+            val stats = getDirectoryStats(tileCacheDir)
+            val totalSize = stats[0]
+            val fileCount = stats[1]
+
+            withContext(Dispatchers.Main) {
+                updateCacheUsageDisplay(totalSize, fileCount)
+            }
+        }
+
+        // Set up clear cache link click handler
+        clearCacheLink.setOnClickListener {
+            openAppSettings()
+        }
+    }
+
+    private fun updateCacheUsageDisplay(totalSize: Long, fileCount: Long) {
+        val df = DecimalFormat("#.##")
+        val sizeInMB = df.format(totalSize.toDouble() / (1024 * 1024))
+        
+        val cacheText = getString(R.string.cacheUsageFormat, "${sizeInMB}MB", fileCount.toInt())
+        cacheUsageText.text = cacheText
+        
+        // Show clear cache link if there are tiles to clear
+        if (fileCount > 0) {
+            clearCacheLink.visibility = View.VISIBLE
+        } else {
+            clearCacheLink.visibility = View.GONE
+        }
+    }
+
+    private fun getDirectoryStats(directory: File): LongArray {
+        var size = 0L
+        var count = 0L
+        
+        if (directory.isDirectory && directory.listFiles() != null) {
+            directory.listFiles()?.forEach { file ->
+                if (file.isFile) {
+                    size += file.length()
+                    count++
+                } else if (file.isDirectory) {
+                    val subDirStats = getDirectoryStats(file)
+                    size += subDirStats[0]
+                    count += subDirStats[1]
+                }
+            }
+        }
+        
+        return longArrayOf(size, count)
+    }
+
+    private fun openAppSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.parse("package:$packageName")
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to open app settings", e)
+            Toast.makeText(this, "Unable to open app settings", Toast.LENGTH_SHORT).show()
         }
     }
 
