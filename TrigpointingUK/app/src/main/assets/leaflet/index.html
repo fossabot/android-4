@@ -160,6 +160,10 @@
     .toggle-icon.expanded {
       transform: rotate(180deg);
     }
+    .location-marker {
+      background: transparent !important;
+      border: none !important;
+    }
   </style>
 </head>
 <body>
@@ -1442,16 +1446,41 @@
       }
     }
 
+    // Global variables for location tracking
+    let locationMarker = null;
+    let accuracyCircle = null;
+    let watchId = null;
+    let isTrackingLocation = false;
+
     function locate(){
       if (!navigator.geolocation) { 
         console.log('Geolocation not supported'); 
         return; 
       }
       
-      console.log('Getting current location...');
-      navigator.geolocation.getCurrentPosition(function(pos){
-        const lat = pos.coords.latitude, lon = pos.coords.longitude;
-        console.log(`Located at: ${lat}, ${lon}`);
+      if (isTrackingLocation) {
+        // Stop tracking and remove location marker
+        stopLocationTracking();
+        return;
+      }
+      
+      console.log('Starting location tracking...');
+      isTrackingLocation = true;
+      
+      // Update button appearance to show tracking state
+      const locBtn = document.getElementById('locbtn');
+      locBtn.style.backgroundColor = '#4285f4';
+      locBtn.style.color = 'white';
+      locBtn.title = 'Stop tracking location';
+      
+      // Start watching position
+      watchId = navigator.geolocation.watchPosition(function(pos){
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        const accuracy = pos.coords.accuracy;
+        const heading = pos.coords.heading;
+        
+        console.log(`Location update: ${lat}, ${lon}, accuracy: ${accuracy}m, heading: ${heading !== null ? heading + '°' : 'not available'}`);
         
         // Cache this location for future map initializations
         const locationData = {
@@ -1461,28 +1490,123 @@
         };
         localStorage.setItem('leaflet_last_location', JSON.stringify(locationData));
         
-        // Adjust zoom level based on current projection
-        let zoom;
-        if (currentCRS === '27700') {
-          // EPSG:27700 needs lower zoom numbers for similar field of view
-          zoom = 7; // Roughly equivalent to zoom 14 in Web Mercator
-        } else {
-          // EPSG:3857 Web Mercator  
-          zoom = 14;
+        // Update or create location marker
+        updateLocationMarker(lat, lon, accuracy, heading);
+        
+        // Center map on first location fix
+        if (!locationMarker) {
+          // Adjust zoom level based on current projection
+          let zoom;
+          if (currentCRS === '27700') {
+            zoom = 7; // Roughly equivalent to zoom 14 in Web Mercator
+          } else {
+            zoom = 14;
+          }
+          
+          console.log(`Setting initial view with zoom ${zoom} for CRS ${currentCRS}`);
+          map.setView([lat, lon], zoom);
         }
         
-        console.log(`Setting view with zoom ${zoom} for CRS ${currentCRS}`);
-        map.setView([lat, lon], zoom);
-        
-        // Optional: Add a temporary marker to show current location
-        // This could be enhanced to show accuracy circle
       }, function(err){
         console.log('Error getting location: ' + err.message);
+        stopLocationTracking();
         // Don't show alert for auto-location failures to avoid disrupting UX
       }, {
         enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 300000 // 5 minutes
+        timeout: 15000,
+        maximumAge: 60000 // 1 minute
+      });
+    }
+
+    function stopLocationTracking() {
+      if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+      }
+      
+      isTrackingLocation = false;
+      
+      // Reset button appearance
+      const locBtn = document.getElementById('locbtn');
+      locBtn.style.backgroundColor = '';
+      locBtn.style.color = '';
+      locBtn.title = 'My location';
+      
+      // Remove location marker and accuracy circle
+      if (locationMarker) {
+        map.removeLayer(locationMarker);
+        locationMarker = null;
+      }
+      if (accuracyCircle) {
+        map.removeLayer(accuracyCircle);
+        accuracyCircle = null;
+      }
+      
+      console.log('Stopped location tracking');
+    }
+
+    function updateLocationMarker(lat, lon, accuracy, heading) {
+      // Remove existing marker and circle
+      if (locationMarker) {
+        map.removeLayer(locationMarker);
+      }
+      if (accuracyCircle) {
+        map.removeLayer(accuracyCircle);
+      }
+      
+      // Create accuracy circle
+      accuracyCircle = L.circle([lat, lon], {
+        radius: accuracy,
+        fillColor: '#4285f4',
+        fillOpacity: 0.1,
+        color: '#4285f4',
+        opacity: 0.3,
+        weight: 1
+      }).addTo(map);
+      
+      // Create location marker with arrow pointing in device direction
+      const arrowIcon = createLocationArrowIcon(heading);
+      locationMarker = L.marker([lat, lon], {
+        icon: arrowIcon,
+        zIndexOffset: 1000 // Ensure it appears above other markers
+      }).addTo(map);
+    }
+
+    function createLocationArrowIcon(heading) {
+      // Create a custom icon with an arrow pointing in the direction the device is facing
+      // If heading is not available, default to pointing north (0 degrees)
+      const rotation = heading !== null && heading !== undefined ? heading : 0;
+      
+      const iconHtml = `
+        <div style="
+          width: 20px; 
+          height: 20px; 
+          background: #4285f4; 
+          border: 3px solid white; 
+          border-radius: 50%; 
+          position: relative;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          transform: rotate(${rotation}deg);
+        ">
+          <div style="
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 12px solid #4285f4;
+          "></div>
+        </div>
+      `;
+      
+      return L.divIcon({
+        html: iconHtml,
+        className: 'location-marker',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
       });
     }
     document.getElementById('locbtn').onclick = locate;
