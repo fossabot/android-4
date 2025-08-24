@@ -248,13 +248,27 @@ public class LeafletMapActivity extends BaseActivity {
         boolean hasParams = false;
 
         if (osKey != null && !osKey.isEmpty()) {
-            url.append("?os_key=").append(java.net.URLEncoder.encode(osKey, StandardCharsets.UTF_8));
+            try {
+                // Use String parameter instead of Charset for backward compatibility (API < 33)
+                url.append("?os_key=").append(java.net.URLEncoder.encode(osKey, StandardCharsets.UTF_8.name()));
+            } catch (java.io.UnsupportedEncodingException e) {
+                // UTF-8 is always supported, this should never happen
+                Log.e(TAG, "UTF-8 encoding not supported", e);
+                url.append("?os_key=").append(osKey); // fallback without encoding
+            }
             hasParams = true;
         }
 
         if (leafletMapStyle != null && !leafletMapStyle.isEmpty()) {
             url.append(hasParams ? "&" : "?");
-            url.append("initial_style=").append(java.net.URLEncoder.encode(leafletMapStyle, StandardCharsets.UTF_8));
+            try {
+                // Use String parameter instead of Charset for backward compatibility (API < 33)
+                url.append("initial_style=").append(java.net.URLEncoder.encode(leafletMapStyle, StandardCharsets.UTF_8.name()));
+            } catch (java.io.UnsupportedEncodingException e) {
+                // UTF-8 is always supported, this should never happen
+                Log.e(TAG, "UTF-8 encoding not supported", e);
+                url.append("initial_style=").append(leafletMapStyle); // fallback without encoding
+            }
         }
 
         return url.toString();
