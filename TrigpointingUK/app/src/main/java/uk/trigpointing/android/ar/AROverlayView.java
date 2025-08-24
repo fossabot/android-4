@@ -1,6 +1,7 @@
 package uk.trigpointing.android.ar;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,16 @@ public class AROverlayView extends View {
         iconPaint.setAntiAlias(true);
     }
     
+    // Compass directions with their bearings
+    private static final String[] COMPASS_DIRECTIONS = {
+        "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", 
+        "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"
+    };
+    private static final float[] COMPASS_BEARINGS = {
+        0f, 22.5f, 45f, 67.5f, 90f, 112.5f, 135f, 157.5f,
+        180f, 202.5f, 225f, 247.5f, 270f, 292.5f, 315f, 337.5f
+    };
+    
     public void updateTrigpoints(List<TrigpointData> trigpoints) {
         this.trigpoints = new ArrayList<>(trigpoints);
         invalidate(); // Trigger redraw
@@ -92,15 +104,34 @@ public class AROverlayView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        if (trigpoints.isEmpty() || currentLocation == null) {
-            return;
-        }
-        
         int screenWidth = getWidth();
         int screenHeight = getHeight();
         float fieldOfView = 60.0f; // Degrees, typical phone camera FOV
         
-        for (TrigpointData trig : trigpoints) {
+        // Draw compass directions at top of screen
+        drawCompassDirections(canvas, screenWidth, fieldOfView);
+        
+        if (trigpoints.isEmpty() || currentLocation == null) {
+            return;
+        }
+        
+        // Sort trigpoints by distance (farthest first) so nearest appear on top
+        List<TrigpointData> sortedTrigpoints = new ArrayList<>(trigpoints);
+        sortedTrigpoints.sort((t1, t2) -> {
+            Location loc1 = new Location("temp");
+            loc1.setLatitude(t1.getLat());
+            loc1.setLongitude(t1.getLon());
+            float dist1 = currentLocation.distanceTo(loc1);
+            
+            Location loc2 = new Location("temp");
+            loc2.setLatitude(t2.getLat());
+            loc2.setLongitude(t2.getLon());
+            float dist2 = currentLocation.distanceTo(loc2);
+            
+            return Float.compare(dist2, dist1); // Farthest first (reverse order)
+        });
+        
+        for (TrigpointData trig : sortedTrigpoints) {
             // Calculate bearing to trigpoint
             Location trigLocation = new Location("trigpoint");
             trigLocation.setLatitude(trig.getLat());
@@ -133,6 +164,50 @@ public class AROverlayView extends View {
         }
     }
     
+    private void drawCompassDirections(Canvas canvas, int screenWidth, float fieldOfView) {
+        Paint compassPaint = new Paint();
+        compassPaint.setColor(Color.WHITE);
+        compassPaint.setTextSize(36); // Slightly smaller than trigpoint text
+        compassPaint.setAntiAlias(true);
+        compassPaint.setShadowLayer(2, 1, 1, Color.BLACK);
+        compassPaint.setTypeface(android.graphics.Typeface.MONOSPACE);
+        
+        float compassY = 60; // Position near top of screen
+        
+        for (int i = 0; i < COMPASS_DIRECTIONS.length; i++) {
+            float bearing = COMPASS_BEARINGS[i];
+            
+            // Calculate relative bearing (difference between compass bearing and device bearing)
+            float relativeBearing = bearing - deviceAzimuth;
+            
+            // Normalize relative bearing to -180 to 180
+            while (relativeBearing > 180) relativeBearing -= 360;
+            while (relativeBearing < -180) relativeBearing += 360;
+            
+            // Only draw compass directions within field of view
+            if (Math.abs(relativeBearing) <= fieldOfView / 2) {
+                // Calculate screen position
+                float screenX = screenWidth / 2 + (relativeBearing / (fieldOfView / 2)) * (screenWidth / 2);
+                
+                String direction = COMPASS_DIRECTIONS[i];
+                Rect textBounds = new Rect();
+                compassPaint.getTextBounds(direction, 0, direction.length(), textBounds);
+                
+                // Center the text horizontally
+                float textX = screenX - textBounds.width() / 2;
+                
+                // Draw text background
+                canvas.drawRect(
+                    textX - 8, compassY - textBounds.height() - 8,
+                    textX + textBounds.width() + 8, compassY + 8,
+                    new Paint() {{ setColor(0x80000000); }} // Semi-transparent black
+                );
+                
+                canvas.drawText(direction, textX, compassY, compassPaint);
+            }
+        }
+    }
+    
     private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
         try {
             // Get trigpoint icon
@@ -142,7 +217,7 @@ public class AROverlayView extends View {
             if (icon != null) {
                 // Scale icon based on distance (closer = larger, but with reasonable limits)
                 float scale = Math.max(0.3f, Math.min(1.0f, 1000.0f / distance));
-                int iconSize = (int) (640 * scale); // Base size 640dp (10x larger than 64dp)
+                int iconSize = (int) (213 * scale); // Base size 213dp (1/3 of 640dp)
                 
                 // Draw icon
                 icon.setBounds(
@@ -190,10 +265,28 @@ public class AROverlayView extends View {
     }
     
     private int getTrigpointIconResource(TrigpointData trigpoint) {
-        // For AR view, always use bright green "good condition" icons for visibility
+        // Get user's map icon style preference (like in Leaflet maps)
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String iconStyle = prefs.getString("map_icon_style", "condition");
+        
         Trig.Physical physicalType = Trig.Physical.fromCode(trigpoint.getType());
-        // Always use the highlighted (bright green) version for AR visibility
-        return physicalType.icon(true); // true = use highlighted/bright version
+        
+        // Determine if icon should be highlighted based on user preference and condition
+        boolean isHighlighted = false;
+        
+        if ("condition".equals(iconStyle)) {
+            // Show highlighted (green) for good condition, normal for others
+            uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(trigpoint.getCondition());
+            isHighlighted = (condition == uk.trigpointing.android.types.Condition.GOOD);
+        } else if ("all_bright".equals(iconStyle)) {
+            // Always use bright/highlighted icons
+            isHighlighted = true;
+        } else if ("found".equals(iconStyle)) {
+            // This would require checking if trigpoint is found - for now default to normal
+            isHighlighted = false;
+        }
+        
+        return physicalType.icon(isHighlighted);
     }
     
     @Override

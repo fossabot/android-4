@@ -34,16 +34,7 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-            <!-- Compass directions row -->
-            <TextView
-                android:id="@+id/tvCompassDirections"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="N    NNE    NE    ENE    E    ESE    SE    SSE    S    SSW    SW    WSW    W    WNW    NW    NNW"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:fontFamily="monospace" />
+
 
             <TextView
                 android:id="@+id/tvTrigpointCount"
