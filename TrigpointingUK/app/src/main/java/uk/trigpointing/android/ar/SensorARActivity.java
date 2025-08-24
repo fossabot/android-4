@@ -310,6 +310,11 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                             trigpoints.add(trigData);
                         }
                         
+                        // Limit to 10 nearest trigpoints
+                        if (trigpoints.size() >= 10) {
+                            break;
+                        }
+                        
                     } while (cursor.moveToNext());
                     cursor.close();
                 }
@@ -317,7 +322,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                 // Update UI on main thread
                 runOnUiThread(() -> {
                     nearbyTrigpoints = trigpoints;
-                    tvTrigpointCount.setText("Found " + trigpoints.size() + " trigpoints within 5km");
+                    tvTrigpointCount.setText("Showing " + trigpoints.size() + " nearest trigpoints");
                     overlayView.setCurrentLocation(currentLocation);
                     overlayView.updateTrigpoints(trigpoints);
                     Log.i(TAG, "Loaded " + trigpoints.size() + " nearby trigpoints");

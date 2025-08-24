@@ -51,6 +51,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private void startPreview() {
         if (camera != null && holder.getSurface() != null) {
             try {
+                // Set camera orientation to match device orientation
+                // Default camera is rotated 90 degrees, so we need to correct it
+                camera.setDisplayOrientation(90);
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
             } catch (Exception e) {
