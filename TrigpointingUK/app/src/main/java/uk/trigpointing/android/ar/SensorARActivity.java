@@ -85,6 +85,9 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     // UI components
     private AROverlayView overlayView;
     
+    // Activity lifecycle flag
+    private volatile boolean isDestroyed = false;
+    
 
     
     @Override
@@ -174,6 +177,9 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     protected void onDestroy() {
         super.onDestroy();
         
+        // Set flag to prevent further database access
+        isDestroyed = true;
+        
         if (dbHelper != null) {
             try {
                 dbHelper.close();
@@ -260,6 +266,10 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     
     @Override
     public void onLocationChanged(Location location) {
+        if (isDestroyed) {
+            return;
+        }
+        
         currentLocation = location;
         Log.i(TAG, "New location: " + location.getLatitude() + ", " + location.getLongitude());
         loadNearbyTrigpoints();
@@ -273,12 +283,18 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     public void onStatusChanged(String provider, int status, Bundle extras) {}
     
     private void loadNearbyTrigpoints() {
-        if (currentLocation == null || dbHelper == null) {
+        if (currentLocation == null || dbHelper == null || isDestroyed) {
             return;
         }
         
         new Thread(() -> {
             try {
+                // Check again if activity was destroyed while thread was starting
+                if (isDestroyed) {
+                    Log.i(TAG, "loadNearbyTrigpoints: Activity destroyed, aborting database query");
+                    return;
+                }
+                
                 double lat = currentLocation.getLatitude();
                 double lon = currentLocation.getLongitude();
                 
@@ -317,12 +333,16 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                     cursor.close();
                 }
                 
-                // Update UI on main thread
+                // Update UI on main thread (if activity still exists)
                 runOnUiThread(() -> {
-                    nearbyTrigpoints = trigpoints;
-                    overlayView.setCurrentLocation(currentLocation);
-                    overlayView.updateTrigpoints(trigpoints);
-                    Log.i(TAG, "Loaded " + trigpoints.size() + " nearby trigpoints");
+                    if (!isDestroyed && overlayView != null) {
+                        nearbyTrigpoints = trigpoints;
+                        overlayView.setCurrentLocation(currentLocation);
+                        overlayView.updateTrigpoints(trigpoints);
+                        Log.i(TAG, "Loaded " + trigpoints.size() + " nearby trigpoints");
+                    } else {
+                        Log.i(TAG, "loadNearbyTrigpoints: Activity destroyed, skipping UI update");
+                    }
                 });
                 
             } catch (Exception e) {
@@ -333,6 +353,10 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (isDestroyed) {
+            return;
+        }
+        
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             // Get rotation matrix from rotation vector
             SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
