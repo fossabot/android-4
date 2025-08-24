@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
     private TextView			mUnsyncedCount;
     private TextView			mPhotosCount;
     private Button				mSyncBtn;
-    private Button				mARCoreBtn;
     private Button				mARViewBtn;
     private TextView			mUserName;
     private ImageView			mUserMapImage;
@@ -103,7 +102,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         mPhotosIcon = findViewById(R.id.countPhotosImage);
         mPhotosCount = findViewById(R.id.countPhotosText);
         mSyncBtn = findViewById(R.id.btnSync);
-        mARCoreBtn = findViewById(R.id.btnARCore);
         mARViewBtn = findViewById(R.id.btnARView);
         mUserName = findViewById(R.id.txtUserName);
         mUserMapImage = findViewById(R.id.userMapImage);
@@ -227,13 +225,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
             mapLauncher.launch(i);
         });
 
-        // ARCore button (developer mode only)
-        mARCoreBtn.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, uk.trigpointing.android.ar.ARTrigpointActivity.class);
-            startActivity(i);
-        });
-
-        // Sensor-based AR View button (developer mode only)
+        // AR View button
         mARViewBtn.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, uk.trigpointing.android.ar.SensorARActivity.class);
             startActivity(i);
@@ -551,14 +543,8 @@ public class MainActivity extends BaseActivity implements SyncListener {
 				mUserMapImage.setVisibility(View.GONE);
 			}
 			
-			// Show AR buttons only for developers
-			if (devMode) {
-				mARCoreBtn.setVisibility(View.VISIBLE);
-				mARViewBtn.setVisibility(View.VISIBLE);
-			} else {
-				mARCoreBtn.setVisibility(View.GONE);
-				mARViewBtn.setVisibility(View.GONE);
-			}
+					// AR View is available to all users
+		mARViewBtn.setVisibility(View.VISIBLE);
 			
 		} catch (Exception e) {
 			Log.e(TAG, "updateUserDisplay: Error updating user display", e);
