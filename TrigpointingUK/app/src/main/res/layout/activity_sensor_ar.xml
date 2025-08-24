@@ -7,22 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".ar.SensorARActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
         <!-- Camera preview as background -->
         <uk.trigpointing.android.ar.CameraPreview
@@ -45,16 +32,18 @@
             android:layout_gravity="top"
             android:background="#80000000"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="8dp">
 
+            <!-- Compass directions row -->
             <TextView
-                android:id="@+id/tvInstructions"
+                android:id="@+id/tvCompassDirections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Point your camera around to see nearby trigpoints.\nThis uses pure compass bearings."
+                android:text="N    NNE    NE    ENE    E    ESE    SE    SSE    S    SSW    SW    WSW    W    WNW    NW    NNW"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:gravity="center" />
+                android:textSize="12sp"
+                android:gravity="center"
+                android:fontFamily="monospace" />
 
             <TextView
                 android:id="@+id/tvTrigpointCount"
@@ -64,7 +53,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:gravity="center"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="4dp" />
 
         </LinearLayout>
 

@@ -142,7 +142,7 @@ public class AROverlayView extends View {
             if (icon != null) {
                 // Scale icon based on distance (closer = larger, but with reasonable limits)
                 float scale = Math.max(0.3f, Math.min(1.0f, 1000.0f / distance));
-                int iconSize = (int) (64 * scale); // Base size 64dp
+                int iconSize = (int) (640 * scale); // Base size 640dp (10x larger than 64dp)
                 
                 // Draw icon
                 icon.setBounds(

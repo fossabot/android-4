@@ -82,7 +82,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     private List<AROverlayView.TrigpointData> nearbyTrigpoints = new ArrayList<>();
     
     // UI components
-    private TextView tvInstructions;
     private TextView tvTrigpointCount;
     private AROverlayView overlayView;
     
@@ -102,7 +101,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         }
         
         // Initialize UI components
-        tvInstructions = findViewById(R.id.tvInstructions);
         tvTrigpointCount = findViewById(R.id.tvTrigpointCount);
         cameraPreview = findViewById(R.id.camera_preview);
         overlayView = findViewById(R.id.ar_overlay);
