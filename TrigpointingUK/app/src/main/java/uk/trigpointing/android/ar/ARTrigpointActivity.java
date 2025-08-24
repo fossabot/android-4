@@ -1,6 +1,7 @@
 package uk.trigpointing.android.ar;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
@@ -66,6 +67,7 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
             this.condition = condition;
         }
         
+        public long getId() { return id; }
         public String getName() { return name; }
         public double getLat() { return lat; }
         public double getLon() { return lon; }
@@ -456,12 +458,11 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
         float scaledDistance = Math.min(distance / 100.0f, 10.0f);
         
         // Convert bearing to AR coordinates:
-        // - sin(bearing) gives East-West component (positive X = East)
-        // - cos(bearing) gives North-South component, but we need to negate it
-        // Since camera looks toward negative Z, North (bearing 0°) should be negative Z
+        // Fix 182° offset by inverting Z-axis calculation
+        // ARCore camera looks toward negative Z, but our coordinate system needs adjustment
         float x = (float) (Math.sin(bearingRad) * scaledDistance);      // East = positive X
-        float z = (float) (-Math.cos(bearingRad) * scaledDistance);     // North = negative Z (camera forward)
-        float y = 0.5f; // Height above ground
+        float z = (float) (Math.cos(bearingRad) * scaledDistance);      // North = positive Z (opposite of camera forward)
+        float y = 0.0f; // Force all trigpoints to horizon level
         
         // Debug logging to help verify bearing calculations
         String direction = "";
@@ -503,6 +504,14 @@ public class ARTrigpointActivity extends BaseActivity implements LocationListene
                 if (distanceText != null) {
                     distanceText.setText(String.format("%.0fm", distance));
                 }
+                
+                // Add click handler to open trigpoint details
+                markerNode.setOnTapListener((hitTestResult, motionEvent) -> {
+                    Log.i(TAG, "Tapped on trigpoint: " + trig.getName() + " (ID: " + trig.getId() + ")");
+                    Intent intent = new Intent(ARTrigpointActivity.this, uk.trigpointing.android.trigdetails.TrigDetailsActivity.class);
+                    intent.putExtra(uk.trigpointing.android.DbHelper.TRIG_ID, trig.getId());
+                    startActivity(intent);
+                });
                 
                 arSceneView.getScene().addChild(markerNode);
                 trigpointNodes.add(markerNode);
