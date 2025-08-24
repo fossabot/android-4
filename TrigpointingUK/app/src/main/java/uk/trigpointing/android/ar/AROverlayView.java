@@ -15,6 +15,8 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,12 +210,11 @@ public class AROverlayView extends View {
         }
     }
     
-    private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
+        private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
         try {
-            // Get trigpoint icon
-            int iconRes = getTrigpointIconResource(trig);
-            Drawable icon = ContextCompat.getDrawable(getContext(), iconRes);
-            
+            // Get trigpoint icon (same source as Leaflet map)
+            Drawable icon = getTrigpointIconDrawable(trig);
+
             if (icon != null) {
                 // Scale icon based on distance (closer = larger, but with reasonable limits)
                 float scale = Math.max(0.3f, Math.min(1.0f, 1000.0f / distance));
@@ -264,37 +265,81 @@ public class AROverlayView extends View {
         }
     }
     
-        private int getTrigpointIconResource(TrigpointData trigpoint) {
-        // Get user's map icon style preference (like in Leaflet maps)
+        private Drawable getTrigpointIconDrawable(TrigpointData trigpoint) {
+        // Get user's map icon style preference (same as Leaflet maps)
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String iconStyle = prefs.getString("map_icon_style", "medium");
-
-        Trig.Physical physicalType = Trig.Physical.fromCode(trigpoint.getType());
-
-        // Handle "Type Icons" option - use same icons as Nearest activity
-        if ("types".equals(iconStyle)) {
-            // Type icons are always highlighted for visibility in AR
-            return physicalType.icon(true);
+        
+        // Determine icon path using same logic as Leaflet map
+        String iconPath = getTrigIconPath(trigpoint.getType(), trigpoint.getCondition(), iconStyle);
+        
+        try {
+            // Load icon from assets folder (same source as Leaflet map)
+            InputStream inputStream = getContext().getAssets().open("leaflet/icons/" + iconPath);
+            Drawable drawable = Drawable.createFromStream(inputStream, null);
+            inputStream.close();
+            return drawable;
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to load icon from assets: " + iconPath + ", falling back to default");
+            // Fallback to default Android drawable
+            Trig.Physical physicalType = Trig.Physical.fromCode(trigpoint.getType());
+            int iconRes = physicalType.icon(true);
+            return ContextCompat.getDrawable(getContext(), iconRes);
+        }
+    }
+    
+    private String getTrigIconPath(String type, String condition, String iconStyle) {
+        // Map database type codes to icon type names (same as Leaflet)
+        String iconType;
+        switch (type) {
+            case "PI": iconType = "pillar"; break;
+            case "FB": iconType = "fbm"; break;
+            case "IN": iconType = "intersected"; break;
+            default: iconType = "passive"; break;
         }
         
-        // Handle "Trigpoint Symbols" option - use same logic as types for now
+        // Determine if icon should be flagged/highlighted (same logic as Leaflet)
+        boolean flagged = false; // TODO: Add marked status check when available
+        
+        // Determine color based on condition (same logic as Leaflet)
+        String color = getConditionColor(condition);
+        
+        // Generate icon path based on style (same logic as Leaflet)
         if ("symbols".equals(iconStyle)) {
-            // Symbols are always highlighted for visibility in AR
-            return physicalType.icon(true);
+            // Use symbol icons with full color support
+            String highlight = flagged ? "_h" : "";
+            return "symbolicon_" + iconType + "_" + color + highlight + ".png";
+        } else if ("types".equals(iconStyle)) {
+            // Use type icons with full color support  
+            String highlight = flagged ? "_h" : "";
+            return "typeicon_" + iconType + "_" + color + highlight + ".png";
+        } else {
+            // Use colored logo icons (small/medium/large)
+            String highlight = flagged ? "_h" : "";
+            return "mapicon_" + iconType + "_" + color + highlight + ".png";
         }
-        
-        // Handle colored logo icons (small/medium/large) - need to map to drawable resources
-        // Since we don't have the full set of colored logo icons as Android resources,
-        // we'll use the colored condition-based logic for these options
-        
-        // Determine if icon should be highlighted based on user preference and condition
-        boolean isHighlighted = false;
-
-        // For small/medium/large, we use condition-based coloring like the original AR logic
-        uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(trigpoint.getCondition());
-        isHighlighted = (condition == uk.trigpointing.android.types.Condition.GOOD);
-
-        return physicalType.icon(isHighlighted);
+    }
+    
+    private String getConditionColor(String condition) {
+        // Same color logic as Leaflet map
+        switch (condition) {
+            case "G": return "green";    // Good
+            case "S": return "yellow";   // Slightly damaged
+            case "C": return "yellow";   // Converted  
+            case "D": return "red";      // Damaged
+            case "R": return "red";      // Remains
+            case "T": return "red";      // Toppled
+            case "M": return "red";      // Moved
+            case "Q": return "red";      // Possibly missing
+            case "X": return "red";      // Destroyed
+            case "N": return "red";      // Couldn't find
+            case "V": return "yellow";   // Visible but unreachable
+            case "P": return "grey";     // Inaccessible
+            case "U": return "grey";     // Unknown
+            case "-": return "grey";     // Not visited
+            case "Z": return "grey";     // Not logged
+            default: return "green";     // Default to green
+        }
     }
     
     @Override
