@@ -264,28 +264,36 @@ public class AROverlayView extends View {
         }
     }
     
-    private int getTrigpointIconResource(TrigpointData trigpoint) {
+        private int getTrigpointIconResource(TrigpointData trigpoint) {
         // Get user's map icon style preference (like in Leaflet maps)
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String iconStyle = prefs.getString("map_icon_style", "condition");
-        
+        String iconStyle = prefs.getString("map_icon_style", "medium");
+
         Trig.Physical physicalType = Trig.Physical.fromCode(trigpoint.getType());
+
+        // Handle "Type Icons" option - use same icons as Nearest activity
+        if ("types".equals(iconStyle)) {
+            // Type icons are always highlighted for visibility in AR
+            return physicalType.icon(true);
+        }
+        
+        // Handle "Trigpoint Symbols" option - use same logic as types for now
+        if ("symbols".equals(iconStyle)) {
+            // Symbols are always highlighted for visibility in AR
+            return physicalType.icon(true);
+        }
+        
+        // Handle colored logo icons (small/medium/large) - need to map to drawable resources
+        // Since we don't have the full set of colored logo icons as Android resources,
+        // we'll use the colored condition-based logic for these options
         
         // Determine if icon should be highlighted based on user preference and condition
         boolean isHighlighted = false;
-        
-        if ("condition".equals(iconStyle)) {
-            // Show highlighted (green) for good condition, normal for others
-            uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(trigpoint.getCondition());
-            isHighlighted = (condition == uk.trigpointing.android.types.Condition.GOOD);
-        } else if ("all_bright".equals(iconStyle)) {
-            // Always use bright/highlighted icons
-            isHighlighted = true;
-        } else if ("found".equals(iconStyle)) {
-            // This would require checking if trigpoint is found - for now default to normal
-            isHighlighted = false;
-        }
-        
+
+        // For small/medium/large, we use condition-based coloring like the original AR logic
+        uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(trigpoint.getCondition());
+        isHighlighted = (condition == uk.trigpointing.android.types.Condition.GOOD);
+
         return physicalType.icon(isHighlighted);
     }
     

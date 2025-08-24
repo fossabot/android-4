@@ -1396,8 +1396,8 @@
     }
 
     function getTrigIconUrl(type, color, flagged, iconStyle) {
-      // Check if using trigpoint symbols
-      if (iconStyle === 'symbols') {
+      // Check if using trigpoint symbols or type icons
+      if (iconStyle === 'symbols' || iconStyle === 'types') {
         // Map database type codes to symbol icon names
         const typeMap = {
           'PI': 'pillar',

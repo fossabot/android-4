@@ -78,6 +78,7 @@
         <item>Medium Icons - Default</item>
         <item>Large Icons</item>
         <item>Trigpoint Symbols</item>
+        <item>Type Icons</item>
     </string-array>
 
     <string-array name="icon_style_values">
@@ -85,6 +86,7 @@
         <item>medium</item>
         <item>large</item>
         <item>symbols</item>
+        <item>types</item>
     </string-array>
 
 </resources> 
