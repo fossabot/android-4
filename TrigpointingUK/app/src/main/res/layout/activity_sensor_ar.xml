@@ -25,28 +25,7 @@
             android:clickable="true"
             android:focusable="true" />
 
-        <!-- Status overlay -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:background="#80000000"
-            android:orientation="vertical"
-            android:padding="8dp">
 
-
-
-            <TextView
-                android:id="@+id/tvTrigpointCount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Loading trigpoints..."
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginTop="4dp" />
-
-        </LinearLayout>
 
     </FrameLayout>
 

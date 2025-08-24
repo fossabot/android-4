@@ -42,6 +42,7 @@ import java.util.List;
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
 import uk.trigpointing.android.common.BaseActivity;
+import uk.trigpointing.android.filter.Filter;
 import uk.trigpointing.android.types.Trig;
 
 /**
@@ -82,7 +83,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     private List<AROverlayView.TrigpointData> nearbyTrigpoints = new ArrayList<>();
     
     // UI components
-    private TextView tvTrigpointCount;
     private AROverlayView overlayView;
     
 
@@ -101,7 +101,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         }
         
         // Initialize UI components
-        tvTrigpointCount = findViewById(R.id.tvTrigpointCount);
         cameraPreview = findViewById(R.id.camera_preview);
         overlayView = findViewById(R.id.ar_overlay);
         
@@ -283,7 +282,8 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                 double lat = currentLocation.getLatitude();
                 double lon = currentLocation.getLongitude();
                 
-                // Query database for nearby trigpoints
+                // Query database for nearby trigpoints with user's filter preferences
+                Log.i(TAG, "loadNearbyTrigpoints: Applying user's trigpoint type filters");
                 Cursor cursor = dbHelper.fetchTrigList(currentLocation);
                 List<AROverlayView.TrigpointData> trigpoints = new ArrayList<>();
                 
@@ -320,7 +320,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                 // Update UI on main thread
                 runOnUiThread(() -> {
                     nearbyTrigpoints = trigpoints;
-                    tvTrigpointCount.setText("Showing " + trigpoints.size() + " nearest trigpoints");
                     overlayView.setCurrentLocation(currentLocation);
                     overlayView.updateTrigpoints(trigpoints);
                     Log.i(TAG, "Loaded " + trigpoints.size() + " nearby trigpoints");
@@ -328,7 +327,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                 
             } catch (Exception e) {
                 Log.e(TAG, "Error loading nearby trigpoints", e);
-                runOnUiThread(() -> tvTrigpointCount.setText("Error loading trigpoints"));
             }
         }).start();
     }
