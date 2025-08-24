@@ -105,10 +105,52 @@ class DownloadMapsActivity : BaseActivity() {
 
                 if (response.isSuccessful && body != null) {
                     val totalSize = body.contentLength()
-                    var extractedSize = 0L
+                    var downloadedBytes = 0L
+                    var extractedFileCount = 0
+                    
+                    Log.d(TAG, "Starting download of ${mapDownload.name}, total size: $totalSize bytes")
 
                     body.byteStream().use { inputStream ->
-                        BufferedInputStream(inputStream).use { bufferedInputStream ->
+                        // Create a counting input stream to track actual bytes read
+                        val countingInputStream = object : InputStream() {
+                            override fun read(): Int {
+                                val byte = inputStream.read()
+                                if (byte != -1) {
+                                    downloadedBytes++
+                                    // Update progress every 64KB to avoid too many UI updates
+                                    if (downloadedBytes % 65536 == 0L || downloadedBytes == totalSize) {
+                                        val progress = if (totalSize > 0) {
+                                            ((downloadedBytes * 100) / totalSize).toInt().coerceIn(0, 100)
+                                        } else 0
+                                        
+                                        lifecycleScope.launch(Dispatchers.Main) {
+                                            adapter.updateProgress(mapDownload, progress)
+                                        }
+                                    }
+                                }
+                                return byte
+                            }
+                            
+                            override fun read(b: ByteArray, off: Int, len: Int): Int {
+                                val bytesRead = inputStream.read(b, off, len)
+                                if (bytesRead > 0) {
+                                    downloadedBytes += bytesRead
+                                    // Update progress every 64KB to avoid too many UI updates
+                                    if (downloadedBytes % 65536 < bytesRead || downloadedBytes == totalSize) {
+                                        val progress = if (totalSize > 0) {
+                                            ((downloadedBytes * 100) / totalSize).toInt().coerceIn(0, 100)
+                                        } else 0
+                                        
+                                        lifecycleScope.launch(Dispatchers.Main) {
+                                            adapter.updateProgress(mapDownload, progress)
+                                        }
+                                    }
+                                }
+                                return bytesRead
+                            }
+                        }
+                        
+                        BufferedInputStream(countingInputStream).use { bufferedInputStream ->
                             TarArchiveInputStream(bufferedInputStream).use { tarInput ->
                                 var entry = tarInput.nextTarEntry
                                 while (entry != null) {
@@ -122,28 +164,31 @@ class DownloadMapsActivity : BaseActivity() {
                                                 fos.write(buffer, 0, len)
                                             }
                                         }
-                                        extractedSize += entry.size
-                                        val progress = ((extractedSize * 100) / totalSize).toInt()
-                                        withContext(Dispatchers.Main) {
-                                            adapter.updateProgress(mapDownload, progress)
-                                        }
+                                        extractedFileCount++
+                                        Log.v(TAG, "Extracted file ${extractedFileCount}: ${entry.name}")
                                     }
                                     entry = tarInput.nextTarEntry
                                 }
                             }
                         }
                     }
+                    
+                    Log.d(TAG, "Download complete: ${mapDownload.name}, extracted $extractedFileCount files")
+                    
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@DownloadMapsActivity, "${mapDownload.name} download complete!", Toast.LENGTH_SHORT).show()
+                        // Update cache usage display
+                        setupCacheUsage()
+                        
+                        Toast.makeText(this@DownloadMapsActivity, "${mapDownload.name} download complete! Extracted $extractedFileCount files.", Toast.LENGTH_LONG).show()
                         adapter.updateProgress(mapDownload, 100) // Mark as complete
-                        finish() // Close the activity
+                        // Don't automatically close activity - let user see completion and navigate back manually
                     }
                 } else {
-                    showError("Download failed")
+                    showError("Download failed - HTTP ${response.code}")
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Download/Extraction failed", e)
-                showError("Download failed")
+                Log.e(TAG, "Download/Extraction failed for ${mapDownload.name}", e)
+                showError("Download failed: ${e.message}")
             }
         }
     }
