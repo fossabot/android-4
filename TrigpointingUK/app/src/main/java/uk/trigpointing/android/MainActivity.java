@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
     private TextView			mUnsyncedCount;
     private TextView			mPhotosCount;
     private Button				mSyncBtn;
-    private Button				mARViewBtn;
+    private Button				mARCoreBtn;
     private TextView			mUserName;
     private ImageView			mUserMapImage;
     
@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
         mPhotosIcon = findViewById(R.id.countPhotosImage);
         mPhotosCount = findViewById(R.id.countPhotosText);
         mSyncBtn = findViewById(R.id.btnSync);
-        mARViewBtn = findViewById(R.id.btnARView);
+        mARCoreBtn = findViewById(R.id.btnARCore);
         mUserName = findViewById(R.id.txtUserName);
         mUserMapImage = findViewById(R.id.userMapImage);
         
@@ -225,8 +225,8 @@ public class MainActivity extends BaseActivity implements SyncListener {
             mapLauncher.launch(i);
         });
 
-        // AR View button (developer mode only)
-        mARViewBtn.setOnClickListener(v -> {
+        // ARCore button (developer mode only)
+        mARCoreBtn.setOnClickListener(v -> {
             Intent i = new Intent(MainActivity.this, uk.trigpointing.android.ar.ARTrigpointActivity.class);
             startActivity(i);
         });
@@ -543,11 +543,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
 				mUserMapImage.setVisibility(View.GONE);
 			}
 			
-			// Show AR View button only for developers
+			// Show ARCore button only for developers
 			if (devMode) {
-				mARViewBtn.setVisibility(View.VISIBLE);
+				mARCoreBtn.setVisibility(View.VISIBLE);
 			} else {
-				mARViewBtn.setVisibility(View.GONE);
+				mARCoreBtn.setVisibility(View.GONE);
 			}
 			
 		} catch (Exception e) {

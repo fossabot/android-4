@@ -249,13 +249,13 @@
             android:background="@color/colorPrimary"
             android:textColor="@color/colorOnPrimary" />
 
-        <!-- Developer only: AR View button -->
+        <!-- Developer only: ARCore button -->
         <Button
-            android:id="@+id/btnARView"
+            android:id="@+id/btnARCore"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="8dp"
-            android:text="@string/arView"
+            android:text="@string/arCore"
             android:textSize="16sp"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorOnPrimary"
