@@ -1396,8 +1396,8 @@
     }
 
     function getTrigIconUrl(type, color, flagged, iconStyle) {
-      // Check if using trigpoint symbols or type icons
-      if (iconStyle === 'symbols' || iconStyle === 'types') {
+      // Check if using trigpoint symbols
+      if (iconStyle === 'symbols') {
         // Map database type codes to symbol icon names
         const typeMap = {
           'PI': 'pillar',
@@ -1408,9 +1408,26 @@
         // Default to passive for any unknown types
         const iconType = typeMap[type] || 'passive';
         
-        // Use symbol icons: t_ for normal, ts_ for flagged/highlighted
-        const prefix = flagged ? 'ts_' : 't_';
-        const iconName = `${prefix}${iconType}.png`;
+        // Use new symbol icons with full color support
+        const highlight = flagged ? '_h' : '';
+        const iconName = `symbolicon_${iconType}_${color}${highlight}.png`;
+        
+        return `icons/${iconName}`;
+      } else if (iconStyle === 'types') {
+        // Type Icons - same color/highlighting logic as Small/Medium/Large
+        // Map database type codes to icon names
+        const typeMap = {
+          'PI': 'pillar',
+          'FB': 'fbm', 
+          'IN': 'intersected'
+        };
+        
+        // Default to passive for any unknown types
+        const iconType = typeMap[type] || 'passive';
+        
+        // Use new type icons with full color support
+        const highlight = flagged ? '_h' : '';
+        const iconName = `typeicon_${iconType}_${color}${highlight}.png`;
         
         return `icons/${iconName}`;
       } else {
