@@ -129,8 +129,12 @@
         <activity 
             android:name="uk.trigpointing.android.filter.FilterFoundActivity"
             android:exported="false" />
-        <activity 
+                <activity
             android:name="uk.trigpointing.android.ar.ARTrigpointActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="uk.trigpointing.android.ar.SensorARActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>
