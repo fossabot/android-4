@@ -25,13 +25,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Camera preview as background -->
-        <uk.trigpointing.android.ar.SensorARActivity.CameraPreview
+        <uk.trigpointing.android.ar.CameraPreview
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <!-- AR overlay for trigpoint icons -->
-        <uk.trigpointing.android.ar.SensorARActivity.AROverlayView
+        <uk.trigpointing.android.ar.AROverlayView
             android:id="@+id/ar_overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
