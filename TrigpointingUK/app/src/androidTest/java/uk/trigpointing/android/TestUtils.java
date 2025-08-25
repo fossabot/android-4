@@ -22,7 +22,7 @@ public class TestUtils {
         return dbHelper.createTrig(
             id, name, "TEST" + id, 54.5270, -3.0165,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, "Test FB content"
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, "Test FB content"
         );
     }
 
@@ -33,7 +33,7 @@ public class TestUtils {
         return dbHelper.createTrig(
             id, name, "TEST" + id, lat, lon,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null
         );
     }
 
@@ -54,7 +54,7 @@ public class TestUtils {
     public static long createTestPhoto(DbHelper dbHelper, long trigId) {
         return dbHelper.createPhoto(
             trigId, "Test Photo", "Test Description",
-            "test_icon.jpg", "test_photo.jpg", PhotoSubject.AERIAL, 1
+            "test_icon.jpg", "test_photo.jpg", PhotoSubject.TRIGPOINT, 1
         );
     }
 
@@ -106,26 +106,26 @@ public class TestUtils {
         // Pillars
         dbHelper.createTrig(2001, "Pillar 1", "P001", 54.0, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
         
         dbHelper.createTrig(2002, "Pillar 2", "P002", 54.1, -3.1,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
 
         // FBMs
         dbHelper.createTrig(2003, "FBM 1", "F001", 54.2, -3.2,
             Trig.Physical.FBM, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
 
         // Intersected
         dbHelper.createTrig(2004, "Intersected 1", "I001", 54.3, -3.3,
             Trig.Physical.INTERSECTED, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
 
         // Passive (other type)
         dbHelper.createTrig(2005, "Passive 1", "PA001", 54.4, -3.4,
-            Trig.Physical.PASSIVE, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Physical.ACTIVE, Condition.GOOD, Condition.GOOD,
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
     }
 
     /**

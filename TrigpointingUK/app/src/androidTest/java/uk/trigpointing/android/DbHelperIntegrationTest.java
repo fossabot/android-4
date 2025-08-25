@@ -72,8 +72,8 @@ public class DbHelperIntegrationTest {
             Trig.Physical.PILLAR, 
             Condition.GOOD, 
             Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, 
-            Trig.Historic.HISTORIC,
+            Trig.Current.ACTIVE, 
+            Trig.Historic.PRIMARY,
             "Test FB content"
         );
         
@@ -100,7 +100,7 @@ public class DbHelperIntegrationTest {
         dbHelper.createTrig(
             trigId, "Test Trig", "TEST001", 54.0, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null
         );
         
         // Update log status
@@ -126,7 +126,7 @@ public class DbHelperIntegrationTest {
         dbHelper.createTrig(
             1003, "Test Trig", "TEST001", 54.0, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null
         );
         
         // Now should be populated
@@ -138,19 +138,19 @@ public class DbHelperIntegrationTest {
         // Add test trigpoints of different types
         dbHelper.createTrig(1011, "Pillar 1", "P001", 54.0, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
             
         dbHelper.createTrig(1012, "Pillar 2", "P002", 54.1, -3.1,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
             
         dbHelper.createTrig(1013, "FBM 1", "F001", 54.2, -3.2,
             Trig.Physical.FBM, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
             
         dbHelper.createTrig(1014, "Intersected 1", "I001", 54.3, -3.3,
             Trig.Physical.INTERSECTED, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
         
         // Test counting methods
         assertEquals("Should count 2 logged pillars", 2, dbHelper.countLoggedPillars());
@@ -197,13 +197,13 @@ public class DbHelperIntegrationTest {
         dbHelper.createTrig(
             trigId, "Photo Test Trig", "PT001", 54.0, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null
         );
         
         // Create a photo
         long photoResult = dbHelper.createPhoto(
             trigId, "Test Photo", "Test Description",
-            "icon.jpg", "photo.jpg", PhotoSubject.AERIAL, 1
+            "icon.jpg", "photo.jpg", PhotoSubject.TRIGPOINT, 1
         );
         
         assertTrue("Photo creation should succeed", photoResult != -1);
@@ -249,11 +249,11 @@ public class DbHelperIntegrationTest {
         // Create test trigpoints at different distances
         dbHelper.createTrig(5001, "Near Trig", "N001", 54.5270, -3.0165,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
             
         dbHelper.createTrig(5002, "Far Trig", "F001", 55.0, -4.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
         
         // Create a location near the first trigpoint
         Location testLocation = new Location("test");
@@ -277,18 +277,14 @@ public class DbHelperIntegrationTest {
         // Create trigpoints inside and outside bounding box
         dbHelper.createTrig(6001, "Inside Trig", "I001", 54.5, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
             
         dbHelper.createTrig(6002, "Outside Trig", "O001", 55.5, -4.5,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
         
         // Create bounding box around Lake District
-        BoundingBox boundingBox = new BoundingBox();
-        boundingBox.setLatNorth(54.8);
-        boundingBox.setLatSouth(54.2);
-        boundingBox.setLonEast(-2.5);
-        boundingBox.setLonWest(-3.5);
+        BoundingBox boundingBox = new BoundingBox(54.8, -2.5, 54.2, -3.5);
         
         Cursor cursor = dbHelper.fetchTrigMapList(boundingBox);
         assertNotNull("Cursor should not be null", cursor);
@@ -307,13 +303,13 @@ public class DbHelperIntegrationTest {
         long trigId = 7001;
         dbHelper.createTrig(trigId, "Test Trig", "T001", 54.0, -3.0,
             Trig.Physical.PILLAR, Condition.GOOD, Condition.GOOD,
-            Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+            Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
             
         dbHelper.createLog(trigId, 2024, 12, 25, 1640, 14, 30,
             "NY341151", "Test", Condition.GOOD, 10, "Comment", 0, 0);
             
         dbHelper.createPhoto(trigId, "Photo", "Desc", "icon.jpg", "photo.jpg", 
-            PhotoSubject.AERIAL, 1);
+            PhotoSubject.TRIGPOINT, 1);
             
         dbHelper.setMarkedTrig(trigId, true);
         
@@ -346,7 +342,7 @@ public class DbHelperIntegrationTest {
         try {
             dbHelper.createTrig(trigId, "Transaction Test", "T001", 54.0, -3.0,
                 Trig.Physical.PILLAR, Condition.GOOD, Condition.TRIGNOTLOGGED,
-                Trig.Current.CURRENT, Trig.Historic.HISTORIC, null);
+                Trig.Current.ACTIVE, Trig.Historic.PRIMARY, null);
                 
             dbHelper.updateTrigLog(trigId, Condition.GOOD);
             
