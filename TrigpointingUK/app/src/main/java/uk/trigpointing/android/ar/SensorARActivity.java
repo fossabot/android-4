@@ -275,9 +275,11 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         loadNearbyTrigpoints();
     }
     
-    public void onLocationProviderEnabled(String provider) {}
+    @Override
+    public void onProviderEnabled(String provider) {}
     
-    public void onLocationProviderDisabled(String provider) {}
+    @Override
+    public void onProviderDisabled(String provider) {}
     
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
