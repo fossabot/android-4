@@ -1,0 +1,784 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LeafletMapActivity</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.mapping</a>
+</div>
+
+<h1>Coverage Summary for Class: LeafletMapActivity (uk.trigpointing.android.mapping)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LeafletMapActivity</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/84)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/202)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">LeafletMapActivity$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">LeafletMapActivity$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">LeafletMapActivity$LeafletPreferencesInterface</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/36)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/41)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/94)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/259)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.mapping;
+&nbsp;
+&nbsp;import android.Manifest;
+&nbsp;import android.annotation.SuppressLint;
+&nbsp;import android.content.pm.PackageManager;
+&nbsp;import android.os.Bundle;
+&nbsp;import android.content.Intent;
+&nbsp;import android.content.SharedPreferences;
+&nbsp;import androidx.preference.PreferenceManager;
+&nbsp;import android.util.Log;
+&nbsp;import android.webkit.GeolocationPermissions;
+&nbsp;import android.webkit.JavascriptInterface;
+&nbsp;import android.view.Menu;
+&nbsp;import android.view.MenuItem;
+&nbsp;import android.webkit.WebChromeClient;
+&nbsp;import android.webkit.WebResourceRequest;
+&nbsp;import android.webkit.WebResourceResponse;
+&nbsp;import android.webkit.WebSettings;
+&nbsp;import android.webkit.WebView;
+&nbsp;import android.widget.Toast;
+&nbsp;import android.database.Cursor;
+&nbsp;
+&nbsp;import com.google.android.material.bottomsheet.BottomSheetDialog;
+&nbsp;import com.google.android.material.tabs.TabLayout;
+&nbsp;import com.google.android.material.tabs.TabLayoutMediator;
+&nbsp;
+&nbsp;import org.json.JSONArray;
+&nbsp;import org.json.JSONObject;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.FileInputStream;
+&nbsp;import java.io.FileNotFoundException;
+&nbsp;import java.io.FileOutputStream;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.InputStream;
+&nbsp;import java.net.HttpURLConnection;
+&nbsp;import java.net.URL;
+&nbsp;import java.nio.charset.StandardCharsets;
+&nbsp;import java.text.DecimalFormat;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;import uk.trigpointing.android.common.BaseActivity;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.core.app.ActivityCompat;
+&nbsp;import androidx.core.content.ContextCompat;
+&nbsp;import androidx.viewpager2.widget.ViewPager2;
+&nbsp;import androidx.webkit.WebViewClientCompat;
+&nbsp;
+&nbsp;import uk.trigpointing.android.DbHelper;
+&nbsp;import uk.trigpointing.android.R;
+&nbsp;import uk.trigpointing.android.common.FileCache;
+&nbsp;import uk.trigpointing.android.DownloadTrigsActivity;
+&nbsp;import uk.trigpointing.android.filter.Filter;
+&nbsp;import uk.trigpointing.android.mapping.DownloadMapsActivity;
+&nbsp;
+<b class="nc">&nbsp;public class LeafletMapActivity extends BaseActivity {</b>
+&nbsp;    private static final String TAG = &quot;LeafletMapActivity&quot;;
+&nbsp;    private WebView webView;
+&nbsp;    private static final int REQ_LOCATION = 2001;
+&nbsp;    private DbHelper dbHelper;
+&nbsp;    private File mTileCacheDir;
+&nbsp;
+&nbsp;    @SuppressLint(&quot;SetJavaScriptEnabled&quot;)
+&nbsp;    @Override
+&nbsp;    protected void onCreate(Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onCreate(savedInstanceState);</b>
+<b class="nc">&nbsp;        setContentView(R.layout.leaflet_map);</b>
+<b class="nc">&nbsp;        if (getSupportActionBar() != null) {</b>
+<b class="nc">&nbsp;            getSupportActionBar().setDisplayHomeAsUpEnabled(true);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        mTileCacheDir = new File(getCacheDir(), &quot;map_tiles&quot;);</b>
+<b class="nc">&nbsp;        if (!mTileCacheDir.exists()) {</b>
+<b class="nc">&nbsp;            mTileCacheDir.mkdirs();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            dbHelper = new DbHelper(this);</b>
+<b class="nc">&nbsp;            dbHelper.open();</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            Log.e(TAG, &quot;Error opening database&quot;, e);</b>
+<b class="nc">&nbsp;            Toast.makeText(this, &quot;Error opening database&quot;, Toast.LENGTH_SHORT).show();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        webView = findViewById(R.id.leafletWebView);</b>
+<b class="nc">&nbsp;        WebSettings ws = webView.getSettings();</b>
+<b class="nc">&nbsp;        ws.setJavaScriptEnabled(true);</b>
+<b class="nc">&nbsp;        ws.setDomStorageEnabled(true);</b>
+<b class="nc">&nbsp;        ws.setBuiltInZoomControls(true);</b>
+<b class="nc">&nbsp;        ws.setDisplayZoomControls(false);</b>
+<b class="nc">&nbsp;        ws.setAllowFileAccess(true);</b>
+<b class="nc">&nbsp;        ws.setAllowFileAccessFromFileURLs(true);</b>
+<b class="nc">&nbsp;        ws.setAllowUniversalAccessFromFileURLs(true);</b>
+<b class="nc">&nbsp;        ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);</b>
+<b class="nc">&nbsp;        ws.setCacheMode(WebSettings.LOAD_DEFAULT);</b>
+<b class="nc">&nbsp;        ws.setDatabaseEnabled(true);</b>
+<b class="nc">&nbsp;        ws.setGeolocationEnabled(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        webView.addJavascriptInterface(new LeafletPreferencesInterface(), &quot;AndroidPrefs&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        webView.setWebViewClient(new WebViewClientCompat() {</b>
+&nbsp;            @Override
+&nbsp;            public WebResourceResponse shouldInterceptRequest(@NonNull WebView view, @NonNull WebResourceRequest request) {
+<b class="nc">&nbsp;                String url = request.getUrl().toString();</b>
+&nbsp;
+<b class="nc">&nbsp;                if (url.contains(&quot;tile.openstreetmap.org&quot;) || url.contains(&quot;api.os.uk&quot;)) {</b>
+&nbsp;                    try {
+<b class="nc">&nbsp;                        String domain = request.getUrl().getHost();</b>
+<b class="nc">&nbsp;                        String path = request.getUrl().getPath();</b>
+<b class="nc">&nbsp;                        File tileFile = new File(mTileCacheDir, domain + path);</b>
+&nbsp;
+<b class="nc">&nbsp;                        if (tileFile.exists()) {</b>
+<b class="nc">&nbsp;                            Log.d(TAG, &quot;Serving tile from local cache: &quot; + tileFile.getPath());</b>
+<b class="nc">&nbsp;                            InputStream inputStream = new FileInputStream(tileFile);</b>
+<b class="nc">&nbsp;                            String mimeType = getMimeType(url);</b>
+<b class="nc">&nbsp;                            return new WebResourceResponse(mimeType, &quot;UTF-8&quot;, inputStream);</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                             Log.d(TAG, &quot;Tile not in cache, fetching from network: &quot; + url);</b>
+<b class="nc">&nbsp;                             return fetchAndCacheTile(url, tileFile);</b>
+&nbsp;                        }
+&nbsp;                    } catch (Exception e) {
+<b class="nc">&nbsp;                        Log.e(TAG, &quot;Error serving tile from cache&quot;, e);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                return super.shouldInterceptRequest(view, request);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        webView.setWebChromeClient(new WebChromeClient() {</b>
+&nbsp;            @Override
+&nbsp;            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+<b class="nc">&nbsp;                callback.invoke(origin, true, false);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            @Override
+&nbsp;            public boolean onConsoleMessage(android.webkit.ConsoleMessage consoleMessage) {
+<b class="nc">&nbsp;                Log.d(TAG, &quot;WebView Console: &quot; + consoleMessage.message() + &quot; -- From line &quot;</b>
+<b class="nc">&nbsp;                        + consoleMessage.lineNumber() + &quot; of &quot;</b>
+<b class="nc">&nbsp;                        + consoleMessage.sourceId());</b>
+<b class="nc">&nbsp;                return super.onConsoleMessage(consoleMessage);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+<b class="nc">&nbsp;        String osKey = prefs.getString(&quot;os_api_key&quot;, &quot;&quot;);</b>
+<b class="nc">&nbsp;        String leafletMapStyle = prefs.getString(&quot;leaflet_map_style&quot;, &quot;OpenStreetMap&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        String url = buildLeafletUrl(osKey, leafletMapStyle);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            if (ensureLocationPermission()) {</b>
+<b class="nc">&nbsp;                webView.loadUrl(url);</b>
+&nbsp;            }
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            Log.e(TAG, &quot;Error loading Leaflet page&quot;, e);</b>
+<b class="nc">&nbsp;            Toast.makeText(this, &quot;Error loading Leaflet page&quot;, Toast.LENGTH_LONG).show();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void showCacheStatus() {
+<b class="nc">&nbsp;        new Thread(() -&gt; {</b>
+<b class="nc">&nbsp;            long[] stats = getDirectoryStats(mTileCacheDir);</b>
+<b class="nc">&nbsp;            long totalSize = stats[0];</b>
+<b class="nc">&nbsp;            long fileCount = stats[1];</b>
+&nbsp;
+<b class="nc">&nbsp;            DecimalFormat df = new DecimalFormat(&quot;#.##&quot;);</b>
+<b class="nc">&nbsp;            String sizeInMB = df.format((double) totalSize / (1024 * 1024));</b>
+<b class="nc">&nbsp;            String message = &quot;Tiles: &quot; + fileCount + &quot;\nSize: &quot; + sizeInMB + &quot; MB&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;            runOnUiThread(() -&gt; {</b>
+<b class="nc">&nbsp;                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;                builder.setTitle(&quot;Cache Status&quot;);</b>
+<b class="nc">&nbsp;                builder.setMessage(message);</b>
+<b class="nc">&nbsp;                builder.setPositiveButton(&quot;OK&quot;, null);</b>
+<b class="nc">&nbsp;                builder.show();</b>
+&nbsp;            });
+<b class="nc">&nbsp;        }).start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private long[] getDirectoryStats(File directory) {
+<b class="nc">&nbsp;        long size = 0;</b>
+<b class="nc">&nbsp;        long count = 0;</b>
+<b class="nc">&nbsp;        if (directory != null &amp;&amp; directory.isDirectory() &amp;&amp; directory.listFiles() != null) {</b>
+<b class="nc">&nbsp;            for (File file : Objects.requireNonNull(directory.listFiles())) {</b>
+<b class="nc">&nbsp;                if (file.isFile()) {</b>
+<b class="nc">&nbsp;                    size += file.length();</b>
+<b class="nc">&nbsp;                    count++;</b>
+<b class="nc">&nbsp;                } else if (file.isDirectory()) {</b>
+<b class="nc">&nbsp;                    long[] subDirStats = getDirectoryStats(file);</b>
+<b class="nc">&nbsp;                    size += subDirStats[0];</b>
+<b class="nc">&nbsp;                    count += subDirStats[1];</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return new long[]{size, count};</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private WebResourceResponse fetchAndCacheTile(String urlString, File tileFile) {
+&nbsp;        try {
+<b class="nc">&nbsp;            URL url = new URL(urlString);</b>
+<b class="nc">&nbsp;            HttpURLConnection connection = (HttpURLConnection) url.openConnection();</b>
+&nbsp;
+&nbsp;            // Set a custom User-Agent to comply with tile server policies
+<b class="nc">&nbsp;            connection.setRequestProperty(&quot;User-Agent&quot;, &quot;TrigpointingUK-Android-App/1.0&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            connection.connect();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {</b>
+<b class="nc">&nbsp;                InputStream inputStream = connection.getInputStream();</b>
+&nbsp;                
+&nbsp;                // Ensure parent directories exist
+<b class="nc">&nbsp;                File parentDir = tileFile.getParentFile();</b>
+<b class="nc">&nbsp;                if (parentDir != null &amp;&amp; !parentDir.exists()) {</b>
+<b class="nc">&nbsp;                    parentDir.mkdirs();</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                // Write the tile to the cache file
+<b class="nc">&nbsp;                FileOutputStream fileOutputStream = new FileOutputStream(tileFile);</b>
+<b class="nc">&nbsp;                byte[] buffer = new byte[1024];</b>
+&nbsp;                int bufferLength;
+<b class="nc">&nbsp;                while ((bufferLength = inputStream.read(buffer)) &gt; 0) {</b>
+<b class="nc">&nbsp;                    fileOutputStream.write(buffer, 0, bufferLength);</b>
+&nbsp;                }
+&nbsp;                fileOutputStream.close();
+&nbsp;                
+&nbsp;                // Now that it&#39;s cached, serve it from the file
+<b class="nc">&nbsp;                InputStream cachedInputStream = new FileInputStream(tileFile);</b>
+<b class="nc">&nbsp;                String mimeType = getMimeType(urlString);</b>
+<b class="nc">&nbsp;                return new WebResourceResponse(mimeType, connection.getContentEncoding(), cachedInputStream);</b>
+&nbsp;            }
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            Log.e(TAG, &quot;Error fetching and caching tile&quot;, e);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null; // Let WebView handle the failed request</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    private String getMimeType(String url) {
+<b class="nc">&nbsp;        if (url.endsWith(&quot;.png&quot;)) {</b>
+<b class="nc">&nbsp;            return &quot;image/png&quot;;</b>
+<b class="nc">&nbsp;        } else if (url.endsWith(&quot;.jpg&quot;) || url.endsWith(&quot;.jpeg&quot;)) {</b>
+<b class="nc">&nbsp;            return &quot;image/jpeg&quot;;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return &quot;application/octet-stream&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String buildLeafletUrl(String osKey, String leafletMapStyle) {
+<b class="nc">&nbsp;        StringBuilder url = new StringBuilder(&quot;file:///android_asset/leaflet/index.html&quot;);</b>
+<b class="nc">&nbsp;        boolean hasParams = false;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (osKey != null &amp;&amp; !osKey.isEmpty()) {</b>
+&nbsp;            try {
+&nbsp;                // Use String parameter instead of Charset for backward compatibility (API &lt; 33)
+<b class="nc">&nbsp;                url.append(&quot;?os_key=&quot;).append(java.net.URLEncoder.encode(osKey, StandardCharsets.UTF_8.name()));</b>
+&nbsp;            } catch (java.io.UnsupportedEncodingException e) {
+&nbsp;                // UTF-8 is always supported, this should never happen
+<b class="nc">&nbsp;                Log.e(TAG, &quot;UTF-8 encoding not supported&quot;, e);</b>
+<b class="nc">&nbsp;                url.append(&quot;?os_key=&quot;).append(osKey); // fallback without encoding</b>
+&nbsp;            }
+<b class="nc">&nbsp;            hasParams = true;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (leafletMapStyle != null &amp;&amp; !leafletMapStyle.isEmpty()) {</b>
+<b class="nc">&nbsp;            url.append(hasParams ? &quot;&amp;&quot; : &quot;?&quot;);</b>
+&nbsp;            try {
+&nbsp;                // Use String parameter instead of Charset for backward compatibility (API &lt; 33)
+<b class="nc">&nbsp;                url.append(&quot;initial_style=&quot;).append(java.net.URLEncoder.encode(leafletMapStyle, StandardCharsets.UTF_8.name()));</b>
+&nbsp;            } catch (java.io.UnsupportedEncodingException e) {
+&nbsp;                // UTF-8 is always supported, this should never happen
+<b class="nc">&nbsp;                Log.e(TAG, &quot;UTF-8 encoding not supported&quot;, e);</b>
+<b class="nc">&nbsp;                url.append(&quot;initial_style=&quot;).append(leafletMapStyle); // fallback without encoding</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return url.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private boolean ensureLocationPermission() {
+<b class="nc">&nbsp;        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {</b>
+<b class="nc">&nbsp;            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQ_LOCATION);</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+<b class="nc">&nbsp;        super.onRequestPermissionsResult(requestCode, permissions, grantResults);</b>
+<b class="nc">&nbsp;        if (requestCode == REQ_LOCATION) {</b>
+<b class="nc">&nbsp;            if (grantResults.length &gt; 0 &amp;&amp; grantResults[0] == PackageManager.PERMISSION_GRANTED) {</b>
+<b class="nc">&nbsp;                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+<b class="nc">&nbsp;                String osKey = prefs.getString(&quot;os_api_key&quot;, &quot;&quot;);</b>
+<b class="nc">&nbsp;                String leafletMapStyle = prefs.getString(&quot;leaflet_map_style&quot;, &quot;OpenStreetMap&quot;);</b>
+<b class="nc">&nbsp;                String url = buildLeafletUrl(osKey, leafletMapStyle);</b>
+<b class="nc">&nbsp;                webView.loadUrl(url);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                Toast.makeText(this, &quot;Location permission denied; My location will be disabled.&quot;, Toast.LENGTH_LONG).show();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean onCreateOptionsMenu(Menu menu) {
+<b class="nc">&nbsp;        getMenuInflater().inflate(R.menu.leaflet_map_menu, menu);</b>
+&nbsp;
+<b class="nc">&nbsp;        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+<b class="nc">&nbsp;        boolean devMode = prefs.getBoolean(&quot;dev_mode&quot;, false);</b>
+&nbsp;
+<b class="nc">&nbsp;        menu.findItem(R.id.menu_clear_cache).setVisible(devMode);</b>
+<b class="nc">&nbsp;        menu.findItem(R.id.menu_cache_status).setVisible(devMode);</b>
+&nbsp;
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean onOptionsItemSelected(MenuItem item) {
+<b class="nc">&nbsp;        if (item.getItemId() == android.R.id.home) {</b>
+<b class="nc">&nbsp;            finish();</b>
+<b class="nc">&nbsp;            return true;</b>
+<b class="nc">&nbsp;        } else if (item.getItemId() == R.id.menu_cache_status) {</b>
+<b class="nc">&nbsp;            showCacheStatus();</b>
+<b class="nc">&nbsp;            return true;</b>
+<b class="nc">&nbsp;        } else if (item.getItemId() == R.id.menu_clear_cache) {</b>
+&nbsp;            // Clear both WebView tile cache and static map images cache
+<b class="nc">&nbsp;            clearAllCaches();</b>
+<b class="nc">&nbsp;            return true;</b>
+<b class="nc">&nbsp;        } else if (item.getItemId() == R.id.menu_download_tiles) {</b>
+<b class="nc">&nbsp;            Intent intent = new Intent(this, DownloadMapsActivity.class);</b>
+<b class="nc">&nbsp;            startActivity(intent);</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return super.onOptionsItemSelected(item);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    // Callback methods for tab fragments
+&nbsp;    public void updateMapStyle(String style) {
+<b class="nc">&nbsp;        webView.evaluateJavascript(&quot;if (typeof switchToLayer === &#39;function&#39;) switchToLayer(&#39;&quot; + style + &quot;&#39;);&quot;, null);</b>
+<b class="nc">&nbsp;        Log.d(TAG, &quot;Updated map style to: &quot; + style);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void updateMarkerColor(String color) {
+<b class="nc">&nbsp;        webView.evaluateJavascript(&quot;if (typeof updateMarkerColors === &#39;function&#39;) updateMarkerColors(&#39;&quot; + color + &quot;&#39;);&quot;, null);</b>
+<b class="nc">&nbsp;        Log.d(TAG, &quot;Updated marker colour to: &quot; + color);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void updateTrigpointType(String type) {
+<b class="nc">&nbsp;        webView.evaluateJavascript(&quot;if (typeof updateTrigpointType === &#39;function&#39;) updateTrigpointType(&#39;&quot; + type + &quot;&#39;);&quot;, null);</b>
+<b class="nc">&nbsp;        Log.d(TAG, &quot;Updated trigpoint type to: &quot; + type);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    public void updateFilterFound(String found) {
+<b class="nc">&nbsp;        webView.evaluateJavascript(&quot;if (typeof updateFilterFound === &#39;function&#39;) updateFilterFound(&#39;&quot; + found + &quot;&#39;);&quot;, null);</b>
+<b class="nc">&nbsp;        Log.d(TAG, &quot;Updated filter found to: &quot; + found);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private String queryTrigpoints(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
+<b class="nc">&nbsp;        if (dbHelper == null) {</b>
+<b class="nc">&nbsp;            Log.e(TAG, &quot;Database helper not initialised&quot;);</b>
+<b class="nc">&nbsp;            return &quot;[]&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        try {
+&nbsp;            // Convert leaflet filter names to Filter constants
+<b class="nc">&nbsp;            setupFilterPreferences(trigpointType, filterFound);</b>
+&nbsp;            
+&nbsp;            // Create bounding box for query
+<b class="nc">&nbsp;            BoundingBox bounds = new BoundingBox(north, east, south, west);</b>
+&nbsp;            
+&nbsp;            // Query database using bounding box
+<b class="nc">&nbsp;            Cursor cursor = dbHelper.fetchTrigMapList(bounds);</b>
+&nbsp;            
+<b class="nc">&nbsp;            if (cursor == null) {</b>
+<b class="nc">&nbsp;                return &quot;[]&quot;;</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            JSONArray trigpoints = new JSONArray();</b>
+&nbsp;            
+<b class="nc">&nbsp;            while (cursor.moveToNext()) {</b>
+<b class="nc">&nbsp;                JSONObject trig = new JSONObject();</b>
+&nbsp;                
+<b class="nc">&nbsp;                trig.put(&quot;id&quot;, cursor.getLong(cursor.getColumnIndex(DbHelper.TRIG_ID)));</b>
+<b class="nc">&nbsp;                trig.put(&quot;name&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_NAME)));</b>
+<b class="nc">&nbsp;                trig.put(&quot;lat&quot;, cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LAT)));</b>
+<b class="nc">&nbsp;                trig.put(&quot;lon&quot;, cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LON)));</b>
+<b class="nc">&nbsp;                trig.put(&quot;type&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_TYPE)));</b>
+<b class="nc">&nbsp;                trig.put(&quot;condition&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_CONDITION)));</b>
+<b class="nc">&nbsp;                trig.put(&quot;logged&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_LOGGED)));</b>
+&nbsp;                
+&nbsp;                // Check if flagged/marked
+<b class="nc">&nbsp;                String marked = cursor.getString(cursor.getColumnIndex(DbHelper.JOIN_MARKED));</b>
+<b class="nc">&nbsp;                trig.put(&quot;flagged&quot;, marked != null);</b>
+&nbsp;                
+<b class="nc">&nbsp;                trigpoints.put(trig);</b>
+&nbsp;            }
+&nbsp;            
+&nbsp;            cursor.close();
+&nbsp;            
+<b class="nc">&nbsp;            Log.d(TAG, &quot;Returning &quot; + trigpoints.length() + &quot; trigpoints&quot;);</b>
+<b class="nc">&nbsp;            return trigpoints.toString();</b>
+&nbsp;            
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            Log.e(TAG, &quot;Error querying trigpoints&quot;, e);</b>
+<b class="nc">&nbsp;            return &quot;[]&quot;;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setupFilterPreferences(String trigpointType, String filterFound) {
+&nbsp;        // Convert JavaScript filter names to Filter preference values
+<b class="nc">&nbsp;        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+<b class="nc">&nbsp;        SharedPreferences.Editor editor = prefs.edit();</b>
+&nbsp;        
+&nbsp;        // Set trigpoint type filter based on trigpointType parameter
+<b class="nc">&nbsp;        switch (trigpointType) {</b>
+&nbsp;            case &quot;all&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERTYPE, 6); // TYPESALL</b>
+&nbsp;                break;
+&nbsp;            case &quot;pillars&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERTYPE, 0); // TYPESPILLAR</b>
+&nbsp;                break;
+&nbsp;            case &quot;fbm&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERTYPE, 2); // TYPESFBM</b>
+&nbsp;                break;
+&nbsp;            case &quot;passive&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERTYPE, 3); // TYPESPASSIVE</b>
+&nbsp;                break;
+&nbsp;            case &quot;intersected&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERTYPE, 4); // TYPESINTERSECTED</b>
+&nbsp;                break;
+&nbsp;            default:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERTYPE, 6); // TYPESALL</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        // Set filter found status based on filterFound parameter
+<b class="nc">&nbsp;        switch (filterFound) {</b>
+&nbsp;            case &quot;all&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERRADIO, 0); // Logged or not</b>
+&nbsp;                break;
+&nbsp;            case &quot;logged&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERRADIO, 1); // Logged</b>
+&nbsp;                break;
+&nbsp;            case &quot;notlogged&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERRADIO, 2); // Not Logged</b>
+&nbsp;                break;
+&nbsp;            case &quot;marked&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERRADIO, 3); // Marked</b>
+&nbsp;                break;
+&nbsp;            case &quot;unsynced&quot;:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERRADIO, 4); // Unsynced</b>
+&nbsp;                break;
+&nbsp;            default:
+<b class="nc">&nbsp;                editor.putInt(Filter.FILTERRADIO, 0); // Logged or not</b>
+&nbsp;        }
+&nbsp;        
+<b class="nc">&nbsp;        editor.apply();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected void onDestroy() {
+<b class="nc">&nbsp;        if (dbHelper != null) {</b>
+<b class="nc">&nbsp;            dbHelper.close();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        super.onDestroy();</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public class LeafletPreferencesInterface {</b>
+&nbsp;        @JavascriptInterface
+&nbsp;        public void saveMapStyle(String mapStyle) {
+<b class="nc">&nbsp;            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;            prefs.edit().putString(&quot;leaflet_map_style&quot;, mapStyle).apply();</b>
+<b class="nc">&nbsp;            Log.d(TAG, &quot;Saved map style preference: &quot; + mapStyle);</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        @JavascriptInterface
+&nbsp;        public String getFilterFoundPreference() {
+<b class="nc">&nbsp;            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;            String filterFound = prefs.getString(&quot;leaflet_filter_found&quot;, &quot;all&quot;);</b>
+<b class="nc">&nbsp;            Log.d(TAG, &quot;Retrieved filter found preference: &quot; + filterFound);</b>
+<b class="nc">&nbsp;            return filterFound;</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        @JavascriptInterface
+&nbsp;        public void getTrigpointData(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
+<b class="nc">&nbsp;            Log.d(TAG, String.format(&quot;getTrigpointData: bounds=(%.6f,%.6f,%.6f,%.6f) type=%s found=%s colour=%s&quot;, south, west, north, east, trigpointType, filterFound, colorScheme));</b>
+&nbsp;            
+&nbsp;            // Run database query on background thread
+<b class="nc">&nbsp;            new Thread(() -&gt; {</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    String trigpointsJson = queryTrigpoints(south, west, north, east, trigpointType, filterFound, colorScheme);</b>
+&nbsp;                    
+&nbsp;                    // Return results to JavaScript on UI thread
+<b class="nc">&nbsp;                    runOnUiThread(() -&gt; {</b>
+<b class="nc">&nbsp;                        webView.evaluateJavascript(&quot;displayTrigpointMarkers(&#39;&quot; + trigpointsJson.replace(&quot;&#39;&quot;, &quot;\\&#39;&quot;) + &quot;&#39;);&quot;, null);</b>
+&nbsp;                    });
+&nbsp;                } catch (Exception e) {
+<b class="nc">&nbsp;                    Log.e(TAG, &quot;Error querying trigpoints&quot;, e);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            }).start();</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        @JavascriptInterface
+&nbsp;        public void openTrigDetails(long trigId) {
+<b class="nc">&nbsp;            Log.d(TAG, &quot;Opening trig details for ID: &quot; + trigId);</b>
+<b class="nc">&nbsp;            Intent i = new Intent(LeafletMapActivity.this, uk.trigpointing.android.trigdetails.TrigDetailsActivity.class);</b>
+<b class="nc">&nbsp;            i.putExtra(uk.trigpointing.android.DbHelper.TRIG_ID, trigId);</b>
+<b class="nc">&nbsp;            startActivity(i);</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        @JavascriptInterface
+&nbsp;        public void showCacheDialog(String message, String note) {
+<b class="nc">&nbsp;            runOnUiThread(() -&gt; {</b>
+<b class="nc">&nbsp;                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;                builder.setTitle(&quot;Cache Status&quot;);</b>
+&nbsp;                
+<b class="nc">&nbsp;                String fullMessage = message;</b>
+<b class="nc">&nbsp;                if (note != null &amp;&amp; !note.trim().isEmpty()) {</b>
+<b class="nc">&nbsp;                    fullMessage += &quot;\n\n&quot; + note;</b>
+&nbsp;                }
+&nbsp;                
+<b class="nc">&nbsp;                builder.setMessage(fullMessage);</b>
+<b class="nc">&nbsp;                builder.setPositiveButton(&quot;OK&quot;, null);</b>
+<b class="nc">&nbsp;                builder.show();</b>
+&nbsp;            });
+&nbsp;        }
+&nbsp;        
+&nbsp;        @JavascriptInterface
+&nbsp;        public void showDialog(String title, String message) {
+<b class="nc">&nbsp;            runOnUiThread(() -&gt; {</b>
+<b class="nc">&nbsp;                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;                builder.setTitle(title);</b>
+<b class="nc">&nbsp;                builder.setMessage(message);</b>
+<b class="nc">&nbsp;                builder.setPositiveButton(&quot;OK&quot;, null);</b>
+<b class="nc">&nbsp;                builder.show();</b>
+&nbsp;            });
+&nbsp;        }
+&nbsp;        
+&nbsp;        @JavascriptInterface
+&nbsp;        public String getIconStyle() {
+<b class="nc">&nbsp;            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;            return prefs.getString(&quot;map_icon_style&quot;, &quot;medium&quot;);</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;
+&nbsp;    }
+&nbsp;    
+&nbsp;    private void clearAllCaches() {
+&nbsp;        // Clear our custom tile cache
+<b class="nc">&nbsp;        new Thread(() -&gt; {</b>
+<b class="nc">&nbsp;            int deletedCount = deleteRecursive(mTileCacheDir);</b>
+<b class="nc">&nbsp;            Log.d(TAG, &quot;Cleared &quot; + deletedCount + &quot; tile files&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            runOnUiThread(() -&gt; {</b>
+<b class="nc">&nbsp;                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(LeafletMapActivity.this);</b>
+<b class="nc">&nbsp;                builder.setTitle(&quot;Clear Cache&quot;);</b>
+<b class="nc">&nbsp;                builder.setMessage(&quot;Cleared &quot; + deletedCount + &quot; cached map tiles.&quot;);</b>
+<b class="nc">&nbsp;                builder.setPositiveButton(&quot;OK&quot;, null);</b>
+<b class="nc">&nbsp;                builder.show();</b>
+&nbsp;            });
+<b class="nc">&nbsp;        }).start();</b>
+&nbsp;
+&nbsp;        // Also clear WebView&#39;s own caches
+<b class="nc">&nbsp;        webView.clearCache(true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private int deleteRecursive(File fileOrDirectory) {
+<b class="nc">&nbsp;        int count = 0;</b>
+<b class="nc">&nbsp;        if (fileOrDirectory.isDirectory()) {</b>
+<b class="nc">&nbsp;            for (File child : Objects.requireNonNull(fileOrDirectory.listFiles())) {</b>
+<b class="nc">&nbsp;                count += deleteRecursive(child);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (fileOrDirectory.delete()) {</b>
+<b class="nc">&nbsp;            count++;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

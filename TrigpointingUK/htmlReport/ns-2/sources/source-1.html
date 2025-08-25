@@ -1,0 +1,286 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AuthApiClient</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.api</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthApiClient (uk.trigpointing.android.api)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthApiClient</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/41)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">AuthApiClient$AuthCallback</td>
+  </tr>
+  <tr>
+    <td class="name">AuthApiClient$AuthResult</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/48)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.api;
+&nbsp;
+&nbsp;import android.util.Log;
+&nbsp;import com.google.gson.Gson;
+&nbsp;import okhttp3.FormBody;
+&nbsp;import okhttp3.OkHttpClient;
+&nbsp;import okhttp3.Request;
+&nbsp;import okhttp3.Response;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.concurrent.CompletableFuture;
+&nbsp;
+&nbsp;/**
+&nbsp; * API client for handling authentication with the new TrigpointingUK API
+&nbsp; */
+&nbsp;public class AuthApiClient {
+&nbsp;    private static final String TAG = &quot;AuthApiClient&quot;;
+&nbsp;    private static final String API_BASE_URL = &quot;https://fastapi.trigpointing.uk/api/v1&quot;;
+&nbsp;    private static final String LOGIN_ENDPOINT = &quot;/auth/login&quot;;
+&nbsp;
+&nbsp;    private final OkHttpClient httpClient;
+&nbsp;    private final Gson gson;
+&nbsp;
+<b class="nc">&nbsp;    public AuthApiClient() {</b>
+<b class="nc">&nbsp;        this.httpClient = new OkHttpClient();</b>
+<b class="nc">&nbsp;        this.gson = new Gson();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Interface for authentication callbacks
+&nbsp;     */
+&nbsp;    public interface AuthCallback {
+&nbsp;        void onSuccess(AuthResponse authResponse);
+&nbsp;        void onError(String errorMessage);
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Authenticate user with username and password
+&nbsp;     * @param username The username or email
+&nbsp;     * @param password The user&#39;s password
+&nbsp;     * @param callback Callback to handle success or error
+&nbsp;     */
+&nbsp;    public void authenticate(String username, String password, AuthCallback callback) {
+<b class="nc">&nbsp;        Log.i(TAG, &quot;authenticate: Starting authentication for user: &quot; + username);</b>
+&nbsp;        
+<b class="nc">&nbsp;        CompletableFuture.supplyAsync(() -&gt; {</b>
+&nbsp;            try {
+&nbsp;                // Create form data for the POST request
+<b class="nc">&nbsp;                FormBody formBody = new FormBody.Builder()</b>
+<b class="nc">&nbsp;                        .add(&quot;username&quot;, username)</b>
+<b class="nc">&nbsp;                        .add(&quot;password&quot;, password)</b>
+<b class="nc">&nbsp;                        .build();</b>
+&nbsp;
+&nbsp;                // Build the request
+<b class="nc">&nbsp;                Request request = new Request.Builder()</b>
+<b class="nc">&nbsp;                        .url(API_BASE_URL + LOGIN_ENDPOINT)</b>
+<b class="nc">&nbsp;                        .post(formBody)</b>
+<b class="nc">&nbsp;                        .addHeader(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded&quot;)</b>
+<b class="nc">&nbsp;                        .build();</b>
+&nbsp;
+<b class="nc">&nbsp;                Log.i(TAG, &quot;authenticate: Sending POST request to &quot; + API_BASE_URL + LOGIN_ENDPOINT);</b>
+&nbsp;
+&nbsp;                // Execute the request
+<b class="nc">&nbsp;                try (Response response = httpClient.newCall(request).execute()) {</b>
+<b class="nc">&nbsp;                    String responseBody = response.body().string();</b>
+<b class="nc">&nbsp;                    Log.i(TAG, &quot;authenticate: Received response with code: &quot; + response.code());</b>
+&nbsp;                    
+<b class="nc">&nbsp;                    if (response.isSuccessful()) {</b>
+&nbsp;                        // Parse successful authentication response
+<b class="nc">&nbsp;                        Log.i(TAG, &quot;authenticate: Authentication successful, parsing response&quot;);</b>
+<b class="nc">&nbsp;                        AuthResponse authResponse = gson.fromJson(responseBody, AuthResponse.class);</b>
+<b class="nc">&nbsp;                        return new AuthResult(true, authResponse, null);</b>
+&nbsp;                    } else {
+&nbsp;                        // Parse error response
+<b class="nc">&nbsp;                        Log.w(TAG, &quot;authenticate: Authentication failed with code: &quot; + response.code());</b>
+&nbsp;                        try {
+<b class="nc">&nbsp;                            ErrorResponse errorResponse = gson.fromJson(responseBody, ErrorResponse.class);</b>
+<b class="nc">&nbsp;                            return new AuthResult(false, null, errorResponse.getDetail());</b>
+&nbsp;                        } catch (Exception e) {
+<b class="nc">&nbsp;                            Log.e(TAG, &quot;authenticate: Failed to parse error response&quot;, e);</b>
+<b class="nc">&nbsp;                            return new AuthResult(false, null, &quot;Authentication failed: &quot; + response.code());</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            } catch (IOException e) {
+<b class="nc">&nbsp;                Log.e(TAG, &quot;authenticate: Network error during authentication&quot;, e);</b>
+<b class="nc">&nbsp;                return new AuthResult(false, null, &quot;Network error: &quot; + e.getMessage());</b>
+&nbsp;            } catch (Exception e) {
+<b class="nc">&nbsp;                Log.e(TAG, &quot;authenticate: Unexpected error during authentication&quot;, e);</b>
+<b class="nc">&nbsp;                return new AuthResult(false, null, &quot;Unexpected error: &quot; + e.getMessage());</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }).thenAccept(result -&gt; {</b>
+&nbsp;            // Call the callback on the result
+<b class="nc">&nbsp;            if (result.isSuccess()) {</b>
+<b class="nc">&nbsp;                Log.i(TAG, &quot;authenticate: Calling success callback&quot;);</b>
+<b class="nc">&nbsp;                callback.onSuccess(result.getAuthResponse());</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                Log.i(TAG, &quot;authenticate: Calling error callback with message: &quot; + result.getErrorMessage());</b>
+<b class="nc">&nbsp;                callback.onError(result.getErrorMessage());</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }).exceptionally(throwable -&gt; {</b>
+<b class="nc">&nbsp;            Log.e(TAG, &quot;authenticate: Exception in async operation&quot;, throwable);</b>
+<b class="nc">&nbsp;            callback.onError(&quot;Authentication failed: &quot; + throwable.getMessage());</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Helper class to hold authentication results
+&nbsp;     */
+&nbsp;    private static class AuthResult {
+&nbsp;        private final boolean success;
+&nbsp;        private final AuthResponse authResponse;
+&nbsp;        private final String errorMessage;
+&nbsp;
+<b class="nc">&nbsp;        public AuthResult(boolean success, AuthResponse authResponse, String errorMessage) {</b>
+<b class="nc">&nbsp;            this.success = success;</b>
+<b class="nc">&nbsp;            this.authResponse = authResponse;</b>
+<b class="nc">&nbsp;            this.errorMessage = errorMessage;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public boolean isSuccess() {
+<b class="nc">&nbsp;            return success;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public AuthResponse getAuthResponse() {
+<b class="nc">&nbsp;            return authResponse;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public String getErrorMessage() {
+<b class="nc">&nbsp;            return errorMessage;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

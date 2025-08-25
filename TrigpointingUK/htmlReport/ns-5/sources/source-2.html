@@ -1,0 +1,248 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > FilterActivity</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.filter</a>
+</div>
+
+<h1>Coverage Summary for Class: FilterActivity (uk.trigpointing.android.filter)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FilterActivity</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/21)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/55)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.filter;
+&nbsp;
+&nbsp;import android.content.SharedPreferences;
+&nbsp;import android.content.SharedPreferences.Editor;
+&nbsp;import android.os.Bundle;
+&nbsp;import androidx.preference.PreferenceManager;
+&nbsp;import android.util.Log;
+&nbsp;import android.view.MenuItem;
+&nbsp;import android.widget.RadioButton;
+&nbsp;import android.widget.RadioGroup;
+&nbsp;import android.widget.Spinner;
+&nbsp;import uk.trigpointing.android.common.BaseActivity;
+&nbsp;
+&nbsp;import uk.trigpointing.android.R;
+&nbsp;
+<b class="nc">&nbsp;public class FilterActivity extends BaseActivity {</b>
+&nbsp;	private static final String TAG = &quot;FilterActivity&quot;;
+&nbsp;	private SharedPreferences 	mPrefs;
+&nbsp;	private Spinner				mFilterType;
+&nbsp;	private RadioGroup 			mFilterRadio;
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected void onCreate(Bundle savedInstanceState) {
+<b class="nc">&nbsp;		super.onCreate(savedInstanceState);</b>
+<b class="nc">&nbsp;		setContentView(R.layout.filter);</b>
+&nbsp;
+<b class="nc">&nbsp;		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+<b class="nc">&nbsp;		mFilterType 	= findViewById(R.id.filterType);</b>
+<b class="nc">&nbsp;		mFilterRadio	= findViewById(R.id.filterRadio);</b>
+&nbsp;
+&nbsp;		// Enable back button in action bar
+<b class="nc">&nbsp;		if (getSupportActionBar() != null) {</b>
+<b class="nc">&nbsp;			getSupportActionBar().setDisplayHomeAsUpEnabled(true);</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected void onPause() {
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onPause&quot;);</b>
+&nbsp;		
+<b class="nc">&nbsp;		Editor editor = mPrefs.edit();</b>
+&nbsp;		
+&nbsp;		// Get identifier for selected item from physical type list
+<b class="nc">&nbsp;		int filterType = mFilterType.getSelectedItemPosition();</b>
+<b class="nc">&nbsp;		editor.putInt(Filter.FILTERTYPE, filterType);</b>
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onPause: Saving filter type: &quot; + filterType);</b>
+&nbsp;	
+&nbsp;		// Get the correct radio button value based on the checked ID
+<b class="nc">&nbsp;		int filterRadio = 0; // Default to &quot;All&quot;</b>
+<b class="nc">&nbsp;		int checkedId = mFilterRadio.getCheckedRadioButtonId();</b>
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onPause: Checked radio button ID: &quot; + checkedId);</b>
+&nbsp;		
+<b class="nc">&nbsp;		if (checkedId == R.id.filterAll) {</b>
+<b class="nc">&nbsp;			filterRadio = 0;</b>
+<b class="nc">&nbsp;		} else if (checkedId == R.id.filterLogged) {</b>
+<b class="nc">&nbsp;			filterRadio = 1;</b>
+<b class="nc">&nbsp;		} else if (checkedId == R.id.filterNotLogged) {</b>
+<b class="nc">&nbsp;			filterRadio = 2;</b>
+<b class="nc">&nbsp;		} else if (checkedId == R.id.filterMarked) {</b>
+<b class="nc">&nbsp;			filterRadio = 3;</b>
+<b class="nc">&nbsp;		} else if (checkedId == R.id.filterUnsynced) {</b>
+<b class="nc">&nbsp;			filterRadio = 4;</b>
+&nbsp;		}
+&nbsp;		
+<b class="nc">&nbsp;		editor.putInt(Filter.FILTERRADIO, filterRadio);</b>
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onPause: Saving filter radio: &quot; + filterRadio);</b>
+&nbsp;		
+&nbsp;		// Get text of selected radiobox item
+<b class="nc">&nbsp;		RadioButton btnSelected = findViewById(checkedId);</b>
+<b class="nc">&nbsp;		if (btnSelected != null) {</b>
+<b class="nc">&nbsp;			String radioText = btnSelected.getText().toString();</b>
+<b class="nc">&nbsp;			editor.putString(Filter.FILTERRADIOTEXT, radioText);</b>
+<b class="nc">&nbsp;			Log.i(TAG, &quot;onPause: Saving filter radio text: &#39;&quot; + radioText + &quot;&#39;&quot;);</b>
+&nbsp;		}
+&nbsp;	
+&nbsp;		// Save to prefs
+<b class="nc">&nbsp;		editor.apply();</b>
+<b class="nc">&nbsp;		super.onPause();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected void onResume() {
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onResume&quot;);</b>
+<b class="nc">&nbsp;		super.onResume();</b>
+&nbsp;		
+&nbsp;		// Restore filter type
+<b class="nc">&nbsp;		int filterType = mPrefs.getInt(Filter.FILTERTYPE, 0);</b>
+<b class="nc">&nbsp;		mFilterType.setSelection(filterType);</b>
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onResume: Restored filter type: &quot; + filterType);</b>
+&nbsp;		
+&nbsp;		// Restore radio button selection based on saved value
+<b class="nc">&nbsp;		int filterRadio = mPrefs.getInt(Filter.FILTERRADIO, 0);</b>
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onResume: Restored filter radio: &quot; + filterRadio);</b>
+&nbsp;		
+<b class="nc">&nbsp;		int radioButtonId = R.id.filterAll; // Default to &quot;All&quot;</b>
+<b class="nc">&nbsp;		switch (filterRadio) {</b>
+&nbsp;			case 0:
+<b class="nc">&nbsp;				radioButtonId = R.id.filterAll;</b>
+&nbsp;				break;
+&nbsp;			case 1:
+<b class="nc">&nbsp;				radioButtonId = R.id.filterLogged;</b>
+&nbsp;				break;
+&nbsp;			case 2:
+<b class="nc">&nbsp;				radioButtonId = R.id.filterNotLogged;</b>
+&nbsp;				break;
+&nbsp;			case 3:
+<b class="nc">&nbsp;				radioButtonId = R.id.filterMarked;</b>
+&nbsp;				break;
+&nbsp;			case 4:
+<b class="nc">&nbsp;				radioButtonId = R.id.filterUnsynced;</b>
+&nbsp;				break;
+&nbsp;		}
+&nbsp;		
+<b class="nc">&nbsp;		mFilterRadio.check(radioButtonId);</b>
+<b class="nc">&nbsp;		Log.i(TAG, &quot;onResume: Set radio button to ID: &quot; + radioButtonId);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	public boolean onOptionsItemSelected(MenuItem item) {
+<b class="nc">&nbsp;		if (item.getItemId() == android.R.id.home) {</b>
+&nbsp;			// Handle back button in action bar
+<b class="nc">&nbsp;			finish();</b>
+<b class="nc">&nbsp;			return true;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		return super.onOptionsItemSelected(item);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,450 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TrigDetailsInfoTab</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.trigdetails</a>
+</div>
+
+<h1>Coverage Summary for Class: TrigDetailsInfoTab (uk.trigpointing.android.trigdetails)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TrigDetailsInfoTab</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/103)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TrigDetailsInfoTab$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TrigDetailsInfoTab$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">TrigDetailsInfoTab$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/113)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.trigdetails;
+&nbsp;
+&nbsp;import uk.trigpointing.android.common.BaseTabActivity;
+&nbsp;import android.app.Dialog;
+&nbsp;import android.content.ActivityNotFoundException;
+&nbsp;import android.content.Intent;
+&nbsp;import android.content.SharedPreferences;
+&nbsp;import android.content.SharedPreferences.Editor;
+&nbsp;import android.database.Cursor;
+&nbsp;import android.net.Uri;
+&nbsp;import android.os.Bundle;
+&nbsp;import androidx.preference.PreferenceManager;
+&nbsp;import android.util.Log;
+&nbsp;import android.view.Menu;
+&nbsp;import android.view.MenuItem;
+&nbsp;import android.view.View;
+&nbsp;import android.view.View.OnClickListener;
+&nbsp;import android.widget.Button;
+&nbsp;import android.widget.CheckBox;
+&nbsp;import android.widget.CompoundButton;
+&nbsp;import android.widget.CompoundButton.OnCheckedChangeListener;
+&nbsp;import android.widget.ImageView;
+&nbsp;import android.widget.TextView;
+&nbsp;import android.widget.Toast;
+&nbsp;
+&nbsp;import uk.trigpointing.android.DbHelper;
+&nbsp;import uk.trigpointing.android.R;
+&nbsp;import uk.trigpointing.android.mapping.LeafletMapActivity;
+&nbsp;import uk.trigpointing.android.types.Condition;
+&nbsp;import uk.trigpointing.android.types.LatLon;
+&nbsp;import uk.trigpointing.android.types.Trig;
+&nbsp;
+<b class="nc">&nbsp;public class TrigDetailsInfoTab extends BaseTabActivity {</b>
+&nbsp;	private static final String TAG=&quot;TrigDetailsInfoTab&quot;;
+&nbsp;	private long     mTrigId;
+&nbsp;	private DbHelper mDb;
+&nbsp;	private Uri 	 mTUKUrl;
+&nbsp;	private Uri 	 mNavUrl;
+&nbsp;	private double   mLatitude;
+&nbsp;	private double   mLongitude;
+&nbsp;	private String   mWaypoint;
+&nbsp;	private CheckBox mMark;
+&nbsp;    private SharedPreferences mPrefs;
+&nbsp;
+&nbsp;	
+&nbsp;	private static final int RADAR = 1;
+&nbsp;	
+&nbsp;	public void onCreate(Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onCreate(savedInstanceState);</b>
+<b class="nc">&nbsp;        setContentView(R.layout.triginfo);</b>
+&nbsp;
+&nbsp;        // Get trig_id robustly
+<b class="nc">&nbsp;        Bundle extras = getIntent().getExtras();</b>
+<b class="nc">&nbsp;        if (extras != null &amp;&amp; extras.containsKey(DbHelper.TRIG_ID)) {</b>
+<b class="nc">&nbsp;            mTrigId = extras.getLong(DbHelper.TRIG_ID);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            mTrigId = getIntent().getLongExtra(DbHelper.TRIG_ID, -1);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (mTrigId &lt;= 0 &amp;&amp; getParent() != null &amp;&amp; getParent().getIntent() != null) {</b>
+<b class="nc">&nbsp;            mTrigId = getParent().getIntent().getLongExtra(DbHelper.TRIG_ID, -1);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (mTrigId &lt;= 0) {</b>
+<b class="nc">&nbsp;            Log.w(TAG, &quot;No trig ID provided to TrigDetailsInfoTab&quot;);</b>
+<b class="nc">&nbsp;            Toast.makeText(this, &quot;Unable to load trig details&quot;, Toast.LENGTH_LONG).show();</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;		Log.i(&quot;TrigInfo&quot;, &quot;Trig_id = &quot;+mTrigId);</b>
+&nbsp;
+&nbsp;		// get application preferences
+<b class="nc">&nbsp;		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+&nbsp;
+<b class="nc">&nbsp;		mMark = findViewById(R.id.mark);</b>
+<b class="nc">&nbsp;		mMark.setOnCheckedChangeListener(new OnCheckedChangeListener() {</b>
+&nbsp;			@Override
+&nbsp;			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+&nbsp;				try {
+<b class="nc">&nbsp;					mDb.setMarkedTrig(mTrigId, isChecked);</b>
+&nbsp;				} catch (Exception e) {
+<b class="nc">&nbsp;					e.printStackTrace();</b>
+&nbsp;				}
+&nbsp;			}
+&nbsp;		});
+&nbsp;		
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	protected void onResume() {
+<b class="nc">&nbsp;		super.onResume();</b>
+<b class="nc">&nbsp;		populateFields();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	
+&nbsp;	private void populateFields() {
+&nbsp;		// get trig info from database
+<b class="nc">&nbsp;        mDb = new DbHelper(TrigDetailsInfoTab.this);</b>
+<b class="nc">&nbsp;        mDb.open();        </b>
+<b class="nc">&nbsp;        Cursor c = mDb.fetchTrigInfo(mTrigId);</b>
+<b class="nc">&nbsp;        if (c == null || !c.moveToFirst()) {</b>
+&nbsp;            if (c != null) c.close();
+<b class="nc">&nbsp;            Toast.makeText(this, &quot;Trig not found in database&quot;, Toast.LENGTH_LONG).show();</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;		mLatitude  = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));</b>
+<b class="nc">&nbsp;		mLongitude = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));</b>
+&nbsp;		
+<b class="nc">&nbsp;		mTUKUrl   = Uri.parse( &quot;https://trigpointing.uk/trigs/trig-details.php?t=&quot;+c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)) );</b>
+<b class="nc">&nbsp;		mNavUrl   = Uri.parse( String.format(&quot;google.navigation:ll=%3.5f,%3.5f&quot;,mLatitude, mLongitude)); </b>
+<b class="nc">&nbsp;		mWaypoint = String.format(&quot;TP%04d&quot;, c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)));</b>
+&nbsp;		
+&nbsp;		TextView tv;
+&nbsp;		ImageView iv;
+&nbsp;		
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_name);</b>
+<b class="nc">&nbsp;		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_NAME)));</b>
+&nbsp;
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_waypoint);</b>
+<b class="nc">&nbsp;		tv.setText(mWaypoint);</b>
+&nbsp;		
+<b class="nc">&nbsp;		iv = findViewById(R.id.triginfo_condition_icon);</b>
+<b class="nc">&nbsp;		iv.setImageResource(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).icon());</b>
+&nbsp;
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_condition);</b>
+<b class="nc">&nbsp;		tv.setText(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).toString());</b>
+&nbsp;
+<b class="nc">&nbsp;		LatLon ll = new LatLon(c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT)), c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON)));</b>
+&nbsp;
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_gridref);</b>
+<b class="nc">&nbsp;		tv.setText(ll.getOSGB10());</b>
+&nbsp;		
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_wgs84);</b>
+<b class="nc">&nbsp;		tv.setText(ll.getWGS());</b>
+&nbsp;		
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_current);</b>
+<b class="nc">&nbsp;		tv.setText(Trig.Current.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CURRENT))).toString());</b>
+&nbsp;
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_historic);</b>
+<b class="nc">&nbsp;		tv.setText(Trig.Historic.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_HISTORIC))).toString());</b>
+&nbsp;
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_type);</b>
+<b class="nc">&nbsp;		tv.setText(Trig.Physical.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_TYPE))).toString());</b>
+&nbsp;
+<b class="nc">&nbsp;		tv = findViewById(R.id.triginfo_fb);</b>
+<b class="nc">&nbsp;		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_FB)));</b>
+&nbsp;
+&nbsp;		c.close();
+&nbsp;
+<b class="nc">&nbsp;		mMark.setChecked(mDb.isMarkedTrig(mTrigId));</b>
+&nbsp;		
+&nbsp;	
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	public boolean onCreateOptionsMenu(Menu menu) {
+<b class="nc">&nbsp;		boolean result = super.onCreateOptionsMenu(menu);</b>
+<b class="nc">&nbsp;		getMenuInflater().inflate(R.menu.trigdetailsinfomenu, menu);</b>
+<b class="nc">&nbsp;		return result;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public boolean onOptionsItemSelected(MenuItem item) {
+<b class="nc">&nbsp;		int itemId = item.getItemId();</b>
+&nbsp;		
+<b class="nc">&nbsp;		if (itemId == R.id.directions) {</b>
+<b class="nc">&nbsp;			Log.i(TAG, &quot;directions&quot;);</b>
+&nbsp;			try {
+<b class="nc">&nbsp;				startActivity( new Intent( Intent.ACTION_VIEW, mNavUrl ) );</b>
+&nbsp;			} catch (ActivityNotFoundException e) {
+<b class="nc">&nbsp;				Toast.makeText(this, &quot;Unable to launch navigator&quot;, Toast.LENGTH_LONG).show();</b>
+&nbsp;			} 
+<b class="nc">&nbsp;			return true;</b>
+<b class="nc">&nbsp;		} else if (itemId == R.id.browser) {</b>
+<b class="nc">&nbsp;			Log.i(TAG, &quot;browser&quot;);</b>
+&nbsp;			try {
+<b class="nc">&nbsp;				startActivity( new Intent( Intent.ACTION_VIEW, mTUKUrl ) );</b>
+&nbsp;			} catch (ActivityNotFoundException e) {
+<b class="nc">&nbsp;				Toast.makeText(this, &quot;Unable to launch browser&quot;, Toast.LENGTH_LONG).show();</b>
+&nbsp;			}
+<b class="nc">&nbsp;			return true;</b>
+<b class="nc">&nbsp;		} else if (itemId == R.id.radar) {</b>
+<b class="nc">&nbsp;			Log.i(TAG, &quot;radar&quot;);</b>
+&nbsp;			try {
+<b class="nc">&nbsp;				Intent i = new Intent(&quot;com.google.android.radar.SHOW_RADAR&quot;) ;</b>
+<b class="nc">&nbsp;				i.putExtra(&quot;latitude&quot;,  (float) mLatitude);</b>
+<b class="nc">&nbsp;				i.putExtra(&quot;longitude&quot;, (float) mLongitude);</b>
+<b class="nc">&nbsp;				i.putExtra(&quot;name&quot;, mWaypoint);</b>
+<b class="nc">&nbsp;				startActivity(i);</b>
+&nbsp;			} catch (ActivityNotFoundException e) {
+<b class="nc">&nbsp;				showDialog(RADAR);</b>
+&nbsp;			} 
+<b class="nc">&nbsp;			return true;	     </b>
+<b class="nc">&nbsp;		} else if (itemId == R.id.map) {</b>
+<b class="nc">&nbsp;			Log.i(TAG, &quot;map&quot;);</b>
+&nbsp;			// remove existing map bounding box preferences
+<b class="nc">&nbsp;			Editor editor = mPrefs.edit();</b>
+<b class="nc">&nbsp;			editor.remove(&quot;north&quot;);</b>
+<b class="nc">&nbsp;			editor.remove(&quot;south&quot;);</b>
+<b class="nc">&nbsp;			editor.remove(&quot;east&quot;);</b>
+<b class="nc">&nbsp;			editor.remove(&quot;west&quot;);</b>
+<b class="nc">&nbsp;			editor.putInt(&quot;zoomLevel&quot;, 12);</b>
+<b class="nc">&nbsp;			editor.putInt(&quot;latitude&quot;, (int)(mLatitude * 1E6));</b>
+<b class="nc">&nbsp;			editor.putInt(&quot;longitude&quot;, (int)(mLongitude * 1E6));</b>
+<b class="nc">&nbsp;			editor.apply();</b>
+<b class="nc">&nbsp;			Intent i = new Intent(TrigDetailsInfoTab.this, LeafletMapActivity.class);</b>
+<b class="nc">&nbsp;			startActivityForResult(i, R.id.map);</b>
+<b class="nc">&nbsp;			return true;	     </b>
+&nbsp;		}
+<b class="nc">&nbsp;		return super.onOptionsItemSelected(item);</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+<b class="nc">&nbsp;		super.onActivityResult(requestCode, resultCode, data);</b>
+<b class="nc">&nbsp;		populateFields();</b>
+&nbsp;		
+&nbsp;	}
+&nbsp;
+&nbsp;	protected Dialog onCreateDialog(int id) {
+&nbsp;	    Dialog dialog;
+<b class="nc">&nbsp;	    switch(id) {</b>
+&nbsp;	    case RADAR:
+<b class="nc">&nbsp;			dialog = new Dialog(this);</b>
+<b class="nc">&nbsp;			dialog.setContentView(R.layout.radardialog);</b>
+<b class="nc">&nbsp;			dialog.setTitle(R.string.radartitle);</b>
+<b class="nc">&nbsp;			Button yes = dialog.findViewById(R.id.yes);</b>
+<b class="nc">&nbsp;			yes.setOnClickListener(new OnClickListener() {</b>
+&nbsp;				@Override
+&nbsp;				public void onClick(View v) {
+<b class="nc">&nbsp;					dismissDialog(RADAR);</b>
+<b class="nc">&nbsp;					Intent intent = new Intent(Intent.ACTION_VIEW);</b>
+<b class="nc">&nbsp;					intent.setData(Uri.parse(&quot;market://details?id=com.eclipsim.gpsstatus2&quot;));</b>
+<b class="nc">&nbsp;					startActivity(intent);</b>
+&nbsp;				}
+&nbsp;			});
+<b class="nc">&nbsp;			Button no = dialog.findViewById(R.id.no);</b>
+<b class="nc">&nbsp;			no.setOnClickListener(new OnClickListener() {</b>
+&nbsp;				@Override
+&nbsp;				public void onClick(View v) {
+<b class="nc">&nbsp;					dismissDialog(RADAR);</b>
+&nbsp;				}
+&nbsp;			});
+&nbsp;	        break;
+&nbsp;	    default:
+<b class="nc">&nbsp;	        dialog = null;</b>
+&nbsp;	    }
+<b class="nc">&nbsp;	    return dialog;</b>
+&nbsp;	}
+&nbsp;	
+&nbsp;	
+&nbsp;	@Override
+&nbsp;	protected void onDestroy() {
+<b class="nc">&nbsp;		if (mDb != null) {</b>
+<b class="nc">&nbsp;			mDb.close();</b>
+&nbsp;		}
+<b class="nc">&nbsp;		super.onDestroy();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

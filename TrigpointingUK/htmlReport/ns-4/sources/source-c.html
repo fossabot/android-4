@@ -1,0 +1,155 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ThemeUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.common</a>
+</div>
+
+<h1>Coverage Summary for Class: ThemeUtils (uk.trigpointing.android.common)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThemeUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.common;
+&nbsp;
+&nbsp;import android.content.Context;
+&nbsp;import android.util.TypedValue;
+&nbsp;import androidx.appcompat.app.AppCompatActivity;
+&nbsp;
+<b class="nc">&nbsp;public class ThemeUtils {</b>
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Get the action bar height for proper content positioning
+&nbsp;     * This method is kept for reference but should not be needed with proper theme configuration
+&nbsp;     */
+&nbsp;    public static int getActionBarHeight(Context context) {
+<b class="nc">&nbsp;        int actionBarHeight = 0;</b>
+<b class="nc">&nbsp;        TypedValue tv = new TypedValue();</b>
+<b class="nc">&nbsp;        if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {</b>
+<b class="nc">&nbsp;            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return actionBarHeight;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets up proper content positioning for activities.
+&nbsp;     * 
+&nbsp;     * With the modernized Material Components theme and windowActionBarOverlay=false,
+&nbsp;     * the Android framework now automatically positions content below the action bar.
+&nbsp;     * This method is kept for compatibility but no longer needs to do anything.
+&nbsp;     * 
+&nbsp;     * The theme configuration handles:
+&nbsp;     * - Positioning content below the action bar (windowActionBarOverlay=false)
+&nbsp;     * - Proper status bar handling (windowDrawsSystemBarBackgrounds=true)
+&nbsp;     * - Consistent behavior across all devices
+&nbsp;     */
+&nbsp;    public static void setupContentPositioning(AppCompatActivity activity) {
+&nbsp;        // No manual adjustment needed - the Material Components theme with
+&nbsp;        // windowActionBarOverlay=false ensures content is properly positioned
+&nbsp;        // below the action bar on all devices.
+<b class="nc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

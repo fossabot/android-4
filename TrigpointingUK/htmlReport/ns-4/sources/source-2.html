@@ -1,0 +1,159 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BaseTabActivity</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.common</a>
+</div>
+
+<h1>Coverage Summary for Class: BaseTabActivity (uk.trigpointing.android.common)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BaseTabActivity</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.common;
+&nbsp;
+&nbsp;import android.os.Bundle;
+&nbsp;import android.view.View;
+&nbsp;import android.view.ViewGroup;
+&nbsp;import android.widget.FrameLayout;
+&nbsp;import androidx.appcompat.app.AppCompatActivity;
+&nbsp;import androidx.coordinatorlayout.widget.CoordinatorLayout;
+&nbsp;import com.google.android.material.appbar.AppBarLayout;
+&nbsp;
+&nbsp;/**
+&nbsp; * Base activity for activities that are embedded as tabs within another activity.
+&nbsp; * This is similar to BaseActivity but without action bar handling since tab activities
+&nbsp; * are embedded within a parent activity that already has an action bar.
+&nbsp; * 
+&nbsp; * This ensures content positioning works correctly without creating duplicate action bars.
+&nbsp; */
+<b class="nc">&nbsp;public abstract class BaseTabActivity extends AppCompatActivity {</b>
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    protected void onCreate(Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onCreate(savedInstanceState);</b>
+&nbsp;        
+&nbsp;        // Explicitly hide the action bar for tab activities
+<b class="nc">&nbsp;        if (getSupportActionBar() != null) {</b>
+<b class="nc">&nbsp;            getSupportActionBar().hide();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    public void setContentView(int layoutResID) {
+&nbsp;        // For tab activities, we don&#39;t need the CoordinatorLayout wrapper
+&nbsp;        // since they&#39;re embedded within a parent activity that already handles
+&nbsp;        // the action bar spacing. Just use the layout directly.
+<b class="nc">&nbsp;        super.setContentView(layoutResID);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    public void setContentView(View view) {
+&nbsp;        // For tab activities, use the view directly without wrapping
+<b class="nc">&nbsp;        super.setContentView(view);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

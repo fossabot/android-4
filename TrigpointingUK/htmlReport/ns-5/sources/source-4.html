@@ -1,0 +1,307 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TrigpointTypesActivity</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.filter</a>
+</div>
+
+<h1>Coverage Summary for Class: TrigpointTypesActivity (uk.trigpointing.android.filter)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TrigpointTypesActivity</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/75)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.filter;
+&nbsp;
+&nbsp;import android.content.SharedPreferences;
+&nbsp;import android.content.SharedPreferences.Editor;
+&nbsp;import android.os.Bundle;
+&nbsp;import androidx.preference.PreferenceManager;
+&nbsp;import android.util.Log;
+&nbsp;import android.view.MenuItem;
+&nbsp;import android.widget.RadioButton;
+&nbsp;import android.widget.RadioGroup;
+&nbsp;import uk.trigpointing.android.common.BaseActivity;
+&nbsp;
+&nbsp;import uk.trigpointing.android.R;
+&nbsp;
+<b class="nc">&nbsp;public class TrigpointTypesActivity extends BaseActivity {</b>
+&nbsp;    private static final String TAG = &quot;TrigpointTypesActivity&quot;;
+&nbsp;    private SharedPreferences mPrefs;
+&nbsp;    private RadioGroup mFilterTypeRadioGroup;
+&nbsp;    private RadioGroup mFilterStatusRadioGroup;
+&nbsp;    private RadioButton[] mTypeRadioButtons;
+&nbsp;    private RadioButton[] mStatusRadioButtons;
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    protected void onCreate(Bundle savedInstanceState) {
+<b class="nc">&nbsp;        super.onCreate(savedInstanceState);</b>
+<b class="nc">&nbsp;        setContentView(R.layout.trigpoint_types);</b>
+&nbsp;
+<b class="nc">&nbsp;        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);</b>
+<b class="nc">&nbsp;        mFilterTypeRadioGroup = findViewById(R.id.filterTypeRadioGroup);</b>
+<b class="nc">&nbsp;        mFilterStatusRadioGroup = findViewById(R.id.filterStatusRadioGroup);  </b>
+&nbsp;
+&nbsp;        // Enable back button in action bar
+<b class="nc">&nbsp;        if (getSupportActionBar() != null) {</b>
+<b class="nc">&nbsp;            getSupportActionBar().setDisplayHomeAsUpEnabled(true);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Initialize radio buttons
+<b class="nc">&nbsp;        setupRadioButtons();</b>
+&nbsp;
+&nbsp;        // Load current selection
+<b class="nc">&nbsp;        loadCurrentSelection();</b>
+&nbsp;        
+&nbsp;        // Set up automatic close on selection
+<b class="nc">&nbsp;        setupAutoClose();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void setupRadioButtons() {
+&nbsp;        // Initialize array of type radio buttons
+<b class="nc">&nbsp;        mTypeRadioButtons = new RadioButton[] {</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_pillars_only),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_pillars_fbm),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_fbm_only),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_passive),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_intersected),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_all_except_intersected),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_all_types)</b>
+&nbsp;        };
+&nbsp;        
+&nbsp;        // Initialize array of status radio buttons
+<b class="nc">&nbsp;        mStatusRadioButtons = new RadioButton[] {</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_status_all),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_status_logged),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_status_not_logged),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_status_marked),</b>
+<b class="nc">&nbsp;            findViewById(R.id.radio_status_unsynced)</b>
+&nbsp;        };
+&nbsp;        
+<b class="nc">&nbsp;        Log.i(TAG, &quot;setupRadioButtons: Initialized &quot; + mTypeRadioButtons.length + &quot; type radio buttons and &quot; + mStatusRadioButtons.length + &quot; status radio buttons&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void loadCurrentSelection() {
+&nbsp;        // Load trigpoint type selection
+<b class="nc">&nbsp;        int currentType = mPrefs.getInt(Filter.FILTERTYPE, 0);</b>
+&nbsp;        
+&nbsp;        // Ensure currentType is within bounds
+<b class="nc">&nbsp;        if (currentType &gt;= 0 &amp;&amp; currentType &lt; mTypeRadioButtons.length) {</b>
+<b class="nc">&nbsp;            mTypeRadioButtons[currentType].setChecked(true);</b>
+&nbsp;        } else {
+&nbsp;            // Default to &quot;All Types&quot; if invalid selection
+<b class="nc">&nbsp;            mTypeRadioButtons[6].setChecked(true);</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        // Load logging status selection
+<b class="nc">&nbsp;        int currentStatus = mPrefs.getInt(Filter.FILTERRADIO, 0);</b>
+&nbsp;        
+&nbsp;        // Ensure currentStatus is within bounds (0=All, 1=Logged, 2=Not Logged, 3=Marked, 4=Unsynced)
+<b class="nc">&nbsp;        if (currentStatus &gt;= 0 &amp;&amp; currentStatus &lt; mStatusRadioButtons.length) {</b>
+<b class="nc">&nbsp;            mStatusRadioButtons[currentStatus].setChecked(true);</b>
+&nbsp;        } else {
+&nbsp;            // Default to &quot;All&quot; if invalid selection
+<b class="nc">&nbsp;            mStatusRadioButtons[0].setChecked(true);</b>
+&nbsp;        }
+&nbsp;        
+<b class="nc">&nbsp;        Log.i(TAG, &quot;Loaded filter type: &quot; + currentType + &quot;, filter status: &quot; + currentStatus);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    private void setupAutoClose() {
+&nbsp;        // Set up listeners for both radio groups
+<b class="nc">&nbsp;        mFilterTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -&gt; {</b>
+<b class="nc">&nbsp;            Log.i(TAG, &quot;Trigpoint type selection changed, saving and closing&quot;);</b>
+&nbsp;            
+&nbsp;            // Save the selection immediately
+<b class="nc">&nbsp;            saveCurrentSelection();</b>
+&nbsp;            
+&nbsp;            // Close the activity
+<b class="nc">&nbsp;            finish();</b>
+&nbsp;        });
+&nbsp;        
+<b class="nc">&nbsp;        mFilterStatusRadioGroup.setOnCheckedChangeListener((group, checkedId) -&gt; {</b>
+<b class="nc">&nbsp;            Log.i(TAG, &quot;Filter status selection changed, saving and closing&quot;);</b>
+&nbsp;            
+&nbsp;            // Save the selection immediately
+<b class="nc">&nbsp;            saveCurrentSelection();</b>
+&nbsp;            
+&nbsp;            // Close the activity
+<b class="nc">&nbsp;            finish();</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;    
+&nbsp;    private void saveCurrentSelection() {
+<b class="nc">&nbsp;        Editor editor = mPrefs.edit();</b>
+&nbsp;        
+&nbsp;        // Find which trigpoint type radio button is selected
+<b class="nc">&nbsp;        int filterType = 0; // default</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; mTypeRadioButtons.length; i++) {</b>
+<b class="nc">&nbsp;            if (mTypeRadioButtons[i].isChecked()) {</b>
+<b class="nc">&nbsp;                filterType = i;</b>
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;        
+&nbsp;        // Find which status radio button is selected
+<b class="nc">&nbsp;        int filterStatus = 0; // default (All)</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; mStatusRadioButtons.length; i++) {</b>
+<b class="nc">&nbsp;            if (mStatusRadioButtons[i].isChecked()) {</b>
+<b class="nc">&nbsp;                filterStatus = i;</b>
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;        
+<b class="nc">&nbsp;        editor.putInt(Filter.FILTERTYPE, filterType);</b>
+<b class="nc">&nbsp;        editor.putInt(Filter.FILTERRADIO, filterStatus);</b>
+&nbsp;        
+&nbsp;        // Update the text values for display
+<b class="nc">&nbsp;        String typeText = mTypeRadioButtons[filterType].getText().toString();</b>
+<b class="nc">&nbsp;        String statusText = mStatusRadioButtons[filterStatus].getText().toString();</b>
+<b class="nc">&nbsp;        editor.putString(Filter.FILTERRADIOTEXT, statusText); // Keep for compatibility</b>
+&nbsp;        
+&nbsp;        // Update leaflet_filter_found for map screen synchronization
+<b class="nc">&nbsp;        String leafletFilterValue = convertToLeafletFilterValue(filterStatus);</b>
+<b class="nc">&nbsp;        editor.putString(&quot;leaflet_filter_found&quot;, leafletFilterValue);</b>
+&nbsp;        
+<b class="nc">&nbsp;        Log.i(TAG, &quot;saveCurrentSelection: Saving filter type: &quot; + filterType + &quot; (&quot; + typeText + &quot;), filter status: &quot; + filterStatus + &quot; (&quot; + statusText + &quot;), leaflet_filter_found: &quot; + leafletFilterValue);</b>
+&nbsp;    
+&nbsp;        // Save to prefs
+<b class="nc">&nbsp;        editor.apply();</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Convert the filter status values to LeafletMap filter values for synchronization
+&nbsp;     */
+&nbsp;    private String convertToLeafletFilterValue(int filterStatus) {
+<b class="nc">&nbsp;        switch (filterStatus) {</b>
+<b class="nc">&nbsp;            case 0: return &quot;all&quot;;       // Logged or not</b>
+<b class="nc">&nbsp;            case 1: return &quot;logged&quot;;    // Logged  </b>
+<b class="nc">&nbsp;            case 2: return &quot;notlogged&quot;; // Not Logged</b>
+<b class="nc">&nbsp;            case 3: return &quot;marked&quot;;    // Marked</b>
+<b class="nc">&nbsp;            case 4: return &quot;unsynced&quot;;  // Unsynced</b>
+<b class="nc">&nbsp;            default: return &quot;all&quot;;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected void onPause() {
+<b class="nc">&nbsp;        Log.i(TAG, &quot;onPause&quot;);</b>
+&nbsp;        
+&nbsp;        // Save current selection (fallback in case auto-close didn&#39;t trigger)
+<b class="nc">&nbsp;        saveCurrentSelection();</b>
+&nbsp;        
+<b class="nc">&nbsp;        super.onPause();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean onOptionsItemSelected(MenuItem item) {
+<b class="nc">&nbsp;        if (item.getItemId() == android.R.id.home) {</b>
+<b class="nc">&nbsp;            finish();</b>
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return super.onOptionsItemSelected(item);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,420 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ZoomableImageView</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">uk.trigpointing.android.common</a>
+</div>
+
+<h1>Coverage Summary for Class: ZoomableImageView (uk.trigpointing.android.common)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ZoomableImageView</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/62)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ZoomableImageView$GestureListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">ZoomableImageView$ScaleListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/94)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package uk.trigpointing.android.common;
+&nbsp;
+&nbsp;import android.content.Context;
+&nbsp;import android.graphics.Bitmap;
+&nbsp;import android.graphics.Matrix;
+&nbsp;import android.graphics.drawable.Drawable;
+&nbsp;import android.util.AttributeSet;
+&nbsp;import android.view.GestureDetector;
+&nbsp;import android.view.MotionEvent;
+&nbsp;import android.view.ScaleGestureDetector;
+&nbsp;
+&nbsp;import androidx.annotation.NonNull;
+&nbsp;import androidx.appcompat.widget.AppCompatImageView;
+&nbsp;
+&nbsp;/**
+&nbsp; * Custom ImageView that supports pinch-to-zoom and pan gestures
+&nbsp; * Modern implementation using standard Android gesture detection
+&nbsp; */
+&nbsp;public class ZoomableImageView extends AppCompatImageView {
+&nbsp;
+&nbsp;    // Matrix for transformations
+<b class="nc">&nbsp;    private final Matrix mMatrix = new Matrix();</b>
+&nbsp;
+&nbsp;    // Scale limits
+&nbsp;    private static final float MIN_SCALE = 1.0f;
+&nbsp;    private static final float MAX_SCALE = 10.0f;
+&nbsp;    
+&nbsp;    // Current scale
+<b class="nc">&nbsp;    private float mCurrentScale = 1.0f;</b>
+&nbsp;    
+&nbsp;    // Gesture detectors
+&nbsp;    private ScaleGestureDetector mScaleDetector;
+&nbsp;    private GestureDetector mGestureDetector;
+&nbsp;    
+&nbsp;    // View dimensions
+&nbsp;    private int mViewWidth;
+&nbsp;    private int mViewHeight;
+&nbsp;    
+&nbsp;    // Image dimensions
+&nbsp;    private int mImageWidth;
+&nbsp;    private int mImageHeight;
+&nbsp;    
+&nbsp;    public ZoomableImageView(Context context) {
+<b class="nc">&nbsp;        super(context);</b>
+<b class="nc">&nbsp;        init();</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    public ZoomableImageView(Context context, AttributeSet attrs) {
+<b class="nc">&nbsp;        super(context, attrs);</b>
+<b class="nc">&nbsp;        init();</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    public ZoomableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+<b class="nc">&nbsp;        super(context, attrs, defStyleAttr);</b>
+<b class="nc">&nbsp;        init();</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    private void init() {
+<b class="nc">&nbsp;        setScaleType(ScaleType.MATRIX);</b>
+&nbsp;        
+<b class="nc">&nbsp;        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());</b>
+<b class="nc">&nbsp;        mGestureDetector = new GestureDetector(getContext(), new GestureListener());</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    public void setImageBitmap(Bitmap bitmap) {
+<b class="nc">&nbsp;        super.setImageBitmap(bitmap);</b>
+<b class="nc">&nbsp;        if (bitmap != null) {</b>
+<b class="nc">&nbsp;            mImageWidth = bitmap.getWidth();</b>
+<b class="nc">&nbsp;            mImageHeight = bitmap.getHeight();</b>
+<b class="nc">&nbsp;            resetZoom();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    public void setImageDrawable(Drawable drawable) {
+<b class="nc">&nbsp;        super.setImageDrawable(drawable);</b>
+<b class="nc">&nbsp;        if (drawable != null) {</b>
+<b class="nc">&nbsp;            mImageWidth = drawable.getIntrinsicWidth();</b>
+<b class="nc">&nbsp;            mImageHeight = drawable.getIntrinsicHeight();</b>
+<b class="nc">&nbsp;            resetZoom();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+<b class="nc">&nbsp;        super.onSizeChanged(w, h, oldw, oldh);</b>
+<b class="nc">&nbsp;        mViewWidth = w;</b>
+<b class="nc">&nbsp;        mViewHeight = h;</b>
+<b class="nc">&nbsp;        resetZoom();</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @Override
+&nbsp;    public boolean onTouchEvent(MotionEvent event) {
+<b class="nc">&nbsp;        boolean scaleResult = mScaleDetector.onTouchEvent(event);</b>
+<b class="nc">&nbsp;        boolean gestureResult = mGestureDetector.onTouchEvent(event);</b>
+&nbsp;        
+<b class="nc">&nbsp;        return scaleResult || gestureResult || super.onTouchEvent(event);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Reset zoom to fit image to screen
+&nbsp;     */
+&nbsp;    public void resetZoom() {
+<b class="nc">&nbsp;        if (mViewWidth == 0 || mViewHeight == 0 || mImageWidth == 0 || mImageHeight == 0) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;        
+<b class="nc">&nbsp;        mMatrix.reset();</b>
+&nbsp;        
+&nbsp;        // Calculate scale to fit image to view
+<b class="nc">&nbsp;        float scaleX = (float) mViewWidth / mImageWidth;</b>
+<b class="nc">&nbsp;        float scaleY = (float) mViewHeight / mImageHeight;</b>
+<b class="nc">&nbsp;        float scale = Math.min(scaleX, scaleY);</b>
+&nbsp;        
+<b class="nc">&nbsp;        mCurrentScale = scale;</b>
+&nbsp;        
+&nbsp;        // Center the image
+<b class="nc">&nbsp;        float dx = (mViewWidth - mImageWidth * scale) / 2;</b>
+<b class="nc">&nbsp;        float dy = (mViewHeight - mImageHeight * scale) / 2;</b>
+&nbsp;        
+<b class="nc">&nbsp;        mMatrix.setScale(scale, scale);</b>
+<b class="nc">&nbsp;        mMatrix.postTranslate(dx, dy);</b>
+&nbsp;        
+<b class="nc">&nbsp;        setImageMatrix(mMatrix);</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {</b>
+&nbsp;        @Override
+&nbsp;        public boolean onScale(ScaleGestureDetector detector) {
+<b class="nc">&nbsp;            float scaleFactor = detector.getScaleFactor();</b>
+<b class="nc">&nbsp;            float newScale = mCurrentScale * scaleFactor;</b>
+&nbsp;            
+&nbsp;            // Limit zoom range
+<b class="nc">&nbsp;            newScale = Math.max(MIN_SCALE, Math.min(newScale, MAX_SCALE));</b>
+&nbsp;            
+<b class="nc">&nbsp;            if (newScale != mCurrentScale) {</b>
+<b class="nc">&nbsp;                float prevScale = mCurrentScale;</b>
+<b class="nc">&nbsp;                mCurrentScale = newScale;</b>
+&nbsp;                
+<b class="nc">&nbsp;                float focusX = detector.getFocusX();</b>
+<b class="nc">&nbsp;                float focusY = detector.getFocusY();</b>
+&nbsp;                
+&nbsp;                // Scale around focus point
+<b class="nc">&nbsp;                mMatrix.postScale(mCurrentScale / prevScale, mCurrentScale / prevScale, focusX, focusY);</b>
+&nbsp;                
+&nbsp;                // Keep image within bounds
+<b class="nc">&nbsp;                constrainPan();</b>
+&nbsp;                
+<b class="nc">&nbsp;                setImageMatrix(mMatrix);</b>
+&nbsp;            }
+&nbsp;            
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+<b class="nc">&nbsp;    private class GestureListener extends GestureDetector.SimpleOnGestureListener {</b>
+&nbsp;        @Override
+&nbsp;        public boolean onScroll(MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
+&nbsp;            // Only pan if zoomed in
+<b class="nc">&nbsp;            if (mCurrentScale &gt; MIN_SCALE) {</b>
+<b class="nc">&nbsp;                mMatrix.postTranslate(-distanceX, -distanceY);</b>
+<b class="nc">&nbsp;                constrainPan();</b>
+<b class="nc">&nbsp;                setImageMatrix(mMatrix);</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        @Override
+&nbsp;        public boolean onDoubleTap(@NonNull MotionEvent e) {
+<b class="nc">&nbsp;            if (mCurrentScale &gt; MIN_SCALE) {</b>
+&nbsp;                // If zoomed in, reset to fit
+<b class="nc">&nbsp;                resetZoom();</b>
+&nbsp;            } else {
+&nbsp;                // If at minimum scale, zoom to 2x at tap point
+<b class="nc">&nbsp;                float targetScale = MIN_SCALE * 2;</b>
+<b class="nc">&nbsp;                float scaleFactor = targetScale / mCurrentScale;</b>
+<b class="nc">&nbsp;                mCurrentScale = targetScale;</b>
+&nbsp;                
+<b class="nc">&nbsp;                float focusX = e.getX();</b>
+<b class="nc">&nbsp;                float focusY = e.getY();</b>
+&nbsp;                
+<b class="nc">&nbsp;                mMatrix.postScale(scaleFactor, scaleFactor, focusX, focusY);</b>
+<b class="nc">&nbsp;                constrainPan();</b>
+<b class="nc">&nbsp;                setImageMatrix(mMatrix);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        @Override
+&nbsp;        public boolean onDown(@NonNull MotionEvent e) {
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Constrain panning to keep image within bounds
+&nbsp;     */
+&nbsp;    private void constrainPan() {
+<b class="nc">&nbsp;        float[] values = new float[9];</b>
+<b class="nc">&nbsp;        mMatrix.getValues(values);</b>
+&nbsp;        
+<b class="nc">&nbsp;        float dx = values[Matrix.MTRANS_X];</b>
+<b class="nc">&nbsp;        float dy = values[Matrix.MTRANS_Y];</b>
+<b class="nc">&nbsp;        float scaleX = values[Matrix.MSCALE_X];</b>
+<b class="nc">&nbsp;        float scaleY = values[Matrix.MSCALE_Y];</b>
+&nbsp;        
+<b class="nc">&nbsp;        float scaledImageWidth = mImageWidth * scaleX;</b>
+<b class="nc">&nbsp;        float scaledImageHeight = mImageHeight * scaleY;</b>
+&nbsp;        
+<b class="nc">&nbsp;        float minX = Math.min(0, mViewWidth - scaledImageWidth);</b>
+<b class="nc">&nbsp;        float maxX = Math.max(0, mViewWidth - scaledImageWidth);</b>
+<b class="nc">&nbsp;        float minY = Math.min(0, mViewHeight - scaledImageHeight);</b>
+<b class="nc">&nbsp;        float maxY = Math.max(0, mViewHeight - scaledImageHeight);</b>
+&nbsp;        
+&nbsp;        // Constrain X
+<b class="nc">&nbsp;        if (dx &lt; minX) {</b>
+<b class="nc">&nbsp;            dx = minX;</b>
+<b class="nc">&nbsp;        } else if (dx &gt; maxX) {</b>
+<b class="nc">&nbsp;            dx = maxX;</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;        // Constrain Y
+<b class="nc">&nbsp;        if (dy &lt; minY) {</b>
+<b class="nc">&nbsp;            dy = minY;</b>
+<b class="nc">&nbsp;        } else if (dy &gt; maxY) {</b>
+<b class="nc">&nbsp;            dy = maxY;</b>
+&nbsp;        }
+&nbsp;        
+<b class="nc">&nbsp;        values[Matrix.MTRANS_X] = dx;</b>
+<b class="nc">&nbsp;        values[Matrix.MTRANS_Y] = dy;</b>
+<b class="nc">&nbsp;        mMatrix.setValues(values);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-08-25 13:52</div>
+</div>
+</body>
+</html>
