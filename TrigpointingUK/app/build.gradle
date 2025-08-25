@@ -10,7 +10,11 @@ plugins {
 
 // Only apply Firebase Performance plugin for non-test builds
 // This prevents protobuf compatibility issues in test environments
-if (!gradle.startParameter.taskNames.any { it.contains("Test") || it.contains("test") }) {
+def isTestBuild = gradle.startParameter.taskNames.any { 
+    it.contains("Test") || it.contains("test") || it.contains("AndroidTest") || it.contains("connected")
+}
+
+if (!isTestBuild) {
     apply plugin: 'com.google.firebase.firebase-perf'
 }
 
@@ -28,6 +32,8 @@ android {
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
+    
+
 
     buildTypes {
         release {
@@ -144,7 +150,14 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics:23.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:20.0.0'
-    implementation 'com.google.firebase:firebase-perf:22.0.0'
+    
+    // Only include Firebase Performance in non-test builds
+    // Check if we're building for tests by looking at current task execution
+    if (!gradle.startParameter.taskNames.any { 
+        it.contains("Test") || it.contains("test") || it.contains("AndroidTest") || it.contains("connected")
+    }) {
+        implementation 'com.google.firebase:firebase-perf:22.0.0'
+    }
     
 
 
@@ -164,19 +177,37 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.11.1'
     
     // Testing - Android Integration Tests
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    androidTestImplementation('androidx.test.ext:junit:1.1.5') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
+    androidTestImplementation('androidx.test:runner:1.5.2') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
+    androidTestImplementation('androidx.test:rules:1.5.0') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
+    androidTestImplementation('androidx.test.uiautomator:uiautomator:2.2.0') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
     
     // Testing - UI Tests (Espresso)
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-web:3.5.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
+    androidTestImplementation('androidx.test.espresso:espresso-web:3.5.1') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
+    androidTestImplementation('androidx.test.espresso:espresso-intents:3.5.1') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
+    androidTestImplementation('androidx.test.espresso:espresso-contrib:3.5.1') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
     
     // Testing - Database
-    androidTestImplementation 'androidx.room:room-testing:2.4.3'
+    androidTestImplementation('androidx.room:room-testing:2.4.3') {
+        exclude group: 'com.google.firebase', module: 'firebase-perf'
+    }
     implementation "com.mikepenz:aboutlibraries:12.2.4"
 }
 
