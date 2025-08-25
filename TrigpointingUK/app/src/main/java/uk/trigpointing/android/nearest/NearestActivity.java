@@ -182,9 +182,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			return;
 		} else {
 			// We have permission, proceed with location access
-			mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
+			// Try to get last known location from available providers
+			mCurrentLocation = getLastKnownLocationFromAvailableProviders();
 			updateLocationHeader("cached");
 			if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
 		}
@@ -236,8 +235,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		// Register the listener with the Location Manager to receive location updates
 		if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
 			checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*30, 250, mLocationListener);
-			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*300, 250, mLocationListener);
+			// Request location updates from available providers only
+			requestLocationUpdatesFromAvailableProviders();
 		}
 		else {
 			// If returning here after a permission denial, ensure headers/UI reflect state
@@ -249,6 +248,84 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		updateFilterHeader();
 	}
 
+	/**
+	 * Safely get last known location from available providers
+	 * Network provider was deprecated and removed in newer Android versions
+	 */
+	private Location getLastKnownLocationFromAvailableProviders() {
+		Location bestLocation = null;
+		
+		try {
+			// Try GPS provider first (most accurate)
+			if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				Location gpsLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				if (isBetterLocation(gpsLocation, bestLocation)) {
+					bestLocation = gpsLocation;
+				}
+			}
+			
+			// Try network provider only if it exists (deprecated/removed on newer devices)
+			try {
+				if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					Location networkLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					if (isBetterLocation(networkLocation, bestLocation)) {
+						bestLocation = networkLocation;
+					}
+				}
+			} catch (IllegalArgumentException e) {
+				// Network provider doesn't exist on this device - this is expected on newer Android versions
+				Log.d(TAG, "Network provider not available (this is normal on newer Android versions)");
+			}
+			
+			// Try passive provider as fallback
+			try {
+				if (mLocationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
+					Location passiveLocation = mLocationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+					if (isBetterLocation(passiveLocation, bestLocation)) {
+						bestLocation = passiveLocation;
+					}
+				}
+			} catch (IllegalArgumentException e) {
+				Log.d(TAG, "Passive provider not available");
+			}
+			
+		} catch (SecurityException e) {
+			Log.w(TAG, "No location permission for getLastKnownLocation");
+		} catch (Exception e) {
+			Log.e(TAG, "Error getting last known location", e);
+		}
+		
+		return bestLocation;
+	}
+	
+	/**
+	 * Safely request location updates from available providers
+	 */
+	private void requestLocationUpdatesFromAvailableProviders() {
+		try {
+			// Always try GPS provider (most accurate, available on all devices)
+			if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*300, 250, mLocationListener);
+				Log.d(TAG, "Requested location updates from GPS provider");
+			}
+			
+			// Try network provider only if it exists (deprecated/removed on newer devices)
+			try {
+				if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000*30, 250, mLocationListener);
+					Log.d(TAG, "Requested location updates from network provider");
+				}
+			} catch (IllegalArgumentException e) {
+				// Network provider doesn't exist on this device - this is expected on newer Android versions
+				Log.d(TAG, "Network provider not available for location updates (this is normal on newer Android versions)");
+			}
+			
+		} catch (SecurityException e) {
+			Log.w(TAG, "No location permission for requestLocationUpdates");
+		} catch (Exception e) {
+			Log.e(TAG, "Error requesting location updates", e);
+		}
+	}
 
 	private void useCompass(boolean use) {
 		mUsingCompass = use;
@@ -374,9 +451,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 				// Check permissions explicitly before calling getLastKnownLocation
 				if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
 					ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-					mCurrentLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-					Location newLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-					if (isBetterLocation(newLoc, mCurrentLocation)) {mCurrentLocation = newLoc;}
+					// Try to get last known location from available providers
+					mCurrentLocation = getLastKnownLocationFromAvailableProviders();
 					updateLocationHeader("cached");
 					if (mCurrentLocation != null && !mTaskRunning) {findTrigs();}
 				}
