@@ -643,8 +643,8 @@
         Object.keys(pendingSectionStates).forEach(sectionName => {
           const shouldBeExpanded = pendingSectionStates[sectionName];
           const sectionContent = document.getElementById(sectionName + '-content');
-          const sectionHeader = sectionContent?.previousElementSibling;
-          const toggle = sectionHeader?.querySelector('.toggle-icon');
+          const sectionHeader = sectionContent ? sectionContent.previousElementSibling : null;
+          const toggle = sectionHeader ? sectionHeader.querySelector('.toggle-icon') : null;
           
           if (sectionContent && shouldBeExpanded) {
             console.log(`Expanding section ${sectionName}`);
@@ -887,8 +887,8 @@
         Object.keys(pendingSectionStates).forEach(sectionName => {
           const shouldBeExpanded = pendingSectionStates[sectionName];
           const sectionContent = document.getElementById(sectionName + '-content');
-          const sectionHeader = sectionContent?.previousElementSibling;
-          const toggle = sectionHeader?.querySelector('.toggle-icon');
+          const sectionHeader = sectionContent ? sectionContent.previousElementSibling : null;
+          const toggle = sectionHeader ? sectionHeader.querySelector('.toggle-icon') : null;
           
           if (sectionContent && shouldBeExpanded && sectionContent.classList.contains('collapsed')) {
             console.log(`Backup restoration: Expanding section ${sectionName}`);
