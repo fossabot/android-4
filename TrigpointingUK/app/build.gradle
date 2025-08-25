@@ -19,6 +19,10 @@ android {
         versionCode 27
         versionName "2.0.16"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Disable Firebase for tests
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+        testInstrumentationRunnerArguments disableAnalytics: 'true'
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
     }
@@ -139,6 +143,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:23.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:20.0.0'
     implementation 'com.google.firebase:firebase-perf:22.0.0'
+    
+    // Exclude Firebase from test builds to prevent API 27 crashes
+    androidTestImplementation('androidx.test.ext:junit:1.1.5') {
+        exclude group: 'com.google.firebase'
+        exclude group: 'com.google.protobuf'
+    }
 
     // Room for database
     implementation "androidx.room:room-runtime:2.7.2"
