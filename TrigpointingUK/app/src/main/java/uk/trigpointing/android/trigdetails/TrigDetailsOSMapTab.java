@@ -563,7 +563,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			String label = formatDistance(niceMeters);
 			Paint labelPaint = new Paint();
 			labelPaint.setAntiAlias(true);
-			labelPaint.setColor(0xFFD9D9D9); // ~85% gray for more punch
+			labelPaint.setColor(0xFF8C8C8C); // ~55% gray (darker than bar) for more punch
 			labelPaint.setTextSize(dpToPxF(7f));
 			labelPaint.setTextAlign(Paint.Align.CENTER);
 			float tick = dpToPxF(6f);
