@@ -76,7 +76,7 @@ PROVIDERS: Dict[str, Dict[str, str]] = {
 }
 
 # Configuration
-USER_AGENT = "TrigpointingUK OSM Downloader (https://github.com/trigpointinguk/android)"
+USER_AGENT = "TrigpointingUK Tile Downloader (https://github.com/trigpointinguk/android)"
 TILES_DIR = "map_tiles"
 LOG_FILE = "download.log"
 

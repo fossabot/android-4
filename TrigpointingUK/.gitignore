@@ -96,6 +96,7 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+htmlReport/
 
 # Temporary files
 *.tmp
