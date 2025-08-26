@@ -60,12 +60,13 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	// Add/remove/reorder to control exactly what appears in the grid
 	private static final String[][] MAP_SELECTIONS = new String[][]{
 		// name, zoom as string (parsed to int)
-		{"OSM", "8"},
+		{"OSM", "7"},
 		{"OSM", "10"},
-		{"OSM", "12"},
+		{"OSM", "15"},
+		{"OSM", "19"},
 		{"OS_Outdoor", "8"},
-		{"OS_Outdoor", "10"},
-		{"OS_Outdoor", "12"},
+		{"OS_Outdoor", "15"},
+		{"OS_Outdoor", "18"},
 		{"OS_Leisure", "5"},
 		{"OS_Leisure", "7"},
 		{"OS_Leisure", "9"}
