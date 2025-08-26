@@ -133,6 +133,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	}
 	
 	private void generateCachedImages(double lat, double lon) {
+		mNextPosition.set(0);
 		// Calculate total expected images from explicit selections
 		int expectedImageCount = MAP_SELECTIONS.length;
 		
@@ -141,6 +142,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		// Create adapter with placeholders immediately and show gallery
 		mAdapter = TrigDetailsOSMapAdapter.createWithPlaceholders(this, expectedImageCount);
 		setupGallery();
+		mAdapter.notifyDataSetChanged();
 		
 		// Start generating images progressively based on explicit selections
 		for (String[] sel : MAP_SELECTIONS) {
@@ -493,7 +495,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		Paint textPaint = new Paint();
 		textPaint.setColor(0xCC000000); // semi-transparent black
 		textPaint.setAntiAlias(true);
-		textPaint.setTextSize(dpToPxF(6.67f));
+		textPaint.setTextSize(dpToPxF(10f * 4f / 9f));
 		textPaint.setTextAlign(Paint.Align.LEFT);
 		
 		// White background strip for readability
