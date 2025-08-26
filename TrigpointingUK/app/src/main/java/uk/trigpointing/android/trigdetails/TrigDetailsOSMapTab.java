@@ -26,6 +26,7 @@ import android.util.Log;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.widget.Toast;
 
 import uk.trigpointing.android.DbHelper;
@@ -462,8 +463,18 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		
 		// Use the instance adapter (either newly created or existing)
 		if (mAdapter != null) {
-			gallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+			// Use GridLayoutManager for vertical scrolling grid layout
+			// Calculate number of columns based on screen width for optimal thumbnail size
+			int screenWidth = getResources().getDisplayMetrics().widthPixels;
+			int columns = Math.max(2, Math.min(3, screenWidth / 500)); // 2-3 columns based on screen width (higher threshold for 2 columns)
+			
+			gallery.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, columns));
 			gallery.setAdapter(mAdapter);
+			
+			// Add dp-based grid spacing decoration so columns and rows have visible gaps
+			int spacingPx = dpToPx(16); // 16dp spacing between items
+			gallery.addItemDecoration(new GridSpacingItemDecoration(columns, spacingPx, false));
+			gallery.setClipToPadding(false);
 		}
 		
 		mAdapter.setOnItemClickListener(new TrigDetailsOSMapAdapter.OnItemClickListener() {
@@ -488,6 +499,51 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		});
 	}
 
+	/**
+	 * Converts dp to pixels for consistent spacing on different densities
+	 */
+	private int dpToPx(int dp) {
+		float density = getResources().getDisplayMetrics().density;
+		return Math.round(dp * density);
+	}
+
+	/**
+	 * ItemDecoration that adds even spacing around grid items so columns and rows have gaps.
+	 * If includeEdge is true, outer edges will also have spacing, matching inner gaps visually.
+	 */
+	private static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+		private final int spanCount;
+		private final int spacing;
+		private final boolean includeEdge;
+
+		GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+			this.spanCount = spanCount;
+			this.spacing = spacing;
+			this.includeEdge = includeEdge;
+		}
+
+		@Override
+		public void getItemOffsets(android.graphics.Rect outRect, android.view.View view,
+				RecyclerView parent, RecyclerView.State state) {
+			int position = parent.getChildAdapterPosition(view); // item position
+			int column = position % spanCount; // item column
+
+			if (includeEdge) {
+				outRect.left = spacing - column * spacing / spanCount;
+				outRect.right = (column + 1) * spacing / spanCount;
+				if (position < spanCount) { // top edge
+					outRect.top = spacing;
+				}
+				outRect.bottom = spacing; // item bottom
+			} else {
+				outRect.left = column * spacing / spanCount;
+				outRect.right = spacing - (column + 1) * spacing / spanCount;
+				if (position >= spanCount) {
+					outRect.top = spacing; // item top
+				}
+			}
+		}
+	}
 	@Override
 	protected void onDestroy() {
 		if (mExecutor != null) {
@@ -498,4 +554,6 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		}
 		super.onDestroy();
 	}
+	
+
 }

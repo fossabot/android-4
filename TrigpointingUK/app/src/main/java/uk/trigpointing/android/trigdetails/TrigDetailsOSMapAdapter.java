@@ -42,12 +42,22 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // Calculate cell size based on screen width for better grid layout
+        int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+        int columns = Math.max(2, Math.min(3, screenWidth / 500)); // 2-3 columns based on screen width (higher threshold for 2 columns)
+        int totalSidePaddingPx = dpToPx(32); // RecyclerView has 16dp padding on both sides
+        int interItemSpacingPx = dpToPx(16);  // Decoration adds 16dp between columns
+        int totalInterItemWidth = interItemSpacingPx * (columns - 1);
+        int availableWidth = screenWidth - totalSidePaddingPx - totalInterItemWidth;
+        int cellSize = availableWidth / columns;
+
+        // Create the ImageView directly; spacing handled by ItemDecoration
         ImageView imageView = new ImageView(mContext);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(300, 300));
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setBackgroundResource(mGalleryItemBackground);
-        
-        // Set click listener
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(cellSize, cellSize));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        // Remove background to eliminate grey borders
+
+        // Set click listener on the view
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,14 +67,14 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
                 }
             }
         });
-        
+
         return new ViewHolder(imageView);
     }
     
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // Set position tag for click handling
-        holder.imageView.setTag(position);
+        holder.itemView.setTag(position);
         
         Log.d(TAG, "Loading map image at position " + position + ": " + mUrls[position]);
         
@@ -111,6 +121,11 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
             super(itemView);
             imageView = (ImageView) itemView;
         }
+    }
+
+    private int dpToPx(int dp) {
+        float density = mContext.getResources().getDisplayMetrics().density;
+        return Math.round(dp * density);
     }
     
     /**
