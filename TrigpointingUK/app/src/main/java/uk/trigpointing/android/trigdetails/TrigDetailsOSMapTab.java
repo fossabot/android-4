@@ -557,6 +557,25 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		return null;
 	}
 
+	public void refreshImagesFromParent() {
+		try {
+			File cacheDir = new File(getCacheDir(), "map_images");
+			File[] files = cacheDir.listFiles();
+			if (files != null) {
+				for (File f : files) {
+					String name = f.getName();
+					if (name.startsWith("trig_" + mTrigId + "_")) {
+						// noinspection ResultOfMethodCallIgnored
+						f.delete();
+					}
+				}
+			}
+			generateCachedImages(mLat, mLon);
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to refresh images from parent", e);
+		}
+	}
+
 	/**
 	 * Converts dp to pixels for consistent spacing on different densities
 	 */

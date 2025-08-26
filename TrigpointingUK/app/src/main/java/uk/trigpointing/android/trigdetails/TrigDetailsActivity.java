@@ -589,6 +589,25 @@ public class TrigDetailsActivity extends BaseActivity {
                     showToast("Unable to get trigpoint coordinates");
                 }
                 return true;
+            } else if (id == R.id.action_refresh_osmaps) {
+                try {
+                    TabHost tabHost = findViewById(android.R.id.tabhost);
+                    if (tabHost != null) {
+                        String currentTag = tabHost.getCurrentTabTag();
+                        // Prefer refreshing regardless of current tab
+                        android.app.Activity mapActivity = mLocalActivityManager.getActivity("map");
+                        if (mapActivity instanceof TrigDetailsOSMapTab) {
+                            ((TrigDetailsOSMapTab) mapActivity).refreshImagesFromParent();
+                            Toast.makeText(this, "Refreshing OS map tiles", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Map tab not active yet", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e(TAG, "Error refreshing OS maps: " + e.getMessage(), e);
+                    Toast.makeText(this, "Error refreshing maps", Toast.LENGTH_SHORT).show();
+                }
+                return true;
             }
         } catch (Exception e) {
             android.util.Log.e(TAG, "Error handling menu action: " + e.getMessage(), e);

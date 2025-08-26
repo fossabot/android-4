@@ -14,5 +14,9 @@
         android:title="Guide me (radar)"
         android:icon="@android:drawable/ic_menu_compass"
         android:showAsAction="never" />
+    <item
+        android:id="@+id/action_refresh_osmaps"
+        android:title="Refresh OS map tiles"
+        android:showAsAction="never" />
 </menu>
 
