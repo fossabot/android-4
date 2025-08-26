@@ -493,7 +493,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		Paint textPaint = new Paint();
 		textPaint.setColor(0xCC000000); // semi-transparent black
 		textPaint.setAntiAlias(true);
-		textPaint.setTextSize(dpToPx(10));
+		textPaint.setTextSize(dpToPxF(6.67f));
 		textPaint.setTextAlign(Paint.Align.LEFT);
 		
 		// White background strip for readability
@@ -582,6 +582,11 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private int dpToPx(int dp) {
 		float density = getResources().getDisplayMetrics().density;
 		return Math.round(dp * density);
+	}
+
+	private float dpToPxF(float dp) {
+		float density = getResources().getDisplayMetrics().density;
+		return dp * density;
 	}
 
 	/**
