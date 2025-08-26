@@ -23,9 +23,13 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.widget.Toast;
 
 import uk.trigpointing.android.DbHelper;
@@ -42,17 +46,49 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private final AtomicInteger mNextPosition = new AtomicInteger(0);
 	private ExecutorService mExecutor;
 	private Handler mMainHandler;
+	private double mLat;
+	private double mLon;
 	
 	// Tile configuration
 	private static final int TILE_SIZE = 256;
 	private static final int GRID_SIZE = 3; // 3x3 grid
 	private static final int FINAL_IMAGE_SIZE = TILE_SIZE * 2; // 2x tile size as requested
 	
-	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700}
+	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700, attribution}
 	private static final MapConfig[] MAP_CONFIGS = {
-		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false),
-		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false),
-		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true)
+		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false, "© OpenStreetMap contributors"),
+		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false, "Contains OS data © Crown copyright and database rights 2024"),
+		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true, "Contains OS data © Crown copyright and database rights 2024"),
+		// Satellite layer matches Leaflet's ESRI World Imagery
+		new MapConfig(
+			"Satellite",
+			"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+			false,
+			0,
+			18,
+			false,
+			"Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+		)
+	};
+
+	// Explicit ordered selection of map/zoom pairs to generate/cache and display
+	// Add/remove/reorder to control exactly what appears in the grid
+	private static final String[][] MAP_SELECTIONS = new String[][]{
+		// name, zoom as string (parsed to int)
+		{"OSM", "7"},
+		{"OS_Outdoor", "8"},
+		{"Satellite", "8"},
+		{"OS_Leisure", "5"},
+		{"OSM", "10"},
+		{"OS_Leisure", "7"},
+		{"OS_Outdoor", "15"},
+		{"Satellite", "15"},
+		{"OSM", "15"},
+		{"OS_Outdoor", "18"},
+		{"OS_Leisure", "9"},
+		{"Satellite", "18"},
+		{"OSM", "19"},
+		{"OS_Outdoor", "20"}
 	};
 	
 	private static class MapConfig {
@@ -62,20 +98,24 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		final int minZoom;
 		final int maxZoom;
 		final boolean is27700; // Uses British National Grid projection
+		final String attribution;
 		
-		MapConfig(String name, String baseUrl, boolean needsApiKey, int minZoom, int maxZoom, boolean is27700) {
+		MapConfig(String name, String baseUrl, boolean needsApiKey, int minZoom, int maxZoom, boolean is27700, String attribution) {
 			this.name = name;
 			this.baseUrl = baseUrl;
 			this.needsApiKey = needsApiKey;
 			this.minZoom = minZoom;
 			this.maxZoom = maxZoom;
 			this.is27700 = is27700;
+			this.attribution = attribution;
 		}
 	}
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.trigosmap);
+		// Ensure we have a menu
+		invalidateOptionsMenu();
 
 		// Initialise threading
 		mExecutor = Executors.newSingleThreadExecutor();
@@ -96,6 +136,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		// Get coordinates
 		double lat = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
 		double lon = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
+		mLat = lat;
+		mLon = lon;
 		c.close();
 		
 		Log.d(TAG, "Generating cached map images for lat: " + lat + ", lon: " + lon);
@@ -105,51 +147,47 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	}
 	
 	private void generateCachedImages(double lat, double lon) {
-		// Calculate total expected images
-		int expectedImageCount = 0;
-		for (MapConfig config : MAP_CONFIGS) {
-			for (int zoom = config.minZoom; zoom <= config.maxZoom; zoom += 2) {
-				expectedImageCount++;
-			}
-		}
+		mNextPosition.set(0);
+		// Calculate total expected images from explicit selections
+		int expectedImageCount = MAP_SELECTIONS.length;
 		
 		Log.d(TAG, "Expecting " + expectedImageCount + " total images");
 		
 		// Create adapter with placeholders immediately and show gallery
 		mAdapter = TrigDetailsOSMapAdapter.createWithPlaceholders(this, expectedImageCount);
 		setupGallery();
+		mAdapter.notifyDataSetChanged();
 		
-		// Start generating images progressively
-		for (MapConfig config : MAP_CONFIGS) {
-			for (int zoom = config.minZoom; zoom <= config.maxZoom; zoom += 2) {
-				// Create effectively final copies for lambda capture
-				final MapConfig finalConfig = config;
-				final int finalZoom = zoom;
-				
-				generateTileBasedImage(mTrigId, lat, lon, finalConfig, finalZoom)
-					.thenAccept(imagePath -> {
-						if (imagePath != null) {
-							// Update the next available position
-							int position = mNextPosition.getAndIncrement();
-							mMainHandler.post(() -> {
-								mAdapter.updateImageAtPosition(position, imagePath);
-								int remaining = mAdapter.getPendingCount();
-								Log.d(TAG, "Updated position " + position + ", " + remaining + " images remaining");
-								
-								if (remaining == 0) {
-									Log.d(TAG, "All images loaded!");
-									Toast.makeText(this, "All map images loaded", Toast.LENGTH_SHORT).show();
-								}
-							});
-						} else {
-							Log.w(TAG, "Failed to generate image for " + finalConfig.name + " zoom " + finalZoom);
-						}
-					})
-					.exceptionally(throwable -> {
-						Log.e(TAG, "Error generating image for " + finalConfig.name + " zoom " + finalZoom, throwable);
-						return null;
-					});
+		// Start generating images progressively based on explicit selections
+		for (String[] sel : MAP_SELECTIONS) {
+			final String selName = sel[0];
+			final int selZoom = Integer.parseInt(sel[1]);
+			final MapConfig finalConfig = findMapConfigByName(selName);
+			if (finalConfig == null) {
+				Log.w(TAG, "Unknown map selection name: " + selName);
+				continue;
 			}
+			generateTileBasedImage(mTrigId, lat, lon, finalConfig, selZoom)
+				.thenAccept(imagePath -> {
+					if (imagePath != null) {
+						int position = mNextPosition.getAndIncrement();
+						mMainHandler.post(() -> {
+							mAdapter.updateImageAtPosition(position, imagePath);
+							int remaining = mAdapter.getPendingCount();
+							Log.d(TAG, "Updated position " + position + ", " + remaining + " images remaining");
+							if (remaining == 0) {
+								Log.d(TAG, "All images loaded!");
+								Toast.makeText(this, "All map images loaded", Toast.LENGTH_SHORT).show();
+							}
+						});
+					} else {
+						Log.w(TAG, "Failed to generate image for " + finalConfig.name + " zoom " + selZoom);
+					}
+				})
+				.exceptionally(throwable -> {
+					Log.e(TAG, "Error generating image for " + finalConfig.name + " zoom " + selZoom, throwable);
+					return null;
+				});
 		}
 	}
 	
@@ -233,8 +271,17 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 					cropLeft, cropTop, FINAL_IMAGE_SIZE, FINAL_IMAGE_SIZE);
 				compositeBitmap.recycle();
 				
-				// Add blue circle marker at center of image
-				finalBitmap = addCenterMarker(finalBitmap);
+				// Draw scale bar just above attribution area
+				finalBitmap = drawScaleBar(finalBitmap, config, lat, zoom);
+				// Draw attribution text at the bottom
+				finalBitmap = drawAttribution(finalBitmap, config.attribution);
+				
+				// Add blue circle marker at center of image only in Dev Mode
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+				boolean devMode = prefs.getBoolean("dev_mode", false);
+				if (devMode) {
+					finalBitmap = addCenterMarker(finalBitmap);
+				}
 				
 				// Save to cache
 				try (FileOutputStream out = new FileOutputStream(cachedFile)) {
@@ -456,14 +503,157 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		
 		return markedBitmap;
 	}
+
+	private Bitmap drawAttribution(Bitmap originalBitmap, String attribution) {
+		if (attribution == null || attribution.trim().isEmpty()) return originalBitmap;
+		Bitmap markedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+		Canvas canvas = new Canvas(markedBitmap);
+		Paint textPaint = new Paint();
+		textPaint.setColor(0xCC000000); // semi-transparent black
+		textPaint.setAntiAlias(true);
+		textPaint.setTextSize(dpToPxF(10f * 4f / 9f));
+		textPaint.setTextAlign(Paint.Align.LEFT);
+		
+		// White background strip for readability
+		Paint bgPaint = new Paint();
+		bgPaint.setColor(0x80FFFFFF);
+		
+		float padding = dpToPx(4);
+		float textHeight = Math.abs(textPaint.ascent() + textPaint.descent());
+		float y = markedBitmap.getHeight() - padding;
+		float bgTop = y - textHeight - padding;
+		canvas.drawRect(0, bgTop, markedBitmap.getWidth(), markedBitmap.getHeight(), bgPaint);
+		canvas.drawText(attribution, padding, y - textPaint.descent(), textPaint);
+		return markedBitmap;
+	}
+
+	private Bitmap drawScaleBar(Bitmap originalBitmap, MapConfig config, double lat, int zoom) {
+		try {
+			Bitmap bmp = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+			Canvas canvas = new Canvas(bmp);
+			
+			// Compute meters-per-pixel
+			double metersPerPixel;
+			if (config.is27700) {
+				int z = zoom;
+				if (z < 0) z = 0;
+				if (z >= OSGB_RESOLUTIONS.length) z = OSGB_RESOLUTIONS.length - 1;
+				metersPerPixel = OSGB_RESOLUTIONS[z];
+			} else {
+				metersPerPixel = 156543.03392 * Math.cos(Math.toRadians(lat)) / Math.pow(2.0, zoom);
+			}
+			
+			int width = bmp.getWidth();
+			int height = bmp.getHeight();
+			
+			// Determine available horizontal length (aim ~50% of width)
+			float targetPx = width * 0.5f;
+			double targetMeters = targetPx * metersPerPixel;
+			
+			// Choose a nice rounded length (1,2,5 * 10^n)
+			double niceMeters = chooseNiceScale(targetMeters);
+			float barPx = (float)(niceMeters / metersPerPixel);
+			
+			// Calculate vertical position just above attribution strip height
+			Paint attrPaint = new Paint();
+			attrPaint.setAntiAlias(true);
+			attrPaint.setTextSize(dpToPxF(10f * 4f / 9f));
+			float pad = dpToPx(4);
+			float textHeight = Math.abs(attrPaint.ascent() + attrPaint.descent());
+			float stripHeight = textHeight + pad; // attribution will add another bottom pad
+			float gap = dpToPx(4);
+			float barY = height - stripHeight - gap;
+			
+			// Geometry and paints
+			float barX = dpToPx(8);
+			float stroke = Math.max(1f, dpToPxF(1.5f));
+			Paint barPaint = new Paint();
+			barPaint.setAntiAlias(true);
+			barPaint.setColor(0xFFB3B3B3); // ~70% gray
+			barPaint.setStrokeWidth(stroke);
+			barPaint.setStyle(Paint.Style.STROKE);
+			
+			// Background rectangle behind label and bar for legibility
+			String label = formatDistance(niceMeters);
+			Paint labelPaint = new Paint();
+			labelPaint.setAntiAlias(true);
+			labelPaint.setColor(0xFF8C8C8C); // ~55% gray (darker than bar) for more punch
+			labelPaint.setTextSize(dpToPxF(7f));
+			labelPaint.setTextAlign(Paint.Align.CENTER);
+			float tick = dpToPxF(6f);
+			// Nudge the bar up by a fraction of the tick height to avoid attribution overlap
+			barY -= (tick / 3f);
+			float labelY = barY - dpToPxF(2f);
+			float labelHeight = Math.abs(labelPaint.ascent() + labelPaint.descent());
+			Paint bgPaint = new Paint();
+			bgPaint.setColor(0x80FFFFFF);
+			float bgPad = dpToPxF(4f);
+			float bgTop = labelY - labelHeight - bgPad;
+			float bgBottom = barY + (dpToPxF(6f) / 2f) + bgPad;
+			float bgLeft = barX - bgPad;
+			float bgRight = barX + barPx + bgPad;
+			canvas.drawRect(bgLeft, bgTop, bgRight, bgBottom, bgPaint);
+			
+			// Draw scale bar line over background
+			// Main bar
+			canvas.drawLine(barX, barY, barX + barPx, barY, barPaint);
+			// End ticks
+			canvas.drawLine(barX, barY - tick/2f, barX, barY + tick/2f, barPaint);
+			canvas.drawLine(barX + barPx, barY - tick/2f, barX + barPx, barY + tick/2f, barPaint);
+			
+			// Label
+			canvas.drawText(label, barX + barPx / 2f, labelY, labelPaint);
+			
+			return bmp;
+		} catch (Exception e) {
+			Log.w(TAG, "drawScaleBar failed", e);
+			return originalBitmap;
+		}
+	}
+
+	private double chooseNiceScale(double targetMeters) {
+		if (targetMeters <= 0) return 1;
+		double exponent = Math.floor(Math.log10(targetMeters));
+		double base = Math.pow(10, exponent);
+		double[] candidates = new double[]{1, 2, 5};
+		double best = base;
+		for (double c : candidates) {
+			double v = c * base;
+			if (v <= targetMeters) best = v;
+		}
+		return best;
+	}
+
+	private String formatDistance(double meters) {
+		if (meters >= 1000.0) {
+			double km = meters / 1000.0;
+			if (km >= 10) return ((int)Math.round(km)) + " km";
+			return String.format(java.util.Locale.UK, "%.1f km", km);
+		} else {
+			if (meters >= 100) return ((int)Math.round(meters)) + " m";
+			return ((int)Math.round(meters)) + " m";
+		}
+	}
 	
 	private void setupGallery() {
 		RecyclerView gallery = findViewById(R.id.trigosgallery);
 		
 		// Use the instance adapter (either newly created or existing)
 		if (mAdapter != null) {
-			gallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+			// Use GridLayoutManager for vertical scrolling grid layout
+			// Calculate number of columns based on screen width for optimal thumbnail size
+			int screenWidth = getResources().getDisplayMetrics().widthPixels;
+			int columns = Math.max(2, Math.min(3, screenWidth / 500)); // 2-3 columns based on screen width (higher threshold for 2 columns)
+			
+			gallery.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, columns));
+			// Disable nested scrolling so parent scroll view handles scroll
+			gallery.setNestedScrollingEnabled(false);
 			gallery.setAdapter(mAdapter);
+			
+			// Add dp-based grid spacing decoration so columns and rows have visible gaps
+			int spacingPx = dpToPx(16); // 16dp spacing between items
+			gallery.addItemDecoration(new GridSpacingItemDecoration(columns, spacingPx, false));
+			gallery.setClipToPadding(false);
 		}
 		
 		mAdapter.setOnItemClickListener(new TrigDetailsOSMapAdapter.OnItemClickListener() {
@@ -488,6 +678,110 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		});
 	}
 
+	private MapConfig findMapConfigByName(String name) {
+		for (MapConfig mc : MAP_CONFIGS) {
+			if (mc.name.equals(name)) return mc;
+		}
+		return null;
+	}
+
+	public void refreshImagesFromParent() {
+		try {
+			File cacheDir = new File(getCacheDir(), "map_images");
+			File[] files = cacheDir.listFiles();
+			if (files != null) {
+				for (File f : files) {
+					String name = f.getName();
+					if (name.startsWith("trig_" + mTrigId + "_")) {
+						// noinspection ResultOfMethodCallIgnored
+						f.delete();
+					}
+				}
+			}
+			generateCachedImages(mLat, mLon);
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to refresh images from parent", e);
+		}
+	}
+
+	/**
+	 * Converts dp to pixels for consistent spacing on different densities
+	 */
+	private int dpToPx(int dp) {
+		float density = getResources().getDisplayMetrics().density;
+		return Math.round(dp * density);
+	}
+
+	private float dpToPxF(float dp) {
+		float density = getResources().getDisplayMetrics().density;
+		return dp * density;
+	}
+
+	/**
+	 * ItemDecoration that adds even spacing around grid items so columns and rows have gaps.
+	 * If includeEdge is true, outer edges will also have spacing, matching inner gaps visually.
+	 */
+	private static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+		private final int spanCount;
+		private final int spacing;
+		private final boolean includeEdge;
+
+		GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+			this.spanCount = spanCount;
+			this.spacing = spacing;
+			this.includeEdge = includeEdge;
+		}
+
+		@Override
+		public void getItemOffsets(android.graphics.Rect outRect, android.view.View view,
+				RecyclerView parent, RecyclerView.State state) {
+			int position = parent.getChildAdapterPosition(view); // item position
+			int column = position % spanCount; // item column
+
+			if (includeEdge) {
+				outRect.left = spacing - column * spacing / spanCount;
+				outRect.right = (column + 1) * spacing / spanCount;
+				if (position < spanCount) { // top edge
+					outRect.top = spacing;
+				}
+				outRect.bottom = spacing; // item bottom
+			} else {
+				outRect.left = column * spacing / spanCount;
+				outRect.right = spacing - (column + 1) * spacing / spanCount;
+				if (position >= spanCount) {
+					outRect.top = spacing; // item top
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.trigosmap_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.action_refresh_osmaps) {
+			File cacheDir = new File(getCacheDir(), "map_images");
+			File[] files = cacheDir.listFiles();
+			if (files != null) {
+				for (File f : files) {
+					String name = f.getName();
+					if (name.startsWith("trig_" + mTrigId + "_")) {
+						// noinspection ResultOfMethodCallIgnored
+						f.delete();
+					}
+				}
+			}
+			Toast.makeText(this, "Cleared cached OS map images for this trigpoint", Toast.LENGTH_SHORT).show();
+			generateCachedImages(mLat, mLon);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 	@Override
 	protected void onDestroy() {
 		if (mExecutor != null) {
@@ -498,4 +792,6 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		}
 		super.onDestroy();
 	}
+	
+
 }
