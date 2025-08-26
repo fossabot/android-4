@@ -257,10 +257,10 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 					cropLeft, cropTop, FINAL_IMAGE_SIZE, FINAL_IMAGE_SIZE);
 				compositeBitmap.recycle();
 				
-				// Draw attribution text first
-				finalBitmap = drawAttribution(finalBitmap, config.attribution);
-				// Then draw scale bar so it appears above attribution
+				// Draw scale bar just above attribution area
 				finalBitmap = drawScaleBar(finalBitmap, config, lat, zoom);
+				// Draw attribution text at the bottom
+				finalBitmap = drawAttribution(finalBitmap, config.attribution);
 				
 				// Add blue circle marker at center of image only in Dev Mode
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -563,9 +563,12 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			String label = formatDistance(niceMeters);
 			Paint labelPaint = new Paint();
 			labelPaint.setAntiAlias(true);
-			labelPaint.setColor(0xFF000000);
+			labelPaint.setColor(0xFFB3B3B3); // ~70% gray to match bar
 			labelPaint.setTextSize(dpToPxF(7f));
 			labelPaint.setTextAlign(Paint.Align.CENTER);
+			float tick = dpToPxF(6f);
+			// Nudge the bar up by a fraction of the tick height to avoid attribution overlap
+			barY -= (tick / 3f);
 			float labelY = barY - dpToPxF(2f);
 			float labelHeight = Math.abs(labelPaint.ascent() + labelPaint.descent());
 			Paint bgPaint = new Paint();
@@ -581,7 +584,6 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			// Main bar
 			canvas.drawLine(barX, barY, barX + barPx, barY, barPaint);
 			// End ticks
-			float tick = dpToPxF(6f);
 			canvas.drawLine(barX, barY - tick/2f, barX, barY + tick/2f, barPaint);
 			canvas.drawLine(barX + barPx, barY - tick/2f, barX + barPx, barY + tick/2f, barPaint);
 			
