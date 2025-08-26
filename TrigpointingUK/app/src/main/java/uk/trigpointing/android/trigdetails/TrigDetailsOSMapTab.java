@@ -23,6 +23,9 @@ import android.os.Handler;
 import android.os.Looper;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,17 +46,19 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private final AtomicInteger mNextPosition = new AtomicInteger(0);
 	private ExecutorService mExecutor;
 	private Handler mMainHandler;
+	private double mLat;
+	private double mLon;
 	
 	// Tile configuration
 	private static final int TILE_SIZE = 256;
 	private static final int GRID_SIZE = 3; // 3x3 grid
 	private static final int FINAL_IMAGE_SIZE = TILE_SIZE * 2; // 2x tile size as requested
 	
-	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700}
+	// Map configurations: {name, baseUrl, needsApiKey, minZoom, maxZoom, is27700, attribution}
 	private static final MapConfig[] MAP_CONFIGS = {
-		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false),
-		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false),
-		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true)
+		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false, "© OpenStreetMap contributors"),
+		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false, "Contains OS data © Crown copyright and database rights 2024"),
+		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true, "Contains OS data © Crown copyright and database rights 2024")
 	};
 
 	// Explicit ordered selection of map/zoom pairs to generate/cache and display
@@ -79,20 +84,24 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		final int minZoom;
 		final int maxZoom;
 		final boolean is27700; // Uses British National Grid projection
+		final String attribution;
 		
-		MapConfig(String name, String baseUrl, boolean needsApiKey, int minZoom, int maxZoom, boolean is27700) {
+		MapConfig(String name, String baseUrl, boolean needsApiKey, int minZoom, int maxZoom, boolean is27700, String attribution) {
 			this.name = name;
 			this.baseUrl = baseUrl;
 			this.needsApiKey = needsApiKey;
 			this.minZoom = minZoom;
 			this.maxZoom = maxZoom;
 			this.is27700 = is27700;
+			this.attribution = attribution;
 		}
 	}
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.trigosmap);
+		// Ensure we have a menu
+		invalidateOptionsMenu();
 
 		// Initialise threading
 		mExecutor = Executors.newSingleThreadExecutor();
@@ -113,6 +122,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		// Get coordinates
 		double lat = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
 		double lon = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
+		mLat = lat;
+		mLon = lon;
 		c.close();
 		
 		Log.d(TAG, "Generating cached map images for lat: " + lat + ", lon: " + lon);
@@ -244,8 +255,15 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 					cropLeft, cropTop, FINAL_IMAGE_SIZE, FINAL_IMAGE_SIZE);
 				compositeBitmap.recycle();
 				
-				// Add blue circle marker at center of image
-				finalBitmap = addCenterMarker(finalBitmap);
+				// Draw attribution text at the bottom
+				finalBitmap = drawAttribution(finalBitmap, config.attribution);
+				
+				// Add blue circle marker at center of image only in Dev Mode
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+				boolean devMode = prefs.getBoolean("dev_mode", false);
+				if (devMode) {
+					finalBitmap = addCenterMarker(finalBitmap);
+				}
 				
 				// Save to cache
 				try (FileOutputStream out = new FileOutputStream(cachedFile)) {
@@ -467,6 +485,29 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		
 		return markedBitmap;
 	}
+
+	private Bitmap drawAttribution(Bitmap originalBitmap, String attribution) {
+		if (attribution == null || attribution.trim().isEmpty()) return originalBitmap;
+		Bitmap markedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+		Canvas canvas = new Canvas(markedBitmap);
+		Paint textPaint = new Paint();
+		textPaint.setColor(0xCC000000); // semi-transparent black
+		textPaint.setAntiAlias(true);
+		textPaint.setTextSize(dpToPx(10));
+		textPaint.setTextAlign(Paint.Align.LEFT);
+		
+		// White background strip for readability
+		Paint bgPaint = new Paint();
+		bgPaint.setColor(0x80FFFFFF);
+		
+		float padding = dpToPx(4);
+		float textHeight = Math.abs(textPaint.ascent() + textPaint.descent());
+		float y = markedBitmap.getHeight() - padding;
+		float bgTop = y - textHeight - padding;
+		canvas.drawRect(0, bgTop, markedBitmap.getWidth(), markedBitmap.getHeight(), bgPaint);
+		canvas.drawText(attribution, padding, y - textPaint.descent(), textPaint);
+		return markedBitmap;
+	}
 	
 	private void setupGallery() {
 		RecyclerView gallery = findViewById(R.id.trigosgallery);
@@ -560,6 +601,34 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.trigosmap_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.action_refresh_osmaps) {
+			File cacheDir = new File(getCacheDir(), "map_images");
+			File[] files = cacheDir.listFiles();
+			if (files != null) {
+				for (File f : files) {
+					String name = f.getName();
+					if (name.startsWith("trig_" + mTrigId + "_")) {
+						// noinspection ResultOfMethodCallIgnored
+						f.delete();
+					}
+				}
+			}
+			Toast.makeText(this, "Cleared cached OS map images for this trigpoint", Toast.LENGTH_SHORT).show();
+			generateCachedImages(mLat, mLon);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	@Override
 	protected void onDestroy() {
