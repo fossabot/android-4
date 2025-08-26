@@ -257,10 +257,10 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 					cropLeft, cropTop, FINAL_IMAGE_SIZE, FINAL_IMAGE_SIZE);
 				compositeBitmap.recycle();
 				
-				// Draw scale bar just above attribution area
-				finalBitmap = drawScaleBar(finalBitmap, config, lat, zoom);
-				// Draw attribution text at the bottom
+				// Draw attribution text first
 				finalBitmap = drawAttribution(finalBitmap, config.attribution);
+				// Then draw scale bar so it appears above attribution
+				finalBitmap = drawScaleBar(finalBitmap, config, lat, zoom);
 				
 				// Add blue circle marker at center of image only in Dev Mode
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -555,7 +555,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			float stroke = Math.max(1f, dpToPxF(1.5f));
 			Paint barPaint = new Paint();
 			barPaint.setAntiAlias(true);
-			barPaint.setColor(0xFF000000);
+			barPaint.setColor(0xFFB3B3B3); // ~70% gray
 			barPaint.setStrokeWidth(stroke);
 			barPaint.setStyle(Paint.Style.STROKE);
 			
