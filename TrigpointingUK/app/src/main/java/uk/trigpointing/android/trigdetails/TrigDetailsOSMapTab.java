@@ -532,8 +532,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			int width = bmp.getWidth();
 			int height = bmp.getHeight();
 			
-			// Determine available horizontal length (aim ~30% of width)
-			float targetPx = width * 0.3f;
+			// Determine available horizontal length (aim ~50% of width)
+			float targetPx = width * 0.5f;
 			double targetMeters = targetPx * metersPerPixel;
 			
 			// Choose a nice rounded length (1,2,5 * 10^n)
@@ -550,7 +550,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			float gap = dpToPx(4);
 			float barY = height - stripHeight - gap;
 			
-			// Draw scale bar line
+			// Geometry and paints
 			float barX = dpToPx(8);
 			float stroke = Math.max(1f, dpToPxF(1.5f));
 			Paint barPaint = new Paint();
@@ -559,6 +559,25 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			barPaint.setStrokeWidth(stroke);
 			barPaint.setStyle(Paint.Style.STROKE);
 			
+			// Background rectangle behind label and bar for legibility
+			String label = formatDistance(niceMeters);
+			Paint labelPaint = new Paint();
+			labelPaint.setAntiAlias(true);
+			labelPaint.setColor(0xFF000000);
+			labelPaint.setTextSize(dpToPxF(7f));
+			labelPaint.setTextAlign(Paint.Align.CENTER);
+			float labelY = barY - dpToPxF(2f);
+			float labelHeight = Math.abs(labelPaint.ascent() + labelPaint.descent());
+			Paint bgPaint = new Paint();
+			bgPaint.setColor(0x80FFFFFF);
+			float bgPad = dpToPxF(4f);
+			float bgTop = labelY - labelHeight - bgPad;
+			float bgBottom = barY + (dpToPxF(6f) / 2f) + bgPad;
+			float bgLeft = barX - bgPad;
+			float bgRight = barX + barPx + bgPad;
+			canvas.drawRect(bgLeft, bgTop, bgRight, bgBottom, bgPaint);
+			
+			// Draw scale bar line over background
 			// Main bar
 			canvas.drawLine(barX, barY, barX + barPx, barY, barPaint);
 			// End ticks
@@ -567,13 +586,6 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			canvas.drawLine(barX + barPx, barY - tick/2f, barX + barPx, barY + tick/2f, barPaint);
 			
 			// Label
-			String label = formatDistance(niceMeters);
-			Paint labelPaint = new Paint();
-			labelPaint.setAntiAlias(true);
-			labelPaint.setColor(0xFF000000);
-			labelPaint.setTextSize(dpToPxF(7f));
-			labelPaint.setTextAlign(Paint.Align.CENTER);
-			float labelY = barY - dpToPxF(2f);
 			canvas.drawText(label, barX + barPx / 2f, labelY, labelPaint);
 			
 			return bmp;
