@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Name above image, small, slightly bold, dark grey -->
+    <TextView
+        android:id="@+id/photoName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#444444"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:paddingBottom="4dp" />
+
+    <!-- Image square; size is set dynamically in code to keep square cells -->
+    <ImageView
+        android:id="@+id/photoIcon"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/photoThumb" />
+
+    <!-- Date and user on one line, small, slightly light text -->
+    <TextView
+        android:id="@+id/photoDateUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#777777"
+        android:textSize="11sp"
+        android:paddingTop="4dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Description at the bottom; wrap if necessary -->
+    <TextView
+        android:id="@+id/photoDescr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#555555"
+        android:textSize="12sp"
+        android:paddingTop="2dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp" />
+
+</LinearLayout>
+
+

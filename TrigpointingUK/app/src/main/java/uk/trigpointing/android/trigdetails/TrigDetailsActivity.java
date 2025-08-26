@@ -589,23 +589,29 @@ public class TrigDetailsActivity extends BaseActivity {
                     showToast("Unable to get trigpoint coordinates");
                 }
                 return true;
-            } else if (id == R.id.action_refresh_osmaps) {
+            } else if (id == R.id.action_refresh) {
                 try {
                     TabHost tabHost = findViewById(android.R.id.tabhost);
                     if (tabHost != null) {
                         String currentTag = tabHost.getCurrentTabTag();
-                        // Prefer refreshing regardless of current tab
+                        // Refresh OS maps cache
                         android.app.Activity mapActivity = mLocalActivityManager.getActivity("map");
                         if (mapActivity instanceof TrigDetailsOSMapTab) {
                             ((TrigDetailsOSMapTab) mapActivity).refreshImagesFromParent();
-                            Toast.makeText(this, "Refreshing OS map tiles", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Refreshing maps and photos", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(this, "Map tab not active yet", Toast.LENGTH_SHORT).show();
                         }
+
+                        // Also refresh the Album tab photos and invalidate cached images
+                        android.app.Activity albumActivity = mLocalActivityManager.getActivity("album");
+                        if (albumActivity instanceof TrigDetailsAlbumTab) {
+                            ((TrigDetailsAlbumTab) albumActivity).refreshAlbumFromParent();
+                        }
                     }
                 } catch (Exception e) {
-                    android.util.Log.e(TAG, "Error refreshing OS maps: " + e.getMessage(), e);
-                    Toast.makeText(this, "Error refreshing maps", Toast.LENGTH_SHORT).show();
+                    android.util.Log.e(TAG, "Error refreshing content: " + e.getMessage(), e);
+                    Toast.makeText(this, "Error refreshing", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }

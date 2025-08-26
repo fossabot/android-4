@@ -84,8 +84,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		{"OS_Outdoor", "15"},
 		{"Satellite", "15"},
 		{"OSM", "15"},
-		{"OS_Outdoor", "18"},
 		{"OS_Leisure", "9"},
+		{"OS_Outdoor", "18"},
 		{"Satellite", "18"},
 		{"OSM", "19"},
 		{"OS_Outdoor", "20"}

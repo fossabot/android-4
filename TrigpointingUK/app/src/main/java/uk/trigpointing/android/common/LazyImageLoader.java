@@ -43,6 +43,15 @@ public class LazyImageLoader {
         
         fileCache=new FileCache(context, "images");
     }
+
+    public void clearCaches() {
+        try {
+            memoryCache.clear();
+        } catch (Exception ignored) {}
+        try {
+            fileCache.clear();
+        } catch (Exception ignored) {}
+    }
     
     public void DisplayImage(String url, ImageView imageView)
     {

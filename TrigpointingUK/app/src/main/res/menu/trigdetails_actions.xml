@@ -15,8 +15,8 @@
         android:icon="@android:drawable/ic_menu_compass"
         android:showAsAction="never" />
     <item
-        android:id="@+id/action_refresh_osmaps"
-        android:title="Refresh map tiles"
+        android:id="@+id/action_refresh"
+        android:title="@string/refresh"
         android:showAsAction="never" />
 </menu>
 

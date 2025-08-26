@@ -35,4 +35,8 @@ public class MemoryCache {
         cache.put(id, new SoftReference<>(string));
     }
 
+    public void clear() {
+        cache.clear();
+    }
+
 }

@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.widget.TextView;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,9 +30,8 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 	private static final String TAG="TrigDetailsAlbumTab";
 	private StringLoader 			mStrLoader;
     private ArrayList<TrigPhoto> 	mTrigPhotos;
-    private TrigDetailsAlbumAdapter mTrigAlbumAdapter;
+    private TrigDetailsAlbumGridAdapter mGridAdapter;
 	private TextView 				mEmptyView;
-	private ListView 				mListView;
 
     
     public void onCreate(Bundle savedInstanceState) {
@@ -45,21 +44,28 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 		mTrigId = extras.getLong(DbHelper.TRIG_ID);
 		Log.i(TAG, "Trig_id = "+mTrigId);
 
-        // Find ListView and set up adapter
-		mListView = findViewById(android.R.id.list);
-		mTrigPhotos = new ArrayList<TrigPhoto>();
-		mTrigAlbumAdapter = new TrigDetailsAlbumAdapter(TrigDetailsAlbumTab.this, R.layout.trigalbumrow, mTrigPhotos);
-		mListView.setAdapter(mTrigAlbumAdapter);
-
-		// find view for empty list notification
+        // Set up grid RecyclerView similar to OS Map tab
+		RecyclerView recycler = findViewById(R.id.trigalbum_recycler);
 		mEmptyView = findViewById(android.R.id.empty);
-		mListView.setEmptyView(mEmptyView);
+		mTrigPhotos = new ArrayList<TrigPhoto>();
+		mGridAdapter = new TrigDetailsAlbumGridAdapter(this, mTrigPhotos);
 		
-		// Set up click listener
-		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		int screenWidth = getResources().getDisplayMetrics().widthPixels;
+		int columns = Math.max(2, Math.min(3, screenWidth / 500));
+		recycler.setLayoutManager(new GridLayoutManager(this, columns));
+		recycler.setNestedScrollingEnabled(false);
+		recycler.setAdapter(mGridAdapter);
+		int spacingPx = dpToPx(16);
+		recycler.addItemDecoration(new GridSpacingItemDecoration(columns, spacingPx, false));
+
+		mGridAdapter.setOnItemClickListener(new TrigDetailsAlbumGridAdapter.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				onListItemClick(mListView, view, position, id);
+			public void onItemClick(int position) {
+				String url = mTrigPhotos.get(position).getPhotoURL();
+				Intent i = new Intent(TrigDetailsAlbumTab.this, DisplayBitmapActivity.class);
+				i.putExtra("URL", url);
+				Log.i(TAG, "Clicked photo at URL: " + url);
+				startActivity(i);
 			}
 		});
 
@@ -68,13 +74,7 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
     }
     
     
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        String url = mTrigPhotos.get(position).getPhotoURL();
-        Intent i = new Intent(this, DisplayBitmapActivity.class);
-        i.putExtra("URL", url);
-        Log.i(TAG, "Clicked photo at URL: " +url);
-        startActivity(i);
-    }
+    protected void onListItemClick(android.widget.ListView l, View v, int position, long id) {}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,7 +90,7 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 		
 		if (itemId == R.id.refresh) {
 			Log.i(TAG, "refresh");
-			populatePhotos(true);
+			refreshAlbumFromParent();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -146,9 +146,85 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 			return count;
 		}, executor)
 		.thenAcceptAsync(count -> {
-			mEmptyView.setText(R.string.noPhotos);
-			mTrigAlbumAdapter.notifyDataSetChanged();
+			if (count == 0) {
+				mEmptyView.setVisibility(View.VISIBLE);
+				mEmptyView.setText(R.string.noPhotos);
+			} else {
+				mEmptyView.setVisibility(View.GONE);
+			}
+			mGridAdapter.notifyDataSetChanged();
 		}, mainHandler::post);
+	}
+
+	public void refreshAlbumFromParent() {
+		try {
+			if (mGridAdapter != null) {
+				mGridAdapter.clearImageCaches();
+			}
+		} catch (Exception e) {
+			Log.w(TAG, "Failed to clear image cache", e);
+		}
+
+		// Recreate adapter to clear any in-memory caches
+		RecyclerView recycler = findViewById(R.id.trigalbum_recycler);
+		if (recycler != null) {
+			mGridAdapter = new TrigDetailsAlbumGridAdapter(this, mTrigPhotos);
+			recycler.setAdapter(mGridAdapter);
+			mGridAdapter.setOnItemClickListener(new TrigDetailsAlbumGridAdapter.OnItemClickListener() {
+				@Override
+				public void onItemClick(int position) {
+					String url = mTrigPhotos.get(position).getPhotoURL();
+					Intent i = new Intent(TrigDetailsAlbumTab.this, DisplayBitmapActivity.class);
+					i.putExtra("URL", url);
+					Log.i(TAG, "Clicked photo at URL: " + url);
+					startActivity(i);
+				}
+			});
+		}
+
+		// Force reload of photo list and thumbnails
+		populatePhotos(true);
+	}
+
+
+
+	private int dpToPx(int dp) {
+		float density = getResources().getDisplayMetrics().density;
+		return Math.round(dp * density);
+	}
+
+	// Even grid spacing decoration similar to OS Map tab
+	private static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+		private final int spanCount;
+		private final int spacing;
+		private final boolean includeEdge;
+
+		GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+			this.spanCount = spanCount;
+			this.spacing = spacing;
+			this.includeEdge = includeEdge;
+		}
+
+		@Override
+		public void getItemOffsets(android.graphics.Rect outRect, android.view.View view,
+				RecyclerView parent, RecyclerView.State state) {
+			int position = parent.getChildAdapterPosition(view);
+			int column = position % spanCount;
+			if (includeEdge) {
+				outRect.left = spacing - column * spacing / spanCount;
+				outRect.right = (column + 1) * spacing / spanCount;
+				if (position < spanCount) {
+					outRect.top = spacing;
+				}
+				outRect.bottom = spacing;
+			} else {
+				outRect.left = column * spacing / spanCount;
+				outRect.right = spacing - (column + 1) * spacing / spanCount;
+				if (position >= spanCount) {
+					outRect.top = spacing;
+				}
+			}
+		}
 	}
 
     

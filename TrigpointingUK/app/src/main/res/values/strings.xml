@@ -174,4 +174,7 @@
     <!-- OS map tab header -->
     <string name="osmap_header">This screen caches a variety of static maps of the area</string>
 
+    <!-- Album tab header -->
+    <string name="album_header">Photos taken by TrigpointingUK users</string>
+
 </resources>

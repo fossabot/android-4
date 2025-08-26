@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <!-- List view for photos -->
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <!-- Empty view for when no photos -->
-    <TextView
-        android:id="@android:id/empty"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No photos available"
-        android:gravity="center"
-        android:padding="16dp" />
+        android:orientation="vertical">
 
-</LinearLayout> 
+        <!-- Header text consistent with OS Map Tab styling -->
+        <TextView
+            android:id="@+id/trigalbum_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/album_header"
+            android:textColor="#666666"
+            android:textSize="12sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp" />
+
+        <!-- RecyclerView grid for photos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trigalbum_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
+            android:padding="16dp"
+            android:clipToPadding="false" />
+
+        <!-- Empty view for when no photos -->
+        <TextView
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/noPhotos"
+            android:gravity="center"
+            android:padding="16dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
