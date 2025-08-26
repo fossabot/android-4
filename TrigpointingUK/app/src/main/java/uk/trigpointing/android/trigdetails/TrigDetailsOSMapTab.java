@@ -55,6 +55,21 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false),
 		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true)
 	};
+
+	// Explicit ordered selection of map/zoom pairs to generate/cache and display
+	// Add/remove/reorder to control exactly what appears in the grid
+	private static final String[][] MAP_SELECTIONS = new String[][]{
+		// name, zoom as string (parsed to int)
+		{"OSM", "8"},
+		{"OSM", "10"},
+		{"OSM", "12"},
+		{"OS_Outdoor", "8"},
+		{"OS_Outdoor", "10"},
+		{"OS_Outdoor", "12"},
+		{"OS_Leisure", "5"},
+		{"OS_Leisure", "7"},
+		{"OS_Leisure", "9"}
+	};
 	
 	private static class MapConfig {
 		final String name;
@@ -106,13 +121,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	}
 	
 	private void generateCachedImages(double lat, double lon) {
-		// Calculate total expected images
-		int expectedImageCount = 0;
-		for (MapConfig config : MAP_CONFIGS) {
-			for (int zoom = config.minZoom; zoom <= config.maxZoom; zoom += 2) {
-				expectedImageCount++;
-			}
-		}
+		// Calculate total expected images from explicit selections
+		int expectedImageCount = MAP_SELECTIONS.length;
 		
 		Log.d(TAG, "Expecting " + expectedImageCount + " total images");
 		
@@ -120,37 +130,36 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		mAdapter = TrigDetailsOSMapAdapter.createWithPlaceholders(this, expectedImageCount);
 		setupGallery();
 		
-		// Start generating images progressively
-		for (MapConfig config : MAP_CONFIGS) {
-			for (int zoom = config.minZoom; zoom <= config.maxZoom; zoom += 2) {
-				// Create effectively final copies for lambda capture
-				final MapConfig finalConfig = config;
-				final int finalZoom = zoom;
-				
-				generateTileBasedImage(mTrigId, lat, lon, finalConfig, finalZoom)
-					.thenAccept(imagePath -> {
-						if (imagePath != null) {
-							// Update the next available position
-							int position = mNextPosition.getAndIncrement();
-							mMainHandler.post(() -> {
-								mAdapter.updateImageAtPosition(position, imagePath);
-								int remaining = mAdapter.getPendingCount();
-								Log.d(TAG, "Updated position " + position + ", " + remaining + " images remaining");
-								
-								if (remaining == 0) {
-									Log.d(TAG, "All images loaded!");
-									Toast.makeText(this, "All map images loaded", Toast.LENGTH_SHORT).show();
-								}
-							});
-						} else {
-							Log.w(TAG, "Failed to generate image for " + finalConfig.name + " zoom " + finalZoom);
-						}
-					})
-					.exceptionally(throwable -> {
-						Log.e(TAG, "Error generating image for " + finalConfig.name + " zoom " + finalZoom, throwable);
-						return null;
-					});
+		// Start generating images progressively based on explicit selections
+		for (String[] sel : MAP_SELECTIONS) {
+			final String selName = sel[0];
+			final int selZoom = Integer.parseInt(sel[1]);
+			final MapConfig finalConfig = findMapConfigByName(selName);
+			if (finalConfig == null) {
+				Log.w(TAG, "Unknown map selection name: " + selName);
+				continue;
 			}
+			generateTileBasedImage(mTrigId, lat, lon, finalConfig, selZoom)
+				.thenAccept(imagePath -> {
+					if (imagePath != null) {
+						int position = mNextPosition.getAndIncrement();
+						mMainHandler.post(() -> {
+							mAdapter.updateImageAtPosition(position, imagePath);
+							int remaining = mAdapter.getPendingCount();
+							Log.d(TAG, "Updated position " + position + ", " + remaining + " images remaining");
+							if (remaining == 0) {
+								Log.d(TAG, "All images loaded!");
+								Toast.makeText(this, "All map images loaded", Toast.LENGTH_SHORT).show();
+							}
+						});
+					} else {
+						Log.w(TAG, "Failed to generate image for " + finalConfig.name + " zoom " + selZoom);
+					}
+				})
+				.exceptionally(throwable -> {
+					Log.e(TAG, "Error generating image for " + finalConfig.name + " zoom " + selZoom, throwable);
+					return null;
+				});
 		}
 	}
 	
@@ -497,6 +506,13 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 				}
 			}
 		});
+	}
+
+	private MapConfig findMapConfigByName(String name) {
+		for (MapConfig mc : MAP_CONFIGS) {
+			if (mc.name.equals(name)) return mc;
+		}
+		return null;
 	}
 
 	/**
