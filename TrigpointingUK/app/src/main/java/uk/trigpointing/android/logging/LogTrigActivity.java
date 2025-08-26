@@ -58,6 +58,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.MenuItem;
 import android.widget.ViewSwitcher;
+import android.widget.ScrollView;
 
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
@@ -81,6 +82,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	private LatLon				mTrigLocation;
 	
     private ViewSwitcher 		mSwitcher;
+    private ScrollView			mScroll;
     private CheckBox			mSendTime;
     private DatePicker			mDate;
     private TimePicker			mTime;
@@ -150,6 +152,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		
 		// Get references to various views and form elements
 		mSwitcher 		= findViewById(R.id.logswitcher);
+		mScroll			= findViewById(R.id.logScroll);
 		
 		// Ensure proper content positioning to prevent action bar overlap
 		// Content positioning is now handled by BaseActivity
@@ -299,6 +302,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	        	deleteLog();
 	        	mSwitcher.setDisplayedChild(0); // Show button
 	        	mHaveLog = false;
+	        	if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
 			}
 		});	
 
@@ -999,6 +1003,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	if (status == SyncTask.SUCCESS) {
     		mSwitcher.setDisplayedChild(0); // Show button after successful sync
         	mHaveLog = false;
+        	if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
     	}
 	}
 

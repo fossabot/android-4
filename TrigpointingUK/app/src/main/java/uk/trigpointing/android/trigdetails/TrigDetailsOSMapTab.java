@@ -58,7 +58,17 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private static final MapConfig[] MAP_CONFIGS = {
 		new MapConfig("OSM", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", false, 8, 12, false, "© OpenStreetMap contributors"),
 		new MapConfig("OS_Outdoor", "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png", true, 8, 12, false, "Contains OS data © Crown copyright and database rights 2024"),
-		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true, "Contains OS data © Crown copyright and database rights 2024")
+		new MapConfig("OS_Leisure", "https://api.os.uk/maps/raster/v1/zxy/Leisure_27700/{z}/{x}/{y}.png", true, 5, 9, true, "Contains OS data © Crown copyright and database rights 2024"),
+		// Satellite layer matches Leaflet's ESRI World Imagery
+		new MapConfig(
+			"Satellite",
+			"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+			false,
+			0,
+			18,
+			false,
+			"Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
+		)
 	};
 
 	// Explicit ordered selection of map/zoom pairs to generate/cache and display
@@ -66,15 +76,19 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 	private static final String[][] MAP_SELECTIONS = new String[][]{
 		// name, zoom as string (parsed to int)
 		{"OSM", "7"},
-		{"OSM", "10"},
-		{"OSM", "15"},
-		{"OSM", "19"},
 		{"OS_Outdoor", "8"},
-		{"OS_Outdoor", "15"},
-		{"OS_Outdoor", "18"},
+		{"Satellite", "8"},
 		{"OS_Leisure", "5"},
+		{"OSM", "10"},
 		{"OS_Leisure", "7"},
-		{"OS_Leisure", "9"}
+		{"OS_Outdoor", "15"},
+		{"Satellite", "15"},
+		{"OSM", "15"},
+		{"OS_Outdoor", "18"},
+		{"OS_Leisure", "9"},
+		{"Satellite", "18"},
+		{"OSM", "19"},
+		{"OS_Outdoor", "20"}
 	};
 	
 	private static class MapConfig {
@@ -632,6 +646,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 			int columns = Math.max(2, Math.min(3, screenWidth / 500)); // 2-3 columns based on screen width (higher threshold for 2 columns)
 			
 			gallery.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, columns));
+			// Disable nested scrolling so parent scroll view handles scroll
+			gallery.setNestedScrollingEnabled(false);
 			gallery.setAdapter(mAdapter);
 			
 			// Add dp-based grid spacing decoration so columns and rows have visible gaps

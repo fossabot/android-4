@@ -171,4 +171,7 @@
     <string name="title_activity_download_maps">Download Maps</string>
     <string name="title_activity_about">About</string>
 
+    <!-- OS map tab header -->
+    <string name="osmap_header">This screen caches a variety of static maps of the area</string>
+
 </resources>
