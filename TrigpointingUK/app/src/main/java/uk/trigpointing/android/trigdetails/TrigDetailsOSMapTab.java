@@ -257,6 +257,8 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 					cropLeft, cropTop, FINAL_IMAGE_SIZE, FINAL_IMAGE_SIZE);
 				compositeBitmap.recycle();
 				
+				// Draw scale bar just above attribution area
+				finalBitmap = drawScaleBar(finalBitmap, config, lat, zoom);
 				// Draw attribution text at the bottom
 				finalBitmap = drawAttribution(finalBitmap, config.attribution);
 				
@@ -509,6 +511,100 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		canvas.drawRect(0, bgTop, markedBitmap.getWidth(), markedBitmap.getHeight(), bgPaint);
 		canvas.drawText(attribution, padding, y - textPaint.descent(), textPaint);
 		return markedBitmap;
+	}
+
+	private Bitmap drawScaleBar(Bitmap originalBitmap, MapConfig config, double lat, int zoom) {
+		try {
+			Bitmap bmp = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+			Canvas canvas = new Canvas(bmp);
+			
+			// Compute meters-per-pixel
+			double metersPerPixel;
+			if (config.is27700) {
+				int z = zoom;
+				if (z < 0) z = 0;
+				if (z >= OSGB_RESOLUTIONS.length) z = OSGB_RESOLUTIONS.length - 1;
+				metersPerPixel = OSGB_RESOLUTIONS[z];
+			} else {
+				metersPerPixel = 156543.03392 * Math.cos(Math.toRadians(lat)) / Math.pow(2.0, zoom);
+			}
+			
+			int width = bmp.getWidth();
+			int height = bmp.getHeight();
+			
+			// Determine available horizontal length (aim ~30% of width)
+			float targetPx = width * 0.3f;
+			double targetMeters = targetPx * metersPerPixel;
+			
+			// Choose a nice rounded length (1,2,5 * 10^n)
+			double niceMeters = chooseNiceScale(targetMeters);
+			float barPx = (float)(niceMeters / metersPerPixel);
+			
+			// Calculate vertical position just above attribution strip height
+			Paint attrPaint = new Paint();
+			attrPaint.setAntiAlias(true);
+			attrPaint.setTextSize(dpToPxF(10f * 4f / 9f));
+			float pad = dpToPx(4);
+			float textHeight = Math.abs(attrPaint.ascent() + attrPaint.descent());
+			float stripHeight = textHeight + pad; // attribution will add another bottom pad
+			float gap = dpToPx(4);
+			float barY = height - stripHeight - gap;
+			
+			// Draw scale bar line
+			float barX = dpToPx(8);
+			float stroke = Math.max(1f, dpToPxF(1.5f));
+			Paint barPaint = new Paint();
+			barPaint.setAntiAlias(true);
+			barPaint.setColor(0xFF000000);
+			barPaint.setStrokeWidth(stroke);
+			barPaint.setStyle(Paint.Style.STROKE);
+			
+			// Main bar
+			canvas.drawLine(barX, barY, barX + barPx, barY, barPaint);
+			// End ticks
+			float tick = dpToPxF(6f);
+			canvas.drawLine(barX, barY - tick/2f, barX, barY + tick/2f, barPaint);
+			canvas.drawLine(barX + barPx, barY - tick/2f, barX + barPx, barY + tick/2f, barPaint);
+			
+			// Label
+			String label = formatDistance(niceMeters);
+			Paint labelPaint = new Paint();
+			labelPaint.setAntiAlias(true);
+			labelPaint.setColor(0xFF000000);
+			labelPaint.setTextSize(dpToPxF(7f));
+			labelPaint.setTextAlign(Paint.Align.CENTER);
+			float labelY = barY - dpToPxF(2f);
+			canvas.drawText(label, barX + barPx / 2f, labelY, labelPaint);
+			
+			return bmp;
+		} catch (Exception e) {
+			Log.w(TAG, "drawScaleBar failed", e);
+			return originalBitmap;
+		}
+	}
+
+	private double chooseNiceScale(double targetMeters) {
+		if (targetMeters <= 0) return 1;
+		double exponent = Math.floor(Math.log10(targetMeters));
+		double base = Math.pow(10, exponent);
+		double[] candidates = new double[]{1, 2, 5};
+		double best = base;
+		for (double c : candidates) {
+			double v = c * base;
+			if (v <= targetMeters) best = v;
+		}
+		return best;
+	}
+
+	private String formatDistance(double meters) {
+		if (meters >= 1000.0) {
+			double km = meters / 1000.0;
+			if (km >= 10) return ((int)Math.round(km)) + " km";
+			return String.format(java.util.Locale.UK, "%.1f km", km);
+		} else {
+			if (meters >= 100) return ((int)Math.round(meters)) + " m";
+			return ((int)Math.round(meters)) + " m";
+		}
 	}
 	
 	private void setupGallery() {
