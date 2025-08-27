@@ -280,7 +280,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         // These items are only visible in developer mode.
         menu.findItem(R.id.action_refresh).setVisible(devMode);
         menu.findItem(R.id.action_clearcache).setVisible(devMode);
-        menu.findItem(R.id.action_cachestatus).setVisible(devMode);
         menu.findItem(R.id.action_exit).setVisible(devMode);
 
         menu.findItem(R.id.action_login).setVisible(!loggedIn);
@@ -310,9 +309,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
             return true;
         } else if (itemId == R.id.action_clearcache) {
             new ClearCacheTask(this).execute();
-            return true;
-        } else if (itemId == R.id.action_cachestatus) {
-            // Implement cache status functionality
             return true;
         } else if (itemId == R.id.action_exit) {
             finish();
