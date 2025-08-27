@@ -281,7 +281,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         menu.findItem(R.id.action_refresh).setVisible(devMode);
         menu.findItem(R.id.action_clearcache).setVisible(devMode);
         menu.findItem(R.id.action_cachestatus).setVisible(devMode);
-        menu.findItem(R.id.action_testcrash).setVisible(devMode);
         menu.findItem(R.id.action_exit).setVisible(devMode);
 
         menu.findItem(R.id.action_login).setVisible(!loggedIn);
@@ -315,8 +314,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         } else if (itemId == R.id.action_cachestatus) {
             // Implement cache status functionality
             return true;
-        } else if (itemId == R.id.action_testcrash) {
-            throw new RuntimeException("Test Crash");
         } else if (itemId == R.id.action_exit) {
             finish();
             return true;
