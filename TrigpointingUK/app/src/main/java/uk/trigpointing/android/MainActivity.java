@@ -695,10 +695,14 @@ public class MainActivity extends BaseActivity implements SyncListener {
 		CompletableFuture.supplyAsync(() -> {
 			DbHelper mDb = new DbHelper(MainActivity.this);
 			try {
-				mDb.open();
+				// Open read-only to avoid SQLITE_BUSY when another writer exists
+				mDb.openReadable();
 				boolean isPopulated = mDb.isTrigTablePopulated();
 				mDb.close();
 				return isPopulated;
+			} catch (android.database.sqlite.SQLiteDatabaseLockedException locked) {
+				Log.w(TAG, "checkAndPopulateDatabase: Database locked, will treat as populated for now to avoid contention");
+				return true; // avoid kicking off population while locked
 			} catch (Exception e) {
 				Log.e(TAG, "checkAndPopulateDatabase: Error checking database", e);
 				return false;

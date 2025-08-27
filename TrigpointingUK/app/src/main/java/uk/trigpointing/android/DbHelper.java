@@ -120,6 +120,9 @@ public class DbHelper {
 	private DatabaseHelper mDbHelper;
 	public SQLiteDatabase mDb;
     private final SharedPreferences mPrefs;
+	// Global helper and lock to avoid concurrent initialization/open races
+	private static SQLiteOpenHelper sDbHelper;
+	private static final Object DB_OPEN_LOCK = new Object();
     	
 	private final Context mCtx;
 
@@ -179,15 +182,40 @@ public class DbHelper {
 	 */
 	public DbHelper open() throws SQLException {
 		Log.i(TAG, "open: Opening database");
-		mDbHelper = new DatabaseHelper(mCtx);
-		mDb = mDbHelper.getWritableDatabase();
+		synchronized (DB_OPEN_LOCK) {
+			if (sDbHelper == null) {
+				sDbHelper = new DatabaseHelper(mCtx.getApplicationContext());
+			}
+			mDb = sDbHelper.getWritableDatabase();
+		}
 		Log.i(TAG, "open: Database opened successfully");
+		return this;
+	}
+
+	/**
+	 * Open the database for read-only operations. Prefer this for simple queries.
+	 */
+	public DbHelper openReadable() throws SQLException {
+		Log.i(TAG, "openReadable: Opening database (read-only)");
+		synchronized (DB_OPEN_LOCK) {
+			if (sDbHelper == null) {
+				sDbHelper = new DatabaseHelper(mCtx.getApplicationContext());
+			}
+			mDb = sDbHelper.getReadableDatabase();
+		}
+		Log.i(TAG, "openReadable: Database opened successfully");
 		return this;
 	}
 
 	public void close() {
 		Log.i(TAG, "close: Closing database");
-		mDbHelper.close();
+		try {
+			if (mDb != null && mDb.isOpen()) {
+				mDb.close();
+			}
+		} catch (Exception e) {
+			Log.w(TAG, "close: Ignored exception while closing DB", e);
+		}
 		Log.i(TAG, "close: Database closed");
 	}
 
@@ -856,8 +884,8 @@ public class DbHelper {
             if (mDb != null && mDb.isOpen()) {
                 mDb.close();
             }
-            if (mDbHelper != null) {
-                mDbHelper.close();
+            if (sDbHelper != null) {
+                sDbHelper.close();
             }
             boolean deleted = mCtx.deleteDatabase(DATABASE_NAME);
             Log.i(TAG, "deleteDatabase: Database deletion result: " + deleted);
