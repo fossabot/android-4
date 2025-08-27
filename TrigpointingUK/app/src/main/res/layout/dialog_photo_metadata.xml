@@ -52,13 +52,13 @@
         android:id="@+id/public_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Make this photo public"
+        android:text="Make this photo public domain"
         android:checked="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Public photos may be shared with the Trigpointing UK community"
+        android:text="Public domain photos may be used by anyone for any purpose"
         android:textSize="12sp"
         android:textColor="@android:color/darker_gray"
         android:layout_marginTop="4dp" />
