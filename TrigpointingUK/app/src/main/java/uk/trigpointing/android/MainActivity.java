@@ -280,8 +280,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         // These items are only visible in developer mode.
         menu.findItem(R.id.action_refresh).setVisible(devMode);
         menu.findItem(R.id.action_clearcache).setVisible(devMode);
-        menu.findItem(R.id.action_cachestatus).setVisible(devMode);
-        menu.findItem(R.id.action_testcrash).setVisible(devMode);
         menu.findItem(R.id.action_exit).setVisible(devMode);
 
         menu.findItem(R.id.action_login).setVisible(!loggedIn);
@@ -312,11 +310,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
         } else if (itemId == R.id.action_clearcache) {
             new ClearCacheTask(this).execute();
             return true;
-        } else if (itemId == R.id.action_cachestatus) {
-            // Implement cache status functionality
-            return true;
-        } else if (itemId == R.id.action_testcrash) {
-            throw new RuntimeException("Test Crash");
         } else if (itemId == R.id.action_exit) {
             finish();
             return true;
@@ -702,10 +695,14 @@ public class MainActivity extends BaseActivity implements SyncListener {
 		CompletableFuture.supplyAsync(() -> {
 			DbHelper mDb = new DbHelper(MainActivity.this);
 			try {
-				mDb.open();
+				// Open read-only to avoid SQLITE_BUSY when another writer exists
+				mDb.openReadable();
 				boolean isPopulated = mDb.isTrigTablePopulated();
 				mDb.close();
 				return isPopulated;
+			} catch (android.database.sqlite.SQLiteDatabaseLockedException locked) {
+				Log.w(TAG, "checkAndPopulateDatabase: Database locked, will treat as populated for now to avoid contention");
+				return true; // avoid kicking off population while locked
 			} catch (Exception e) {
 				Log.e(TAG, "checkAndPopulateDatabase: Error checking database", e);
 				return false;

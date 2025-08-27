@@ -39,6 +39,10 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
     private static int 		mProgressMax = 10000; // value unimportant
 	private int 			mAppVersion;
 	private Handler 		mainHandler;
+	// Retry/backoff state
+	private int 			retryDelaySeconds = 5; // initial delay for exponential backoff
+	private int 			countdownRemainingSeconds = 0;
+	private Runnable 		countdownRunnable;
 	
 	private static final String TAG = "DownloadTrigsActivity";
 	private enum DownloadStatus {OK, CANCELLED, ERROR}
@@ -191,10 +195,9 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 				mainHandler.post(() -> new SyncTask(DownloadTrigsActivity.this, DownloadTrigsActivity.this).execute(true));
 				break;
 			case ERROR:
-				mStatus.setText("Download failed! Please try again.");
 				mProgress.setProgress(0);
-				// Auto-close after 3 seconds on error too
-				mainHandler.postDelayed(DownloadTrigsActivity.this::finish, 3000);
+				// Schedule retry with exponential backoff and per-second countdown
+				scheduleRetryWithCountdown();
 				break;
 			case CANCELLED:
 				mStatus.setText("Download cancelled.");
@@ -205,6 +208,51 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 			}
             return result;
 		}, mainHandler::post);
+	}
+
+	private void scheduleRetryWithCountdown() {
+		// Initialize countdown
+		countdownRemainingSeconds = retryDelaySeconds;
+		updateRetryStatusText();
+
+		// Cancel any existing countdown before starting a new one
+		if (countdownRunnable != null) {
+			mainHandler.removeCallbacks(countdownRunnable);
+		}
+
+		countdownRunnable = new Runnable() {
+			@Override
+			public void run() {
+				countdownRemainingSeconds--;
+				if (countdownRemainingSeconds > 0) {
+					updateRetryStatusText();
+					mainHandler.postDelayed(this, 1000);
+				} else {
+					// Time to retry now
+					mStatus.setText("Retrying download now...");
+					// Increase delay for the next potential retry (exponential backoff with 300s cap)
+					retryDelaySeconds = Math.min(retryDelaySeconds * 2, 300);
+					// Start the download again
+					downloadTrigs();
+				}
+			}
+		};
+
+		mainHandler.postDelayed(countdownRunnable, 1000);
+	}
+
+	@SuppressLint("SetTextI18n")
+	private void updateRetryStatusText() {
+		mStatus.setText("Download failed!  Will retry in " + countdownRemainingSeconds + " seconds");
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// Clean up any pending countdown callbacks to avoid leaks
+		if (mainHandler != null && countdownRunnable != null) {
+			mainHandler.removeCallbacks(countdownRunnable);
+		}
 	}
 	
 	@Override

@@ -38,7 +38,7 @@ maps:
     format: "png"
     file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/satellite-0-13.tar"
     file_size: 934072320
-    file_timestamp: "2025-08-14T21:00:00Z"
+    file_timestamp: "2025-08-27T21:00:00Z"
   - name: "Satellite-14"
     description: "Satellite-14 is a Satellite map of the UK at zoom levels 0-14. It is a high-resolution basemap. WARNING: It's BIG and you probably don't need it."
     source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/{z}/{x}/{y}.png"
@@ -50,4 +50,16 @@ maps:
     format: "png"
     file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/satellite-0-14.tar"
     file_size: 3597752320
-    file_timestamp: "2025-08-14T21:00:00Z"
+    file_timestamp: "2025-08-27T21:00:00Z"
+  - name: "OS Digital-13"
+    description: "OS Digital-13 is an OS digital map of the UK at zoom levels 0-13. It is a medium-resolution basemap. WARNING: It's BIG and you probably don't need it."
+    source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/{z}/{x}/{y}.png"
+    attribution: "© Ordnance Survey"
+    minZoom: 0
+    maxZoom: 13
+    bounds: [-85.0511, -180, 85.0511, 180]
+    type: "tar"
+    format: "png"
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/os-digital-0-13.tar"
+    file_size: 2410895360
+    file_timestamp: "2025-08-27T21:00:00Z"
