@@ -29,7 +29,7 @@ maps:
     file_timestamp: "2025-08-16T19:00:00Z"
   - name: "Satellite-13"
     description: "Satellite-13 is a Satellite map of the UK at zoom levels 0-13. It is a medium-resolution basemap."
-    source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/{z}/{x}/{y}.png"
+    source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}.png"
     attribution: "© ESRI"
     minZoom: 0
     maxZoom: 13
@@ -41,7 +41,7 @@ maps:
     file_timestamp: "2025-08-27T21:00:00Z"
   - name: "Satellite-14"
     description: "Satellite-14 is a Satellite map of the UK at zoom levels 0-14. It is a high-resolution basemap. WARNING: It's BIG and you probably don't need it."
-    source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/{z}/{x}/{y}.png"
+    source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{x}/{y}.png"
     attribution: "© ESRI"
     minZoom: 0
     maxZoom: 14
@@ -53,7 +53,7 @@ maps:
     file_timestamp: "2025-08-27T21:00:00Z"
   - name: "OS Digital-13"
     description: "OS Digital-13 is an OS digital map of the UK at zoom levels 0-13. It is a medium-resolution basemap. WARNING: It's BIG and you probably don't need it."
-    source_url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/{z}/{x}/{y}.png"
+    source_url: "https://api.os.uk/maps/raster/v1/zxy/Outdoor_3857/{z}/{x}/{y}.png"
     attribution: "© Ordnance Survey"
     minZoom: 0
     maxZoom: 13
