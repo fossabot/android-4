@@ -168,7 +168,7 @@
     /* Zoom Level Display */
     .zoom-level-display {
       position: absolute;
-      top: 70px; /* Position below the zoom controls */
+      top: 78px; /* Position below the zoom controls with small gap */
       left: 10px; /* Align with zoom controls */
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid #ccc;
@@ -185,7 +185,7 @@
 </head>
 <body>
   <div id="map"></div>
-  <div id="zoom-level-display" class="zoom-level-display">Zoom: 7</div>
+  <div id="zoom-level-display" class="zoom-level-display">7</div>
   <button class="fab location-btn" id="locbtn" title="My location">
     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
       <!-- Standard location crosshairs icon -->
@@ -1545,7 +1545,7 @@
       const currentZoom = Math.round(map.getZoom());
       const zoomDisplay = document.getElementById('zoom-level-display');
       if (zoomDisplay) {
-        zoomDisplay.textContent = 'Zoom: ' + currentZoom;
+        zoomDisplay.textContent = currentZoom;
       }
     }
 
