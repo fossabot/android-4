@@ -368,15 +368,17 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 
 	private void updateFilterHeader() {
 		// Get trigpoint type text
-		int filterType = mPrefs.getInt(Filter.FILTERTYPE, 0);
+		int filterType = mPrefs.getInt(Filter.FILTERTYPE, 6); // Default to "All Types"
 		String typeText = getTypeTextFromIndex(filterType);
 		
-		// Get logging status text
-		String statusText = mPrefs.getString(Filter.FILTERRADIOTEXT, "Logged or not");
+		// Get logging status text directly from Filter.FILTERRADIO for consistency
+		int filterRadio = mPrefs.getInt(Filter.FILTERRADIO, 0); // Default to "Logged or not"
+		String statusText = getStatusTextFromIndex(filterRadio);
 		
 		// Create two-line display
 		String headerText = typeText + "\n" + statusText;
 		mStrFilter.setText(headerText);
+		Log.d(TAG, "Updated filter header: " + typeText + " / " + statusText);
 	}
 	
 	private String getTypeTextFromIndex(int filterType) {
@@ -389,6 +391,17 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			case 5: return "All except Intersected";
 			case 6: return "All Types";
 			default: return "All Types";
+		}
+	}
+	
+	private String getStatusTextFromIndex(int filterRadio) {
+		switch (filterRadio) {
+			case 0: return "Logged or not";
+			case 1: return "Logged";
+			case 2: return "Not Logged";
+			case 3: return "Marked";
+			case 4: return "Unsynced";
+			default: return "Logged or not";
 		}
 	}
 	
