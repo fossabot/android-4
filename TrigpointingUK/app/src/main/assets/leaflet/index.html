@@ -461,10 +461,21 @@
     function initialiseMap() {
       initialiseLayers();
       
-      // Check if we have a session style override, otherwise use user's preference
-      const sessionStyle = sessionStorage.getItem('leaflet_session_map_style');
-      const styleToUse = sessionStyle || initialStyle;
-      console.log('Session style:', sessionStyle, 'Initial style:', initialStyle, 'Using:', styleToUse);
+      // Session management: use session style if it exists, otherwise use preference and save to session
+      let sessionStyle = sessionStorage.getItem('leaflet_session_map_style');
+      let styleToUse;
+      
+      if (sessionStyle) {
+        // We have a session style - use it (this is a return visit to the map)
+        styleToUse = sessionStyle;
+        console.log('Using existing session style:', sessionStyle);
+      } else {
+        // No session style - this is the first map visit this session
+        // Use the user's preference and save it as the session style
+        styleToUse = initialStyle;
+        sessionStorage.setItem('leaflet_session_map_style', initialStyle);
+        console.log('First map visit - using preference and saving to session:', initialStyle);
+      }
       
       // Convert preference value to JavaScript layer name
       const jsInitialStyle = convertPreferenceToJSLayer(styleToUse);

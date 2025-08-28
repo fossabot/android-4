@@ -120,7 +120,11 @@ public class MapStyleTabFragment extends Fragment implements SharedPreferences.O
     private void notifyLeafletMap(String style) {
         Log.d("MapStyleTabFragment", "Notifying map to update style to: " + style);
         if (getActivity() instanceof LeafletMapActivity) {
-            ((LeafletMapActivity) getActivity()).updateMapStyle(style);
+            LeafletMapActivity mapActivity = (LeafletMapActivity) getActivity();
+            // Update the map to use the new style
+            mapActivity.updateMapStyle(style);
+            // Update session storage so the new preference becomes the session default
+            mapActivity.updateSessionMapStyle(style);
         } else {
             Log.w("MapStyleTabFragment", "Activity is not LeafletMapActivity, cannot notify map");
         }

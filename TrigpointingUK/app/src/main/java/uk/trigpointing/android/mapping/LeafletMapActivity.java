@@ -356,6 +356,11 @@ public class LeafletMapActivity extends BaseActivity {
         webView.evaluateJavascript("if (typeof updateFilterFound === 'function') updateFilterFound('" + found + "');", null);
         Log.d(TAG, "Updated filter found to: " + found);
     }
+    
+    public void updateSessionMapStyle(String style) {
+        webView.evaluateJavascript("sessionStorage.setItem('leaflet_session_map_style', '" + style + "');", null);
+        Log.d(TAG, "Updated session map style to: " + style);
+    }
 
     private String queryTrigpoints(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
         if (dbHelper == null) {
