@@ -350,6 +350,10 @@ class DownloadMapsActivity : BaseActivity() {
         try {
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             intent.data = Uri.parse("package:$packageName")
+            
+            // Show guidance to the user
+            Toast.makeText(this, "Tap 'Storage and Cache' → 'Clear Cache' in the settings that open", Toast.LENGTH_LONG).show()
+            
             startActivity(intent)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to open app settings", e)
