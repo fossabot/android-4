@@ -164,10 +164,28 @@
       background: transparent !important;
       border: none !important;
     }
+    
+    /* Zoom Level Display */
+    .zoom-level-display {
+      position: absolute;
+      top: 70px; /* Position below the zoom controls */
+      left: 10px; /* Align with zoom controls */
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #555;
+      font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+      z-index: 1000;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      pointer-events: none; /* Allow clicks to pass through */
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
+  <div id="zoom-level-display" class="zoom-level-display">Zoom: 7</div>
   <button class="fab location-btn" id="locbtn" title="My location">
     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
       <!-- Standard location crosshairs icon -->
@@ -487,6 +505,9 @@
         loadControlPreferences();
         initialiseMarkers();
         
+        // Initialize zoom level display
+        updateZoomLevelDisplay();
+        
         // Auto-centre on GPS location when first visiting and start location tracking by default
         autoLocateOnFirstVisit();
       }, 100);
@@ -608,6 +629,9 @@
         setupTrigpointingControl();
         loadControlPreferences();
         initialiseMarkers(); // Reinitialise markers after CRS switch
+        
+        // Update zoom level display after CRS switch
+        updateZoomLevelDisplay();
         
         // Check if control state was restored properly during creation
         console.log('Checking control state after CRS switch. PendingControlExpansion:', pendingControlExpansion);
@@ -1300,6 +1324,7 @@
       
       map.on('zoomend', () => {
         loadTrigpointMarkers();
+        updateZoomLevelDisplay();
       });
     }
 
@@ -1512,6 +1537,15 @@
         
         // Use relative path from current leaflet directory
         return `icons/${iconName}`;
+      }
+    }
+
+    // Update zoom level display
+    function updateZoomLevelDisplay() {
+      const currentZoom = Math.round(map.getZoom());
+      const zoomDisplay = document.getElementById('zoom-level-display');
+      if (zoomDisplay) {
+        zoomDisplay.textContent = 'Zoom: ' + currentZoom;
       }
     }
 
