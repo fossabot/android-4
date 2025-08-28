@@ -21,13 +21,7 @@
             android:title="Ordnance Survey API key"
             android:summary="Enter OS Data Hub API key for Ordnance Survey maps" />
 
-        <ListPreference
-            android:key="leaflet_map_style"
-            android:title="Map Style"
-            android:summary="Choose default map style"
-            android:entries="@array/leaflet_map_styles"
-            android:entryValues="@array/leaflet_map_style_values"
-            android:defaultValue="OpenStreetMap" />
+        <!-- Removed Map Style preference. Map now remembers last used style within the map UI. -->
 
         <ListPreference
             android:key="mapcount"

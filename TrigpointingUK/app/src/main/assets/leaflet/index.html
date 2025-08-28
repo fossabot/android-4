@@ -247,16 +247,22 @@
         var value = param[1] || '';
         if (key === name) {
           try {
-            return decodeURIComponent(value);
+            // Android encodes spaces as '+', so normalize before decoding
+            var normalized = (value || '').replace(/\+/g, ' ');
+            return decodeURIComponent(normalized);
           } catch (e) {
-            return value; // fallback if decoding fails
+            return (value || '').replace(/\+/g, ' '); // fallback if decoding fails
           }
         }
       }
       return '';
     }
     const osKey = getParam('os_key');
-    const initialStyle = getParam('initial_style') || 'OpenStreetMap';
+    let initialStyle = getParam('initial_style') || 'OpenStreetMap';
+    // Backward compatibility for legacy style names
+    if (initialStyle === 'ESRI.WorldImagery') initialStyle = 'Satellite';
+    if (initialStyle === 'OS Outdoor' || initialStyle === 'OS Outdoor (27700)' || initialStyle === 'OS Outdoor (3857)') initialStyle = 'OS Digital';
+    if (initialStyle === 'OS Leisure' || initialStyle === 'OS Leisure (27700)') initialStyle = 'OS Paper';
 
     // Define OSGB CRS for 27700
     const osgb = new L.Proj.CRS(
@@ -374,7 +380,7 @@
         minZoom: 0,
         maxZoom: 18
       });
-      addTileErrorHandling(layer, 'ESRI.WorldImagery', 0, 18);
+      addTileErrorHandling(layer, 'Satellite', 0, 18);
       return layer;
     }
     function createOSLeisure() {
@@ -389,7 +395,7 @@
           maxZoom: 9
         }
       );
-      addTileErrorHandling(layer, 'OS Leisure', 0, 9);
+      addTileErrorHandling(layer, 'OS Paper', 0, 9);
       return layer;
     }
     function createOSOutdoor3857() {
@@ -401,7 +407,7 @@
           maxZoom: 20
         }
       );
-      addTileErrorHandling(layer, 'OS Outdoor', 0, 20);
+      addTileErrorHandling(layer, 'OS Digital', 0, 20);
       return layer;
     }
 
@@ -461,12 +467,15 @@
       let initialLayer = osmLayer;
       let initialCRS = L.CRS.EPSG3857;
       
-      if (initialStyle === 'OS Outdoor') {
+      if (initialStyle === 'OS Digital') {
         initialLayer = outdoorLayer;
         initialCRS = L.CRS.EPSG3857;
-      } else if (initialStyle === 'OS Leisure') {
+      } else if (initialStyle === 'OS Paper') {
         initialLayer = leisureLayer;
         initialCRS = osgb;
+      } else if (initialStyle === 'Satellite') {
+        initialLayer = esriLayer;
+        initialCRS = L.CRS.EPSG3857;
       }
       
       // Recreate map with correct CRS if needed
@@ -603,17 +612,25 @@
       }).addTo(map);
       
       // Add the correct layer based on user selection
-      if (targetLayerName === 'OS Leisure') {
+      if (targetLayerName === 'OS Paper') {
         leisureLayer.addTo(map);
-      } else if (targetLayerName === 'OS Outdoor') {
+      } else if (targetLayerName === 'OS Digital') {
         outdoorLayer.addTo(map);
-      } else if (targetLayerName === 'ESRI.WorldImagery') {
+      } else if (targetLayerName === 'Satellite') {
         esriLayer.addTo(map);
       } else {
         osmLayer.addTo(map);
       }
       
       currentLayerName = targetLayerName;
+      // Persist selection when switching CRS, since the normal layer-change path is bypassed
+      try {
+        if (typeof AndroidPrefs !== 'undefined' && AndroidPrefs.saveMapStyle) {
+          AndroidPrefs.saveMapStyle(targetLayerName);
+        }
+      } catch (e) {
+        console.log('Failed to save map style after CRS switch:', e);
+      }
       
       // Reattach handlers
       document.getElementById('locbtn').onclick = locate;
@@ -699,7 +716,7 @@
         AndroidPrefs.saveMapStyle(name);
       }
       
-      const needs27700 = name.indexOf('27700') !== -1;
+      const needs27700 = (name === 'OS Paper');
       const needsCRSSwitch = (needs27700 && currentCRS !== '27700') || (!needs27700 && currentCRS !== '3857');
       
       if (needsCRSSwitch) {
@@ -741,15 +758,15 @@
                   <label for="js-osm">OpenStreetMap</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="mapstyle" value="ESRI.WorldImagery" id="js-esri">
+                  <input type="radio" name="mapstyle" value="Satellite" id="js-esri">
                   <label for="js-esri">Satellite</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="mapstyle" value="OS Outdoor" id="js-outdoor">
+                  <input type="radio" name="mapstyle" value="OS Digital" id="js-outdoor">
                   <label for="js-outdoor">OS Digital</label>
                 </div>
                 <div class="control-option">
-                  <input type="radio" name="mapstyle" value="OS Leisure" id="js-leisure">
+                  <input type="radio" name="mapstyle" value="OS Paper" id="js-leisure">
                   <label for="js-leisure">OS Paper</label>
                 </div>
               </div>
@@ -1025,7 +1042,7 @@
     function switchMapToLayer(layerName) {
       // Check if we need CRS switch
       const currentIs27700 = (currentCRS === '27700');
-      const targetIs27700 = (layerName === 'OS Leisure');
+      const targetIs27700 = (layerName === 'OS Paper');
       
       if (currentIs27700 !== targetIs27700) {
         // Need CRS switch - use existing mechanism
@@ -1039,22 +1056,22 @@
       // Remove current layer
       if (currentLayerName === 'OpenStreetMap' && map.hasLayer(osmLayer)) {
         map.removeLayer(osmLayer);
-      } else if (currentLayerName === 'ESRI.WorldImagery' && map.hasLayer(esriLayer)) {
+      } else if (currentLayerName === 'Satellite' && map.hasLayer(esriLayer)) {
         map.removeLayer(esriLayer);
-      } else if (currentLayerName === 'OS Outdoor' && map.hasLayer(outdoorLayer)) {
+      } else if (currentLayerName === 'OS Digital' && map.hasLayer(outdoorLayer)) {
         map.removeLayer(outdoorLayer);
-      } else if (currentLayerName === 'OS Leisure' && map.hasLayer(leisureLayer)) {
+      } else if (currentLayerName === 'OS Paper' && map.hasLayer(leisureLayer)) {
         map.removeLayer(leisureLayer);
       }
       
       // Add new layer
       if (layerName === 'OpenStreetMap') {
         osmLayer.addTo(map);
-      } else if (layerName === 'ESRI.WorldImagery') {
+      } else if (layerName === 'Satellite') {
         esriLayer.addTo(map);
-      } else if (layerName === 'OS Outdoor') {
+      } else if (layerName === 'OS Digital') {
         outdoorLayer.addTo(map);
-      } else if (layerName === 'OS Leisure') {
+      } else if (layerName === 'OS Paper') {
         leisureLayer.addTo(map);
       }
       
