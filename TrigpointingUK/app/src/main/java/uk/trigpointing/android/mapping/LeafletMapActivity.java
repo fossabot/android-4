@@ -145,23 +145,10 @@ public class LeafletMapActivity extends BaseActivity {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String osKey = prefs.getString("os_api_key", "");
-        String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
-        
-        // Check if this is the first map load since app startup
-        boolean isFirstMapLoad = prefs.getBoolean("is_first_map_load", true);
-        
-        String initialStyle;
-        if (isFirstMapLoad) {
-            // First load - use user preference
-            initialStyle = leafletMapStyle;
-            // Mark that we've loaded the map once
-            prefs.edit().putBoolean("is_first_map_load", false).apply();
-            Log.d(TAG, "First map load this session - using preference: " + leafletMapStyle);
-        } else {
-            // Subsequent loads - pass empty string to signal JavaScript to use session storage
-            initialStyle = "";
-            Log.d(TAG, "Subsequent map load - will use session storage");
-        }
+        String leafletMapStyle = normalizeMapStyle(prefs.getString("leaflet_map_style", "OpenStreetMap"));
+        // Always use the persisted preference for initial style
+        String initialStyle = leafletMapStyle;
+        Log.d(TAG, "Using persisted map style preference: " + leafletMapStyle);
         
         String url = buildLeafletUrl(osKey, initialStyle);
         Log.d(TAG, "Built URL: " + url);
@@ -172,6 +159,28 @@ public class LeafletMapActivity extends BaseActivity {
         } catch (Exception e) {
             Log.e(TAG, "Error loading Leaflet page", e);
             Toast.makeText(this, "Error loading Leaflet page", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private String normalizeMapStyle(String value) {
+        if (value == null || value.trim().isEmpty()) return "OpenStreetMap";
+        switch (value) {
+            case "OpenStreetMap":
+            case "Satellite":
+            case "OS Digital":
+            case "OS Paper":
+                return value;
+            // Backward compatibility mappings
+            case "ESRI.WorldImagery":
+                return "Satellite";
+            case "OS Outdoor (3857)":
+            case "OS Outdoor":
+                return "OS Digital";
+            case "OS Leisure (27700)":
+            case "OS Leisure":
+                return "OS Paper";
+            default:
+                return "OpenStreetMap";
         }
     }
 
@@ -307,20 +316,8 @@ public class LeafletMapActivity extends BaseActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 String osKey = prefs.getString("os_api_key", "");
-                String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
-
-                // Mirror first-load logic: only use preference on the first map load
-                boolean isFirstMapLoad = prefs.getBoolean("is_first_map_load", true);
-                String initialStyle = isFirstMapLoad ? leafletMapStyle : "";
-                if (isFirstMapLoad) {
-                    // Mark that we've loaded once this session
-                    prefs.edit().putBoolean("is_first_map_load", false).apply();
-                    Log.d(TAG, "Permission granted - first map load this session, using preference: " + leafletMapStyle);
-                } else {
-                    Log.d(TAG, "Permission granted - subsequent map load, using session storage");
-                }
-
-                String url = buildLeafletUrl(osKey, initialStyle);
+                String leafletMapStyle = normalizeMapStyle(prefs.getString("leaflet_map_style", "OpenStreetMap"));
+                String url = buildLeafletUrl(osKey, leafletMapStyle);
                 webView.loadUrl(url);
             } else {
                 Toast.makeText(this, "Location permission denied; My location will be disabled.", Toast.LENGTH_LONG).show();
@@ -507,12 +504,10 @@ public class LeafletMapActivity extends BaseActivity {
     public class LeafletPreferencesInterface {
         @JavascriptInterface
         public void saveMapStyle(String mapStyle) {
-            // WARNING: This method should NOT be called from normal map interactions
-            // Map style changes should be temporary and not affect user preferences
-            // Only legitimate preference changes (from Settings activity) should call this
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
-            prefs.edit().putString("leaflet_map_style", mapStyle).apply();
-            Log.d(TAG, "Saved map style preference: " + mapStyle);
+            String normalized = normalizeMapStyle(mapStyle);
+            prefs.edit().putString("leaflet_map_style", normalized).apply();
+            Log.d(TAG, "Saved map style preference: " + normalized);
         }
         
         @JavascriptInterface
