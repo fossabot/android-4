@@ -125,6 +125,12 @@ public class MapStyleTabFragment extends Fragment implements SharedPreferences.O
             mapActivity.updateMapStyle(style);
             // Update session storage so the new preference becomes the session default
             mapActivity.updateSessionMapStyle(style);
+            
+            // Mark that the next map load should use preferences (in case user leaves and returns)
+            // This ensures preference changes always take effect immediately
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            prefs.edit().putBoolean("is_first_map_load", true).apply();
+            Log.d("MapStyleTabFragment", "Reset first map load flag due to preference change");
         } else {
             Log.w("MapStyleTabFragment", "Activity is not LeafletMapActivity, cannot notify map");
         }

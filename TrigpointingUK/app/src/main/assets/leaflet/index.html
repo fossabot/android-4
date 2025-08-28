@@ -461,20 +461,33 @@
     function initialiseMap() {
       initialiseLayers();
       
-      // Session management: use session style if it exists, otherwise use preference and save to session
+      // Session management
       let sessionStyle = sessionStorage.getItem('leaflet_session_map_style');
       let styleToUse;
       
-      if (sessionStyle) {
-        // We have a session style - use it (this is a return visit to the map)
-        styleToUse = sessionStyle;
-        console.log('Using existing session style:', sessionStyle);
+      if (initialStyle === '' || initialStyle === null) {
+        // Android signaled this is a subsequent load - use session storage
+        if (sessionStyle) {
+          styleToUse = sessionStyle;
+          console.log('Subsequent load - using session style:', sessionStyle);
+        } else {
+          // Fallback if no session style (shouldn't happen)
+          styleToUse = 'OpenStreetMap';
+          sessionStorage.setItem('leaflet_session_map_style', 'OpenStreetMap');
+          console.log('Subsequent load but no session style found - fallback to OpenStreetMap');
+        }
       } else {
-        // No session style - this is the first map visit this session
-        // Use the user's preference and save it as the session style
-        styleToUse = initialStyle;
-        sessionStorage.setItem('leaflet_session_map_style', initialStyle);
-        console.log('First map visit - using preference and saving to session:', initialStyle);
+        // Android passed a preference - check if it's different from session
+        if (sessionStyle && sessionStyle === initialStyle) {
+          // Preference matches session - use session (this is just a reload)
+          styleToUse = sessionStyle;
+          console.log('Preference matches session - using session style:', sessionStyle);
+        } else {
+          // Preference is different or no session - use preference (first load or setting changed)
+          styleToUse = initialStyle;
+          sessionStorage.setItem('leaflet_session_map_style', initialStyle);
+          console.log('Using preference (first load or changed):', initialStyle);
+        }
       }
       
       // Convert preference value to JavaScript layer name

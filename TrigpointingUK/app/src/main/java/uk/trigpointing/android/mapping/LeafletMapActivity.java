@@ -59,6 +59,7 @@ public class LeafletMapActivity extends BaseActivity {
     private static final int REQ_LOCATION = 2001;
     private DbHelper dbHelper;
     private File mTileCacheDir;
+    private boolean isWebViewLoaded = false;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -146,9 +147,23 @@ public class LeafletMapActivity extends BaseActivity {
         String osKey = prefs.getString("os_api_key", "");
         String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
         
-        Log.d(TAG, "Loading map with preferred style: " + leafletMapStyle);
+        // Check if this is the first map load since app startup
+        boolean isFirstMapLoad = prefs.getBoolean("is_first_map_load", true);
         
-        String url = buildLeafletUrl(osKey, leafletMapStyle);
+        String initialStyle;
+        if (isFirstMapLoad) {
+            // First load - use user preference
+            initialStyle = leafletMapStyle;
+            // Mark that we've loaded the map once
+            prefs.edit().putBoolean("is_first_map_load", false).apply();
+            Log.d(TAG, "First map load this session - using preference: " + leafletMapStyle);
+        } else {
+            // Subsequent loads - pass empty string to signal JavaScript to use session storage
+            initialStyle = "";
+            Log.d(TAG, "Subsequent map load - will use session storage");
+        }
+        
+        String url = buildLeafletUrl(osKey, initialStyle);
         Log.d(TAG, "Built URL: " + url);
         try {
             if (ensureLocationPermission()) {
