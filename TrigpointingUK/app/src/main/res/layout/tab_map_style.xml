@@ -21,7 +21,7 @@
             android:id="@+id/radioOSOutdoor3857"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="OS Outdoor (3857)"
+            android:text="Satellite"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -29,7 +29,7 @@
             android:id="@+id/radioOSOutdoor27700"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="OS Outdoor (27700)"
+            android:text="OS Digital"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/radioOSLeisure27700"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="OS Leisure (27700)"
+            android:text="OS Paper"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 

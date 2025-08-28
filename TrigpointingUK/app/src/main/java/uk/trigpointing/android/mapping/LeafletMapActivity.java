@@ -145,8 +145,11 @@ public class LeafletMapActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String osKey = prefs.getString("os_api_key", "");
         String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
-
+        
+        Log.d(TAG, "Loading map with preferred style: " + leafletMapStyle);
+        
         String url = buildLeafletUrl(osKey, leafletMapStyle);
+        Log.d(TAG, "Built URL: " + url);
         try {
             if (ensureLocationPermission()) {
                 webView.loadUrl(url);
@@ -472,6 +475,9 @@ public class LeafletMapActivity extends BaseActivity {
     public class LeafletPreferencesInterface {
         @JavascriptInterface
         public void saveMapStyle(String mapStyle) {
+            // WARNING: This method should NOT be called from normal map interactions
+            // Map style changes should be temporary and not affect user preferences
+            // Only legitimate preference changes (from Settings activity) should call this
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
             prefs.edit().putString("leaflet_map_style", mapStyle).apply();
             Log.d(TAG, "Saved map style preference: " + mapStyle);
