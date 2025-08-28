@@ -59,6 +59,7 @@ public class LeafletMapActivity extends BaseActivity {
     private static final int REQ_LOCATION = 2001;
     private DbHelper dbHelper;
     private File mTileCacheDir;
+    private boolean isWebViewLoaded = false;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -145,8 +146,25 @@ public class LeafletMapActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String osKey = prefs.getString("os_api_key", "");
         String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
-
-        String url = buildLeafletUrl(osKey, leafletMapStyle);
+        
+        // Check if this is the first map load since app startup
+        boolean isFirstMapLoad = prefs.getBoolean("is_first_map_load", true);
+        
+        String initialStyle;
+        if (isFirstMapLoad) {
+            // First load - use user preference
+            initialStyle = leafletMapStyle;
+            // Mark that we've loaded the map once
+            prefs.edit().putBoolean("is_first_map_load", false).apply();
+            Log.d(TAG, "First map load this session - using preference: " + leafletMapStyle);
+        } else {
+            // Subsequent loads - pass empty string to signal JavaScript to use session storage
+            initialStyle = "";
+            Log.d(TAG, "Subsequent map load - will use session storage");
+        }
+        
+        String url = buildLeafletUrl(osKey, initialStyle);
+        Log.d(TAG, "Built URL: " + url);
         try {
             if (ensureLocationPermission()) {
                 webView.loadUrl(url);
@@ -353,6 +371,11 @@ public class LeafletMapActivity extends BaseActivity {
         webView.evaluateJavascript("if (typeof updateFilterFound === 'function') updateFilterFound('" + found + "');", null);
         Log.d(TAG, "Updated filter found to: " + found);
     }
+    
+    public void updateSessionMapStyle(String style) {
+        webView.evaluateJavascript("sessionStorage.setItem('leaflet_session_map_style', '" + style + "');", null);
+        Log.d(TAG, "Updated session map style to: " + style);
+    }
 
     private String queryTrigpoints(double south, double west, double north, double east, String trigpointType, String filterFound, String colorScheme) {
         if (dbHelper == null) {
@@ -472,6 +495,9 @@ public class LeafletMapActivity extends BaseActivity {
     public class LeafletPreferencesInterface {
         @JavascriptInterface
         public void saveMapStyle(String mapStyle) {
+            // WARNING: This method should NOT be called from normal map interactions
+            // Map style changes should be temporary and not affect user preferences
+            // Only legitimate preference changes (from Settings activity) should call this
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
             prefs.edit().putString("leaflet_map_style", mapStyle).apply();
             Log.d(TAG, "Saved map style preference: " + mapStyle);

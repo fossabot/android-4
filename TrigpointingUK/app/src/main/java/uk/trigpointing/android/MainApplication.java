@@ -29,9 +29,13 @@ public class MainApplication extends Application {
 		
 		// Mark that the app is starting fresh - this will trigger logging status filter reset
 		editor.putBoolean("app_fresh_start", true);
+		
+		// Reset map load flag so first map visit uses user preference
+		editor.putBoolean("is_first_map_load", true);
+		
 		editor.apply();
 		
-		Log.i(TAG, "Marked app as fresh start for filter reset");  
+		Log.i(TAG, "Marked app as fresh start for filter reset and map preference loading");  
         
         // Crashlytics removed during package migration; re-add if needed later
 

@@ -258,11 +258,11 @@
       return '';
     }
     const osKey = getParam('os_key');
-    let initialStyle = getParam('initial_style') || 'OpenStreetMap';
-    // Backward compatibility for legacy style names
-    if (initialStyle === 'ESRI.WorldImagery') initialStyle = 'Satellite';
-    if (initialStyle === 'OS Outdoor' || initialStyle === 'OS Outdoor (27700)' || initialStyle === 'OS Outdoor (3857)') initialStyle = 'OS Digital';
-    if (initialStyle === 'OS Leisure' || initialStyle === 'OS Leisure (27700)') initialStyle = 'OS Paper';
+    const rawInitialStyle = getParam('initial_style') || 'OpenStreetMap';
+    // URL decode the initial style parameter
+    const initialStyle = decodeURIComponent(rawInitialStyle.replace(/\+/g, ' '));
+    console.log('JavaScript received initial_style parameter (raw):', rawInitialStyle);
+    console.log('JavaScript using initialStyle (decoded):', initialStyle);
 
     // Define OSGB CRS for 27700
     const osgb = new L.Proj.CRS(
@@ -463,19 +463,50 @@
     function initialiseMap() {
       initialiseLayers();
       
-      // Determine initial layer and CRS based on preference
+      // Session management
+      let sessionStyle = sessionStorage.getItem('leaflet_session_map_style');
+      let styleToUse;
+      
+      if (initialStyle === '' || initialStyle === null) {
+        // Android signaled this is a subsequent load - use session storage
+        if (sessionStyle) {
+          styleToUse = sessionStyle;
+          console.log('Subsequent load - using session style:', sessionStyle);
+        } else {
+          // Fallback if no session style (shouldn't happen)
+          styleToUse = 'OpenStreetMap';
+          sessionStorage.setItem('leaflet_session_map_style', 'OpenStreetMap');
+          console.log('Subsequent load but no session style found - fallback to OpenStreetMap');
+        }
+      } else {
+        // Android passed a preference - check if it's different from session
+        if (sessionStyle && sessionStyle === initialStyle) {
+          // Preference matches session - use session (this is just a reload)
+          styleToUse = sessionStyle;
+          console.log('Preference matches session - using session style:', sessionStyle);
+        } else {
+          // Preference is different or no session - use preference (first load or setting changed)
+          styleToUse = initialStyle;
+          sessionStorage.setItem('leaflet_session_map_style', initialStyle);
+          console.log('Using preference (first load or changed):', initialStyle);
+        }
+      }
+      
+      // Convert preference value to JavaScript layer name
+      const jsInitialStyle = convertPreferenceToJSLayer(styleToUse);
+      console.log('Converting style:', styleToUse, '→', jsInitialStyle);
       let initialLayer = osmLayer;
       let initialCRS = L.CRS.EPSG3857;
       
-      if (initialStyle === 'OS Digital') {
-        initialLayer = outdoorLayer;
-        initialCRS = L.CRS.EPSG3857;
-      } else if (initialStyle === 'OS Paper') {
-        initialLayer = leisureLayer;
-        initialCRS = osgb;
-      } else if (initialStyle === 'Satellite') {
+      if (jsInitialStyle === 'ESRI.WorldImagery') {
         initialLayer = esriLayer;
         initialCRS = L.CRS.EPSG3857;
+      } else if (jsInitialStyle === 'OS Outdoor') {
+        initialLayer = outdoorLayer;
+        initialCRS = L.CRS.EPSG3857;
+      } else if (jsInitialStyle === 'OS Leisure') {
+        initialLayer = leisureLayer;
+        initialCRS = osgb;
       }
       
       // Recreate map with correct CRS if needed
@@ -505,8 +536,10 @@
       }).addTo(map);
       
       // Add initial layer after control is set up
+      console.log('Adding initial layer to map:', jsInitialStyle);
       initialLayer.addTo(map);
-      currentLayerName = initialStyle;
+      currentLayerName = jsInitialStyle;
+      console.log('Set currentLayerName to:', currentLayerName);
       
       // Setup custom control and markers
       setTimeout(() => {
@@ -527,6 +560,11 @@
     function switchCRS(to27700, targetLayerName) {
       if (switchingCRS) return; // Prevent recursive calls
       switchingCRS = true;
+      
+      // Save the session style when switching CRS
+      const preferenceValue = convertJSLayerToPreference(targetLayerName);
+      sessionStorage.setItem('leaflet_session_map_style', preferenceValue);
+      console.log('Saved session map style during CRS switch:', preferenceValue);
       
       // Store current control state before CRS switch
       const panel = document.getElementById('trigpointing-panel');
@@ -711,10 +749,8 @@
       const name = e.name || '';
       currentLayerName = name;
       
-      // Save the new layer preference to Android
-      if (typeof AndroidPrefs !== 'undefined') {
-        AndroidPrefs.saveMapStyle(name);
-      }
+      // Don't save preferences - map changes should be temporary
+      // Only the Settings activity should modify user preferences
       
       const needs27700 = (name === 'OS Paper');
       const needsCRSSwitch = (needs27700 && currentCRS !== '27700') || (!needs27700 && currentCRS !== '3857');
@@ -1026,20 +1062,51 @@
       });
     }
 
+    // Convert Android preference values to JavaScript layer names
+    function convertPreferenceToJSLayer(preferenceValue) {
+      switch (preferenceValue) {
+        case 'ESRI.WorldImagery': return 'ESRI.WorldImagery';
+        case 'OS Outdoor (3857)': return 'OS Outdoor';
+        case 'OS Leisure (27700)': return 'OS Leisure';
+        case 'OpenStreetMap': return 'OpenStreetMap';
+        default: return 'OpenStreetMap';
+      }
+    }
+
+    // Convert JavaScript layer names back to preference values
+    function convertJSLayerToPreference(jsLayerName) {
+      switch (jsLayerName) {
+        case 'ESRI.WorldImagery': return 'ESRI.WorldImagery';
+        case 'OS Outdoor': return 'OS Outdoor (3857)';
+        case 'OS Leisure': return 'OS Leisure (27700)';
+        case 'OpenStreetMap': return 'OpenStreetMap';
+        default: return 'OpenStreetMap';
+      }
+    }
+
     // Functions that will be called from Android
     function switchToLayer(layerName) {
       console.log('Switching to layer:', layerName);
       
+      // Convert Android preference value to JavaScript layer name
+      const jsLayerName = convertPreferenceToJSLayer(layerName);
+      console.log('Converted layer name:', jsLayerName);
+      
       // Update the JavaScript control radio buttons
       document.querySelectorAll('input[name="mapstyle"]').forEach(radio => {
-        radio.checked = (radio.value === layerName);
+        radio.checked = (radio.value === jsLayerName);
       });
       
-      // Actually switch the map layer
-      switchMapToLayer(layerName);
+      // Actually switch the map layer using the converted name
+      switchMapToLayer(jsLayerName);
     }
 
     function switchMapToLayer(layerName) {
+      // Save the current layer choice to session storage (for temporary changes)
+      const preferenceValue = convertJSLayerToPreference(layerName);
+      sessionStorage.setItem('leaflet_session_map_style', preferenceValue);
+      console.log('Saved session map style:', preferenceValue);
+      
       // Check if we need CRS switch
       const currentIs27700 = (currentCRS === '27700');
       const targetIs27700 = (layerName === 'OS Paper');
@@ -1078,9 +1145,7 @@
       // Update current layer name
       currentLayerName = layerName;
       
-      // Trigger layer change event for preferences
-      const layerChangeEvent = { name: layerName };
-      onBaseLayerChange(layerChangeEvent);
+      // No need to trigger preference saving - map changes are temporary
     }
 
     function updateMarkerColors(colorScheme) {
