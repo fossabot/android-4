@@ -67,6 +67,13 @@ class DownloadMapsActivity : BaseActivity() {
         fetchMapDownloads()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Refresh cache usage when returning to the activity
+        // This ensures the display is updated after the user clears cache via system settings
+        setupCacheUsage()
+    }
+
     private fun fetchMapDownloads() {
         progressBar.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
