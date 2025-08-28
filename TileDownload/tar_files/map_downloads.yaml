@@ -3,18 +3,18 @@ version: "1.0.0"
 timestamp: "2025-08-16T19:00:00Z"
 email: "teasel.ian@gmail.com"
 maps:
-  - name: "Mapnik-9"
-    description: "Mapnik-9 is an OSM map of the UK at zoom levels 0-9. It is a super-low-resolution basemap useful only for testing."
-    source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-    attribution: "© OpenStreetMap contributors"
-    minZoom: 0
-    maxZoom: 9
-    bounds: [-85.0511, -180, 85.0511, 180]
-    type: "tgz"
-    format: "png"
-    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-9.tar.gz"
-    file_size: 91699200
-    file_timestamp: "2025-08-16T19:00:00Z"
+  # - name: "Mapnik-9"
+  #   description: "Mapnik-9 is an OSM map of the UK at zoom levels 0-9. It is a super-low-resolution basemap useful only for testing."
+  #   source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+  #   attribution: "© OpenStreetMap contributors"
+  #   minZoom: 0
+  #   maxZoom: 9
+  #   bounds: [-85.0511, -180, 85.0511, 180]
+  #   type: "tgz"
+  #   format: "png"
+  #   file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-9.tar.gz"
+  #   file_size: 91699200
+  #   file_timestamp: "2025-08-16T19:00:00Z"
   - name: "Mapnik-11"
     description: "Mapnik-11 is an OSM map of the UK at zoom levels 0-11. It is a low-resolution basemap."
     source_url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -22,10 +22,10 @@ maps:
     minZoom: 0
     maxZoom: 11
     bounds: [-85.0511, -180, 85.0511, 180]
-    type: "tar"
+    type: "tgz"
     format: "png"
-    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-11.tar"
-    file_size: 91699200
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-11.tar.gz"
+    file_size: 82932081
     file_timestamp: "2025-08-16T19:00:00Z"
   - name: "Mapnik-13"
     description: "Mapnik-13 is an OSM map of the UK at zoom levels 0-13. It is a medium-resolution basemap."
@@ -34,10 +34,10 @@ maps:
     minZoom: 0
     maxZoom: 13
     bounds: [-85.0511, -180, 85.0511, 180]
-    type: "tar"
+    type: "tgz"
     format: "png"
-    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-13.tar"
-    file_size: 750899200
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/mapnik-0-13.tar.gz"
+    file_size: 639453389
     file_timestamp: "2025-08-16T19:00:00Z"
   - name: "Satellite-13"
     description: "Satellite-13 is a Satellite map of the UK at zoom levels 0-13. It is a medium-resolution basemap."
@@ -46,10 +46,10 @@ maps:
     minZoom: 0
     maxZoom: 13
     bounds: [-85.0511, -180, 85.0511, 180]
-    type: "tar"
+    type: "tgz"
     format: "png"
-    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/satellite-0-13.tar"
-    file_size: 934072320
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/satellite-0-13.tar.gz"
+    file_size: 673942229
     file_timestamp: "2025-08-27T21:00:00Z"
   - name: "Satellite-14"
     description: "Satellite-14 is a Satellite map of the UK at zoom levels 0-14. It is a high-resolution basemap. WARNING: It's BIG and you probably don't need it."
@@ -58,10 +58,10 @@ maps:
     minZoom: 0
     maxZoom: 14
     bounds: [-85.0511, -180, 85.0511, 180]
-    type: "tar"
+    type: "tgz"
     format: "png"
-    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/satellite-0-14.tar"
-    file_size: 3597752320
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/satellite-0-14.tar.gz"
+    file_size: 2475121278
     file_timestamp: "2025-08-27T21:00:00Z"
   - name: "OS Digital-13"
     description: "OS Digital-13 is an OS digital map of the UK at zoom levels 0-13. It is a medium-resolution basemap. WARNING: It's BIG and you probably don't need it."
@@ -70,8 +70,8 @@ maps:
     minZoom: 0
     maxZoom: 13
     bounds: [-85.0511, -180, 85.0511, 180]
-    type: "tar"
+    type: "tgz"
     format: "png"
-    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/os-digital-0-13.tar"
-    file_size: 2410895360
+    file_url: "https://trigpointinguk-maps.s3.eu-west-1.amazonaws.com/os-digital-0-13.tar.gz"
+    file_size: 2126441507
     file_timestamp: "2025-08-27T21:00:00Z"
