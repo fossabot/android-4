@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import uk.trigpointing.android.R;
+import uk.trigpointing.android.filter.Filter;
 
 public class FilterFoundTabFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String TAG = "FilterFoundTabFragment";
 
     private RadioGroup filterFoundRadioGroup;
     private SharedPreferences prefs;
@@ -42,9 +45,10 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
         
         // Set up change listener
         filterFoundRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            String selectedFound = getFoundFromRadioId(checkedId);
-            saveFound(selectedFound);
-            notifyLeafletMap(selectedFound);
+            int filterRadio = getFilterRadioFromRadioId(checkedId);
+            saveFilterRadio(filterRadio);
+            String jsValue = convertFilterRadioToJsValue(filterRadio);
+            notifyLeafletMap(jsValue);
         });
         
         return view;
@@ -96,93 +100,101 @@ public class FilterFoundTabFragment extends Fragment implements SharedPreference
     private void loadCurrentSelection() {
         if (getActivity() == null || filterFoundRadioGroup == null || prefs == null) return;
         
-        String currentFound = prefs.getString("leaflet_filter_found", "all");
-        android.util.Log.d("FilterFoundTabFragment", "loadCurrentSelection: currentFound=" + currentFound);
+        int currentFilterRadio = prefs.getInt(Filter.FILTERRADIO, 0); // Default to "Logged or not"
+        Log.d(TAG, "loadCurrentSelection: currentFilterRadio=" + currentFilterRadio);
         
-        int radioId = getRadioIdFromFound(currentFound);
-        android.util.Log.d("FilterFoundTabFragment", "loadCurrentSelection: radioId=" + radioId);
+        int radioId = getRadioIdFromFilterRadio(currentFilterRadio);
+        Log.d(TAG, "loadCurrentSelection: radioId=" + radioId);
         if (radioId != -1) {
             // Temporarily disable listener to avoid triggering change events during programmatic update
             filterFoundRadioGroup.setOnCheckedChangeListener(null);
             filterFoundRadioGroup.check(radioId);
-            android.util.Log.d("FilterFoundTabFragment", "loadCurrentSelection: checked radio " + radioId);
+            Log.d(TAG, "loadCurrentSelection: checked radio " + radioId);
             // Re-enable listener
             filterFoundRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                String selectedFound = getFoundFromRadioId(checkedId);
-                saveFound(selectedFound);
-                notifyLeafletMap(selectedFound);
+                int filterRadio = getFilterRadioFromRadioId(checkedId);
+                saveFilterRadio(filterRadio);
+                String jsValue = convertFilterRadioToJsValue(filterRadio);
+                notifyLeafletMap(jsValue);
             });
         }
     }
 
-    private String getFoundFromRadioId(int radioId) {
-        if (radioId == R.id.radioFoundAll) return "all";
-        if (radioId == R.id.radioFoundLogged) return "logged";
-        if (radioId == R.id.radioFoundNotLogged) return "notlogged";
-        if (radioId == R.id.radioFoundMarked) return "marked";
-        if (radioId == R.id.radioFoundUnsynced) return "unsynced";
-        return "all";
+    /**
+     * Convert radio button ID to Filter.FILTERRADIO integer value (0-4)
+     */
+    private int getFilterRadioFromRadioId(int radioId) {
+        if (radioId == R.id.radioFoundAll) return 0;        // Logged or not
+        if (radioId == R.id.radioFoundLogged) return 1;     // Logged
+        if (radioId == R.id.radioFoundNotLogged) return 2;  // Not Logged
+        if (radioId == R.id.radioFoundMarked) return 3;     // Marked
+        if (radioId == R.id.radioFoundUnsynced) return 4;   // Unsynced
+        return 0; // Default to "Logged or not"
     }
 
-    private int getRadioIdFromFound(String found) {
-        switch (found) {
-            case "all": return R.id.radioFoundAll;
-            case "logged": return R.id.radioFoundLogged;
-            case "notlogged": return R.id.radioFoundNotLogged;
-            case "marked": return R.id.radioFoundMarked;
-            case "unsynced": return R.id.radioFoundUnsynced;
+    /**
+     * Convert Filter.FILTERRADIO integer value (0-4) to radio button ID
+     */
+    private int getRadioIdFromFilterRadio(int filterRadio) {
+        switch (filterRadio) {
+            case 0: return R.id.radioFoundAll;         // Logged or not
+            case 1: return R.id.radioFoundLogged;      // Logged
+            case 2: return R.id.radioFoundNotLogged;   // Not Logged
+            case 3: return R.id.radioFoundMarked;      // Marked
+            case 4: return R.id.radioFoundUnsynced;    // Unsynced
             default: return R.id.radioFoundAll;
         }
     }
 
-    private void saveFound(String found) {
+    /**
+     * Convert Filter.FILTERRADIO integer value to JavaScript string for Leaflet map
+     */
+    private String convertFilterRadioToJsValue(int filterRadio) {
+        switch (filterRadio) {
+            case 0: return "all";       // Logged or not
+            case 1: return "logged";    // Logged
+            case 2: return "notlogged"; // Not Logged
+            case 3: return "marked";    // Marked
+            case 4: return "unsynced";  // Unsynced
+            default: return "all";
+        }
+    }
+
+    private void saveFilterRadio(int filterRadio) {
         if (getActivity() == null || prefs == null) return;
         
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("leaflet_filter_found", found);
+        editor.putInt(Filter.FILTERRADIO, filterRadio);
         
-        // Also update the Filter.FILTERRADIO values for synchronization with nearest page
-        int filterRadio = convertToFilterRadioValue(found);
-        editor.putInt("filterRadio", filterRadio);
+        // Also update leaflet_filter_found for JavaScript synchronization
+        String jsValue = convertFilterRadioToJsValue(filterRadio);
+        editor.putString("leaflet_filter_found", jsValue);
         
         // Update filter text for display purposes
-        String filterText = getFilterTextFromFound(found);
-        editor.putString("filterRadioText", filterText);
+        String filterText = getFilterTextFromRadio(filterRadio);
+        editor.putString(Filter.FILTERRADIOTEXT, filterText);
         
         editor.apply();
+        Log.d(TAG, "Saved filter radio: " + filterRadio + " (" + filterText + "), js value: " + jsValue);
     }
 
-    private void notifyLeafletMap(String found) {
+    private void notifyLeafletMap(String jsValue) {
         if (getActivity() instanceof LeafletMapActivity) {
-            ((LeafletMapActivity) getActivity()).updateFilterFound(found);
-        }
-    }
-    
-    /**
-     * Convert leaflet filter values to FilterFoundActivity radio values for synchronization
-     */
-    private int convertToFilterRadioValue(String found) {
-        switch (found) {
-            case "all": return 0;      // filterAll
-            case "logged": return 1;   // filterLogged
-            case "notlogged": return 2; // filterNotLogged
-            case "marked": return 3;   // filterMarked
-            case "unsynced": return 4; // filterUnsynced
-            default: return 0;
+            ((LeafletMapActivity) getActivity()).updateFilterFound(jsValue);
         }
     }
     
     /**
      * Get display text for filter option
      */
-    private String getFilterTextFromFound(String found) {
-        switch (found) {
-            case "all": return "Logged or not";
-            case "logged": return "Logged";
-            case "notlogged": return "Not Logged";
-            case "marked": return "Marked";
-            case "unsynced": return "Unsynced";
-            default:         return "Logged or not";
+    private String getFilterTextFromRadio(int filterRadio) {
+        switch (filterRadio) {
+            case 0: return "Logged or not";
+            case 1: return "Logged";
+            case 2: return "Not Logged";
+            case 3: return "Marked";
+            case 4: return "Unsynced";
+            default: return "Logged or not";
         }
     }
 

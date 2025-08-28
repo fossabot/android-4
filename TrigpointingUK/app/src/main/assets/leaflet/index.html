@@ -800,7 +800,7 @@
               <div class="section-content collapsed" id="filterfound-content">
                 <div class="control-option">
                   <input type="radio" name="filterfound" value="all" id="js-found-all">
-                  <label for="js-found-all">All</label>
+                  <label for="js-found-all">Logged or not</label>
                 </div>
                 <div class="control-option">
                   <input type="radio" name="filterfound" value="logged" id="js-found-logged">
@@ -965,6 +965,17 @@
             console.log('JS Control - Filter found changed to:', this.value);
             currentFilterFound = this.value;
             localStorage.setItem('leaflet_filter_found', this.value);
+            
+            // Save to Android preferences for persistence across pages
+            try {
+              if (typeof AndroidPrefs !== 'undefined' && AndroidPrefs.saveFilterFoundPreference) {
+                AndroidPrefs.saveFilterFoundPreference(this.value);
+                console.log('Saved filter found to Android preferences:', this.value);
+              }
+            } catch (e) {
+              console.log('Failed to save filter found to Android preferences:', e);
+            }
+            
             if (markersLayer) {
               currentBounds = null; // Force reload
               loadTrigpointMarkers();

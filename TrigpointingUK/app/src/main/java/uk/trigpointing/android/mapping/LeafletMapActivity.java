@@ -480,9 +480,24 @@ public class LeafletMapActivity extends BaseActivity {
         @JavascriptInterface
         public String getFilterFoundPreference() {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
-            String filterFound = prefs.getString("leaflet_filter_found", "all");
-            Log.d(TAG, "Retrieved filter found preference: " + filterFound);
-            return filterFound;
+            int filterRadio = prefs.getInt(Filter.FILTERRADIO, 0); // Default to "Logged or not"
+            String jsValue = convertFilterRadioToJsValue(filterRadio);
+            Log.d(TAG, "Retrieved filter found preference: " + filterRadio + " -> " + jsValue);
+            return jsValue;
+        }
+        
+        /**
+         * Convert Filter.FILTERRADIO integer value to JavaScript string for Leaflet map
+         */
+        private String convertFilterRadioToJsValue(int filterRadio) {
+            switch (filterRadio) {
+                case 0: return "all";       // Logged or not
+                case 1: return "logged";    // Logged
+                case 2: return "notlogged"; // Not Logged
+                case 3: return "marked";    // Marked
+                case 4: return "unsynced";  // Unsynced
+                default: return "all";
+            }
         }
         
         @JavascriptInterface
@@ -532,6 +547,29 @@ public class LeafletMapActivity extends BaseActivity {
                 case "nointersected": return 5; // TYPESNOINTERSECTED
                 case "all": return 6;           // TYPESALL
                 default: return 6;              // Default to "All Types"
+            }
+        }
+        
+        @JavascriptInterface
+        public void saveFilterFoundPreference(String filterFound) {
+            // Convert JavaScript value back to Filter.FILTERRADIO integer
+            int filterRadio = convertJsValueToFilterRadio(filterFound);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
+            prefs.edit().putInt(Filter.FILTERRADIO, filterRadio).apply();
+            Log.d(TAG, "Saved filter found preference: " + filterFound + " -> " + filterRadio);
+        }
+        
+        /**
+         * Convert JavaScript string to Filter.FILTERRADIO integer value
+         */
+        private int convertJsValueToFilterRadio(String jsValue) {
+            switch (jsValue) {
+                case "all": return 0;       // Logged or not
+                case "logged": return 1;    // Logged
+                case "notlogged": return 2; // Not Logged
+                case "marked": return 3;    // Marked
+                case "unsynced": return 4;  // Unsynced
+                default: return 0;          // Default to "Logged or not"
             }
         }
         
