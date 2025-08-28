@@ -498,13 +498,13 @@
       let initialLayer = osmLayer;
       let initialCRS = L.CRS.EPSG3857;
       
-      if (jsInitialStyle === 'ESRI.WorldImagery') {
+      if (jsInitialStyle === 'Satellite') {
         initialLayer = esriLayer;
         initialCRS = L.CRS.EPSG3857;
-      } else if (jsInitialStyle === 'OS Outdoor') {
+      } else if (jsInitialStyle === 'OS Digital') {
         initialLayer = outdoorLayer;
         initialCRS = L.CRS.EPSG3857;
-      } else if (jsInitialStyle === 'OS Leisure') {
+      } else if (jsInitialStyle === 'OS Paper') {
         initialLayer = leisureLayer;
         initialCRS = osgb;
       }
@@ -991,6 +991,15 @@
             console.log('JS Control - Map style changed to:', this.value);
             // Switch map layer immediately
             switchMapToLayer(this.value);
+            // Persist selection to Android preferences for cross-session persistence
+            try {
+              if (typeof AndroidPrefs !== 'undefined' && AndroidPrefs.saveMapStyle) {
+                AndroidPrefs.saveMapStyle(this.value);
+                console.log('Saved map style to Android preferences:', this.value);
+              }
+            } catch (e) {
+              console.log('Failed to save map style to Android preferences:', e);
+            }
           }
         });
       });
@@ -1065,10 +1074,17 @@
     // Convert Android preference values to JavaScript layer names
     function convertPreferenceToJSLayer(preferenceValue) {
       switch (preferenceValue) {
-        case 'ESRI.WorldImagery': return 'ESRI.WorldImagery';
-        case 'OS Outdoor (3857)': return 'OS Outdoor';
-        case 'OS Leisure (27700)': return 'OS Leisure';
+        // Standardized names
         case 'OpenStreetMap': return 'OpenStreetMap';
+        case 'Satellite': return 'Satellite';
+        case 'OS Digital': return 'OS Digital';
+        case 'OS Paper': return 'OS Paper';
+        // Backwards compatibility with older stored values
+        case 'ESRI.WorldImagery': return 'Satellite';
+        case 'OS Outdoor (3857)': return 'OS Digital';
+        case 'OS Outdoor': return 'OS Digital';
+        case 'OS Leisure (27700)': return 'OS Paper';
+        case 'OS Leisure': return 'OS Paper';
         default: return 'OpenStreetMap';
       }
     }
@@ -1076,10 +1092,15 @@
     // Convert JavaScript layer names back to preference values
     function convertJSLayerToPreference(jsLayerName) {
       switch (jsLayerName) {
-        case 'ESRI.WorldImagery': return 'ESRI.WorldImagery';
-        case 'OS Outdoor': return 'OS Outdoor (3857)';
-        case 'OS Leisure': return 'OS Leisure (27700)';
+        // Standardized names
         case 'OpenStreetMap': return 'OpenStreetMap';
+        case 'Satellite': return 'Satellite';
+        case 'OS Digital': return 'OS Digital';
+        case 'OS Paper': return 'OS Paper';
+        // Backwards compatibility for any legacy names appearing in JS context
+        case 'ESRI.WorldImagery': return 'Satellite';
+        case 'OS Outdoor': return 'OS Digital';
+        case 'OS Leisure': return 'OS Paper';
         default: return 'OpenStreetMap';
       }
     }
