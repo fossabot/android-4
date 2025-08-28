@@ -2,20 +2,7 @@
 <resources>
 
 
-    <!-- Leaflet map styles for preferences -->
-    <string-array name="leaflet_map_styles">
-        <item>OpenStreetMap</item>
-        <item>Satellite</item>
-        <item>OS Digital</item>
-        <item>OS Paper</item>
-    </string-array>
-
-    <string-array name="leaflet_map_style_values">
-        <item>OpenStreetMap</item>
-        <item>ESRI.WorldImagery</item>
-        <item>OS Outdoor (27700)</item>
-        <item>OS Leisure (27700)</item>
-    </string-array>
+    <!-- Removed map style preference arrays (styles are now managed in-map and persisted as last used) -->
 
     <!-- Trigpoint type filter arrays -->
     <string-array name="trigpoint_type_names">
