@@ -39,6 +39,7 @@ class DownloadMapsActivity : BaseActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var adapter: MapDownloadAdapter
     private lateinit var cacheUsageText: TextView
+    private lateinit var cacheTileCountText: TextView
     private lateinit var clearCacheLink: TextView
     private lateinit var tileCacheDir: File
 
@@ -57,6 +58,7 @@ class DownloadMapsActivity : BaseActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         progressBar = findViewById(R.id.progressBar)
         cacheUsageText = findViewById(R.id.cacheUsageText)
+        cacheTileCountText = findViewById(R.id.cacheTileCountText)
         clearCacheLink = findViewById(R.id.clearCacheLink)
         
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -315,13 +317,20 @@ class DownloadMapsActivity : BaseActivity() {
         val df = DecimalFormat("#.##")
         val sizeInMB = df.format(totalSize.toDouble() / (1024 * 1024))
         
-        val cacheText = getString(R.string.cacheUsageFormat, "${sizeInMB}MB", fileCount.toInt())
+        // Update the first line with cache size
+        val cacheText = getString(R.string.cacheUsageFormat, "${sizeInMB}MB")
         cacheUsageText.text = cacheText
         
-        // Show clear cache link if there are tiles to clear
+        // Update the second line with tile count
+        val tileCountText = getString(R.string.cacheTileCountFormat, fileCount.toInt())
+        cacheTileCountText.text = tileCountText
+        
+        // Show both lines and clear cache link if there are tiles to clear
         if (fileCount > 0) {
+            cacheTileCountText.visibility = View.VISIBLE
             clearCacheLink.visibility = View.VISIBLE
         } else {
+            cacheTileCountText.visibility = View.GONE
             clearCacheLink.visibility = View.GONE
         }
     }
