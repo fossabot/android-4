@@ -46,6 +46,7 @@ import okhttp3.Response;
 import uk.trigpointing.android.api.AuthApiClient;
 import uk.trigpointing.android.api.AuthPreferences;
 import uk.trigpointing.android.api.User;
+import uk.trigpointing.android.filter.Filter;
 import coil.Coil;
 import coil.ImageLoader;
 import coil.request.ImageRequest;
@@ -108,6 +109,9 @@ public class MainActivity extends BaseActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Setting up preferences");
         mPrefs = getSharedPreferences("TrigpointingUK", MODE_PRIVATE);
+        
+        // Check if this is a fresh app start and reset logging status filter if needed
+        resetLoggingStatusFilterOnAppStart();
         
         // Initialize API authentication components
         authApiClient = new AuthApiClient();
@@ -477,6 +481,33 @@ public class MainActivity extends BaseActivity implements SyncListener {
 	public void onSynced(int status) {
 		Log.i(TAG, "onSynced");
 		populateCounts();
+	}
+	
+	/**
+	 * Reset logging status filter to "Logged or not" on fresh app start.
+	 * This preserves the filter during session navigation but resets it when the app is truly restarted.
+	 */
+	private void resetLoggingStatusFilterOnAppStart() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean isFreshStart = prefs.getBoolean("app_fresh_start", false);
+		
+		if (isFreshStart) {
+			Log.i(TAG, "Fresh app start detected - resetting logging status filter to default");
+			
+			// Reset logging status filter to "Logged or not" (0)
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putInt(Filter.FILTERRADIO, 0); // Reset to "Logged or not"
+			editor.putString(Filter.FILTERRADIOTEXT, "Logged or not"); // Update text for consistency
+			editor.putString("leaflet_filter_found", "all"); // Update JavaScript compatibility value
+			
+			// Clear the fresh start flag so subsequent activity navigations don't reset the filter
+			editor.putBoolean("app_fresh_start", false);
+			editor.apply();
+			
+			Log.i(TAG, "Logging status filter reset to 'Logged or not' and fresh start flag cleared");
+		} else {
+			Log.d(TAG, "Not a fresh start - preserving current logging status filter");
+		}
 	}
 
 

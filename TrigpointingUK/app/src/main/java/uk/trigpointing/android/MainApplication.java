@@ -26,7 +26,12 @@ public class MainApplication extends Application {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		Editor editor = prefs.edit();
 		editor.putBoolean("acra.syslog.enable", false);
-		editor.apply();  
+		
+		// Mark that the app is starting fresh - this will trigger logging status filter reset
+		editor.putBoolean("app_fresh_start", true);
+		editor.apply();
+		
+		Log.i(TAG, "Marked app as fresh start for filter reset");  
         
         // Crashlytics removed during package migration; re-add if needed later
 
