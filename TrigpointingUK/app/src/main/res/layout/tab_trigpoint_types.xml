@@ -10,15 +10,7 @@
         android:layout_height="wrap_content">
 
         <RadioButton
-            android:id="@+id/radioTypesAll"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Show All"
-            android:textSize="16sp"
-            android:paddingStart="8dp" />
-
-        <RadioButton
-            android:id="@+id/radioTypesPillars"
+            android:id="@+id/radioTypesPillarsOnly"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:text="Pillars Only"
@@ -26,10 +18,18 @@
             android:paddingStart="8dp" />
 
         <RadioButton
-            android:id="@+id/radioTypesFBM"
+            android:id="@+id/radioTypesPillarsFBM"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Flush Bracket Marks Only"
+            android:text="Pillars + FBM"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioTypesFBMOnly"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="FBM Only"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/radioTypesPassive"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Passive Stations Only"
+            android:text="Passive Stations"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -45,7 +45,23 @@
             android:id="@+id/radioTypesIntersected"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Intersected Stations Only"
+            android:text="Intersected Stations"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioTypesAllExceptIntersected"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="All except Intersected"
+            android:textSize="16sp"
+            android:paddingStart="8dp" />
+
+        <RadioButton
+            android:id="@+id/radioTypesAll"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="All Types"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 

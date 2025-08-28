@@ -70,7 +70,7 @@ public class TrigpointTypesActivity extends BaseActivity {
 
     private void loadCurrentSelection() {
         // Load trigpoint type selection
-        int currentType = mPrefs.getInt(Filter.FILTERTYPE, 0);
+        int currentType = mPrefs.getInt(Filter.FILTERTYPE, 6); // Default to "All Types"
         
         // Ensure currentType is within bounds
         if (currentType >= 0 && currentType < mTypeRadioButtons.length) {

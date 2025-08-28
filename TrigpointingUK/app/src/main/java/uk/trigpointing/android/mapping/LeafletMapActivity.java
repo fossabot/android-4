@@ -418,6 +418,9 @@ public class LeafletMapActivity extends BaseActivity {
             case "pillars":
                 editor.putInt(Filter.FILTERTYPE, 0); // TYPESPILLAR
                 break;
+            case "pillarsfbm":
+                editor.putInt(Filter.FILTERTYPE, 1); // TYPESPILLARFBM
+                break;
             case "fbm":
                 editor.putInt(Filter.FILTERTYPE, 2); // TYPESFBM
                 break;
@@ -426,6 +429,9 @@ public class LeafletMapActivity extends BaseActivity {
                 break;
             case "intersected":
                 editor.putInt(Filter.FILTERTYPE, 4); // TYPESINTERSECTED
+                break;
+            case "nointersected":
+                editor.putInt(Filter.FILTERTYPE, 5); // TYPESNOINTERSECTED
                 break;
             default:
                 editor.putInt(Filter.FILTERTYPE, 6); // TYPESALL
@@ -477,6 +483,56 @@ public class LeafletMapActivity extends BaseActivity {
             String filterFound = prefs.getString("leaflet_filter_found", "all");
             Log.d(TAG, "Retrieved filter found preference: " + filterFound);
             return filterFound;
+        }
+        
+        @JavascriptInterface
+        public String getTrigpointTypePreference() {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
+            int filterType = prefs.getInt(Filter.FILTERTYPE, 6); // Default to "All Types"
+            String jsType = convertFilterTypeToJsType(filterType);
+            Log.d(TAG, "Retrieved trigpoint type preference: " + filterType + " -> " + jsType);
+            return jsType;
+        }
+        
+        /**
+         * Convert Filter.FILTERTYPE integer value to JavaScript string for Leaflet map
+         */
+        private String convertFilterTypeToJsType(int filterType) {
+            switch (filterType) {
+                case 0: return "pillars";       // TYPESPILLAR
+                case 1: return "pillarsfbm";    // TYPESPILLARFBM
+                case 2: return "fbm";           // TYPESFBM
+                case 3: return "passive";       // TYPESPASSIVE
+                case 4: return "intersected";   // TYPESINTERSECTED
+                case 5: return "nointersected"; // TYPESNOINTERSECTED
+                case 6: return "all";           // TYPESALL
+                default: return "all";
+            }
+        }
+        
+        @JavascriptInterface
+        public void saveTrigpointTypePreference(String trigpointType) {
+            // Convert JavaScript type back to Filter.FILTERTYPE integer
+            int filterType = convertJsTypeToFilterType(trigpointType);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LeafletMapActivity.this);
+            prefs.edit().putInt(Filter.FILTERTYPE, filterType).apply();
+            Log.d(TAG, "Saved trigpoint type preference: " + trigpointType + " -> " + filterType);
+        }
+        
+        /**
+         * Convert JavaScript string to Filter.FILTERTYPE integer value
+         */
+        private int convertJsTypeToFilterType(String jsType) {
+            switch (jsType) {
+                case "pillars": return 0;       // TYPESPILLAR
+                case "pillarsfbm": return 1;    // TYPESPILLARFBM
+                case "fbm": return 2;           // TYPESFBM
+                case "passive": return 3;       // TYPESPASSIVE
+                case "intersected": return 4;   // TYPESINTERSECTED
+                case "nointersected": return 5; // TYPESNOINTERSECTED
+                case "all": return 6;           // TYPESALL
+                default: return 6;              // Default to "All Types"
+            }
         }
         
         @JavascriptInterface

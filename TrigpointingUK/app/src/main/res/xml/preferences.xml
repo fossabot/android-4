@@ -46,15 +46,7 @@
             android:defaultValue="medium" />
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="Filter Settings">
-        <ListPreference
-            android:key="trigpoint_type_filter"
-            android:title="Trigpoint Types"
-            android:summary="Choose which trigpoint types to display"
-            android:entries="@array/trigpoint_type_names"
-            android:entryValues="@array/trigpoint_type_values"
-            android:defaultValue="6" />
-    </PreferenceCategory>
+
 
     <PreferenceCategory
         android:title="Advanced">

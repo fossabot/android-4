@@ -22,7 +22,7 @@ public class Filter {
 	private static final int	TYPESINTERSECTED	= 4;
 	private static final int	TYPESNOINTERSECTED	= 5;
 	private static final int	TYPESALL			= 6;
-	private static final int	TYPESDEFAULT		= 0;
+	private static final int	TYPESDEFAULT		= 6; // Default to "All Types"
 
 	
 	private final SharedPreferences mPrefs;
