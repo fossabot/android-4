@@ -62,7 +62,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		// Satellite layer matches Leaflet's ESRI World Imagery
 		new MapConfig(
 			"Satellite",
-			"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+			"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png",
 			false,
 			0,
 			18,

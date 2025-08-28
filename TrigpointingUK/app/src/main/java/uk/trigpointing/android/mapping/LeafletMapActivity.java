@@ -104,7 +104,7 @@ public class LeafletMapActivity extends BaseActivity {
             public WebResourceResponse shouldInterceptRequest(@NonNull WebView view, @NonNull WebResourceRequest request) {
                 String url = request.getUrl().toString();
 
-                if (url.contains("tile.openstreetmap.org") || url.contains("api.os.uk")) {
+                if (url.contains("tile.openstreetmap.org") || url.contains("api.os.uk") || url.contains("server.arcgisonline.com")) {
                     try {
                         String domain = request.getUrl().getHost();
                         String path = request.getUrl().getPath();
