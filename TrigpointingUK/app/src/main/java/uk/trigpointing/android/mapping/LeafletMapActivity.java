@@ -308,7 +308,19 @@ public class LeafletMapActivity extends BaseActivity {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 String osKey = prefs.getString("os_api_key", "");
                 String leafletMapStyle = prefs.getString("leaflet_map_style", "OpenStreetMap");
-                String url = buildLeafletUrl(osKey, leafletMapStyle);
+
+                // Mirror first-load logic: only use preference on the first map load
+                boolean isFirstMapLoad = prefs.getBoolean("is_first_map_load", true);
+                String initialStyle = isFirstMapLoad ? leafletMapStyle : "";
+                if (isFirstMapLoad) {
+                    // Mark that we've loaded once this session
+                    prefs.edit().putBoolean("is_first_map_load", false).apply();
+                    Log.d(TAG, "Permission granted - first map load this session, using preference: " + leafletMapStyle);
+                } else {
+                    Log.d(TAG, "Permission granted - subsequent map load, using session storage");
+                }
+
+                String url = buildLeafletUrl(osKey, initialStyle);
                 webView.loadUrl(url);
             } else {
                 Toast.makeText(this, "Location permission denied; My location will be disabled.", Toast.LENGTH_LONG).show();
