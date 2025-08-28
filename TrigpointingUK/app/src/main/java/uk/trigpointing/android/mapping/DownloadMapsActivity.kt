@@ -31,6 +31,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.text.DecimalFormat
+import java.util.zip.GZIPInputStream
 
 class DownloadMapsActivity : BaseActivity() {
 
@@ -151,7 +152,23 @@ class DownloadMapsActivity : BaseActivity() {
                         }
                         
                         BufferedInputStream(countingInputStream).use { bufferedInputStream ->
-                            TarArchiveInputStream(bufferedInputStream).use { tarInput ->
+                            // Determine if we need to decompress the stream based on the type field
+                            val archiveInputStream = when (mapDownload.type) {
+                                "tgz" -> {
+                                    Log.d(TAG, "Processing tgz file, applying gzip decompression")
+                                    GZIPInputStream(bufferedInputStream)
+                                }
+                                "tar" -> {
+                                    Log.d(TAG, "Processing tar file, no decompression needed")
+                                    bufferedInputStream
+                                }
+                                else -> {
+                                    Log.w(TAG, "Unknown file type: ${mapDownload.type}, treating as tar")
+                                    bufferedInputStream
+                                }
+                            }
+                            
+                            TarArchiveInputStream(archiveInputStream).use { tarInput ->
                                 var entry = tarInput.nextTarEntry
                                 while (entry != null) {
                                     if (!entry.isDirectory) {
