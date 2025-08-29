@@ -8,11 +8,7 @@
             android:summary="Automatically sync when connected"
             android:defaultValue="true" />
         
-        <CheckBoxPreference
-            android:key="sync_photos"
-            android:title="Sync Photos"
-            android:summary="Include photos in sync"
-            android:defaultValue="true" />
+        
     </PreferenceCategory>
     
     <PreferenceCategory android:title="Map Settings">

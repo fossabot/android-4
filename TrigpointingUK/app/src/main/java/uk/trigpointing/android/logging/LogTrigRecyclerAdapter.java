@@ -32,8 +32,11 @@ public class LogTrigRecyclerAdapter extends RecyclerView.Adapter<LogTrigRecycler
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ImageView imageView = new ImageView(mContext);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
+        int tileHeightPx = (int) (100 * mContext.getResources().getDisplayMetrics().density); // ~100dp tall
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, tileHeightPx);
+        imageView.setLayoutParams(lp);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setAdjustViewBounds(true);
         imageView.setBackgroundResource(mGalleryItemBackground);
         return new ViewHolder(imageView);
     }
@@ -43,7 +46,10 @@ public class LogTrigRecyclerAdapter extends RecyclerView.Adapter<LogTrigRecycler
         TrigPhoto photo = mPhotos[position];
         if (photo == null) {return;}
         String iconUrl = photo.getIconURL();
-        if (iconUrl == null) {return;}
+        if (iconUrl == null || iconUrl.trim().isEmpty()) {
+            holder.imageView.setImageResource(R.drawable.imageloading);
+            return;
+        }
 
         // If this is a local file path, decode directly. Otherwise, use LazyImageLoader.
         File potentialLocalFile = new File(iconUrl);

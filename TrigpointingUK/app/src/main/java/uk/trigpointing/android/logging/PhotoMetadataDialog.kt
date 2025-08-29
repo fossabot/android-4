@@ -1,6 +1,7 @@
 package uk.trigpointing.android.logging
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,6 +29,7 @@ class PhotoMetadataDialog : DialogFragment() {
     private var photoPath: String? = null
     private var thumbPath: String? = null
     private var trigId: Long = 0
+    private var appContext: Context? = null
     
     private var onSaveCallback: ((PhotoManager.PhotoMetadata) -> Unit)? = null
     private var onDeleteCallback: (() -> Unit)? = null
@@ -47,6 +49,8 @@ class PhotoMetadataDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         photoId = arguments?.getLong(ARG_PHOTO_ID) ?: 0
+        // Cache application context to survive transient detach/attach during dialog lifecycle
+        appContext = context?.applicationContext
     }
     
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -104,7 +108,8 @@ class PhotoMetadataDialog : DialogFragment() {
     }
     
     private fun loadPhotoData() {
-        val db = DbHelper(requireContext())
+        val ctx = appContext ?: context ?: return
+        val db = DbHelper(ctx)
         try {
             db.open()
             val cursor = db.fetchPhoto(photoId)
@@ -147,6 +152,7 @@ class PhotoMetadataDialog : DialogFragment() {
     }
     
     private fun saveMetadata() {
+        val ctx = appContext ?: context ?: return
         val subjects = PhotoSubject.values().filter { it != PhotoSubject.NOSUBJECT }
         val selectedSubject = subjects[subjectSpinner.selectedItemPosition]
         
@@ -157,7 +163,7 @@ class PhotoMetadataDialog : DialogFragment() {
         )
         
         // Update database
-        val db = DbHelper(requireContext())
+        val db = DbHelper(ctx)
         try {
             db.open()
             db.updatePhoto(
@@ -189,7 +195,8 @@ class PhotoMetadataDialog : DialogFragment() {
     }
     
     private fun deletePhoto() {
-        val db = DbHelper(requireContext())
+        val ctx = appContext ?: context ?: return
+        val db = DbHelper(ctx)
         try {
             db.open()
             
@@ -204,6 +211,8 @@ class PhotoMetadataDialog : DialogFragment() {
         }
         
         onDeleteCallback?.invoke()
+        // Close the dialog after deletion to prevent interacting with stale UI
+        dismissAllowingStateLoss()
     }
     
     fun setCallbacks(

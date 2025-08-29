@@ -123,6 +123,8 @@ public class DbHelper {
 	// Global helper and lock to avoid concurrent initialization/open races
 	private static SQLiteOpenHelper sDbHelper;
 	private static final Object DB_OPEN_LOCK = new Object();
+	// Track the number of active open() callers sharing the same underlying DB
+	private static int sOpenCount = 0;
     	
 	private final Context mCtx;
 
@@ -187,6 +189,7 @@ public class DbHelper {
 				sDbHelper = new DatabaseHelper(mCtx.getApplicationContext());
 			}
 			mDb = sDbHelper.getWritableDatabase();
+			sOpenCount++;
 		}
 		Log.i(TAG, "open: Database opened successfully");
 		return this;
@@ -202,21 +205,31 @@ public class DbHelper {
 				sDbHelper = new DatabaseHelper(mCtx.getApplicationContext());
 			}
 			mDb = sDbHelper.getReadableDatabase();
+			sOpenCount++;
 		}
 		Log.i(TAG, "openReadable: Database opened successfully");
 		return this;
 	}
 
 	public void close() {
-		Log.i(TAG, "close: Closing database");
-		try {
-			if (mDb != null && mDb.isOpen()) {
-				mDb.close();
+		Log.i(TAG, "close: Releasing database reference");
+		synchronized (DB_OPEN_LOCK) {
+			try {
+				if (sOpenCount > 0) {
+					sOpenCount--;
+				}
+				// Only close the underlying helper/database when no one is using it
+				if (sOpenCount == 0 && sDbHelper != null) {
+					Log.i(TAG, "close: Closing underlying SQLiteOpenHelper (no more references)");
+					sDbHelper.close();
+				}
+			} catch (Exception e) {
+				Log.w(TAG, "close: Ignored exception while releasing DB", e);
+			} finally {
+				mDb = null;
 			}
-		} catch (Exception e) {
-			Log.w(TAG, "close: Ignored exception while closing DB", e);
 		}
-		Log.i(TAG, "close: Database closed");
+		Log.i(TAG, "close: Reference released");
 	}
 
 
