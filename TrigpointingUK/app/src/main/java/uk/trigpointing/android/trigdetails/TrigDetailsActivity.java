@@ -652,6 +652,12 @@ public class TrigDetailsActivity extends BaseActivity {
                         if (albumActivity instanceof TrigDetailsAlbumTab) {
                             ((TrigDetailsAlbumTab) albumActivity).refreshAlbumFromParent();
                         }
+
+                        // Refresh the Logs tab text entries for this trigpoint
+                        android.app.Activity logsActivity = mLocalActivityManager.getActivity("logs");
+                        if (logsActivity instanceof TrigDetailsLoglistTab) {
+                            ((TrigDetailsLoglistTab) logsActivity).refreshLogsFromParent();
+                        }
                     }
                 } catch (Exception e) {
                     android.util.Log.e(TAG, "Error refreshing content: " + e.getMessage(), e);
