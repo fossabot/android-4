@@ -215,7 +215,7 @@ class PhotoManager(
         onSave: (PhotoMetadata) -> Unit,
         onDelete: () -> Unit
     ) {
-        val dialog = PhotoMetadataDialog.newInstance(photoId)
+        val dialog = PhotoMetadataDialog.newInstance(photoId, false)
         dialog.setCallbacks(onSave, onDelete)
         dialog.show(activity.supportFragmentManager, "photo_metadata")
     }

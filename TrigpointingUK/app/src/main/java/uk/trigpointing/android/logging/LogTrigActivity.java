@@ -632,7 +632,8 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
                 // Photo added successfully, show metadata dialog
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    showPhotoMetadataDialog(photoId);
+                    // New photo just created -> suppress Cancel in dialog
+                    showPhotoMetadataDialog(photoId, true);
                 });
                 return kotlin.Unit.INSTANCE;
             },
@@ -657,7 +658,11 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     }
     
     private void showPhotoMetadataDialog(Long photoId) {
-        PhotoMetadataDialog dialog = PhotoMetadataDialog.Companion.newInstance(photoId.longValue());
+        showPhotoMetadataDialog(photoId, false);
+    }
+
+    private void showPhotoMetadataDialog(Long photoId, boolean isNew) {
+        PhotoMetadataDialog dialog = PhotoMetadataDialog.Companion.newInstance(photoId.longValue(), isNew);
         dialog.setCallbacks(
             metadata -> {
                 // Metadata saved

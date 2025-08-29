@@ -30,17 +30,20 @@ class PhotoMetadataDialog : DialogFragment() {
     private var thumbPath: String? = null
     private var trigId: Long = 0
     private var appContext: Context? = null
+    private var isNewPhoto: Boolean = false
     
     private var onSaveCallback: ((PhotoManager.PhotoMetadata) -> Unit)? = null
     private var onDeleteCallback: (() -> Unit)? = null
     
     companion object {
         private const val ARG_PHOTO_ID = "photo_id"
+        private const val ARG_IS_NEW = "is_new"
         
-        fun newInstance(photoId: Long): PhotoMetadataDialog {
+        fun newInstance(photoId: Long, isNew: Boolean): PhotoMetadataDialog {
             return PhotoMetadataDialog().apply {
                 arguments = Bundle().apply {
                     putLong(ARG_PHOTO_ID, photoId)
+                    putBoolean(ARG_IS_NEW, isNew)
                 }
             }
         }
@@ -49,6 +52,7 @@ class PhotoMetadataDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         photoId = arguments?.getLong(ARG_PHOTO_ID) ?: 0
+        isNewPhoto = arguments?.getBoolean(ARG_IS_NEW, false) ?: false
         // Cache application context to survive transient detach/attach during dialog lifecycle
         appContext = context?.applicationContext
     }
@@ -60,17 +64,19 @@ class PhotoMetadataDialog : DialogFragment() {
         setupViews(view)
         loadPhotoData()
         
-        return MaterialAlertDialogBuilder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Photo Details")
             .setView(view)
             .setPositiveButton("Save") { _, _ ->
                 saveMetadata()
             }
-            .setNegativeButton("Cancel", null)
             .setNeutralButton("Delete") { _, _ ->
-                confirmDelete()
+                deletePhoto()
             }
-            .create()
+        if (!isNewPhoto) {
+            builder.setNegativeButton("Cancel", null)
+        }
+        return builder.create()
     }
     
     private fun setupViews(view: View) {
@@ -183,16 +189,7 @@ class PhotoMetadataDialog : DialogFragment() {
         onSaveCallback?.invoke(metadata)
     }
     
-    private fun confirmDelete() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Delete Photo")
-            .setMessage("Are you sure you want to delete this photo? This action cannot be undone.")
-            .setPositiveButton("Delete") { _, _ ->
-                deletePhoto()
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
+    // Confirmation dialog removed per requirements
     
     private fun deletePhoto() {
         val ctx = appContext ?: context ?: return
