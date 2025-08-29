@@ -829,7 +829,8 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     private int computePhotoGridSpanCount() {
         final float density = getResources().getDisplayMetrics().density;
         int screenWidthPx = getResources().getDisplayMetrics().widthPixels;
-        int desiredItemPx = (int) (60 * density); // ~60dp width per tile to fit ~6+ in portrait
+        // Target ~3 columns in portrait (~120dp tiles + margins), more in landscape
+        int desiredItemPx = (int) (124 * density); // 120dp tile + ~4dp margin
         int span = Math.max(2, screenWidthPx / Math.max(1, desiredItemPx));
         return span;
     }
@@ -850,7 +851,8 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             }
             int rows = (count + span - 1) / span;
             float density = getResources().getDisplayMetrics().density;
-            int itemHeightPx = (int) (100 * density); // must match adapter tile height
+            // Tile height plus vertical margins (4dp top + 4dp bottom). Keep in sync with adapter
+            int itemHeightPx = (int) (120 * density) + (int) (8 * density);
             int desiredHeight = rows * itemHeightPx;
             android.view.ViewGroup.LayoutParams lp = mGallery.getLayoutParams();
             if (lp.height != desiredHeight) {

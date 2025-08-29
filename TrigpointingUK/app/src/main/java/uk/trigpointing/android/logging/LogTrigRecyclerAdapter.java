@@ -23,21 +23,23 @@ public class LogTrigRecyclerAdapter extends RecyclerView.Adapter<LogTrigRecycler
         mPhotos = photos;
         imageLoader = new LazyImageLoader(context);
         
-        // Get the gallery item background
-        android.content.res.TypedArray attr = mContext.obtainStyledAttributes(R.styleable.TrigpointingUK);
-        mGalleryItemBackground = attr.getResourceId(R.styleable.TrigpointingUK_android_galleryItemBackground, 0);
-        attr.recycle();
+        // No background/borders for thumbnails
+        mGalleryItemBackground = 0;
     }
     
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ImageView imageView = new ImageView(mContext);
-        int tileHeightPx = (int) (100 * mContext.getResources().getDisplayMetrics().density); // ~100dp tall
+        int tileHeightPx = (int) (120 * mContext.getResources().getDisplayMetrics().density); // ~120dp tall
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, tileHeightPx);
+        int marginPx = (int) (4 * mContext.getResources().getDisplayMetrics().density); // ~4dp margin
+        lp.setMargins(marginPx, marginPx, marginPx, marginPx);
         imageView.setLayoutParams(lp);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setAdjustViewBounds(true);
-        imageView.setBackgroundResource(mGalleryItemBackground);
+        if (mGalleryItemBackground != 0) {
+            imageView.setBackgroundResource(mGalleryItemBackground);
+        }
         return new ViewHolder(imageView);
     }
     

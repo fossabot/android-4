@@ -20,6 +20,7 @@ import android.database.Cursor;
 public class TrigDetailsActivity extends BaseActivity {
 
 	private static final String TAG="TrigDetailsActivity";
+    private static final String STATE_TAB_TAG = "saved_tab_tag";
     private LocalActivityManager mLocalActivityManager;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -198,11 +199,23 @@ public class TrigDetailsActivity extends BaseActivity {
             }
 
             try {
-                tabHost.setCurrentTab(0);
+                // Restore previously selected tab if provided
+                if (savedInstanceState != null) {
+                    try {
+                        String savedTag = savedInstanceState.getString(STATE_TAB_TAG, null);
+                        if (savedTag != null) {
+                            tabHost.setCurrentTabByTag(savedTag);
+                            android.util.Log.d(TAG, "Restored tab tag: " + savedTag);
+                        }
+                    } catch (Exception e) {
+                        android.util.Log.w(TAG, "Error restoring current tab: " + e.getMessage());
+                    }
+                }
+                android.util.Log.d(TAG, "Tabs setup completed successfully");
             } catch (Exception e) {
-                android.util.Log.w(TAG, "Error setting current tab: " + e.getMessage());
+                android.util.Log.e(TAG, "Error creating tabs: " + e.getMessage(), e);
+                showToast("Error setting up tabs");
             }
-            android.util.Log.d(TAG, "Tabs setup completed successfully");
         } catch (Exception e) {
             android.util.Log.e(TAG, "Error creating tabs: " + e.getMessage(), e);
             showToast("Error setting up tabs");
@@ -302,6 +315,17 @@ public class TrigDetailsActivity extends BaseActivity {
                     outState.putLong("saved_trig_id", trigId);
                     android.util.Log.d(TAG, "Saved trig ID to state: " + trigId);
                 }
+                // Save current tab tag so we can restore after rotation
+                try {
+                    TabHost tabHost = findViewById(android.R.id.tabhost);
+                    if (tabHost != null) {
+                        String currentTag = tabHost.getCurrentTabTag();
+                        outState.putString(STATE_TAB_TAG, currentTag);
+                        android.util.Log.d(TAG, "Saved tab tag: " + currentTag);
+                    }
+                } catch (Exception e) {
+                    android.util.Log.w(TAG, "Failed to save tab tag: " + e.getMessage());
+                }
             } else {
                 android.util.Log.w(TAG, "LocalActivityManager is null in onSaveInstanceState");
             }
@@ -378,6 +402,14 @@ public class TrigDetailsActivity extends BaseActivity {
     private void recreateTabs() {
         android.util.Log.d(TAG, "Recreating tabs due to LocalActivityManager invalidity");
         try {
+            // Capture current tab tag to restore after recreation
+            String currentTag = null;
+            try {
+                TabHost existing = findViewById(android.R.id.tabhost);
+                if (existing != null) {
+                    currentTag = existing.getCurrentTabTag();
+                }
+            } catch (Exception ignored) {}
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
                 extras = new Bundle();
@@ -391,6 +423,18 @@ public class TrigDetailsActivity extends BaseActivity {
             
             Bundle savedInstanceState = null; // No need to pass savedInstanceState here, it's handled by onRestoreInstanceState
             setupTabs(extras, savedInstanceState);
+            // Reapply previously selected tab if we captured it
+            if (currentTag != null) {
+                try {
+                    TabHost tabHost = findViewById(android.R.id.tabhost);
+                    if (tabHost != null) {
+                        tabHost.setCurrentTabByTag(currentTag);
+                        android.util.Log.d(TAG, "Reapplied tab tag after recreation: " + currentTag);
+                    }
+                } catch (Exception e) {
+                    android.util.Log.w(TAG, "Failed to reapply tab tag after recreation: " + e.getMessage());
+                }
+            }
             android.util.Log.d(TAG, "Tabs recreated successfully");
         } catch (Exception e) {
             android.util.Log.e(TAG, "Error recreating tabs: " + e.getMessage(), e);
