@@ -57,6 +57,46 @@ public class TrigDetailsActivity extends BaseActivity {
                 finish();
                 return;
             }
+
+            // Populate header with trig icon + name + condition icon (white on green)
+            try {
+                android.widget.TextView header = findViewById(R.id.trig_header_title);
+                android.widget.ImageView typeIcon = findViewById(R.id.trig_header_type_icon);
+                android.widget.ImageView condIcon = findViewById(R.id.trig_header_condition_icon);
+                if (header != null) {
+                    DbHelper db = new DbHelper(this);
+                    db.openReadable();
+                    try (android.database.Cursor c = db.fetchTrigInfo(ensuredTrigId)) {
+                        if (c != null && c.moveToFirst()) {
+                            int idxName = c.getColumnIndex(DbHelper.TRIG_NAME);
+                            int idxType = c.getColumnIndex(DbHelper.TRIG_TYPE);
+                            int idxCond = c.getColumnIndex(DbHelper.TRIG_CONDITION);
+                            String name = (idxName >= 0) ? c.getString(idxName) : "";
+                            String typeCode = (idxType >= 0) ? c.getString(idxType) : null;
+                            String condCode = (idxCond >= 0) ? c.getString(idxCond) : null;
+
+                            // Build header text
+                            header.setText(name != null ? name : "");
+
+                            // Resolve icons
+                            uk.trigpointing.android.types.Trig.Physical physical = uk.trigpointing.android.types.Trig.Physical.fromCode(typeCode);
+                            uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(condCode);
+                            if (typeIcon != null) {
+                                try { typeIcon.setImageResource(physical.icon(false)); } catch (Exception ignored) {}
+                            }
+                            if (condIcon != null) {
+                                try { condIcon.setImageResource(condition.icon()); } catch (Exception ignored) {}
+                            }
+                        }
+                    } catch (Exception e) {
+                        android.util.Log.w(TAG, "Failed to load trig name: " + e.getMessage());
+                    } finally {
+                        try { db.close(); } catch (Exception ignored) {}
+                    }
+                }
+            } catch (Exception e) {
+                android.util.Log.w(TAG, "Error setting trig header", e);
+            }
             
             android.util.Log.d(TAG, "Setting up tabs with trig ID: " + ensuredTrigId);
             setupTabs(extras, savedInstanceState);

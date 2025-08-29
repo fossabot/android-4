@@ -112,14 +112,8 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		TextView tv;
 		ImageView iv;
 		
-		tv = findViewById(R.id.triginfo_name);
-		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_NAME)));
-
 		tv = findViewById(R.id.triginfo_waypoint);
 		tv.setText(mWaypoint);
-		
-		iv = findViewById(R.id.triginfo_condition_icon);
-		iv.setImageResource(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).icon());
 
 		tv = findViewById(R.id.triginfo_condition);
 		tv.setText(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).toString());
