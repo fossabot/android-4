@@ -5,6 +5,12 @@
 -verbose
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
+# Do not obfuscate; keep names readable for stack traces
+-dontobfuscate
+
+# Keep source file and line numbers for better stack traces
+-keepattributes SourceFile,LineNumberTable
+
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service

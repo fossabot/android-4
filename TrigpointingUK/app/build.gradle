@@ -27,8 +27,8 @@ android {
         applicationId "uk.trigpointing.android"
         minSdk = 27
         targetSdk = 36
-        versionCode 32
-        versionName "2.0.21"
+        versionCode 33
+        versionName "2.0.22"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
@@ -43,8 +43,17 @@ android {
             versionNameSuffix "-debug"
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
+            // Crashlytics config; harmless if not obfuscating
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+                nativeSymbolUploadEnabled true
+            }
         }
     }
     
