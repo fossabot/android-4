@@ -60,6 +60,8 @@ import android.widget.Toast;
 import android.view.MenuItem;
 import android.widget.ViewSwitcher;
 import android.widget.ScrollView;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
@@ -206,6 +208,8 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         // Use a grid that adds rows as photos are added
         int spanCount = computePhotoGridSpanCount();
         mGallery.setLayoutManager(new GridLayoutManager(this, spanCount));
+        // Let the form's ScrollView handle scrolling; gallery expands to fit content
+        mGallery.setNestedScrollingEnabled(false);
 
 	    
 
@@ -224,28 +228,37 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         	
 		
 		// Setup listener on gallery photos
-	    mGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-	        @Override
-	        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-	            View child = rv.findChildViewUnder(e.getX(), e.getY());
-	            if (child != null) {
-	                int position = rv.getChildAdapterPosition(child);
-	                if (position != RecyclerView.NO_POSITION && mPhotos != null && position < mPhotos.size()) {
-	                    Log.i(TAG, "Clicked photo icon number : " + position);
-	                    Long photoId = mPhotos.get(position).getLogID();
-	                    showPhotoMetadataDialog(photoId);
-	                    return true;
-	                }
-	            }
-	            return false;
-	        }
+        final GestureDetector tapDetector = new GestureDetector(this, new SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        mGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if (!tapDetector.onTouchEvent(e)) {
+                    return false; // not a tap, let RecyclerView handle (scroll/drag)
+                }
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null) {
+                    int position = rv.getChildAdapterPosition(child);
+                    if (position != RecyclerView.NO_POSITION && mPhotos != null && position < mPhotos.size()) {
+                        Log.i(TAG, "Clicked photo icon number : " + position);
+                        Long photoId = mPhotos.get(position).getLogID();
+                        showPhotoMetadataDialog(photoId);
+                        return true;
+                    }
+                }
+                return false;
+            }
 
-	        @Override
-	        public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
 
-	        @Override
-	        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
-	    });
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+        });
 
 		
 		// Connect to database
@@ -810,6 +823,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         Log.d(TAG, "Setting adapter with " + mPhotos.size() + " photos");
         mGallery.setAdapter(new LogTrigRecyclerAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
         Log.d(TAG, "Gallery adapter updated successfully");
+        adjustGalleryHeight();
     }
 
     private int computePhotoGridSpanCount() {
@@ -818,6 +832,32 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         int desiredItemPx = (int) (60 * density); // ~60dp width per tile to fit ~6+ in portrait
         int span = Math.max(2, screenWidthPx / Math.max(1, desiredItemPx));
         return span;
+    }
+
+    private void adjustGalleryHeight() {
+        try {
+            RecyclerView.LayoutManager lm = mGallery.getLayoutManager();
+            if (!(lm instanceof GridLayoutManager)) { return; }
+            GridLayoutManager glm = (GridLayoutManager) lm;
+            int span = glm.getSpanCount();
+            int count = (mPhotos != null) ? mPhotos.size() : 0;
+            if (count <= 0 || span <= 0) {
+                // No photos; let layout wrap content naturally
+                android.view.ViewGroup.LayoutParams lp = mGallery.getLayoutParams();
+                lp.height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+                mGallery.setLayoutParams(lp);
+                return;
+            }
+            int rows = (count + span - 1) / span;
+            float density = getResources().getDisplayMetrics().density;
+            int itemHeightPx = (int) (100 * density); // must match adapter tile height
+            int desiredHeight = rows * itemHeightPx;
+            android.view.ViewGroup.LayoutParams lp = mGallery.getLayoutParams();
+            if (lp.height != desiredHeight) {
+                lp.height = desiredHeight;
+                mGallery.setLayoutParams(lp);
+            }
+        } catch (Exception ignored) {}
     }
 
 	public void reloadPhotos() {
