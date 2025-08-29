@@ -78,8 +78,38 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				// Request parent to refresh header immediately
+				try {
+					android.app.Activity parent = getParent();
+					if (parent instanceof TrigDetailsActivity) {
+						((TrigDetailsActivity) parent).refreshHeaderNow();
+					}
+				} catch (Exception ignored) {}
 			}
 		});
+
+		// View on map link
+		TextView viewOnMap = findViewById(R.id.triginfo_view_on_map);
+		if (viewOnMap != null) {
+			viewOnMap.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					try {
+						// Disable auto-centre on GPS position for this session and request centering on this trig
+						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(TrigDetailsInfoTab.this);
+						SharedPreferences.Editor ed = prefs.edit();
+						ed.putBoolean("leaflet_disable_autolocate_once", true);
+						ed.putFloat("leaflet_center_lat_once", (float) mLatitude);
+						ed.putFloat("leaflet_center_lon_once", (float) mLongitude);
+						ed.apply();
+						Intent i = new Intent(TrigDetailsInfoTab.this, LeafletMapActivity.class);
+						startActivity(i);
+					} catch (Exception e) {
+						Toast.makeText(TrigDetailsInfoTab.this, "Unable to open map", Toast.LENGTH_LONG).show();
+					}
+				}
+			});
+		}
 		
     }
 

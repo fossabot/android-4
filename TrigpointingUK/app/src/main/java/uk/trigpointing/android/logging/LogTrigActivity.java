@@ -168,12 +168,16 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	   	mCondition		= findViewById(R.id.logCondition);
 	   	mScore			= findViewById(R.id.logScore);
 	   	
-	   			// Ensure minimum 1 star rating
+	   		// Allow half-stars with minimum 0.5
 	   	mScore.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
 	   		@Override
 	   		public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-	   			if (fromUser && rating < 1.0f) {
-	   				ratingBar.setRating(1.0f);
+	   			if (!fromUser) { return; }
+	   			if (rating < 0.5f) { ratingBar.setRating(0.5f); return; }
+	   			// Snap to nearest half-star for consistency
+	   			float snapped = Math.round(rating * 2f) / 2f;
+	   			if (Math.abs(snapped - rating) > 0.01f) {
+	   				ratingBar.setRating(snapped);
 	   			}
 	   		}
 	   	});
@@ -770,8 +774,10 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	mAdminFlag.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);
     	mUserFlag.setChecked 	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGUSERS))  > 0);
     	
-    	// set Score
-    	mScore.setRating		(c.getInt(c.getColumnIndex(DbHelper.LOG_SCORE)));
+    	// set Score: stored value is number of half-stars (1..10); convert to 0.5..5.0
+    	int storedScore = c.getInt(c.getColumnIndex(DbHelper.LOG_SCORE));
+    	float stars = Math.max(0.5f, Math.min(5.0f, storedScore / 2f));
+    	mScore.setRating(stars);
     	
     	// set Condition
     	Condition cond = Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION)));
@@ -903,7 +909,8 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 				mGridref.getText().toString(), 
 				mFb.getText().toString(), 
 				(Condition) mCondition.getSelectedItem(), 
-				(int) mScore.getRating(), 
+				// Save number of half-stars (1..10)
+				Math.max(1, Math.min(10, Math.round(mScore.getRating() * 2f))), 
 				mComment.getText().toString(),
 				mAdminFlag.isChecked()?1:0, 
 				mUserFlag.isChecked()?1:0);
@@ -931,7 +938,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     			"", 
     			"", 
     			Condition.CONDITIONNOTLOGGED, 
-    			3, // Start with 3 stars default
+    			6, // Start with 3.0 stars default -> 6 half-stars
     			"", 
     			0, 
     			0);

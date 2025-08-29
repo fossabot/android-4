@@ -160,6 +160,32 @@ public class LeafletMapActivity extends BaseActivity {
             Log.e(TAG, "Error loading Leaflet page", e);
             Toast.makeText(this, "Error loading Leaflet page", Toast.LENGTH_LONG).show();
         }
+
+        // After page load, apply one-time centering if requested
+        webView.postDelayed(() -> {
+            try {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+                boolean disableAuto = sp.getBoolean("leaflet_disable_autolocate_once", false);
+                if (disableAuto) {
+                    // Clear the flag immediately so it is one-time
+                    sp.edit().putBoolean("leaflet_disable_autolocate_once", false).apply();
+                    // Also mark session so autoLocateOnFirstVisit doesn't trigger
+                    webView.evaluateJavascript("sessionStorage.setItem('leaflet_auto_located','true');", null);
+                    // Ensure any previously active tracking is stopped and button reset
+                    webView.evaluateJavascript("(function(){ if (typeof stopLocationTracking==='function'){ stopLocationTracking(); } var b=document.getElementById('locbtn'); if(b){ b.style.backgroundColor=''; b.style.color=''; b.title='My location'; } })();", null);
+                }
+                if (sp.contains("leaflet_center_lat_once") && sp.contains("leaflet_center_lon_once")) {
+                    float lat = sp.getFloat("leaflet_center_lat_once", 0f);
+                    float lon = sp.getFloat("leaflet_center_lon_once", 0f);
+                    sp.edit().remove("leaflet_center_lat_once").remove("leaflet_center_lon_once").apply();
+                    // Center the map on the trigpoint coordinates; use JS function to preserve zoom logic
+                    String js = "(function(){ var lat="+lat+", lon="+lon+"; if (typeof map !== 'undefined') { map.setView([lat,lon], Math.max(map.getZoom(), 13)); } })();";
+                    webView.evaluateJavascript(js, null);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to apply one-time centering flags", e);
+            }
+        }, 500);
     }
 
     private String normalizeMapStyle(String value) {
