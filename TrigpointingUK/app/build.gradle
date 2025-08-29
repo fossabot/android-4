@@ -257,3 +257,32 @@ dependencies {
     implementation "com.mikepenz:aboutlibraries:12.2.4"
 }
 
+// Generate google-services.json from template using FIREBASE_API_KEY in local.properties
+def localPropsFile = rootProject.file('local.properties')
+def localProps = new Properties()
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { stream -> localProps.load(stream) }
+}
+
+def firebaseApiKey = localProps.getProperty('FIREBASE_API_KEY') ?: System.getenv('FIREBASE_API_KEY')
+
+tasks.register('generateGoogleServicesJson') {
+    description = 'Generates app/google-services.json from template and local.properties'
+    group = 'build setup'
+
+    inputs.file(file('google-services.template.json'))
+    outputs.file(file('google-services.json'))
+
+    doLast {
+        if (!firebaseApiKey) {
+            throw new GradleException('FIREBASE_API_KEY not found in local.properties or environment')
+        }
+        def template = file('google-services.template.json').getText('UTF-8')
+        def rendered = template.replace('__API_KEY__', firebaseApiKey)
+        file('google-services.json').text = rendered
+    }
+}
+
+// Ensure the file exists before Google Services plugin runs
+tasks.matching { it.name == 'preBuild' }.configureEach { dependsOn 'generateGoogleServicesJson' }
+
