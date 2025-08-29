@@ -135,5 +135,11 @@ public class TrigDetailsLoglistTab extends BaseTabActivity {
 		}, mainHandler::post);
 	}
 
-    
+	// Allow parent activity to trigger a refresh for the current trigpoint
+	public void refreshLogsFromParent() {
+		Log.i(TAG, "refreshLogsFromParent");
+		populateLogs(true);
+	}
+
+	
 }

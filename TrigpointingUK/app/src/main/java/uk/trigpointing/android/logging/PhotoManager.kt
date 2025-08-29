@@ -150,10 +150,12 @@ class PhotoManager(
             // Decode and save images
             Log.d(TAG, "Decoding photo bitmap from URI...")
             val photoBitmap = Utils.decodeUri(context, uri, MAX_PHOTO_SIZE)
+                ?: throw IllegalStateException("Failed to decode photo bitmap from $uri")
             Log.d(TAG, "Photo bitmap decoded: ${photoBitmap.width}x${photoBitmap.height}")
-            
+
             Log.d(TAG, "Decoding thumbnail bitmap from URI...")
             val thumbBitmap = Utils.decodeUri(context, uri, THUMB_SIZE)
+                ?: throw IllegalStateException("Failed to decode thumbnail bitmap from $uri")
             Log.d(TAG, "Thumbnail bitmap decoded: ${thumbBitmap.width}x${thumbBitmap.height}")
             
             Log.d(TAG, "Saving photo bitmap to file...")
@@ -183,6 +185,23 @@ class PhotoManager(
             Log.e(TAG, "Failed to process photo from URI: $uri", e)
             Log.e(TAG, "Exception details: ${e.javaClass.simpleName}: ${e.message}")
             e.printStackTrace()
+            // Best-effort cleanup: remove any half-created database record with empty paths
+            try {
+                val cursor = db.fetchPhotos(trigId)
+                if (cursor != null && cursor.moveToFirst()) {
+                    do {
+                        val pid = cursor.getLong(cursor.getColumnIndexOrThrow(DbHelper.PHOTO_ID))
+                        val iconPath = cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.PHOTO_ICON))
+                        val photoPath = cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.PHOTO_PHOTO))
+                        if ((iconPath == null || iconPath.isBlank()) && (photoPath == null || photoPath.isBlank())) {
+                            db.deletePhoto(pid)
+                        }
+                    } while (cursor.moveToNext())
+                    cursor.close()
+                }
+            } catch (cleanup: Exception) {
+                Log.w(TAG, "Cleanup after photo processing failure encountered an error", cleanup)
+            }
             null
         }
     }
@@ -196,7 +215,7 @@ class PhotoManager(
         onSave: (PhotoMetadata) -> Unit,
         onDelete: () -> Unit
     ) {
-        val dialog = PhotoMetadataDialog.newInstance(photoId)
+        val dialog = PhotoMetadataDialog.newInstance(photoId, false)
         dialog.setCallbacks(onSave, onDelete)
         dialog.show(activity.supportFragmentManager, "photo_metadata")
     }

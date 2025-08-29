@@ -49,6 +49,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 // Removed unused Fragment-related imports; using getSupportFragmentManager directly
 // Removed direct Compose interop imports in Java; we host via FrameLayout/RecyclerView
 import android.widget.RatingBar;
@@ -59,6 +60,8 @@ import android.widget.Toast;
 import android.view.MenuItem;
 import android.widget.ViewSwitcher;
 import android.widget.ScrollView;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
@@ -202,7 +205,11 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	   	mAdminFlag		= findViewById(R.id.logAdminFlag);
 	   	mUserFlag		= findViewById(R.id.logUserFlag);
             mGallery 		= findViewById(R.id.logGallery);
-        mGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        // Use a grid that adds rows as photos are added
+        int spanCount = computePhotoGridSpanCount();
+        mGallery.setLayoutManager(new GridLayoutManager(this, spanCount));
+        // Let the form's ScrollView handle scrolling; gallery expands to fit content
+        mGallery.setNestedScrollingEnabled(false);
 
 	    
 
@@ -221,28 +228,37 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         	
 		
 		// Setup listener on gallery photos
-	    mGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-	        @Override
-	        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-	            View child = rv.findChildViewUnder(e.getX(), e.getY());
-	            if (child != null) {
-	                int position = rv.getChildAdapterPosition(child);
-	                if (position != RecyclerView.NO_POSITION && mPhotos != null && position < mPhotos.size()) {
-	                    Log.i(TAG, "Clicked photo icon number : " + position);
-	                    Long photoId = mPhotos.get(position).getLogID();
-	                    showPhotoMetadataDialog(photoId);
-	                    return true;
-	                }
-	            }
-	            return false;
-	        }
+        final GestureDetector tapDetector = new GestureDetector(this, new SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+        mGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                if (!tapDetector.onTouchEvent(e)) {
+                    return false; // not a tap, let RecyclerView handle (scroll/drag)
+                }
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null) {
+                    int position = rv.getChildAdapterPosition(child);
+                    if (position != RecyclerView.NO_POSITION && mPhotos != null && position < mPhotos.size()) {
+                        Log.i(TAG, "Clicked photo icon number : " + position);
+                        Long photoId = mPhotos.get(position).getLogID();
+                        showPhotoMetadataDialog(photoId);
+                        return true;
+                    }
+                }
+                return false;
+            }
 
-	        @Override
-	        public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
 
-	        @Override
-	        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
-	    });
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+        });
 
 		
 		// Connect to database
@@ -526,43 +542,18 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             Log.i(TAG, "Found parent activity: " + parent.getClass().getSimpleName());
             Log.i(TAG, "Requesting parent to launch photo picker");
             
-            // Use the parent activity to launch the photo picker
+            // Use the parent activity to launch a single consistent images-only picker
             try {
-                Intent intent;
-                if (android.os.Build.VERSION.SDK_INT >= 33) {
-                    // Android 13+ photo picker - NO PERMISSIONS REQUIRED!
-                    intent = new Intent("android.provider.action.PICK_IMAGES");
-                    intent.putExtra("android.provider.extra.PICK_IMAGES_MAX", 10);
-                    Log.d(TAG, "Using Android 13+ PICK_IMAGES intent (no permissions required)");
-                } else if (android.os.Build.VERSION.SDK_INT >= 30) {
-                    // Android 11-12: Use ACTION_GET_CONTENT without permissions
-                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    Log.d(TAG, "Using ACTION_GET_CONTENT for Android 11-12 (no permissions required)");
-                } else {
-                    // Android 10 and below: May need READ_EXTERNAL_STORAGE
-                    Log.d(TAG, "Android 10 or below, checking READ_EXTERNAL_STORAGE permission");
-                    if (ActivityCompat.checkSelfPermission(this, 
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        Log.i(TAG, "READ_EXTERNAL_STORAGE permission not granted, requesting...");
-                        ActivityCompat.requestPermissions(this,
-                            new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                            3001);
-                        return;
-                    }
-                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    Log.d(TAG, "Using ACTION_GET_CONTENT for Android 10 and below");
-                }
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                Log.d(TAG, "Using ACTION_GET_CONTENT (images only; cap 5 enforced in code)");
                 
                 // Check if the intent can be handled
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     Log.i(TAG, "Parent starting activity for result with request code: " + CHOOSE_PHOTO);
-                    parent.startActivityForResult(intent, CHOOSE_PHOTO);
+                    parent.startActivityForResult(Intent.createChooser(intent, "Select photos"), CHOOSE_PHOTO);
                 } else {
                     // Final fallback - single image picker
                     Log.w(TAG, "Multi-select not available, falling back to single image picker");
@@ -602,6 +593,30 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         
         Log.d(TAG, "Processing photos for trigpoint ID: " + mTrigId);
         
+        // Filter URIs to only image/* MIME types
+        List<Uri> imageUris = new ArrayList<>();
+        for (Uri uri : uris) {
+            try {
+                String type = getContentResolver().getType(uri);
+                if (type != null && type.startsWith("image/")) {
+                    imageUris.add(uri);
+                } else {
+                    Log.w(TAG, "Skipping non-image URI: " + uri + " type=" + type);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not determine MIME type for URI: " + uri, e);
+            }
+        }
+        if (imageUris.isEmpty()) {
+            Toast.makeText(this, "Only images are supported", Toast.LENGTH_LONG).show();
+            return;
+        }
+        // Enforce maximum of 5 selections
+        if (imageUris.size() > 5) {
+            imageUris = imageUris.subList(0, 5);
+            Toast.makeText(this, "Limited to 5 photos at a time", Toast.LENGTH_SHORT).show();
+        }
+        
         // Show progress dialog (using AlertDialog instead of deprecated ProgressDialog)
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Processing photos...");
@@ -612,12 +627,13 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         
         mPhotoManager.processSelectedPhotos(
             mTrigId,
-            uris,
+            imageUris,
             (Long photoId) -> {
                 // Photo added successfully, show metadata dialog
                 runOnUiThread(() -> {
                     progressDialog.dismiss();
-                    showPhotoMetadataDialog(photoId);
+                    // New photo just created -> suppress Cancel in dialog
+                    showPhotoMetadataDialog(photoId, true);
                 });
                 return kotlin.Unit.INSTANCE;
             },
@@ -642,7 +658,11 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     }
     
     private void showPhotoMetadataDialog(Long photoId) {
-        PhotoMetadataDialog dialog = PhotoMetadataDialog.Companion.newInstance(photoId.longValue());
+        showPhotoMetadataDialog(photoId, false);
+    }
+
+    private void showPhotoMetadataDialog(Long photoId, boolean isNew) {
+        PhotoMetadataDialog dialog = PhotoMetadataDialog.Companion.newInstance(photoId.longValue(), isNew);
         dialog.setCallbacks(
             metadata -> {
                 // Metadata saved
@@ -765,37 +785,87 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         }
     
     private void updateTimeVisibility () {
-    	mTime.setEnabled(mSendTime.isChecked());
+        mTime.setEnabled(mSendTime.isChecked());
     }
 
     
     private void updateGallery() {
-		Log.i(TAG, "updateGallery() called for trigId: " + mTrigId);
-	    mPhotos = new ArrayList<TrigPhoto>(); 
-		Cursor c = mDb.fetchPhotos(mTrigId);
-		if (c != null && c.moveToFirst()) {
-			Log.d(TAG, "Found photos in database, processing...");
-			int count = 0;
-			do {
-				TrigPhoto photo = new TrigPhoto();
-				long photoId = c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID));
-				String iconUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
-				photo.setLogID(photoId);
-				photo.setIconURL(iconUrl);
-				mPhotos.add(photo);
-				count++;
-				Log.d(TAG, "Added photo to gallery - ID: " + photoId + ", Icon: " + iconUrl);
-			} while (c.moveToNext());
-			c.close();
-			Log.i(TAG, "Added " + count + " photos to gallery list");
-		} else {
-			Log.d(TAG, "No photos found in database for trigId: " + mTrigId);
-		}
-		
-		Log.d(TAG, "Setting adapter with " + mPhotos.size() + " photos");
-		mGallery.setAdapter(new LogTrigRecyclerAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
-		Log.d(TAG, "Gallery adapter updated successfully");
-	}
+        Log.i(TAG, "updateGallery() called for trigId: " + mTrigId);
+        mPhotos = new ArrayList<TrigPhoto>(); 
+        Cursor c = mDb.fetchPhotos(mTrigId);
+        if (c != null && c.moveToFirst()) {
+            Log.d(TAG, "Found photos in database, processing...");
+            int count = 0;
+            do {
+                TrigPhoto photo = new TrigPhoto();
+                long photoId = c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID));
+                String iconUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
+                String photoUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO));
+                // Only include photos that have valid thumbnail and photo paths
+                if (iconUrl != null && !iconUrl.trim().isEmpty() && new File(iconUrl).exists()) {
+                    photo.setLogID(photoId);
+                    photo.setIconURL(iconUrl);
+                    photo.setPhotoURL(photoUrl);
+                    mPhotos.add(photo);
+                    count++;
+                    Log.d(TAG, "Added photo to gallery - ID: " + photoId + ", Icon: " + iconUrl);
+                } else {
+                    Log.w(TAG, "Skipping photo ID " + photoId + " due to missing or invalid thumbnail: '" + iconUrl + "'");
+                }
+            } while (c.moveToNext());
+            c.close();
+            Log.i(TAG, "Added " + count + " photos to gallery list");
+        } else {
+            Log.d(TAG, "No photos found in database for trigId: " + mTrigId);
+        }
+        
+        // Ensure grid spans are appropriate for current width/orientation
+        RecyclerView.LayoutManager lm = mGallery.getLayoutManager();
+        if (lm instanceof GridLayoutManager) {
+            ((GridLayoutManager) lm).setSpanCount(computePhotoGridSpanCount());
+        }
+
+        Log.d(TAG, "Setting adapter with " + mPhotos.size() + " photos");
+        mGallery.setAdapter(new LogTrigRecyclerAdapter(this, mPhotos.toArray(new TrigPhoto[mPhotos.size()])));
+        Log.d(TAG, "Gallery adapter updated successfully");
+        adjustGalleryHeight();
+    }
+
+    private int computePhotoGridSpanCount() {
+        final float density = getResources().getDisplayMetrics().density;
+        int screenWidthPx = getResources().getDisplayMetrics().widthPixels;
+        // Target ~3 columns in portrait (~120dp tiles + margins), more in landscape
+        int desiredItemPx = (int) (124 * density); // 120dp tile + ~4dp margin
+        int span = Math.max(2, screenWidthPx / Math.max(1, desiredItemPx));
+        return span;
+    }
+
+    private void adjustGalleryHeight() {
+        try {
+            RecyclerView.LayoutManager lm = mGallery.getLayoutManager();
+            if (!(lm instanceof GridLayoutManager)) { return; }
+            GridLayoutManager glm = (GridLayoutManager) lm;
+            int span = glm.getSpanCount();
+            int count = (mPhotos != null) ? mPhotos.size() : 0;
+            if (count <= 0 || span <= 0) {
+                // No photos; let layout wrap content naturally
+                android.view.ViewGroup.LayoutParams lp = mGallery.getLayoutParams();
+                lp.height = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+                mGallery.setLayoutParams(lp);
+                return;
+            }
+            int rows = (count + span - 1) / span;
+            float density = getResources().getDisplayMetrics().density;
+            // Tile height plus vertical margins (4dp top + 4dp bottom). Keep in sync with adapter
+            int itemHeightPx = (int) (120 * density) + (int) (8 * density);
+            int desiredHeight = rows * itemHeightPx;
+            android.view.ViewGroup.LayoutParams lp = mGallery.getLayoutParams();
+            if (lp.height != desiredHeight) {
+                lp.height = desiredHeight;
+                mGallery.setLayoutParams(lp);
+            }
+        } catch (Exception ignored) {}
+    }
 
 	public void reloadPhotos() {
 		try {

@@ -108,15 +108,13 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		Handler mainHandler = new Handler(Looper.getMainLooper());
 		
-		CompletableFuture.supplyAsync(() -> {
-			int count=0;
-			mTrigPhotos.clear();
-			
+		CompletableFuture.<ArrayList<TrigPhoto>>supplyAsync(() -> {
+			ArrayList<TrigPhoto> results = new ArrayList<TrigPhoto>();
 			String url = String.format("https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d", mTrigId);
 			String list = mStrLoader.getString(url, refresh);
 			if (list == null || list.trim().length()==0) {
-				Log.i(TAG, "No photos for "+mTrigId);        	
-				return count;
+				Log.i(TAG, "No photos for "+mTrigId);            
+				return results;
 			}
 
 			TrigPhoto tp;
@@ -136,22 +134,25 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 								csv[5],		//user
 								csv[4]);	//date
 						Log.d(TAG, "Photo URL: " + csv[1] + ", Icon URL: " + csv[0]);
-						mTrigPhotos.add(tp);
-						count++;
+						results.add(tp);
 					} catch (Exception e) {
 						Log.e(TAG, "Error parsing photo line: " + line, e);
 					}
 				}
 			}
-			return count;
+			return results;
 		}, executor)
-		.thenAcceptAsync(count -> {
+		.thenAcceptAsync(results -> {
+			int count = results != null ? results.size() : 0;
 			if (count == 0) {
 				mEmptyView.setVisibility(View.VISIBLE);
 				mEmptyView.setText(R.string.noPhotos);
 			} else {
 				mEmptyView.setVisibility(View.GONE);
 			}
+			// Mutate adapter list only on main thread to avoid RecyclerView inconsistencies
+			mTrigPhotos.clear();
+			if (results != null) { mTrigPhotos.addAll(results); }
 			mGridAdapter.notifyDataSetChanged();
 		}, mainHandler::post);
 	}

@@ -79,7 +79,10 @@ public class TrigDetailsAlbumGridAdapter extends RecyclerView.Adapter<TrigDetail
 			@Override
 			public void onClick(View v) {
 				if (mClickListener != null) {
-					mClickListener.onItemClick(holder.getAdapterPosition());
+					int pos = holder.getBindingAdapterPosition();
+					if (pos != RecyclerView.NO_POSITION) {
+						mClickListener.onItemClick(pos);
+					}
 				}
 			}
 		});
