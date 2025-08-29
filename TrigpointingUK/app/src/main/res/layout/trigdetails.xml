@@ -5,6 +5,45 @@
     android:orientation="vertical"
     android:background="@color/white">
 
+    <LinearLayout
+        android:id="@+id/trig_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/trig_header_type_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="8dp"
+            android:contentDescription="Type" />
+
+        <TextView
+            android:id="@+id/trig_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="" />
+
+        <ImageView
+            android:id="@+id/trig_header_condition_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="8dp"
+            android:contentDescription="Condition" />
+
+    </LinearLayout>
+
     <TabHost
         android:id="@android:id/tabhost"
         android:layout_width="match_parent"
