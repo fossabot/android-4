@@ -27,8 +27,8 @@ android {
         applicationId "uk.trigpointing.android"
         minSdk = 27
         targetSdk = 36
-        versionCode 33
-        versionName "2.0.22"
+        versionCode 34
+        versionName "2.0.23"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
@@ -90,8 +90,8 @@ android {
     
     // Compose setup
     buildFeatures {
-        compose true
-        buildConfig true
+        compose = true
+        buildConfig = true
     }
     // Compose compiler plugin is added via Kotlin 2.0+; no manual extensionVersion needed
     packagingOptions {
@@ -285,4 +285,6 @@ tasks.register('generateGoogleServicesJson') {
 
 // Ensure the file exists before Google Services plugin runs
 tasks.matching { it.name == 'preBuild' }.configureEach { dependsOn 'generateGoogleServicesJson' }
+// Also ensure all Google Services processing tasks generate the file first
+tasks.matching { it.name ==~ /process.+GoogleServices/ }.configureEach { dependsOn 'generateGoogleServicesJson' }
 
