@@ -81,8 +81,12 @@ public class TrigDetailsActivity extends BaseActivity {
                             // Resolve icons
                             uk.trigpointing.android.types.Trig.Physical physical = uk.trigpointing.android.types.Trig.Physical.fromCode(typeCode);
                             uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(condCode);
+
+                            // Determine if trig is marked to use highlighted icon
+                            boolean isMarked = false;
+                            try { isMarked = db.isMarkedTrig(ensuredTrigId); } catch (Exception ignored) {}
                             if (typeIcon != null) {
-                                try { typeIcon.setImageResource(physical.icon(false)); } catch (Exception ignored) {}
+                                try { typeIcon.setImageResource(mapGreenTypeIconResource(typeCode, isMarked)); } catch (Exception ignored) {}
                             }
                             if (condIcon != null) {
                                 try { condIcon.setImageResource(condition.icon()); } catch (Exception ignored) {}
@@ -786,6 +790,56 @@ public class TrigDetailsActivity extends BaseActivity {
             android.util.Log.w(TAG, "Failed to load drawable " + drawableId + ": " + e.getMessage());
             return null;
         }
+    }
+
+    // Map database type code to green map icon resource for header prominence
+    private int mapGreenTypeIconResource(String typeCode, boolean highlight) {
+        if (typeCode == null) return R.drawable.mapicon_passive_green;
+        switch (typeCode) {
+            case "PI": return highlight ? R.drawable.mapicon_pillar_green_h : R.drawable.mapicon_pillar_green;
+            case "FB": return highlight ? R.drawable.mapicon_fbm_green_h : R.drawable.mapicon_fbm_green;
+            case "IN": return highlight ? R.drawable.mapicon_intersected_green_h : R.drawable.mapicon_intersected_green;
+            default: return highlight ? R.drawable.mapicon_passive_green_h : R.drawable.mapicon_passive_green;
+        }
+    }
+
+    // No custom mapping for condition; using built-in Condition icons
+
+    // Expose a safe method for child tabs to refresh the header immediately (e.g., when mark toggled)
+    public void refreshHeaderNow() {
+        try {
+            long trigId = getIntent().getLongExtra(DbHelper.TRIG_ID, -1);
+            if (trigId <= 0) { return; }
+            android.widget.TextView header = findViewById(R.id.trig_header_title);
+            android.widget.ImageView typeIcon = findViewById(R.id.trig_header_type_icon);
+            android.widget.ImageView condIcon = findViewById(R.id.trig_header_condition_icon);
+            if (header == null) { return; }
+            DbHelper db = new DbHelper(this);
+            db.openReadable();
+            try (android.database.Cursor c = db.fetchTrigInfo(trigId)) {
+                if (c != null && c.moveToFirst()) {
+                    int idxName = c.getColumnIndex(DbHelper.TRIG_NAME);
+                    int idxType = c.getColumnIndex(DbHelper.TRIG_TYPE);
+                    int idxCond = c.getColumnIndex(DbHelper.TRIG_CONDITION);
+                    String name = (idxName >= 0) ? c.getString(idxName) : "";
+                    String typeCode = (idxType >= 0) ? c.getString(idxType) : null;
+                    String condCode = (idxCond >= 0) ? c.getString(idxCond) : null;
+                    header.setText(name != null ? name : "");
+                    uk.trigpointing.android.types.Condition condition = uk.trigpointing.android.types.Condition.fromCode(condCode);
+                    boolean isMarked = false;
+                    try { isMarked = db.isMarkedTrig(trigId); } catch (Exception ignored) {}
+                    if (typeIcon != null) {
+                        try { typeIcon.setImageResource(mapGreenTypeIconResource(typeCode, isMarked)); } catch (Exception ignored) {}
+                    }
+                    if (condIcon != null) {
+                        try { condIcon.setImageResource(condition.icon()); } catch (Exception ignored) {}
+                    }
+                }
+            } catch (Exception ignored) {
+            } finally {
+                try { db.close(); } catch (Exception ignored2) {}
+            }
+        } catch (Exception ignored) {}
     }
 
     /**
