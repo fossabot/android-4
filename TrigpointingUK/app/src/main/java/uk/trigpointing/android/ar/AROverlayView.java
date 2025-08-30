@@ -11,6 +11,7 @@ import android.location.Location;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.MotionEvent;
 
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
@@ -34,6 +35,8 @@ public class AROverlayView extends View {
     private float deviceAzimuth = 0;
     private float devicePitch = 0;
     private Location currentLocation;
+    private final List<HitTarget> hitTargets = new ArrayList<>();
+    private OnTrigpointClickListener clickListener;
     
     // Simple data holder for trigpoint information
     public static class TrigpointData {
@@ -91,6 +94,14 @@ public class AROverlayView extends View {
         this.trigpoints = new ArrayList<>(trigpoints);
         invalidate(); // Trigger redraw
     }
+
+    public interface OnTrigpointClickListener {
+        void onTrigpointClick(long trigId);
+    }
+
+    public void setOnTrigpointClickListener(OnTrigpointClickListener listener) {
+        this.clickListener = listener;
+    }
     
     public void updateOrientation(float azimuth, float pitch, float roll) {
         this.deviceAzimuth = azimuth;
@@ -110,6 +121,9 @@ public class AROverlayView extends View {
         int screenHeight = getHeight();
         float fieldOfView = 60.0f; // Degrees, typical phone camera FOV
         
+        // Reset per-frame hit targets
+        hitTargets.clear();
+
         // Draw compass directions at top of screen
         drawCompassDirections(canvas, screenWidth, fieldOfView);
         
@@ -221,13 +235,14 @@ public class AROverlayView extends View {
                 int iconSize = (int) (213 * scale); // Base size 213dp (1/3 of 640dp)
                 
                 // Draw icon
-                icon.setBounds(
-                    (int) (x - iconSize / 2),
-                    (int) (y - iconSize / 2),
-                    (int) (x + iconSize / 2),
-                    (int) (y + iconSize / 2)
-                );
+                int left = (int) (x - iconSize / 2);
+                int top = (int) (y - iconSize / 2);
+                int right = (int) (x + iconSize / 2);
+                int bottom = (int) (y + iconSize / 2);
+                icon.setBounds(left, top, right, bottom);
                 icon.draw(canvas);
+                // Track hit target for icon area
+                hitTargets.add(new HitTarget(left, top, right, bottom, trig.getId()));
                 
                 // Draw trigpoint name below icon
                 String text = trig.getName();
@@ -262,6 +277,15 @@ public class AROverlayView extends View {
             }
         } catch (Exception e) {
             Log.e(TAG, "Error drawing trigpoint icon for " + trig.getName(), e);
+        }
+    }
+
+    private static class HitTarget {
+        final Rect rect;
+        final long trigId;
+        HitTarget(int left, int top, int right, int bottom, long trigId) {
+            this.rect = new Rect(left, top, right, bottom);
+            this.trigId = trigId;
         }
     }
     
@@ -345,7 +369,26 @@ public class AROverlayView extends View {
     @Override
     public boolean performClick() {
         // Handle click events on trigpoint icons
-        // TODO: Implement hit testing to determine which trigpoint was clicked
         return super.performClick();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            float x = event.getX();
+            float y = event.getY();
+            // Check topmost first (draw order)
+            for (int i = hitTargets.size() - 1; i >= 0; i--) {
+                HitTarget t = hitTargets.get(i);
+                if (t.rect.contains((int) x, (int) y)) {
+                    if (clickListener != null) {
+                        clickListener.onTrigpointClick(t.trigId);
+                    }
+                    performClick();
+                    return true;
+                }
+            }
+        }
+        return true;
     }
 }
