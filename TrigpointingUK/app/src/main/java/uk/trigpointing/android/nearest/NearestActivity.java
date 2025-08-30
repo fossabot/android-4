@@ -44,6 +44,10 @@ import uk.trigpointing.android.common.BaseActivity;
 import uk.trigpointing.android.filter.Filter;
 import uk.trigpointing.android.trigdetails.TrigDetailsActivity;
 import uk.trigpointing.android.types.LatLon;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.text.style.RelativeSizeSpan;
 
 
 public class NearestActivity extends BaseActivity implements SensorEventListener {
@@ -69,6 +73,10 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	private Sensor 					magnetometer;
 	private int mOrientation;
 	private boolean mUsingCompass;
+	private boolean mRelativeMode = false;
+	private Location mReferenceLocation; // Source for distance/bearing calculations and sorting
+	private String mAnchorWaypoint;
+	private String mAnchorName;
 	private static final String     USECOMPASS="useCompass";
 	private static final String TAG = "NearestActivity";
 	private static final int DETAILS = 1;
@@ -108,7 +116,16 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		
 		// Set up compass area click handler
 		findViewById(R.id.compassArea).setOnClickListener(v -> {
-			useCompass(!mUsingCompass);
+			if (!mRelativeMode) {
+				useCompass(!mUsingCompass);
+			}
+		});
+
+		// Clicking the location header exits relative mode (when active)
+		mStrLocation.setOnClickListener(v -> {
+			if (mRelativeMode) {
+				exitRelativeMode();
+			}
 		});
 		
 		// Set up trigpoint types filter click handler
@@ -198,6 +215,9 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		
 		Log.i(TAG, "getOrientation(): " + mOrientation);
 		mListAdapter.setOrientation(mOrientation);
+
+		// Handle possible relative-mode launch
+		handleIncomingIntent(getIntent());
 		 
 	}
 
@@ -207,10 +227,12 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	
 	@Override
 	protected void onPause() {
-		// save compass preference
-		Editor editor = mPrefs.edit();
-		editor.putBoolean(USECOMPASS, mUsingCompass);
-		editor.apply();
+		// save compass preference (but don't overwrite during relative mode)
+		if (!mRelativeMode) {
+			Editor editor = mPrefs.edit();
+			editor.putBoolean(USECOMPASS, mUsingCompass);
+			editor.apply();
+		}
 		// stop listening to the GPS and compass
 		try {
 			if (mLocationManager != null && (
@@ -243,7 +265,11 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			updateLocationHeader("permission_required");
 		}
 		// Decide whether to use the compass
-		useCompass(mPrefs.getBoolean(USECOMPASS, false));
+		if (mRelativeMode) {
+			useCompass(false);
+		} else {
+			useCompass(mPrefs.getBoolean(USECOMPASS, false));
+		}
 		// Setup header icons
 		updateFilterHeader();
 	}
@@ -347,20 +373,43 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 
 
 	private void refreshList() {
-		if (!mTaskRunning) {findTrigs();}
+		refreshList(false);
+	}
+
+	private void refreshList(boolean force) {
+		if (force) {
+			findTrigs();
+		} else if (!mTaskRunning) {
+			findTrigs();
+		}
 	}
 	
 	
 	private void updateLocationHeader(String comment) {
-		
+		if (mRelativeMode) {
+			String waypointText = "Near to " + (mAnchorWaypoint != null ? mAnchorWaypoint : "selected trig");
+			String nameText = (mAnchorName != null && mAnchorName.length() > 0) ? ("\n" + mAnchorName) : "";
+			SpannableStringBuilder ssb = new SpannableStringBuilder(waypointText + nameText);
+			// Bold the first line (waypoint)
+			ssb.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, waypointText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			// Make the second line smaller if present
+			if (nameText.length() > 0) {
+				ssb.setSpan(new RelativeSizeSpan(0.85f), waypointText.length(), waypointText.length() + nameText.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}
+			mStrLocation.setText(ssb);
+			Log.d(TAG, "Relative mode header updated. " + comment);
+			return;
+		}
 		if (null != mCurrentLocation) {
 			LatLon ll = new LatLon(mCurrentLocation);
+			mStrLocation.setTypeface(null, android.graphics.Typeface.NORMAL);
 			mStrLocation.setText(String.format("Near to %s   (from %s)" 
 					, mCurrentLocation.getProvider().equals("gps") ? ll.getOSGB10() : ll.getOSGB6()
 					, mCurrentLocation.getProvider()
 			));
 			Log.d(TAG, "Location update count : " + mUpdateCount + " Location count : " + mLocationCount + " " + comment);
 		} else {
+			mStrLocation.setTypeface(null, android.graphics.Typeface.NORMAL);
 			mStrLocation.setText("Location is unknown");
 			Log.d(TAG, "Location unknown : " + mUpdateCount + " Location count : " + mLocationCount + " " + comment);
 		}
@@ -516,7 +565,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			Log.i(TAG, "FindTrigsTask.doInBackground");
 			Cursor c = null;
 			try {
-				c = mDb.fetchTrigList(mCurrentLocation);
+				Location source = mRelativeMode ? mReferenceLocation : mCurrentLocation;
+				c = mDb.fetchTrigList(source);
 				// startManagingCursor is deprecated - cursor will be managed manually
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -528,14 +578,60 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			Log.i(TAG, "FindTrigsTask.onPostExecute " + cursor);
 			try {
 				mCursor = cursor;
-				mListAdapter.swapCursor(mCursor, mCurrentLocation);
+				Location source = mRelativeMode ? mReferenceLocation : mCurrentLocation;
+				mListAdapter.swapCursor(mCursor, source);
 			} catch (Exception e) {
 				e.printStackTrace();
-				mListAdapter.swapCursor(null, mCurrentLocation);
+				Location source = mRelativeMode ? mReferenceLocation : mCurrentLocation;
+				mListAdapter.swapCursor(null, source);
 			}
 			updateLocationHeader("task");
 			mTaskRunning = false;
 		}, mainHandler::post);
+	}
+
+	private void handleIncomingIntent(Intent intent) {
+		if (intent == null) { return; }
+		if (intent.hasExtra("extra_anchor_waypoint") && intent.hasExtra("extra_anchor_lat") && intent.hasExtra("extra_anchor_lon")) {
+			String waypoint = intent.getStringExtra("extra_anchor_waypoint");
+			String name = intent.getStringExtra("extra_anchor_name");
+			double lat = intent.getDoubleExtra("extra_anchor_lat", Double.NaN);
+			double lon = intent.getDoubleExtra("extra_anchor_lon", Double.NaN);
+			if (!Double.isNaN(lat) && !Double.isNaN(lon)) {
+				enterRelativeMode(waypoint, name, lat, lon);
+			}
+		}
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		handleIncomingIntent(intent);
+	}
+
+	private void enterRelativeMode(String waypoint, String name, double lat, double lon) {
+		mRelativeMode = true;
+		mAnchorWaypoint = waypoint;
+		mAnchorName = name;
+		mReferenceLocation = new Location("anchor");
+		mReferenceLocation.setLatitude(lat);
+		mReferenceLocation.setLongitude(lon);
+		// Lock compass to north-up and ignore toggles
+		useCompass(false);
+		updateLocationHeader("enter_relative");
+		refreshList(true);
+	}
+
+	private void exitRelativeMode() {
+		mRelativeMode = false;
+		mAnchorWaypoint = null;
+		mAnchorName = null;
+		mReferenceLocation = mCurrentLocation;
+		// Restore compass preference state
+		useCompass(mPrefs.getBoolean(USECOMPASS, false));
+		updateLocationHeader("exit_relative");
+		refreshList(true);
 	}
 
 
