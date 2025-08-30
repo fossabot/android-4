@@ -44,3 +44,31 @@
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
+
+# --- Gson + reflection friendly rules ---
+# Keep generic signatures and annotations used by Gson
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# Keep Gson adapters and factories if present
+-keep class * extends com.google.gson.TypeAdapter
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+# Keep TypeToken and subclasses (used for generics)
+-keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+
+# Keep fields annotated with @SerializedName even if obfuscated
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# Keep API models used via reflection by Gson
+-keep class uk.trigpointing.android.api.AuthResponse { *; }
+-keep class uk.trigpointing.android.api.User { *; }
+-keep class uk.trigpointing.android.api.ErrorResponse { *; }
+
+# Defensive: ensure AndroidX BundleCompat is not altered in a way that breaks reflection
+-keep class androidx.core.os.BundleCompat { *; }
