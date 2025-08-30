@@ -44,6 +44,7 @@ import uk.trigpointing.android.R;
 import uk.trigpointing.android.common.BaseActivity;
 import uk.trigpointing.android.filter.Filter;
 import uk.trigpointing.android.types.Trig;
+import uk.trigpointing.android.trigdetails.TrigDetailsActivity;
 
 /**
  * Sensor-based AR Activity that uses pure compass and sensor data
@@ -106,6 +107,17 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         // Initialize UI components
         cameraPreview = findViewById(R.id.camera_preview);
         overlayView = findViewById(R.id.ar_overlay);
+        if (overlayView != null) {
+            overlayView.setOnTrigpointClickListener(trigId -> {
+                try {
+                    Intent i = new Intent(SensorARActivity.this, TrigDetailsActivity.class);
+                    i.putExtra(DbHelper.TRIG_ID, trigId);
+                    startActivity(i);
+                } catch (Exception e) {
+                    Toast.makeText(SensorARActivity.this, "Unable to open trig details", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
         
         // Initialize sensors
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

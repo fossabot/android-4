@@ -29,6 +29,7 @@ import uk.trigpointing.android.mapping.LeafletMapActivity;
 import uk.trigpointing.android.types.Condition;
 import uk.trigpointing.android.types.LatLon;
 import uk.trigpointing.android.types.Trig;
+import uk.trigpointing.android.nearest.NearestActivity;
 
 public class TrigDetailsInfoTab extends BaseTabActivity {
 	private static final String TAG="TrigDetailsInfoTab";
@@ -39,6 +40,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 	private double   mLatitude;
 	private double   mLongitude;
 	private String   mWaypoint;
+	private String   mName;
 	private CheckBox mMark;
     private SharedPreferences mPrefs;
 
@@ -110,6 +112,29 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 				}
 			});
 		}
+
+		// List nearby trigpoints link
+		TextView listNearby = findViewById(R.id.triginfo_list_nearby);
+		if (listNearby != null) {
+			listNearby.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					try {
+						Intent i = new Intent(TrigDetailsInfoTab.this, NearestActivity.class);
+						i.putExtra("extra_anchor_waypoint", mWaypoint);
+						i.putExtra("extra_anchor_name", mName);
+						i.putExtra("extra_anchor_lat", mLatitude);
+						i.putExtra("extra_anchor_lon", mLongitude);
+						i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+						startActivity(i);
+						// Reduce back stack depth: user is clearly switching context back to list
+						finish();
+					} catch (Exception e) {
+						Toast.makeText(TrigDetailsInfoTab.this, "Unable to open list", Toast.LENGTH_LONG).show();
+					}
+				}
+			});
+		}
 		
     }
 
@@ -149,6 +174,8 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		tv.setText(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).toString());
 
 		LatLon ll = new LatLon(c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT)), c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON)));
+
+		mName = c.getString(c.getColumnIndex(DbHelper.TRIG_NAME));
 
 		tv = findViewById(R.id.triginfo_gridref);
 		tv.setText(ll.getOSGB10());

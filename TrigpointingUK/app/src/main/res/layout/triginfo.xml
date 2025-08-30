@@ -218,6 +218,18 @@
             android:clickable="true"
             android:focusable="true" />
 
+        <!-- List nearby trigpoints link -->
+        <TextView
+            android:id="@+id/triginfo_list_nearby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List nearby trigpoints"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:paddingTop="12dp"
+            android:clickable="true"
+            android:focusable="true" />
+
     </LinearLayout>
 
 </ScrollView> 
