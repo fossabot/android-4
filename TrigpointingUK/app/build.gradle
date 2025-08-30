@@ -27,8 +27,8 @@ android {
         applicationId "uk.trigpointing.android"
         minSdk = 27
         targetSdk = 36
-        versionCode 32
-        versionName "2.0.21"
+        versionCode 35
+        versionName "2.0.24"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
@@ -43,8 +43,17 @@ android {
             versionNameSuffix "-debug"
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
+            // Crashlytics config; harmless if not obfuscating
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+                nativeSymbolUploadEnabled true
+            }
         }
     }
     
@@ -81,8 +90,8 @@ android {
     
     // Compose setup
     buildFeatures {
-        compose true
-        buildConfig true
+        compose = true
+        buildConfig = true
     }
     // Compose compiler plugin is added via Kotlin 2.0+; no manual extensionVersion needed
     packagingOptions {
@@ -247,4 +256,35 @@ dependencies {
     }
     implementation "com.mikepenz:aboutlibraries:12.2.4"
 }
+
+// Generate google-services.json from template using FIREBASE_API_KEY in local.properties
+def localPropsFile = rootProject.file('local.properties')
+def localProps = new Properties()
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { stream -> localProps.load(stream) }
+}
+
+def firebaseApiKey = localProps.getProperty('FIREBASE_API_KEY') ?: System.getenv('FIREBASE_API_KEY')
+
+tasks.register('generateGoogleServicesJson') {
+    description = 'Generates app/google-services.json from template and local.properties'
+    group = 'build setup'
+
+    inputs.file(file('google-services.template.json'))
+    outputs.file(file('google-services.json'))
+
+    doLast {
+        if (!firebaseApiKey) {
+            throw new GradleException('FIREBASE_API_KEY not found in local.properties or environment')
+        }
+        def template = file('google-services.template.json').getText('UTF-8')
+        def rendered = template.replace('__API_KEY__', firebaseApiKey)
+        file('google-services.json').text = rendered
+    }
+}
+
+// Ensure the file exists before Google Services plugin runs
+tasks.matching { it.name == 'preBuild' }.configureEach { dependsOn 'generateGoogleServicesJson' }
+// Also ensure all Google Services processing tasks generate the file first
+tasks.matching { it.name ==~ /process.+GoogleServices/ }.configureEach { dependsOn 'generateGoogleServicesJson' }
 
