@@ -580,38 +580,33 @@ public class MainActivity extends BaseActivity implements SyncListener {
 	private void updateUserMap() {
 		Log.i(TAG, "updateUserMap: Updating user map image");
 		try {
-			// Only load map if user is logged in via API
-			if (authPreferences.isLoggedIn()) {
-				User user = authPreferences.getUser();
-				if (user != null) {
-					String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + user.getId() + "&v=y";
-					Log.i(TAG, "updateUserMap: Loading map for user ID " + user.getId() + " from URL: " + mapUrl);
-					
-					// Load the image using Coil
-					ImageRequest request = new ImageRequest.Builder(this)
-							.data(mapUrl)
-							.target(mUserMapImage)
-							.placeholder(android.R.drawable.ic_menu_mapmode) // Show placeholder while loading
-							.error(android.R.drawable.ic_dialog_alert) // Show error icon if loading fails
-							.build();
-					
-					// Show the ImageView and load the image
-					mUserMapImage.setVisibility(View.VISIBLE);
-					ImageLoader imageLoader = Coil.imageLoader(this);
-					imageLoader.enqueue(request);
-					
-					// Add click listener to open full map view
-					mUserMapImage.setOnClickListener(v -> {
-						String fullMapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + user.getId() + "&v=y";
-						android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(fullMapUrl));
-						startActivity(intent);
-					});
-				} else {
-					Log.w(TAG, "updateUserMap: User object is null, hiding map");
-					mUserMapImage.setVisibility(View.GONE);
-				}
+			// Load map if we have a persisted user id, even if token has expired
+			int userId = authPreferences.getUserId();
+			if (userId > 0) {
+				String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
+				Log.i(TAG, "updateUserMap: Loading map for user ID " + userId + " from URL: " + mapUrl);
+				
+				// Load the image using Coil
+				ImageRequest request = new ImageRequest.Builder(this)
+						.data(mapUrl)
+						.target(mUserMapImage)
+						.placeholder(android.R.drawable.ic_menu_mapmode) // Show placeholder while loading
+						.error(android.R.drawable.ic_dialog_alert) // Show error icon if loading fails
+						.build();
+				
+				// Show the ImageView and load the image
+				mUserMapImage.setVisibility(View.VISIBLE);
+				ImageLoader imageLoader = Coil.imageLoader(this);
+				imageLoader.enqueue(request);
+				
+				// Add click listener to open full map view
+				mUserMapImage.setOnClickListener(v -> {
+					String fullMapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
+					android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(fullMapUrl));
+					startActivity(intent);
+				});
 			} else {
-				Log.i(TAG, "updateUserMap: User not logged in via API, hiding map");
+				Log.i(TAG, "updateUserMap: No persisted user ID, hiding map");
 				mUserMapImage.setVisibility(View.GONE);
 			}
 		} catch (Exception e) {

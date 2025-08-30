@@ -12,6 +12,7 @@ public class AuthPreferences {
     private static final String PREF_ACCESS_TOKEN = "api_access_token";
     private static final String PREF_TOKEN_TYPE = "api_token_type";
     private static final String PREF_USER_DATA = "api_user_data";
+    private static final String PREF_USER_ID = "api_user_id";
     private static final String PREF_EXPIRES_IN = "api_expires_in";
     private static final String PREF_LOGIN_TIMESTAMP = "api_login_timestamp";
 
@@ -37,6 +38,10 @@ public class AuthPreferences {
         // Store user data as JSON
         String userJson = gson.toJson(authResponse.getUser());
         editor.putString(PREF_USER_DATA, userJson);
+        // Store user id explicitly for durability and easy access
+        if (authResponse.getUser() != null) {
+            editor.putInt(PREF_USER_ID, authResponse.getUser().getId());
+        }
         
         editor.apply();
     }
@@ -50,6 +55,7 @@ public class AuthPreferences {
         editor.remove(PREF_ACCESS_TOKEN);
         editor.remove(PREF_TOKEN_TYPE);
         editor.remove(PREF_USER_DATA);
+        editor.remove(PREF_USER_ID);
         editor.remove(PREF_EXPIRES_IN);
         editor.remove(PREF_LOGIN_TIMESTAMP);
         
@@ -84,6 +90,19 @@ public class AuthPreferences {
             }
         }
         return null;
+    }
+
+    /**
+     * Get stored user id, even if token has expired.
+     */
+    public int getUserId() {
+        // Prefer id from parsed user JSON
+        User user = getUser();
+        if (user != null && user.getId() > 0) {
+            return user.getId();
+        }
+        // Fallback to explicitly stored id
+        return preferences.getInt(PREF_USER_ID, 0);
     }
 
     /**
