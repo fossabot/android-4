@@ -37,7 +37,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:textSize="18sp"
-            android:text="&lt;"
+            android:text="&lt;&gt;"
             android:layout_gravity="bottom|start"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp" />
@@ -53,7 +53,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:textSize="18sp"
-            android:text="&gt;"
+            android:text="&gt;&lt;"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp" />
