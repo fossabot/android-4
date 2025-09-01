@@ -221,7 +221,8 @@ public class AROverlayView extends View {
             float halfFovWithMargin = halfFov + 2f; // degrees
             if (Math.abs(relativeBearing) <= halfFovWithMargin) {
                 // Calculate screen position
-                float screenX = screenWidth / 2f + (relativeBearing / halfFov) * (screenWidth / 2f);
+                int horizontalSpan = landscapeSnap ? screenHeight : screenWidth;
+                float screenX = horizontalSpan / 2f + (relativeBearing / halfFov) * (horizontalSpan / 2f);
                 
                 // Place at horizon line based on camera elevation, clamped to 15% from edges if out of range
                 float centerY = screenHeight / 2f;
