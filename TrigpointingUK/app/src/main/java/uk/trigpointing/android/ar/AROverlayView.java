@@ -145,10 +145,6 @@ public class AROverlayView extends View {
         int screenWidth = getWidth();
         int screenHeight = getHeight();
         float verticalFieldOfView = fieldOfViewDegY; // degrees across height (Y mapping)
-        // Choose FOV for horizontal mapping based on roll: in landscape, use vertical FOV across long edge
-        float rollSnapDeg = Math.round(deviceRoll / 90f) * 90f;
-        boolean isLandscape = Math.abs(((int) rollSnapDeg) % 180) == 90;
-        float fieldOfView = isLandscape ? fieldOfViewDegY : fieldOfViewDegX;
         
         // Reset per-frame hit targets
         hitTargets.clear();
@@ -157,23 +153,25 @@ public class AROverlayView extends View {
         float snapAngle = updateCompassSnapAngle(deviceRoll);
         int snapped = ((int) Math.round(((snapAngle % 360f) + 360f) % 360f));
         boolean anchorTop = (snapped != 180); // top for 0/90/270, bottom for 180
+        boolean landscapeSnap = (snapped == 90 || snapped == 270);
+        float effectiveHorizontalFov = landscapeSnap ? fieldOfViewDegY : fieldOfViewDegX;
         if (snapped == 90) {
             // Rotate canvas so text is upright at the top long edge (anticlockwise landscape)
             canvas.save();
             canvas.rotate(90);
             canvas.translate(0, -screenWidth);
-            drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
+            drawCompassDirections(canvas, screenHeight, effectiveHorizontalFov, true, screenWidth);
             canvas.restore();
         } else if (snapped == 270) {
             // Rotate canvas so text is upright at the top long edge (clockwise landscape)
             canvas.save();
             canvas.rotate(-90);
             canvas.translate(-screenHeight, 0);
-            drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
+            drawCompassDirections(canvas, screenHeight, effectiveHorizontalFov, true, screenWidth);
             canvas.restore();
         } else {
             // 0 or 180 portrait variants
-            drawCompassDirections(canvas, screenWidth, fieldOfView, anchorTop, screenHeight);
+            drawCompassDirections(canvas, screenWidth, effectiveHorizontalFov, anchorTop, screenHeight);
         }
         
         if (trigpoints.isEmpty() || currentLocation == null) {
@@ -218,10 +216,12 @@ public class AROverlayView extends View {
             while (relativeBearing > 180) relativeBearing -= 360;
             while (relativeBearing < -180) relativeBearing += 360;
             
-            // Only draw trigpoints within field of view (use FOV for current orientation)
-            if (Math.abs(relativeBearing) <= fieldOfView / 2f) {
+            // Only draw trigpoints within field of view (add slight overscan to avoid edge clipping)
+            float halfFov = effectiveHorizontalFov / 2f;
+            float halfFovWithMargin = halfFov + 2f; // degrees
+            if (Math.abs(relativeBearing) <= halfFovWithMargin) {
                 // Calculate screen position
-                float screenX = screenWidth / 2f + (relativeBearing / (fieldOfView / 2f)) * (screenWidth / 2f);
+                float screenX = screenWidth / 2f + (relativeBearing / halfFov) * (screenWidth / 2f);
                 
                 // Place at horizon line based on camera elevation, clamped to 15% from edges if out of range
                 float centerY = screenHeight / 2f;
