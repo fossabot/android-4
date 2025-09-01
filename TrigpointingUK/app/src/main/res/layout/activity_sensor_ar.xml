@@ -25,32 +25,38 @@
             android:clickable="true"
             android:focusable="true" />
 
-        <!-- Simple calibration controls -->
-        <LinearLayout
+        <!-- Simple calibration controls: smaller "<" and ">" buttons near bottom edges -->
+        <Button
+            android:id="@+id/ar_narrower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:background="#66000000"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="16dp">
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:textSize="18sp"
+            android:text="&lt;"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp" />
 
-            <Button
-                android:id="@+id/ar_narrower"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Narrower" />
-
-            <View
-                android:layout_width="12dp"
-                android:layout_height="0dp" />
-
-            <Button
-                android:id="@+id/ar_wider"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wider" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/ar_wider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:textSize="18sp"
+            android:text="&gt;"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp" />
 
 
     </FrameLayout>

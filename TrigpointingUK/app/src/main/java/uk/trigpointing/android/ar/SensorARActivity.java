@@ -426,7 +426,6 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             if (overlayView != null) {
                 overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth());
             }
-            Toast.makeText(this, String.format("AR width %s (scale %.0f%%)", delta > 0 ? "+" : "-", scale * 100f), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.w(TAG, "Failed to adjust AR FOV scale", e);
         }
