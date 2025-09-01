@@ -146,8 +146,8 @@ public class AROverlayView extends View {
         int screenHeight = getHeight();
         float verticalFieldOfView = fieldOfViewDegY; // degrees across height (Y mapping)
         // Choose FOV for horizontal mapping based on roll: in landscape, use vertical FOV across long edge
-        float snapped = Math.round(deviceRoll / 90f) * 90f;
-        boolean isLandscape = Math.abs(((int) snapped) % 180) == 90;
+        float rollSnapDeg = Math.round(deviceRoll / 90f) * 90f;
+        boolean isLandscape = Math.abs(((int) rollSnapDeg) % 180) == 90;
         float fieldOfView = isLandscape ? fieldOfViewDegY : fieldOfViewDegX;
         
         // Reset per-frame hit targets
