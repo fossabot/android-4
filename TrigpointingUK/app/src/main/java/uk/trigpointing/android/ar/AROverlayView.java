@@ -38,8 +38,10 @@ public class AROverlayView extends View {
     private final List<HitTarget> hitTargets = new ArrayList<>();
     private OnTrigpointClickListener clickListener;
     
-    // Horizontal field of view (degrees) used for mapping bearings to X; defaults conservatively
-    private float fieldOfViewDeg = 60.0f;
+    // Field of view (degrees) used for mapping
+    // X uses horizontal FOV across screen width; Y uses vertical FOV across screen height
+    private float fieldOfViewDegX = 60.0f;
+    private float fieldOfViewDegY = 45.0f;
     
     // Simple data holder for trigpoint information
     public static class TrigpointData {
@@ -116,12 +118,20 @@ public class AROverlayView extends View {
         this.currentLocation = location;
     }
     
-    // Allow activity to set the FOV based on camera characteristics and/or user calibration
-    public void setFieldOfViewDegrees(float fovDegrees) {
-        if (Float.isNaN(fovDegrees) || fovDegrees <= 0f) return;
-        // Clamp to a sensible range to avoid accidental extreme values
-        this.fieldOfViewDeg = Math.max(20f, Math.min(120f, fovDegrees));
+    // Allow activity to set FOV based on camera characteristics and/or user calibration
+    public void setFieldOfViewDegrees(float horizontalFovDegrees, float verticalFovDegrees) {
+        if (!Float.isNaN(horizontalFovDegrees) && horizontalFovDegrees > 0f) {
+            this.fieldOfViewDegX = Math.max(20f, Math.min(120f, horizontalFovDegrees));
+        }
+        if (!Float.isNaN(verticalFovDegrees) && verticalFovDegrees > 0f) {
+            this.fieldOfViewDegY = Math.max(20f, Math.min(120f, verticalFovDegrees));
+        }
         invalidate();
+    }
+
+    // Backwards-compatible setter used by older callers; affects X axis mapping
+    public void setFieldOfViewDegrees(float horizontalFovDegrees) {
+        setFieldOfViewDegrees(horizontalFovDegrees, this.fieldOfViewDegY);
     }
     
     @Override
@@ -130,7 +140,8 @@ public class AROverlayView extends View {
         
         int screenWidth = getWidth();
         int screenHeight = getHeight();
-        float fieldOfView = fieldOfViewDeg; // degrees
+        float fieldOfView = fieldOfViewDegX; // degrees across width (X mapping)
+        float verticalFieldOfView = fieldOfViewDegY; // degrees across height (Y mapping)
         
         // Reset per-frame hit targets
         hitTargets.clear();
@@ -181,9 +192,15 @@ public class AROverlayView extends View {
                 // Calculate screen position
                 float screenX = screenWidth / 2 + (relativeBearing / (fieldOfView / 2)) * (screenWidth / 2);
                 
-                // For now, put all trigpoints at horizon level (center Y)
-                // TODO: Adjust for elevation differences using devicePitch
-                float screenY = screenHeight / 2;
+                // Place at horizon line based on device pitch, clamped to 15% from edges if out of range
+                float centerY = screenHeight / 2f;
+                float halfHeight = screenHeight / 2f;
+                float halfVFov = verticalFieldOfView / 2f;
+                float screenY = centerY + (devicePitch / halfVFov) * halfHeight;
+                float minY = screenHeight * 0.15f;
+                float maxY = screenHeight * 0.85f;
+                if (screenY < minY) screenY = minY;
+                if (screenY > maxY) screenY = maxY;
                 
                 // Draw trigpoint icon
                 drawTrigpointIcon(canvas, trig, screenX, screenY, distance);

@@ -252,10 +252,12 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             camera = Camera.open();
             cameraPreview.setCamera(camera);
             Log.i(TAG, "Camera initialized successfully");
-            // Set overlay FOV based on camera parameters and user calibration
+            // Set overlay FOVs based on camera parameters and user calibration
             if (overlayView != null) {
-                overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth());
-                Log.i(TAG, "AR overlay FOV set to " + getEffectiveFovForScreenWidth() + "°");
+                float fovX = getEffectiveFovForScreenWidth();
+                float fovY = getEffectiveFovForScreenHeight();
+                overlayView.setFieldOfViewDegrees(fovX, fovY);
+                Log.i(TAG, "AR overlay FOV set to X=" + fovX + "°, Y=" + fovY + "°");
             }
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize camera", e);
@@ -428,7 +430,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             if (scale > 1.5f) scale = 1.5f;
             prefs.edit().putFloat("ar_fov_scale", scale).apply();
             if (overlayView != null) {
-                overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth());
+                overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth(), getEffectiveFovForScreenHeight());
             }
         } catch (Exception e) {
             Log.w(TAG, "Failed to adjust AR FOV scale", e);
@@ -456,6 +458,31 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             return base * scale;
         } catch (Exception e) {
             Log.w(TAG, "Unable to read camera FOV; using fallback", e);
+            return fallback;
+        }
+    }
+
+    // Compute FOV to use for the vertical spread across screen height in current orientation.
+    // In portrait we rotate preview by 90°, so the camera's horizontal FOV maps to screen height.
+    private float getEffectiveFovForScreenHeight() {
+        float fallback = 45f;
+        try {
+            float base;
+            if (camera != null) {
+                Camera.Parameters p = camera.getParameters();
+                float h = p != null ? p.getHorizontalViewAngle() : 0f;
+                float v = p != null ? p.getVerticalViewAngle() : 0f;
+                base = (h > 0f ? h : (v > 0f ? v : fallback));
+            } else {
+                base = fallback;
+            }
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            float scale = prefs.getFloat("ar_fov_scale", 1.0f);
+            if (scale < 0.5f) scale = 0.5f;
+            if (scale > 1.5f) scale = 1.5f;
+            return base * scale;
+        } catch (Exception e) {
+            Log.w(TAG, "Unable to read camera FOV (height); using fallback", e);
             return fallback;
         }
     }
