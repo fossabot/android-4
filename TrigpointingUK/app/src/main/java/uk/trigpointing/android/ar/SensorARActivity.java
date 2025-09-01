@@ -344,6 +344,10 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                 List<AROverlayView.TrigpointData> trigpoints = new ArrayList<>();
                 
                 if (cursor != null && cursor.moveToFirst()) {
+                    // First pass: collect more candidates than needed to ensure we have
+                    // enough bearings spanning what landscape can display. We'll keep
+                    // at most 10 nearest after bearing filtering.
+                    List<AROverlayView.TrigpointData> candidates = new ArrayList<>();
                     do {
                         long id = cursor.getLong(0);
                         String name = cursor.getString(1);
@@ -361,16 +365,33 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                         // Only include trigpoints within max distance
                         if (distance <= MAX_DISTANCE_METERS) {
                             AROverlayView.TrigpointData trigData = new AROverlayView.TrigpointData(id, name, trigLat, trigLon, type, condition);
-                            trigpoints.add(trigData);
-                        }
-                        
-                        // Limit to 10 nearest trigpoints
-                        if (trigpoints.size() >= 10) {
-                            break;
+                            candidates.add(trigData);
                         }
                         
                     } while (cursor.moveToNext());
                     cursor.close();
+
+                    // Second pass: pick up to 10 nearest among those whose bearings
+                    // lie within the maximum FOV that could be displayed at any screen rotation.
+                    // Use diagonal FOV for optimal coverage across all orientations.
+                    final float maxHorizontalFovDeg = overlayView != null ? overlayView.getDiagonalFieldOfViewDegrees() : 90f;
+                    // Sort by distance ascending
+                    candidates.sort((a, b) -> {
+                        Location la = new Location("a"); la.setLatitude(a.getLat()); la.setLongitude(a.getLon());
+                        Location lb = new Location("b"); lb.setLatitude(b.getLat()); lb.setLongitude(b.getLon());
+                        return Float.compare(currentLocation.distanceTo(la), currentLocation.distanceTo(lb));
+                    });
+                    for (AROverlayView.TrigpointData t : candidates) {
+                        if (trigpoints.size() >= 10) break;
+                        float bearing = currentLocation.bearingTo(new Location("tmp") {{ setLatitude(t.getLat()); setLongitude(t.getLon()); }});
+                        if (bearing < 0) bearing += 360f;
+                        float rel = bearing - currentAzimuth;
+                        while (rel > 180f) rel -= 360f;
+                        while (rel < -180f) rel += 360f;
+                        if (Math.abs(rel) <= maxHorizontalFovDeg / 2f) {
+                            trigpoints.add(t);
+                        }
+                    }
                 }
                 
                 // Update UI on main thread (if activity still exists)
@@ -390,6 +411,8 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             }
         }).start();
     }
+
+    // No dynamic limit – keep stable list of 10 nearest for a clean UI
     
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -457,6 +480,8 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             prefs.edit().putFloat("ar_fov_scale", scale).apply();
             if (overlayView != null) {
                 overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth(), getEffectiveFovForScreenHeight());
+                // Reload trigpoints with new FOV to ensure candidate selection uses updated values
+                loadNearbyTrigpoints();
             }
         } catch (Exception e) {
             Log.w(TAG, "Failed to adjust AR FOV scale", e);

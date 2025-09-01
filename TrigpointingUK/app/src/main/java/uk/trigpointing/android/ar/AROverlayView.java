@@ -145,7 +145,11 @@ public class AROverlayView extends View {
         int screenWidth = getWidth();
         int screenHeight = getHeight();
         float verticalFieldOfView = fieldOfViewDegY; // degrees across height (Y mapping)
-        float fieldOfView = fieldOfViewDegX; // horizontal mapping always uses overlay's X FOV for smoothness
+        float fieldOfView = fieldOfViewDegX; // original behavior: map across X FOV only
+        
+        // Calculate the diagonal FOV to ensure we show all trigpoints that could potentially 
+        // be visible at any screen rotation. This uses the diagonal of the FOV rectangle.
+        float maxPossibleFOV = calculateDiagonalFOV(fieldOfViewDegX, fieldOfViewDegY);
         
         // Reset per-frame hit targets
         hitTargets.clear();
@@ -217,9 +221,8 @@ public class AROverlayView extends View {
             while (relativeBearing > 180) relativeBearing -= 360;
             while (relativeBearing < -180) relativeBearing += 360;
             
-            // Only draw trigpoints within field of view
-            if (Math.abs(relativeBearing) <= fieldOfView / 2f) {
-                // Calculate screen position across current screen width for continuity
+            // Draw trigpoints within the maximum possible FOV (so they're visible in any rotation)
+            if (Math.abs(relativeBearing) <= maxPossibleFOV / 2f) {
                 float screenX = screenWidth / 2f + (relativeBearing / (fieldOfView / 2f)) * (screenWidth / 2f);
                 
                 // Place at horizon line based on camera elevation, clamped to 15% from edges if out of range
@@ -239,6 +242,14 @@ public class AROverlayView extends View {
         }
 
         canvas.restore();
+    }
+
+    // Expose vertical FOV (used as maximum horizontal FOV in landscape)
+    public float getVerticalFieldOfViewDegrees() { return fieldOfViewDegY; }
+    
+    // Expose diagonal FOV for consistent filtering in activity
+    public float getDiagonalFieldOfViewDegrees() { 
+        return calculateDiagonalFOV(fieldOfViewDegX, fieldOfViewDegY); 
     }
     
     private void drawCompassDirections(Canvas canvas, int spanPixels, float fieldOfView, boolean anchorTop, int screenHeight) {
@@ -349,6 +360,66 @@ public class AROverlayView extends View {
         return da - db > 0f;
     }
     
+    /**
+     * Calculate the diagonal field of view given horizontal and vertical FOVs.
+     * This represents the maximum angular span that could be visible at any screen rotation.
+     * 
+     * @param horizontalFovDeg Horizontal field of view in degrees
+     * @param verticalFovDeg Vertical field of view in degrees
+     * @return Diagonal field of view in degrees
+     */
+    private float calculateDiagonalFOV(float horizontalFovDeg, float verticalFovDeg) {
+        // Convert to radians for calculation
+        float hFovRad = (float) Math.toRadians(horizontalFovDeg / 2.0);
+        float vFovRad = (float) Math.toRadians(verticalFovDeg / 2.0);
+        
+        // Calculate diagonal half-angle using: diagonal = sqrt(tan²(h/2) + tan²(v/2))
+        float tanH = (float) Math.tan(hFovRad);
+        float tanV = (float) Math.tan(vFovRad);
+        float diagonalHalfRad = (float) Math.atan(Math.sqrt(tanH * tanH + tanV * tanV));
+        
+        // Convert back to degrees and return full angle
+        return (float) Math.toDegrees(diagonalHalfRad * 2.0);
+    }
+    
+    /**
+     * Transform coordinates from rotated canvas space to where they actually appear on screen.
+     * When canvas.rotate(deviceRoll, centerX, centerY) is applied, a point drawn at (canvasX, canvasY)
+     * in the rotated coordinate system will actually appear at a different location on screen.
+     * 
+     * @param canvasX X coordinate in rotated canvas space
+     * @param canvasY Y coordinate in rotated canvas space  
+     * @param iconSize Size of the icon (for debugging)
+     * @return Array containing [screenX, screenY] where the point actually appears on screen
+     */
+    private float[] transformToScreenCoordinates(float canvasX, float canvasY, int iconSize) {
+        int screenWidth = getWidth();
+        int screenHeight = getHeight();
+        float centerX = screenWidth / 2f;
+        float centerY = screenHeight / 2f;
+        
+        // Translate to origin (center of rotation)
+        float x = canvasX - centerX;
+        float y = canvasY - centerY;
+        
+        // Apply the SAME rotation that was applied to the canvas
+        // This tells us where the point actually appears on screen
+        double rollRad = Math.toRadians(deviceRoll);
+        float cos = (float) Math.cos(rollRad);
+        float sin = (float) Math.sin(rollRad);
+        
+        float rotatedX = x * cos - y * sin;
+        float rotatedY = x * sin + y * cos;
+        
+        // Translate back to screen coordinates
+        float finalX = rotatedX + centerX;
+        float finalY = rotatedY + centerY;
+        
+        // Transform completed
+        
+        return new float[]{finalX, finalY};
+    }
+    
         private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
         try {
             // Get trigpoint icon (same source as Leaflet map)
@@ -366,8 +437,8 @@ public class AROverlayView extends View {
                 int bottom = (int) (y + iconSize / 2);
                 icon.setBounds(left, top, right, bottom);
                 icon.draw(canvas);
-                // Track hit target for icon area
-                hitTargets.add(new HitTarget(left, top, right, bottom, trig.getId()));
+                
+                // We'll create a single comprehensive hit target after drawing all elements
                 
                 // Draw trigpoint name below icon
                 String text = trig.getName();
@@ -386,6 +457,8 @@ public class AROverlayView extends View {
                 
                 canvas.drawText(text, textX, textY, textPaint);
                 
+                // Store text position for comprehensive hit target calculation
+                
                 // Draw distance
                 String distanceText = String.format("%.0fm", distance);
                 textPaint.getTextBounds(distanceText, 0, distanceText.length(), textBounds);
@@ -399,6 +472,30 @@ public class AROverlayView extends View {
                 );
                 
                 canvas.drawText(distanceText, distanceX, distanceY, textPaint);
+                
+                // Create a single comprehensive hit target that covers the entire trigpoint area
+                // Calculate the bounding area in canvas coordinates
+                float canvasTop = y - iconSize / 2; // Top of icon
+                float canvasBottom = distanceY + 5; // Bottom of distance text with padding
+                float canvasLeft = Math.min(x - iconSize / 2, Math.min(textX - 5, distanceX - 5)); // Leftmost edge
+                float canvasRight = Math.max(x + iconSize / 2, Math.max(textX + textBounds.width() + 5, distanceX + textBounds.width() + 5)); // Rightmost edge
+                
+                // Transform the center and calculate screen hit target
+                float canvasCenterX = (canvasLeft + canvasRight) / 2;
+                float canvasCenterY = (canvasTop + canvasBottom) / 2;
+                float[] screenCenter = transformToScreenCoordinates(canvasCenterX, canvasCenterY, 0);
+                
+                // Use a generous circular hit area that encompasses the entire trigpoint
+                float canvasWidth = canvasRight - canvasLeft;
+                float canvasHeight = canvasBottom - canvasTop;
+                int hitRadius = (int) (Math.max(canvasWidth, canvasHeight) / 2 + 20); // Extra generous padding
+                
+                int screenLeft = (int) (screenCenter[0] - hitRadius);
+                int screenTop = (int) (screenCenter[1] - hitRadius);
+                int screenRight = (int) (screenCenter[0] + hitRadius);
+                int screenBottom = (int) (screenCenter[1] + hitRadius);
+                
+                hitTargets.add(new HitTarget(screenLeft, screenTop, screenRight, screenBottom, trig.getId()));
             }
         } catch (Exception e) {
             Log.e(TAG, "Error drawing trigpoint icon for " + trig.getName(), e);
@@ -502,7 +599,9 @@ public class AROverlayView extends View {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             float x = event.getX();
             float y = event.getY();
+            
             // Check topmost first (draw order)
+            // Hit targets are recorded in screen coordinates, so no transformation needed
             for (int i = hitTargets.size() - 1; i >= 0; i--) {
                 HitTarget t = hitTargets.get(i);
                 if (t.rect.contains((int) x, (int) y)) {
