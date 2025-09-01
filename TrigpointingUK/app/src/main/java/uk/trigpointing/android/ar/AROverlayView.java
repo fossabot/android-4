@@ -155,17 +155,17 @@ public class AROverlayView extends View {
         int snapped = ((int) Math.round(((snapAngle % 360f) + 360f) % 360f));
         boolean anchorTop = (snapped != 180); // top for 0/90/270, bottom for 180
         if (snapped == 90) {
-            // Rotate canvas so text is upright at the top long edge
-            canvas.save();
-            canvas.rotate(-90);
-            canvas.translate(-screenHeight, 0);
-            drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
-            canvas.restore();
-        } else if (snapped == 270) {
-            // Rotate canvas so text is upright at the top long edge for other landscape
+            // Rotate canvas so text is upright at the top long edge (anticlockwise landscape)
             canvas.save();
             canvas.rotate(90);
             canvas.translate(0, -screenWidth);
+            drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
+            canvas.restore();
+        } else if (snapped == 270) {
+            // Rotate canvas so text is upright at the top long edge (clockwise landscape)
+            canvas.save();
+            canvas.rotate(-90);
+            canvas.translate(-screenHeight, 0);
             drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
             canvas.restore();
         } else {
