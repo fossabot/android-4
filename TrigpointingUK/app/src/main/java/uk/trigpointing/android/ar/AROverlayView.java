@@ -148,8 +148,12 @@ public class AROverlayView extends View {
         // Reset per-frame hit targets
         hitTargets.clear();
 
-        // Draw compass directions at top edge (unrotated), regardless of device roll bucket
+        // Draw compass directions snapped to the edge closest to zenith
+        float snapAngle = Math.round(deviceRoll / 90f) * 90f; // nearest 0/90/180/270
+        canvas.save();
+        canvas.rotate(-snapAngle, screenWidth / 2f, screenHeight / 2f);
         drawCompassDirections(canvas, screenWidth, fieldOfView);
+        canvas.restore();
         
         if (trigpoints.isEmpty() || currentLocation == null) {
             return;
