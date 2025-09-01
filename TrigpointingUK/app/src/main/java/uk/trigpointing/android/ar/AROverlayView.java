@@ -196,8 +196,8 @@ public class AROverlayView extends View {
                 float centerY = screenHeight / 2f;
                 float halfHeight = screenHeight / 2f;
                 float halfVFov = verticalFieldOfView / 2f;
-                // devicePitch carries camera elevation (+ up), so subtract to move icon up when elevating camera
-                float screenY = centerY - (devicePitch / halfVFov) * halfHeight;
+                // devicePitch carries camera elevation (+ up). When tilting up, horizon appears lower -> move line down (increase Y)
+                float screenY = centerY + (devicePitch / halfVFov) * halfHeight;
                 float minY = screenHeight * 0.15f;
                 float maxY = screenHeight * 0.85f;
                 if (screenY < minY) screenY = minY;
