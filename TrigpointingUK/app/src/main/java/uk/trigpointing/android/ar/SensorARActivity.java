@@ -386,22 +386,26 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         }
         
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            // Get rotation matrix from rotation vector
+            // Build rotation matrix from the rotation vector
             SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
-            
-            // Get orientation angles
+
+            // Derive camera heading: project the camera-forward vector (device -Z) into world X/Y (east/north)
+            // rotationMatrix is row-major: [0..2; 3..5; 6..8]
+            float fx = -rotationMatrix[2];  // world X component of camera-forward
+            float fy = -rotationMatrix[5];  // world Y component of camera-forward
+            float fz = -rotationMatrix[8];  // world Z component of camera-forward (not used for heading)
+
+            // Heading relative to magnetic north, increasing eastward
+            float headingRad = (float) Math.atan2(fx, fy);
+            float headingDeg = (float) Math.toDegrees(headingRad);
+            if (headingDeg < 0) headingDeg += 360f;
+            currentAzimuth = headingDeg;
+
+            // Also compute pitch/roll for potential vertical placement (kept from orientation for now)
             SensorManager.getOrientation(rotationMatrix, orientationAngles);
-            
-            // Convert to degrees
-            currentAzimuth = (float) Math.toDegrees(orientationAngles[0]);
             currentPitch = (float) Math.toDegrees(orientationAngles[1]);
             currentRoll = (float) Math.toDegrees(orientationAngles[2]);
-            
-            // Normalize azimuth to 0-360 degrees
-            if (currentAzimuth < 0) {
-                currentAzimuth += 360;
-            }
-            
+
             // Update overlay with new orientation
             if (overlayView != null) {
                 overlayView.updateOrientation(currentAzimuth, currentPitch, currentRoll);
