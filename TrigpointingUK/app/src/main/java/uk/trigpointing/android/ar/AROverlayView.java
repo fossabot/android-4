@@ -38,6 +38,9 @@ public class AROverlayView extends View {
     private final List<HitTarget> hitTargets = new ArrayList<>();
     private OnTrigpointClickListener clickListener;
     
+    // Horizontal field of view (degrees) used for mapping bearings to X; defaults conservatively
+    private float fieldOfViewDeg = 60.0f;
+    
     // Simple data holder for trigpoint information
     public static class TrigpointData {
         long id;
@@ -113,13 +116,21 @@ public class AROverlayView extends View {
         this.currentLocation = location;
     }
     
+    // Allow activity to set the FOV based on camera characteristics and/or user calibration
+    public void setFieldOfViewDegrees(float fovDegrees) {
+        if (Float.isNaN(fovDegrees) || fovDegrees <= 0f) return;
+        // Clamp to a sensible range to avoid accidental extreme values
+        this.fieldOfViewDeg = Math.max(20f, Math.min(120f, fovDegrees));
+        invalidate();
+    }
+    
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
         int screenWidth = getWidth();
         int screenHeight = getHeight();
-        float fieldOfView = 60.0f; // Degrees, typical phone camera FOV
+        float fieldOfView = fieldOfViewDeg; // degrees
         
         // Reset per-frame hit targets
         hitTargets.clear();

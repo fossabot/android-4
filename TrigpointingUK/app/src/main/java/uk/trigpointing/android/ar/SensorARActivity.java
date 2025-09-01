@@ -26,6 +26,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -117,6 +118,14 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                     Toast.makeText(SensorARActivity.this, "Unable to open trig details", Toast.LENGTH_LONG).show();
                 }
             });
+        }
+        
+        // Calibration buttons
+        Button narrowerBtn = findViewById(R.id.ar_narrower);
+        Button widerBtn = findViewById(R.id.ar_wider);
+        if (narrowerBtn != null && widerBtn != null) {
+            narrowerBtn.setOnClickListener(v -> adjustArFovScale(-0.02f));
+            widerBtn.setOnClickListener(v -> adjustArFovScale(+0.02f));
         }
         
         // Initialize sensors
@@ -243,6 +252,11 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             camera = Camera.open();
             cameraPreview.setCamera(camera);
             Log.i(TAG, "Camera initialized successfully");
+            // Set overlay FOV based on camera parameters and user calibration
+            if (overlayView != null) {
+                overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth());
+                Log.i(TAG, "AR overlay FOV set to " + getEffectiveFovForScreenWidth() + "°");
+            }
         } catch (Exception e) {
             Log.e(TAG, "Failed to initialize camera", e);
             Toast.makeText(this, "Failed to access camera", Toast.LENGTH_SHORT).show();
@@ -398,6 +412,49 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Handle sensor accuracy changes if needed
+    }
+
+    private void adjustArFovScale(float delta) {
+        try {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            float scale = prefs.getFloat("ar_fov_scale", 1.0f);
+            scale += delta;
+            // Clamp defensively
+            if (scale < 0.5f) scale = 0.5f;
+            if (scale > 1.5f) scale = 1.5f;
+            prefs.edit().putFloat("ar_fov_scale", scale).apply();
+            if (overlayView != null) {
+                overlayView.setFieldOfViewDegrees(getEffectiveFovForScreenWidth());
+            }
+            Toast.makeText(this, String.format("AR width %s (scale %.0f%%)", delta > 0 ? "+" : "-", scale * 100f), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to adjust AR FOV scale", e);
+        }
+    }
+
+    // Compute FOV to use for the horizontal spread of the overlay in current orientation.
+    // In portrait we rotate preview by 90°, so the camera's vertical FOV maps to screen width.
+    private float getEffectiveFovForScreenWidth() {
+        float fallback = 60f;
+        try {
+            float base;
+            if (camera != null) {
+                Camera.Parameters p = camera.getParameters();
+                float h = p != null ? p.getHorizontalViewAngle() : 0f;
+                float v = p != null ? p.getVerticalViewAngle() : 0f;
+                base = (v > 0f ? v : (h > 0f ? h : fallback));
+            } else {
+                base = fallback;
+            }
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            float scale = prefs.getFloat("ar_fov_scale", 1.0f);
+            if (scale < 0.5f) scale = 0.5f;
+            if (scale > 1.5f) scale = 1.5f;
+            return base * scale;
+        } catch (Exception e) {
+            Log.w(TAG, "Unable to read camera FOV; using fallback", e);
+            return fallback;
+        }
     }
     
 
