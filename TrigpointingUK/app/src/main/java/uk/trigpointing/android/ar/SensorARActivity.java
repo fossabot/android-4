@@ -19,9 +19,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -90,6 +93,8 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     // Activity lifecycle flag
     private volatile boolean isDestroyed = false;
     
+    // Handler for auto-repeat on FOV calibration buttons
+    private final Handler arFovRepeatHandler = new Handler(Looper.getMainLooper());
 
     
     @Override
@@ -120,12 +125,14 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             });
         }
         
-        // Calibration buttons
+        // Calibration buttons with auto-repeat on press-and-hold
         Button narrowerBtn = findViewById(R.id.ar_narrower);
         Button widerBtn = findViewById(R.id.ar_wider);
-        if (narrowerBtn != null && widerBtn != null) {
-            narrowerBtn.setOnClickListener(v -> adjustArFovScale(-0.02f));
-            widerBtn.setOnClickListener(v -> adjustArFovScale(+0.02f));
+        if (narrowerBtn != null) {
+            setupAutoRepeatButton(narrowerBtn, -0.02f);
+        }
+        if (widerBtn != null) {
+            setupAutoRepeatButton(widerBtn, +0.02f);
         }
         
         // Initialize sensors
@@ -182,6 +189,9 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     protected void onPause() {
         super.onPause();
         
+        // Stop any FOV auto-repeat callbacks
+        arFovRepeatHandler.removeCallbacksAndMessages(null);
+
         // Unregister sensor listeners
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
@@ -439,6 +449,36 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         } catch (Exception e) {
             Log.w(TAG, "Failed to adjust AR FOV scale", e);
         }
+    }
+
+    private void setupAutoRepeatButton(Button button, float delta) {
+        final Runnable[] repeatTaskHolder = new Runnable[1];
+        button.setOnTouchListener((v, event) -> {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    // Immediate adjustment on press
+                    adjustArFovScale(delta);
+                    // Start repeating after a short delay
+                    repeatTaskHolder[0] = new Runnable() {
+                        @Override public void run() {
+                            adjustArFovScale(delta);
+                            arFovRepeatHandler.postDelayed(this, 60);
+                        }
+                    };
+                    arFovRepeatHandler.postDelayed(repeatTaskHolder[0], 300);
+                    v.setPressed(true);
+                    return true;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    v.setPressed(false);
+                    if (repeatTaskHolder[0] != null) {
+                        arFovRepeatHandler.removeCallbacks(repeatTaskHolder[0]);
+                        repeatTaskHolder[0] = null;
+                    }
+                    return true;
+            }
+            return false;
+        });
     }
 
     // Compute FOV to use for the horizontal spread of the overlay in current orientation.
