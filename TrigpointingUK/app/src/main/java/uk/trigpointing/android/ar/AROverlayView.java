@@ -151,12 +151,12 @@ public class AROverlayView extends View {
         hitTargets.clear();
 
         // Draw compass directions snapped to the edge closest to zenith, with hysteresis
-        float snapAngle = computeCompassSnapWithHysteresis(deviceRoll, compassSnapAngleDeg);
-        compassSnapAngleDeg = snapAngle;
+        float snapAngle = updateCompassSnapAngle(deviceRoll);
         canvas.save();
         canvas.rotate(-snapAngle, screenWidth / 2f, screenHeight / 2f);
-        // After rotating the canvas, draw across the rotated width
-        drawCompassDirections(canvas, screenWidth, fieldOfView);
+        // Use the correct span for the current orientation (top/bottom → width, sides → height)
+        int span = (Math.abs(Math.round(snapAngle)) % 180 == 0) ? screenWidth : screenHeight;
+        drawCompassDirections(canvas, span, (Math.abs(Math.round(snapAngle)) % 180 == 0) ? fieldOfView : verticalFieldOfView);
         canvas.restore();
         
         if (trigpoints.isEmpty() || currentLocation == null) {
@@ -270,35 +270,46 @@ public class AROverlayView extends View {
     }
 
     // Compute nearest 0/90/180/270 snap with hysteresis around the 45° boundaries
-    private float computeCompassSnapWithHysteresis(float rollDeg, float lastSnapDeg) {
+    private float updateCompassSnapAngle(float rollDeg) {
         // Normalize roll to [-180, 180)
         float r = rollDeg;
         while (r >= 180f) r -= 360f;
         while (r < -180f) r += 360f;
 
-        // Determine current snap bucket index for lastSnapDeg
-        int lastIdx = Math.round(lastSnapDeg / 90f);
-        if (lastIdx == -2) lastIdx = 2; // map -180 to 180 bucket
-        // Boundaries between buckets at (k*90 ± 45). Add hysteresis so switch occurs beyond ±(45+h)
-        float lowerBoundary = (lastIdx * 90f) - (45f + COMPASS_HYSTERESIS_DEG);
-        float upperBoundary = (lastIdx * 90f) + (45f + COMPASS_HYSTERESIS_DEG);
+        // Determine the nearest bucket index for current roll
+        int nearestIdx = Math.round(r / 90f); // -2..2
+        if (nearestIdx == -2) nearestIdx = 2; // normalize -180 to 180
+        float nearestAngle = nearestIdx * 90f;
 
-        // Normalize r and boundaries to comparable range
-        float rr = r;
-        // Prefer choosing nearest desired when far beyond boundaries
-        if (rr < lowerBoundary) {
-            lastIdx -= 1;
-        } else if (rr > upperBoundary) {
-            lastIdx += 1;
+        // If we have no previous snap, adopt nearest immediately
+        if (compassSnapAngleDeg == 0f && Math.abs(r) < 1f) {
+            compassSnapAngleDeg = 0f;
+            return 0f;
+        } else if (Float.isNaN(compassSnapAngleDeg)) {
+            compassSnapAngleDeg = nearestAngle;
+            return nearestAngle;
         }
 
-        // Clamp idx to [-2,-1,0,1,2] and map -2/2 to ±180 (treat as 180)
-        if (lastIdx < -2) lastIdx = -2;
-        if (lastIdx > 2) lastIdx = 2;
+        // Compute current snapped index
+        int currentIdx = Math.round(compassSnapAngleDeg / 90f);
+        if (currentIdx == -2) currentIdx = 2;
+        float currentAngle = currentIdx * 90f;
 
-        float snapped = lastIdx * 90f;
-        if (snapped == -180f) snapped = 180f;
-        return snapped;
+        // Only switch when roll crosses beyond ±(45 + hysteresis) from current bucket center
+        float lower = currentAngle - (45f + COMPASS_HYSTERESIS_DEG);
+        float upper = currentAngle + (45f + COMPASS_HYSTERESIS_DEG);
+
+        if (r < lower) {
+            currentIdx -= 1;
+        } else if (r > upper) {
+            currentIdx += 1;
+        }
+
+        if (currentIdx < -2) currentIdx = -2;
+        if (currentIdx > 2) currentIdx = 2;
+
+        compassSnapAngleDeg = (currentIdx == -2 ? 180f : currentIdx * 90f);
+        return compassSnapAngleDeg;
     }
     
         private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
