@@ -151,15 +151,27 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
             float[] rotationMatrix = new float[9];
             SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
 
-            // Calculate camera direction instead of phone vertical axis direction
-            // This provides stable rotation even when phone is held upright
-            // Project the camera-forward vector (device -Z) into world X/Y (east/north)
+            // Calculate hybrid direction: 45 degrees between screen normal and phone vertical axis
+            // This works well for both horizontal and vertical phone orientations
+            
+            // Screen normal (camera direction): device -Z axis in world coordinates
             // rotationMatrix is row-major: [0..2; 3..5; 6..8]
-            float fx = -rotationMatrix[2];  // world X component of camera-forward
-            float fy = -rotationMatrix[5];  // world Y component of camera-forward
-
-            // Heading relative to magnetic north, increasing eastward
-            float headingRad = (float) Math.atan2(fx, fy);
+            float screenNormalX = -rotationMatrix[2];  // world X component of screen normal
+            float screenNormalY = -rotationMatrix[5];  // world Y component of screen normal
+            float screenNormalZ = -rotationMatrix[8];  // world Z component of screen normal
+            
+            // Phone vertical axis: device +Y axis in world coordinates
+            float phoneVerticalX = rotationMatrix[1];  // world X component of phone vertical
+            float phoneVerticalY = rotationMatrix[4];  // world Y component of phone vertical
+            float phoneVerticalZ = rotationMatrix[7];  // world Z component of phone vertical
+            
+            // Calculate 45-degree hybrid vector between screen normal and phone vertical
+            // Use equal weighting (cos(45°) ≈ 0.707) for both vectors
+            float hybridX = 0.707f * screenNormalX + 0.707f * phoneVerticalX;
+            float hybridY = 0.707f * screenNormalY + 0.707f * phoneVerticalY;
+            
+            // Calculate heading from hybrid vector (ignore Z component for compass bearing)
+            float headingRad = (float) Math.atan2(hybridX, hybridY);
             float headingDeg = (float) Math.toDegrees(headingRad);
             if (headingDeg < 0) headingDeg += 360f;
             
