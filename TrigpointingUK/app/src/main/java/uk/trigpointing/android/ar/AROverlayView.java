@@ -153,35 +153,25 @@ public class AROverlayView extends View {
         // Draw compass directions snapped to the edge closest to zenith, with hysteresis
         float snapAngle = updateCompassSnapAngle(deviceRoll);
         int snapped = ((int) Math.round(((snapAngle % 360f) + 360f) % 360f));
-        canvas.save();
-        switch (snapped) {
-            case 0:
-                // Portrait upright: no transform
-                drawCompassDirections(canvas, screenWidth, fieldOfView);
-                break;
-            case 90:
-                // Landscape (one side): rotate -90 and translate to align
-                canvas.rotate(-90);
-                canvas.translate(-screenHeight, 0);
-                drawCompassDirections(canvas, screenHeight, fieldOfView);
-                break;
-            case 180:
-                // Upside-down portrait: rotate 180 and translate
-                canvas.rotate(180);
-                canvas.translate(-screenWidth, -screenHeight);
-                drawCompassDirections(canvas, screenWidth, fieldOfView);
-                break;
-            case 270:
-                // Landscape (other side): rotate +90 and translate
-                canvas.rotate(90);
-                canvas.translate(0, -screenWidth);
-                drawCompassDirections(canvas, screenHeight, fieldOfView);
-                break;
-            default:
-                // Fallback: treat as portrait
-                drawCompassDirections(canvas, screenWidth, fieldOfView);
+        boolean anchorTop = (snapped != 180); // top for 0/90/270, bottom for 180
+        if (snapped == 90) {
+            // Rotate canvas so text is upright at the top long edge
+            canvas.save();
+            canvas.rotate(-90);
+            canvas.translate(-screenHeight, 0);
+            drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
+            canvas.restore();
+        } else if (snapped == 270) {
+            // Rotate canvas so text is upright at the top long edge for other landscape
+            canvas.save();
+            canvas.rotate(90);
+            canvas.translate(0, -screenWidth);
+            drawCompassDirections(canvas, screenHeight, fieldOfView, true, screenWidth);
+            canvas.restore();
+        } else {
+            // 0 or 180 portrait variants
+            drawCompassDirections(canvas, screenWidth, fieldOfView, anchorTop, screenHeight);
         }
-        canvas.restore();
         
         if (trigpoints.isEmpty() || currentLocation == null) {
             return;
@@ -249,7 +239,7 @@ public class AROverlayView extends View {
         canvas.restore();
     }
     
-    private void drawCompassDirections(Canvas canvas, int spanPixels, float fieldOfView) {
+    private void drawCompassDirections(Canvas canvas, int spanPixels, float fieldOfView, boolean anchorTop, int screenHeight) {
         Paint compassPaint = new Paint();
         compassPaint.setColor(Color.WHITE);
         compassPaint.setTextSize(36); // Slightly smaller than trigpoint text
@@ -257,7 +247,10 @@ public class AROverlayView extends View {
         compassPaint.setShadowLayer(2, 1, 1, Color.BLACK);
         compassPaint.setTypeface(android.graphics.Typeface.MONOSPACE);
         
-        float compassY = 60; // Position near top of screen
+        float margin = 60f;
+        float compassYTop = margin; // Position near top of screen
+        float compassYBottom = screenHeight - margin; // Near bottom
+        float compassY = anchorTop ? compassYTop : compassYBottom;
         
         for (int i = 0; i < COMPASS_DIRECTIONS.length; i++) {
             float bearing = COMPASS_BEARINGS[i];
