@@ -152,11 +152,35 @@ public class AROverlayView extends View {
 
         // Draw compass directions snapped to the edge closest to zenith, with hysteresis
         float snapAngle = updateCompassSnapAngle(deviceRoll);
+        int snapped = ((int) Math.round(((snapAngle % 360f) + 360f) % 360f));
         canvas.save();
-        canvas.rotate(-snapAngle, screenWidth / 2f, screenHeight / 2f);
-        // Use the correct span for the current orientation (top/bottom → width, sides → height)
-        int span = (Math.abs(Math.round(snapAngle)) % 180 == 0) ? screenWidth : screenHeight;
-        drawCompassDirections(canvas, span, (Math.abs(Math.round(snapAngle)) % 180 == 0) ? fieldOfView : verticalFieldOfView);
+        switch (snapped) {
+            case 0:
+                // Portrait upright: no transform
+                drawCompassDirections(canvas, screenWidth, fieldOfView);
+                break;
+            case 90:
+                // Landscape (one side): rotate -90 and translate to align
+                canvas.rotate(-90);
+                canvas.translate(-screenHeight, 0);
+                drawCompassDirections(canvas, screenHeight, fieldOfView);
+                break;
+            case 180:
+                // Upside-down portrait: rotate 180 and translate
+                canvas.rotate(180);
+                canvas.translate(-screenWidth, -screenHeight);
+                drawCompassDirections(canvas, screenWidth, fieldOfView);
+                break;
+            case 270:
+                // Landscape (other side): rotate +90 and translate
+                canvas.rotate(90);
+                canvas.translate(0, -screenWidth);
+                drawCompassDirections(canvas, screenHeight, fieldOfView);
+                break;
+            default:
+                // Fallback: treat as portrait
+                drawCompassDirections(canvas, screenWidth, fieldOfView);
+        }
         canvas.restore();
         
         if (trigpoints.isEmpty() || currentLocation == null) {
@@ -296,12 +320,12 @@ public class AROverlayView extends View {
         float currentAngle = currentIdx * 90f;
 
         // Only switch when roll crosses beyond ±(45 + hysteresis) from current bucket center
-        float lower = currentAngle - (45f + COMPASS_HYSTERESIS_DEG);
-        float upper = currentAngle + (45f + COMPASS_HYSTERESIS_DEG);
+        float lower = wrapDegrees(currentAngle - (45f + COMPASS_HYSTERESIS_DEG));
+        float upper = wrapDegrees(currentAngle + (45f + COMPASS_HYSTERESIS_DEG));
 
-        if (r < lower) {
+        if (angleIsLess(r, lower)) {
             currentIdx -= 1;
-        } else if (r > upper) {
+        } else if (angleIsGreater(r, upper)) {
             currentIdx += 1;
         }
 
@@ -310,6 +334,24 @@ public class AROverlayView extends View {
 
         compassSnapAngleDeg = (currentIdx == -2 ? 180f : currentIdx * 90f);
         return compassSnapAngleDeg;
+    }
+
+    // Helpers to compare wrapped angles safely around -180/180 boundaries
+    private float wrapDegrees(float deg) {
+        float d = deg;
+        while (d >= 180f) d -= 360f;
+        while (d < -180f) d += 360f;
+        return d;
+    }
+    private boolean angleIsLess(float a, float b) {
+        float da = wrapDegrees(a);
+        float db = wrapDegrees(b);
+        return da - db < 0f;
+    }
+    private boolean angleIsGreater(float a, float b) {
+        float da = wrapDegrees(a);
+        float db = wrapDegrees(b);
+        return da - db > 0f;
     }
     
         private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
