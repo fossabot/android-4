@@ -45,6 +45,7 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
     private ImageView arrowView;
     private TextView distanceView;
     private TextView accuracyView;
+    private TextView bearingView;
     private TextView calibrationView;
 
     private Vibrator vibrator;
@@ -66,6 +67,7 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
         arrowView = findViewById(R.id.radar_arrow);
         distanceView = findViewById(R.id.radar_distance);
         accuracyView = findViewById(R.id.radar_accuracy);
+        bearingView = findViewById(R.id.radar_bearing);
         calibrationView = findViewById(R.id.radar_calibration);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -195,6 +197,13 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
 
         float acc = Math.max(lastLocation.getAccuracy(), 3f);
         accuracyView.setText(String.format("±%.0f m", acc));
+
+        // Calculate magnetic bearing (true bearing minus declination)
+        float magneticBearing = bearingTo - field.getDeclination();
+        // Normalize to 0-360 degrees
+        while (magneticBearing < 0) magneticBearing += 360f;
+        while (magneticBearing >= 360) magneticBearing -= 360f;
+        bearingView.setText(String.format("Bearing: %03.0f°", magneticBearing));
 
         // Haptic feedback when aligned and close
         if (distance < 20 && Math.abs(delta) < 5) {

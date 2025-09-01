@@ -30,6 +30,15 @@
         android:text="±0 m" />
 
     <TextView
+        android:id="@+id/radar_bearing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Bearing: 000°" />
+
+    <TextView
         android:id="@+id/radar_calibration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
