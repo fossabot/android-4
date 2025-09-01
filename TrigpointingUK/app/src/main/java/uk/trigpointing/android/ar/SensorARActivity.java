@@ -403,10 +403,14 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             if (headingDeg < 0) headingDeg += 360f;
             currentAzimuth = headingDeg;
 
-            // Also compute pitch/roll for potential vertical placement (kept from orientation for now)
-            SensorManager.getOrientation(rotationMatrix, orientationAngles);
-            currentPitch = (float) Math.toDegrees(orientationAngles[1]);
-            currentRoll = (float) Math.toDegrees(orientationAngles[2]);
+            // Compute camera elevation above horizon using forward vector
+            float horizontalMag = (float) Math.sqrt(fx * fx + fy * fy);
+            float elevationRad = (float) Math.atan2(fz, horizontalMag); // -90..+90, + up
+            float elevationDeg = (float) Math.toDegrees(elevationRad);
+            currentPitch = elevationDeg; // reuse field to carry elevation to overlay
+            
+            // Roll not used in current overlay; keep zero for now
+            currentRoll = 0f;
 
             // Update overlay with new orientation
             if (overlayView != null) {

@@ -192,11 +192,12 @@ public class AROverlayView extends View {
                 // Calculate screen position
                 float screenX = screenWidth / 2 + (relativeBearing / (fieldOfView / 2)) * (screenWidth / 2);
                 
-                // Place at horizon line based on device pitch, clamped to 15% from edges if out of range
+                // Place at horizon line based on camera elevation, clamped to 15% from edges if out of range
                 float centerY = screenHeight / 2f;
                 float halfHeight = screenHeight / 2f;
                 float halfVFov = verticalFieldOfView / 2f;
-                float screenY = centerY + (devicePitch / halfVFov) * halfHeight;
+                // devicePitch carries camera elevation (+ up), so subtract to move icon up when elevating camera
+                float screenY = centerY - (devicePitch / halfVFov) * halfHeight;
                 float minY = screenHeight * 0.15f;
                 float maxY = screenHeight * 0.85f;
                 if (screenY < minY) screenY = minY;
