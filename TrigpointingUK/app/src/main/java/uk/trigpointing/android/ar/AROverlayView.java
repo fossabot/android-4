@@ -144,8 +144,11 @@ public class AROverlayView extends View {
         
         int screenWidth = getWidth();
         int screenHeight = getHeight();
-        float fieldOfView = fieldOfViewDegX; // degrees across width (X mapping)
         float verticalFieldOfView = fieldOfViewDegY; // degrees across height (Y mapping)
+        // Choose FOV for horizontal mapping based on roll: in landscape, use vertical FOV across long edge
+        float snapped = Math.round(deviceRoll / 90f) * 90f;
+        boolean isLandscape = Math.abs(((int) snapped) % 180) == 90;
+        float fieldOfView = isLandscape ? fieldOfViewDegY : fieldOfViewDegX;
         
         // Reset per-frame hit targets
         hitTargets.clear();
@@ -215,10 +218,10 @@ public class AROverlayView extends View {
             while (relativeBearing > 180) relativeBearing -= 360;
             while (relativeBearing < -180) relativeBearing += 360;
             
-            // Only draw trigpoints within field of view
-            if (Math.abs(relativeBearing) <= fieldOfView / 2) {
+            // Only draw trigpoints within field of view (use FOV for current orientation)
+            if (Math.abs(relativeBearing) <= fieldOfView / 2f) {
                 // Calculate screen position
-                float screenX = screenWidth / 2 + (relativeBearing / (fieldOfView / 2)) * (screenWidth / 2);
+                float screenX = screenWidth / 2f + (relativeBearing / (fieldOfView / 2f)) * (screenWidth / 2f);
                 
                 // Place at horizon line based on camera elevation, clamped to 15% from edges if out of range
                 float centerY = screenHeight / 2f;
