@@ -419,8 +419,20 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             float elevationDeg = (float) Math.toDegrees(elevationRad);
             currentPitch = elevationDeg; // reuse field to carry elevation to overlay
             
-            // Roll not used in current overlay; keep zero for now
-            currentRoll = 0f;
+            // Compute roll so we can rotate overlay to keep horizon level regardless of device rotation
+            // Project world-up (0,0,1) into the camera/image plane and measure its angle vs device screen-up
+            float rx = rotationMatrix[0], ry = rotationMatrix[3], rz = rotationMatrix[6]; // device +X in world
+            float ux = rotationMatrix[1], uy = rotationMatrix[4], uz = rotationMatrix[7]; // device +Y in world (screen up)
+            // forward vector f already computed above: (fx, fy, fz)
+            float dotUf = 0f * fx + 0f * fy + 1f * fz; // = fz
+            float projUx = 0f - dotUf * fx;
+            float projUy = 0f - dotUf * fy;
+            float projUz = 1f - dotUf * fz;
+            // Express projected world-up in device screen basis
+            float upInScreenX = projUx * rx + projUy * ry + projUz * rz; // component along device X (right)
+            float upInScreenY = projUx * ux + projUy * uy + projUz * uz; // component along device Y (up)
+            float rollRad = (float) Math.atan2(upInScreenX, upInScreenY); // angle to rotate so projected up aligns with screen up
+            currentRoll = (float) Math.toDegrees(rollRad);
 
             // Update overlay with new orientation
             if (overlayView != null) {

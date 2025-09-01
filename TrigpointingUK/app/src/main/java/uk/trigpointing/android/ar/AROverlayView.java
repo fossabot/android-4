@@ -34,6 +34,7 @@ public class AROverlayView extends View {
     private List<TrigpointData> trigpoints = new ArrayList<>();
     private float deviceAzimuth = 0;
     private float devicePitch = 0;
+    private float deviceRoll = 0;
     private Location currentLocation;
     private final List<HitTarget> hitTargets = new ArrayList<>();
     private OnTrigpointClickListener clickListener;
@@ -111,6 +112,7 @@ public class AROverlayView extends View {
     public void updateOrientation(float azimuth, float pitch, float roll) {
         this.deviceAzimuth = azimuth;
         this.devicePitch = pitch;
+        this.deviceRoll = roll;
         invalidate(); // Trigger redraw
     }
     
@@ -146,7 +148,7 @@ public class AROverlayView extends View {
         // Reset per-frame hit targets
         hitTargets.clear();
 
-        // Draw compass directions at top of screen
+        // Draw compass directions at top edge (unrotated), regardless of device roll bucket
         drawCompassDirections(canvas, screenWidth, fieldOfView);
         
         if (trigpoints.isEmpty() || currentLocation == null) {
@@ -169,6 +171,10 @@ public class AROverlayView extends View {
             return Float.compare(dist2, dist1); // Farthest first (reverse order)
         });
         
+        // Rotate canvas to follow device roll so trig overlay stays aligned with horizon
+        canvas.save();
+        canvas.rotate(deviceRoll, screenWidth / 2f, screenHeight / 2f);
+
         for (TrigpointData trig : sortedTrigpoints) {
             // Calculate bearing to trigpoint
             Location trigLocation = new Location("trigpoint");
@@ -207,6 +213,8 @@ public class AROverlayView extends View {
                 drawTrigpointIcon(canvas, trig, screenX, screenY, distance);
             }
         }
+
+        canvas.restore();
     }
     
     private void drawCompassDirections(Canvas canvas, int screenWidth, float fieldOfView) {
