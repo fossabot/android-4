@@ -150,12 +150,21 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
             float[] rotationMatrix = new float[9];
             SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
-            float[] orientation = new float[3];
-            SensorManager.getOrientation(rotationMatrix, orientation);
-            float azimuthRad = orientation[0];
-            float azimuthDeg = (float) Math.toDegrees(azimuthRad);
+
+            // Calculate camera direction instead of phone vertical axis direction
+            // This provides stable rotation even when phone is held upright
+            // Project the camera-forward vector (device -Z) into world X/Y (east/north)
+            // rotationMatrix is row-major: [0..2; 3..5; 6..8]
+            float fx = -rotationMatrix[2];  // world X component of camera-forward
+            float fy = -rotationMatrix[5];  // world Y component of camera-forward
+
+            // Heading relative to magnetic north, increasing eastward
+            float headingRad = (float) Math.atan2(fx, fy);
+            float headingDeg = (float) Math.toDegrees(headingRad);
+            if (headingDeg < 0) headingDeg += 360f;
+            
             // low-pass filter for smoother arrow
-            currentAzimuthDeg = currentAzimuthDeg + ALPHA * (azimuthDeg - currentAzimuthDeg);
+            currentAzimuthDeg = currentAzimuthDeg + ALPHA * (headingDeg - currentAzimuthDeg);
             updateUi();
         }
     }
