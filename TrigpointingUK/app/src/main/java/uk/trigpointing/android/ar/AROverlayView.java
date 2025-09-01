@@ -35,6 +35,7 @@ public class AROverlayView extends View {
     private float deviceAzimuth = 0;
     private float devicePitch = 0;
     private float deviceRoll = 0;
+    private float compassSnapAngleDeg = 0f; // remembers last snapped angle for hysteresis
     private Location currentLocation;
     private final List<HitTarget> hitTargets = new ArrayList<>();
     private OnTrigpointClickListener clickListener;
@@ -43,6 +44,7 @@ public class AROverlayView extends View {
     // X uses horizontal FOV across screen width; Y uses vertical FOV across screen height
     private float fieldOfViewDegX = 60.0f;
     private float fieldOfViewDegY = 45.0f;
+    private static final float COMPASS_HYSTERESIS_DEG = 7.0f;
     
     // Simple data holder for trigpoint information
     public static class TrigpointData {
@@ -148,10 +150,12 @@ public class AROverlayView extends View {
         // Reset per-frame hit targets
         hitTargets.clear();
 
-        // Draw compass directions snapped to the edge closest to zenith
-        float snapAngle = Math.round(deviceRoll / 90f) * 90f; // nearest 0/90/180/270
+        // Draw compass directions snapped to the edge closest to zenith, with hysteresis
+        float snapAngle = computeCompassSnapWithHysteresis(deviceRoll, compassSnapAngleDeg);
+        compassSnapAngleDeg = snapAngle;
         canvas.save();
         canvas.rotate(-snapAngle, screenWidth / 2f, screenHeight / 2f);
+        // After rotating the canvas, draw across the rotated width
         drawCompassDirections(canvas, screenWidth, fieldOfView);
         canvas.restore();
         
@@ -221,7 +225,7 @@ public class AROverlayView extends View {
         canvas.restore();
     }
     
-    private void drawCompassDirections(Canvas canvas, int screenWidth, float fieldOfView) {
+    private void drawCompassDirections(Canvas canvas, int spanPixels, float fieldOfView) {
         Paint compassPaint = new Paint();
         compassPaint.setColor(Color.WHITE);
         compassPaint.setTextSize(36); // Slightly smaller than trigpoint text
@@ -244,7 +248,7 @@ public class AROverlayView extends View {
             // Only draw compass directions within field of view
             if (Math.abs(relativeBearing) <= fieldOfView / 2) {
                 // Calculate screen position
-                float screenX = screenWidth / 2 + (relativeBearing / (fieldOfView / 2)) * (screenWidth / 2);
+                float screenX = spanPixels / 2f + (relativeBearing / (fieldOfView / 2f)) * (spanPixels / 2f);
                 
                 String direction = COMPASS_DIRECTIONS[i];
                 Rect textBounds = new Rect();
@@ -263,6 +267,38 @@ public class AROverlayView extends View {
                 canvas.drawText(direction, textX, compassY, compassPaint);
             }
         }
+    }
+
+    // Compute nearest 0/90/180/270 snap with hysteresis around the 45° boundaries
+    private float computeCompassSnapWithHysteresis(float rollDeg, float lastSnapDeg) {
+        // Normalize roll to [-180, 180)
+        float r = rollDeg;
+        while (r >= 180f) r -= 360f;
+        while (r < -180f) r += 360f;
+
+        // Determine current snap bucket index for lastSnapDeg
+        int lastIdx = Math.round(lastSnapDeg / 90f);
+        if (lastIdx == -2) lastIdx = 2; // map -180 to 180 bucket
+        // Boundaries between buckets at (k*90 ± 45). Add hysteresis so switch occurs beyond ±(45+h)
+        float lowerBoundary = (lastIdx * 90f) - (45f + COMPASS_HYSTERESIS_DEG);
+        float upperBoundary = (lastIdx * 90f) + (45f + COMPASS_HYSTERESIS_DEG);
+
+        // Normalize r and boundaries to comparable range
+        float rr = r;
+        // Prefer choosing nearest desired when far beyond boundaries
+        if (rr < lowerBoundary) {
+            lastIdx -= 1;
+        } else if (rr > upperBoundary) {
+            lastIdx += 1;
+        }
+
+        // Clamp idx to [-2,-1,0,1,2] and map -2/2 to ±180 (treat as 180)
+        if (lastIdx < -2) lastIdx = -2;
+        if (lastIdx > 2) lastIdx = 2;
+
+        float snapped = lastIdx * 90f;
+        if (snapped == -180f) snapped = 180f;
+        return snapped;
     }
     
         private void drawTrigpointIcon(Canvas canvas, TrigpointData trig, float x, float y, float distance) {
