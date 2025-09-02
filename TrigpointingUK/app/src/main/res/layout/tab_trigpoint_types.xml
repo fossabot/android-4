@@ -13,7 +13,7 @@
             android:id="@+id/radioTypesPillarsOnly"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Pillars Only"
+            android:text="@string/pillars_only"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -21,7 +21,7 @@
             android:id="@+id/radioTypesPillarsFBM"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Pillars + FBM"
+            android:text="@string/pillars_plus_fbm"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -29,7 +29,7 @@
             android:id="@+id/radioTypesFBMOnly"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="FBM Only"
+            android:text="@string/fbm_only"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/radioTypesPassive"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Passive Stations"
+            android:text="@string/passive_stations"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -45,7 +45,7 @@
             android:id="@+id/radioTypesIntersected"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="Intersected Stations"
+            android:text="@string/intersected_stations"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -53,7 +53,7 @@
             android:id="@+id/radioTypesAllExceptIntersected"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="All except Intersected"
+            android:text="@string/all_except_intersected"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/radioTypesAll"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="All Types"
+            android:text="@string/all_types"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 

@@ -13,7 +13,7 @@
             android:id="@+id/radioByCondition"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="By Condition"
+            android:text="@string/byCondition"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -21,7 +21,7 @@
             android:id="@+id/radioByLogged"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="By Logged Status"
+            android:text="@string/byLogged"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 
@@ -29,7 +29,7 @@
             android:id="@+id/radioNone"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="None (Default)"
+            android:text="@string/none"
             android:textSize="16sp"
             android:paddingStart="8dp" />
 

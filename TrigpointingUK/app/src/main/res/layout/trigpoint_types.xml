@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select trigpoint types to display:"
+            android:text="@string/select_trigpoint_types"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="12dp" />
@@ -29,49 +29,49 @@
                 android:id="@+id/radio_pillars_only"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pillars Only"
+                android:text="@string/pillars_only"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_pillars_fbm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pillars + FBM"
+                android:text="@string/pillars_plus_fbm"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_fbm_only"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="FBM Only"
+                android:text="@string/fbm_only"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_passive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Passive Stations"
+                android:text="@string/passive_stations"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_intersected"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Intersected Stations"
+                android:text="@string/intersected_stations"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_all_except_intersected"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All except Intersected"
+                android:text="@string/all_except_intersected"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_all_types"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All Types"
+                android:text="@string/all_types"
                 android:padding="8dp" />
 
         </RadioGroup>
@@ -80,7 +80,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Filter by logging status:"
+            android:text="@string/filter_by_logging_status"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="12dp" />
@@ -95,35 +95,35 @@
                 android:id="@+id/radio_status_all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Logged or not"
+                android:text="@string/logged_or_not"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_status_logged"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Logged"
+                android:text="@string/filterLogged"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_status_not_logged"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Not Logged"
+                android:text="@string/filterNotLogged"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_status_marked"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Marked"
+                android:text="@string/filterMarked"
                 android:padding="8dp" />
 
             <RadioButton
                 android:id="@+id/radio_status_unsynced"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Unsynced"
+                android:text="@string/filterUnsynced"
                 android:padding="8dp" />
 
         </RadioGroup>

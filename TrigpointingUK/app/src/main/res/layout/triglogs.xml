@@ -16,7 +16,7 @@
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No logs available"
+        android:text="@string/no_logs_available"
         android:gravity="center"
         android:padding="16dp" />
 

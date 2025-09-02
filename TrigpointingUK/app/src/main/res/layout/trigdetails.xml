@@ -22,7 +22,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginRight="8dp"
-            android:contentDescription="Type" />
+            android:contentDescription="@string/type_content_desc" />
 
         <TextView
             android:id="@+id/trig_header_title"
@@ -40,7 +40,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginLeft="12dp"
-            android:contentDescription="Condition" />
+            android:contentDescription="@string/condition_content_desc" />
 
     </LinearLayout>
 
