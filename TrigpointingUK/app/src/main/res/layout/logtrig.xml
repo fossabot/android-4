@@ -27,7 +27,7 @@
                 android:id="@+id/addLog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log this trigpoint"
+                android:text="@string/log_this_trigpoint"
                 android:textSize="18sp"
                 android:padding="16dp" />
                 
@@ -58,7 +58,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date:"
+                android:text="@string/date_label"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -83,7 +83,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time:"
+                android:text="@string/time_label"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
@@ -104,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="Log time?"
+                    android:text="@string/log_time_question"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -116,7 +116,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Grid Reference:"
+        android:text="@string/grid_reference_label"
         android:textSize="14sp"
         android:layout_marginBottom="4dp" />
 
@@ -131,7 +131,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:hint="Grid Reference"
+            android:hint="@string/grid_reference_hint"
             android:layout_marginEnd="8dp" />
 
         <Button
@@ -139,7 +139,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Update" />
+            android:text="@string/update_button" />
 
     </LinearLayout>
 
@@ -155,13 +155,13 @@
         android:id="@+id/logFB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Flush Bracket"
+        android:hint="@string/flush_bracket_hint"
         android:layout_marginBottom="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Condition:"
+        android:text="@string/condition_label"
         android:textSize="14sp"
         android:layout_marginBottom="4dp" />
 
@@ -174,7 +174,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Score:"
+        android:text="@string/score_label"
         android:textSize="14sp"
         android:layout_marginBottom="4dp" />
 
@@ -190,7 +190,7 @@
         android:id="@+id/logComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Comment"
+        android:hint="@string/comment_hint"
         android:minLines="3"
         android:gravity="top"
         android:layout_marginBottom="8dp" />
@@ -199,20 +199,20 @@
         android:id="@+id/logAdminFlag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Admin Flag"
+        android:text="@string/admin_flag"
         android:layout_marginBottom="4dp" />
 
     <CheckBox
         android:id="@+id/logUserFlag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Flag"
+        android:text="@string/user_flag"
         android:layout_marginBottom="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Photos:"
+        android:text="@string/photos_label"
         android:textSize="14sp"
         android:layout_marginBottom="4dp" />
 
@@ -226,7 +226,7 @@
         android:id="@+id/logAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Photo"
+        android:text="@string/add_photo"
         android:layout_marginBottom="16dp" />
 
     <!-- Action buttons -->
@@ -242,7 +242,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Delete Log"
+            android:text="@string/delete_log"
             android:layout_marginEnd="8dp" />
 
         <Button
@@ -250,7 +250,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Upload Now"
+            android:text="@string/upload_now"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp" />
 
@@ -259,7 +259,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sync Later"
+            android:text="@string/sync_later"
             android:layout_marginStart="8dp" />
 
     </LinearLayout>

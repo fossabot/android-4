@@ -19,21 +19,21 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Map Name"/>
+            android:text="@string/map_name_placeholder"/>
 
         <TextView
             android:id="@+id/mapDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Map description goes here."/>
+            android:text="@string/map_description_placeholder"/>
 
         <TextView
             android:id="@+id/mapSize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Size: 0 MB"/>
+            android:text="@string/map_size_format"/>
 
         <ProgressBar
             android:id="@+id/downloadProgressBar"
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Download"/>
+            android:text="@string/download_button"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

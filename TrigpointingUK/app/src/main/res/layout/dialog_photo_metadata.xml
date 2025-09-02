@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Photo Type:"
+        android:text="@string/photo_type_label"
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
@@ -33,7 +33,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Caption (optional):"
+        android:text="@string/caption_optional"
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
@@ -42,7 +42,7 @@
         android:id="@+id/caption_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter a caption for this photo"
+        android:hint="@string/caption_hint"
         android:inputType="textCapSentences|textMultiLine"
         android:maxLines="3"
         android:layout_marginBottom="16dp" />
@@ -52,13 +52,13 @@
         android:id="@+id/public_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Make this photo public domain"
+        android:text="@string/public_domain_photo"
         android:checked="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Public domain photos may be used by anyone for any purpose"
+        android:text="@string/public_domain_explanation"
         android:textSize="12sp"
         android:textColor="@android:color/darker_gray"
         android:layout_marginTop="4dp" />
