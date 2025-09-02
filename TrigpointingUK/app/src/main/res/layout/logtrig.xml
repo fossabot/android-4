@@ -39,20 +39,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-    <!-- Date and Time Container - Responsive Layout -->
+    <!-- Date and Time Container - Vertical Layout for Better Spacing -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
+        android:orientation="vertical"
         android:layout_marginBottom="8dp">
 
         <!-- Date Section -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,7 +63,7 @@
             <DatePicker
                 android:id="@+id/logDate"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
+                android:layout_height="120dp"
                 android:datePickerMode="spinner"
                 android:calendarViewShown="false"
                 android:spinnersShown="true" />
@@ -73,9 +72,8 @@
 
         <!-- Time Section -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -93,7 +91,7 @@
                 <TimePicker
                     android:id="@+id/logTime"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="120dp"
                     android:timePickerMode="spinner" />
 
                 <CheckBox
