@@ -3,7 +3,12 @@ package uk.trigpointing.android.nearest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
@@ -120,7 +125,10 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 				Log.e("NearestCursorAdapter", "trigArrow ImageView is null!");
 			} else {
 				ta.setImageResource(arrowResource);
-				Log.d("NearestCursorAdapter", "Set arrow resource: " + arrowResource + " for trig: " + cursor.getString(mNameIndex));
+				// Apply rotation to the arrow based on bearing
+				float rotation = getArrowRotation(adjustedBearing);
+				ta.setRotation(rotation);
+				Log.d("NearestCursorAdapter", "Set arrow resource: " + arrowResource + " with rotation: " + rotation + "° for trig: " + cursor.getString(mNameIndex));
 			}
 			
 			// Debug logging for first few items
@@ -139,19 +147,38 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 	}
 
 
-	static final int 	nDivisions = 16; // number of arrows
-	static final double anglePerDivision = 360.0 / nDivisions;
-	static final double halfAnglePerDivision = anglePerDivision / 2.0;
+	// Cache for the base arrow drawable to avoid repeated loading
+	private Drawable mBaseArrowDrawable;
+	
+	/**
+	 * Get a rotated arrow drawable based on the bearing
+	 * @param bearing The bearing in degrees (0-360)
+	 * @return A rotated drawable resource ID (for compatibility with existing code)
+	 */
 	public int getArrow(double bearing) {
 		// Only apply orientation offset when compass sensor is active
 		// When compass is disabled, North should always point to top of screen
 		double effectiveOrientationOffset = mUsingCompass ? mOrientationOffset : 0.0;
-		int division = (int) Math.floor(  (bearing + halfAnglePerDivision + effectiveOrientationOffset) / anglePerDivision) % nDivisions;
-		if (division < 0) {division += nDivisions;}
-		int arrowResource = R.drawable.arrow_00_n + division;
-		Log.d("NearestCursorAdapter", String.format("getArrow: bearing=%.1f°, orientationOffset=%.1f°, effectiveOffset=%.1f°, division=%d, resource=%d", 
-			bearing, mOrientationOffset, effectiveOrientationOffset, division, arrowResource));
-		return arrowResource;
+		double totalRotation = bearing + effectiveOrientationOffset;
+		
+		Log.d("NearestCursorAdapter", String.format("getArrow: bearing=%.1f°, orientationOffset=%.1f°, effectiveOffset=%.1f°, totalRotation=%.1f°", 
+			bearing, mOrientationOffset, effectiveOrientationOffset, totalRotation));
+		
+		// For now, return the base arrow resource
+		// The actual rotation will be handled in bindView where we can set the ImageView rotation
+		return R.drawable.arrow_00_n;
+	}
+	
+	/**
+	 * Get the rotation angle for the arrow based on bearing
+	 * @param bearing The bearing in degrees (0-360)
+	 * @return The rotation angle in degrees
+	 */
+	public float getArrowRotation(double bearing) {
+		// Only apply orientation offset when compass sensor is active
+		// When compass is disabled, North should always point to top of screen
+		double effectiveOrientationOffset = mUsingCompass ? mOrientationOffset : 0.0;
+		return (float)(bearing + effectiveOrientationOffset);
 	}	
 	
 	@Override

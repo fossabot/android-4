@@ -367,301 +367,6 @@
     </issue>
 
     <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_01_nne` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_01_nne.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_02_ne` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_02_ne.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_03_ene` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_03_ene.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_04_e` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_04_e.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_05_ese` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_05_ese.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_06_se` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_06_se.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_07_sse` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_07_sse.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_08_s` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_08_s.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_09_sse` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_09_sse.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_10_sw` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_10_sw.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_11_wsw` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_11_wsw.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_12_w` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_12_w.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_13_wnw` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_13_wnw.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_14_nw` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_14_nw.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.arrow_15_nnw` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/arrow_15_nnw.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_fbm_grey` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_fbm_grey.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_fbm_grey_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_fbm_grey_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_fbm_red` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_fbm_red.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_fbm_red_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_fbm_red_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_fbm_yellow` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_fbm_yellow.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_fbm_yellow_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_fbm_yellow_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_intersected_grey` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_intersected_grey.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_intersected_grey_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_intersected_grey_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_intersected_red` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_intersected_red.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_intersected_red_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_intersected_red_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_intersected_yellow` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_intersected_yellow.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_intersected_yellow_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_intersected_yellow_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_passive_grey` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_passive_grey.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_passive_grey_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_passive_grey_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_passive_red` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_passive_red.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_passive_red_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_passive_red_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_passive_yellow` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_passive_yellow.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_passive_yellow_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_passive_yellow_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_pillar_grey` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_pillar_grey.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_pillar_grey_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_pillar_grey_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_pillar_red` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_pillar_red.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_pillar_red_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_pillar_red_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_pillar_yellow` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_pillar_yellow.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.mapicon_pillar_yellow_h` appears to be unused">
-        <location
-            file="src/main/res/drawable-nodpi/mapicon_pillar_yellow_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.unsynced_icon_content_desc` appears to be unused"
-        errorLine1="    &lt;string name=&quot;unsynced_icon_content_desc&quot;>Unsynced data icon&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="110"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photos_icon_content_desc` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photos_icon_content_desc&quot;>Photos icon&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="111"
-            column="13"/>
-    </issue>
-
-    <issue
         id="UselessParent"
         message="This `ViewSwitcher` layout or its `LinearLayout` parent is possibly unnecessary"
         errorLine1="    &lt;ViewSwitcher"
@@ -705,6 +410,61 @@
         message="Missing density variation folders in `src/main/res`: drawable-hdpi">
         <location
             file="src/main/res"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/logtrig.xml"
+            line="243"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/logtrig.xml"
+            line="253"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/logtrig.xml"
+            line="264"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="            &lt;Button"
+        errorLine2="             ~~~~~~">
+        <location
+            file="src/main/res/layout/main.xml"
+            line="147"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="            &lt;Button"
+        errorLine2="             ~~~~~~">
+        <location
+            file="src/main/res/layout/main.xml"
+            line="158"
+            column="14"/>
     </issue>
 
     <issue

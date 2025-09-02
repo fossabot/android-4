@@ -363,6 +363,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		    mSensorManager.unregisterListener(this);
 		    mHeading = 0;
 		    mCompassArrow.setImageResource(mListAdapter.getArrow(0));
+		    mCompassArrow.setRotation(mListAdapter.getArrowRotation(0));
 		    					mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassDisabled));
 		    					mListAdapter.setHeading(0);
         	mListAdapter.notifyDataSetChanged();
@@ -726,6 +727,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	        	mListAdapter.setHeading(mHeading);
 	        	mListAdapter.notifyDataSetChanged();
 				mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
+				mCompassArrow.setRotation(mListAdapter.getArrowRotation(-mHeading));
 	        }
 	    }
 	}

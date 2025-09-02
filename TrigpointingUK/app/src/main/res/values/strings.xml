@@ -107,8 +107,7 @@
 
     <string name="photo_preview_content_desc">Photo preview</string>
 
-    <string name="unsynced_icon_content_desc">Unsynced data icon</string>
-    <string name="photos_icon_content_desc">Photos icon</string>
+
     <string name="photo_icon_content_desc">Photo icon</string>
     <string name="compass_arrow_content_desc">Compass direction arrow</string>
     <string name="log_condition_icon_content_desc">Log condition icon</string>
