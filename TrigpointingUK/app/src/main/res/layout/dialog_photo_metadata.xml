@@ -12,7 +12,8 @@
         android:layout_height="200dp"
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"
+        android:contentDescription="@string/photo_preview_content_desc" />
 
     <!-- Subject Type -->
     <TextView

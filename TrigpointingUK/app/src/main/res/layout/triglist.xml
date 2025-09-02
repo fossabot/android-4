@@ -64,7 +64,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/arrow_00_n"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="4dp"
+                android:contentDescription="@string/compass_arrow_content_desc" />
 
         </LinearLayout>
 

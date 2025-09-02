@@ -64,7 +64,8 @@
                     android:id="@+id/countPillarImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_pillar" />
+                    android:src="@drawable/t_pillar"
+                    android:contentDescription="@string/pillar_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countPillarText"
@@ -86,7 +87,8 @@
                     android:id="@+id/countFbmImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_fbm" />
+                    android:src="@drawable/t_fbm"
+                    android:contentDescription="@string/fbm_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countFbmText"
@@ -108,7 +110,8 @@
                     android:id="@+id/countPassiveImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_passive" />
+                    android:src="@drawable/t_passive"
+                    android:contentDescription="@string/passive_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countPassiveText"
@@ -130,7 +133,8 @@
                     android:id="@+id/countIntersectedImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_intersected" />
+                    android:src="@drawable/t_intersected"
+                    android:contentDescription="@string/intersected_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countIntersectedText"
@@ -152,7 +156,8 @@
                     android:id="@+id/countUnsyncedImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_menu_refresh" />
+                    android:src="@drawable/ic_menu_refresh"
+                    android:contentDescription="@string/unsynced_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countUnsyncedText"
@@ -174,7 +179,8 @@
                     android:id="@+id/countPhotosImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/ic_menu_camera"
+                    android:contentDescription="@string/photos_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countPhotosText"

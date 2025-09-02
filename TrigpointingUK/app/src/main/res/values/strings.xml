@@ -106,6 +106,21 @@
     <string name="compass_calibration">Move your phone in a figure-8 to calibrate the compass</string>
     <string name="trigpoint_name_placeholder">Trigpoint Name</string>
     <string name="distance_zero_short">0m</string>
+    <string name="trigpoint_icon_content_desc">Trigpoint icon</string>
+    <string name="photo_preview_content_desc">Photo preview</string>
+    <string name="pillar_icon_content_desc">Pillar trigpoint icon</string>
+    <string name="fbm_icon_content_desc">Flush bracket marker icon</string>
+    <string name="passive_icon_content_desc">Passive station icon</string>
+    <string name="intersected_icon_content_desc">Intersected station icon</string>
+    <string name="unsynced_icon_content_desc">Unsynced data icon</string>
+    <string name="photos_icon_content_desc">Photos icon</string>
+    <string name="photo_icon_content_desc">Photo icon</string>
+    <string name="compass_arrow_content_desc">Compass direction arrow</string>
+    <string name="log_condition_icon_content_desc">Log condition icon</string>
+    <string name="trig_condition_icon_content_desc">Trigpoint condition icon</string>
+    <string name="trig_type_icon_content_desc">Trigpoint type icon</string>
+    <string name="trig_arrow_content_desc">Direction arrow</string>
+    <string name="trig_logged_status_content_desc">Logged status icon</string>
     
     <!-- Login dialog strings -->
     <string name="login_instructions">Please enter your Trigpointing.UK website credentials. It is not currently possible to create an account using this app, only on the website.</string>

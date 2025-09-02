@@ -684,7 +684,7 @@
         errorLine2="             ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="79"
+            line="80"
             column="14"/>
     </issue>
 
@@ -695,7 +695,7 @@
         errorLine2="             ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="101"
+            line="103"
             column="14"/>
     </issue>
 
@@ -706,7 +706,7 @@
         errorLine2="             ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="123"
+            line="126"
             column="14"/>
     </issue>
 
@@ -717,7 +717,7 @@
         errorLine2="             ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="145"
+            line="149"
             column="14"/>
     </issue>
 
@@ -728,7 +728,7 @@
         errorLine2="             ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="167"
+            line="172"
             column="14"/>
     </issue>
 
@@ -1134,6 +1134,17 @@
         <location
             file="src/main/res/values/strings.xml"
             line="108"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UnusedResources"
+        message="The resource `R.string.trigpoint_icon_content_desc` appears to be unused"
+        errorLine1="    &lt;string name=&quot;trigpoint_icon_content_desc&quot;>Trigpoint icon&lt;/string>"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/res/values/strings.xml"
+            line="109"
             column="13"/>
     </issue>
 
@@ -1653,7 +1664,7 @@
         errorLine2="             ~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="218"
+            line="224"
             column="14"/>
     </issue>
 
@@ -1664,7 +1675,7 @@
         errorLine2="             ~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="229"
+            line="235"
             column="14"/>
     </issue>
 
@@ -1774,7 +1785,7 @@
         errorLine2="     ~~~~~~~~">
         <location
             file="src/main/res/layout/dialog_photo_metadata.xml"
-            line="41"
+            line="42"
             column="6"/>
     </issue>
 
@@ -1897,171 +1908,6 @@
             file="src/main/java/uk/trigpointing/android/common/ZoomableImageView.java"
             line="94"
             column="20"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/ar_trigpoint_marker.xml"
-            line="10"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/dialog_photo_metadata.xml"
-            line="9"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="63"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="85"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="107"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="129"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="151"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="                &lt;ImageView"
-        errorLine2="                 ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="173"
-            column="18"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/trigalbumrow.xml"
-            line="9"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="            &lt;ImageView"
-        errorLine2="             ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/triglist.xml"
-            line="62"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/triglogrow.xml"
-            line="9"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/trigrow.xml"
-            line="12"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="    &lt;ImageView"
-        errorLine2="     ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/trigrow.xml"
-            line="21"
-            column="6"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="        &lt;ImageView"
-        errorLine2="         ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/trigrow.xml"
-            line="59"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ContentDescription"
-        message="Missing `contentDescription` attribute on image"
-        errorLine1="        &lt;ImageView"
-        errorLine2="         ~~~~~~~~~">
-        <location
-            file="src/main/res/layout/trigrow.xml"
-            line="68"
-            column="10"/>
     </issue>
 
     <issue
@@ -2456,7 +2302,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/main.xml"
-            line="195"
+            line="201"
             column="13"/>
     </issue>
 
