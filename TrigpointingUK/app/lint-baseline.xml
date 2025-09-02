@@ -1085,7 +1085,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="118"
+            line="69"
             column="5"/>
     </issue>
 
@@ -1540,94 +1540,6 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.color.colorPrimaryVariant` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorPrimaryVariant&quot;>#054d05&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="17"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorSecondary` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorSecondary&quot;>#087008&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="18"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorSecondaryVariant` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorSecondaryVariant&quot;>#054d05&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="19"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorSurface` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorSurface&quot;>#FFFFFF&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="20"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorBackground` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorBackground&quot;>#FFFFFF&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="21"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorOnSecondary` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorOnSecondary&quot;>#FFFFFF&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="23"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorOnSurface` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorOnSurface&quot;>#000000&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="24"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.colorOnBackground` appears to be unused"
-        errorLine1="    &lt;color name=&quot;colorOnBackground&quot;>#000000&lt;/color>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/colors.xml"
-            line="25"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.drawable.direction_arrow` appears to be unused">
         <location
             file="src/main/res/drawable/direction_arrow.png"/>
@@ -1971,496 +1883,12 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.string.pref_mapsforge_scale` appears to be unused"
-        errorLine1="    &lt;string name=&quot;pref_mapsforge_scale&quot;>Map scale factor&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="33"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.pref_mapsforge_scale_summary` appears to be unused"
-        errorLine1="    &lt;string name=&quot;pref_mapsforge_scale_summary&quot;>Increase the size of map text and symbols. May require app restart.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="34"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.downloadInsertStatus` appears to be unused"
-        errorLine1="    &lt;string name=&quot;downloadInsertStatus&quot;>Downloading...&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="36"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.btnDownload` appears to be unused"
-        errorLine1="    &lt;string name=&quot;btnDownload&quot;>Download&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="37"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.btnCancel` appears to be unused"
-        errorLine1="    &lt;string name=&quot;btnCancel&quot;>Cancel&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="38"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.btnDownloadFinished` appears to be unused"
-        errorLine1="    &lt;string name=&quot;btnDownloadFinished&quot;>Download Complete&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="39"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.noUser` appears to be unused"
-        errorLine1="    &lt;string name=&quot;noUser&quot;>No user set&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="40"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.dlgNoTrigs` appears to be unused"
-        errorLine1="    &lt;string name=&quot;dlgNoTrigs&quot;>No trig points found&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="41"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.errorcolour` appears to be unused"
-        errorLine1="    &lt;string name=&quot;errorcolour&quot;>Error&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="45"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.okcolour` appears to be unused"
-        errorLine1="    &lt;string name=&quot;okcolour&quot;>OK&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="46"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photoName` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photoName&quot;>Photo Name&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="61"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photoDescr` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photoDescr&quot;>Photo Description&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="62"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photoSubject` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photoSubject&quot;>Photo Subject&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="63"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photoIsPublic` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photoIsPublic&quot;>Public Photo&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="64"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photoSave` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photoSave&quot;>Save Photo&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="65"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.photoRemove` appears to be unused"
-        errorLine1="    &lt;string name=&quot;photoRemove&quot;>Remove Photo&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="66"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logswitcher` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logswitcher&quot;>Log Switcher&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="69"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.sendTime` appears to be unused"
-        errorLine1="    &lt;string name=&quot;sendTime&quot;>Send Time&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="70"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logTime` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logTime&quot;>Log Time&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="71"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logDate` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logDate&quot;>Log Date&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="72"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logGridref` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logGridref&quot;>Grid Reference&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="73"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.locationError` appears to be unused"
-        errorLine1="    &lt;string name=&quot;locationError&quot;>Location Error&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="74"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logFB` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logFB&quot;>Found By&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="75"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logCondition` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logCondition&quot;>Condition&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="76"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logScore` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logScore&quot;>Score&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="77"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logComment` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logComment&quot;>Comment&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="78"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logAdminFlag` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logAdminFlag&quot;>Admin Flag&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="79"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logUserFlag` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logUserFlag&quot;>User Flag&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="80"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logGallery` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logGallery&quot;>Gallery&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="81"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logAddPhoto` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logAddPhoto&quot;>Add Photo&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="82"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.addLog` appears to be unused"
-        errorLine1="    &lt;string name=&quot;addLog&quot;>Add Log&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="83"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logDelete` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logDelete&quot;>Delete Log&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="84"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logGetLocation` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logGetLocation&quot;>Get Location&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="85"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logUploadNow` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logUploadNow&quot;>Upload Now&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="86"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logSyncLater` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logSyncLater&quot;>Sync Later&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="87"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.mapview` appears to be unused"
-        errorLine1="    &lt;string name=&quot;mapview&quot;>Map View&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="90"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.displaybitmap` appears to be unused"
-        errorLine1="    &lt;string name=&quot;displaybitmap&quot;>Display Bitmap&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="93"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.zoomview` appears to be unused"
-        errorLine1="    &lt;string name=&quot;zoomview&quot;>Zoom View&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="94"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.filter` appears to be unused"
-        errorLine1="    &lt;string name=&quot;filter&quot;>Filter&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="97"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.filterBy` appears to be unused"
-        errorLine1="    &lt;string name=&quot;filterBy&quot;>Filter by...&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="98"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.filterType` appears to be unused"
-        errorLine1="    &lt;string name=&quot;filterType&quot;>Filter Type&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="99"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.filterRadio` appears to be unused"
-        errorLine1="    &lt;string name=&quot;filterRadio&quot;>Filter Radio&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="100"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logphoto` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logphoto&quot;>Log Photo&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="103"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.logtrig` appears to be unused"
-        errorLine1="    &lt;string name=&quot;logtrig&quot;>Log Trig&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="106"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.string.downloadMapsIdleStatus` appears to be unused"
         errorLine1="    &lt;string name=&quot;downloadMapsIdleStatus&quot;>Ready to download maps&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="114"
+            line="65"
             column="13"/>
     </issue>
 
@@ -2471,7 +1899,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="115"
+            line="66"
             column="13"/>
     </issue>
 
@@ -2482,7 +1910,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="131"
+            line="82"
             column="13"/>
     </issue>
 
@@ -2493,7 +1921,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="132"
+            line="83"
             column="13"/>
     </issue>
 
@@ -2504,7 +1932,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="133"
+            line="84"
             column="13"/>
     </issue>
 
@@ -2515,7 +1943,7 @@
         errorLine2="            ~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="134"
+            line="85"
             column="13"/>
     </issue>
 
@@ -2526,7 +1954,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="137"
+            line="88"
             column="13"/>
     </issue>
 
@@ -2537,7 +1965,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="138"
+            line="89"
             column="13"/>
     </issue>
 
@@ -2548,7 +1976,7 @@
         errorLine2="            ~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="139"
+            line="90"
             column="13"/>
     </issue>
 
@@ -2559,7 +1987,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="140"
+            line="91"
             column="13"/>
     </issue>
 
@@ -2570,7 +1998,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="141"
+            line="92"
             column="13"/>
     </issue>
 
@@ -2581,7 +2009,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="142"
+            line="93"
             column="13"/>
     </issue>
 
@@ -2592,7 +2020,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="143"
+            line="94"
             column="13"/>
     </issue>
 
@@ -2603,183 +2031,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="144"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.tab_info` appears to be unused"
-        errorLine1="    &lt;string name=&quot;tab_info&quot;>Info&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="150"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.tab_logs` appears to be unused"
-        errorLine1="    &lt;string name=&quot;tab_logs&quot;>Logs&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="151"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.tab_album` appears to be unused"
-        errorLine1="    &lt;string name=&quot;tab_album&quot;>Album&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="152"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.tab_map` appears to be unused"
-        errorLine1="    &lt;string name=&quot;tab_map&quot;>Map&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="153"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.tab_mylog` appears to be unused"
-        errorLine1="    &lt;string name=&quot;tab_mylog&quot;>My Log&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="154"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_name` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_name&quot;>Name&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="157"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_gridref` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_gridref&quot;>Grid Reference&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="158"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_condition` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_condition&quot;>Condition&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="159"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_height` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_height&quot;>Height&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="160"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_type` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_type&quot;>Type&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="161"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_county` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_county&quot;>County&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="162"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.trig_country` appears to be unused"
-        errorLine1="    &lt;string name=&quot;trig_country&quot;>Country&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="163"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.preferences_name` appears to be unused"
-        errorLine1="    &lt;string name=&quot;preferences_name&quot;>Settings&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="164"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.prompt_email` appears to be unused"
-        errorLine1="    &lt;string name=&quot;prompt_email&quot;>Email&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="168"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.title_activity_display_trigpoint` appears to be unused"
-        errorLine1="    &lt;string name=&quot;title_activity_display_trigpoint&quot;>DisplayTrigpointActivity&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="169"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.title_activity_settings` appears to be unused"
-        errorLine1="    &lt;string name=&quot;title_activity_settings&quot;>Settings&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="170"
+            line="95"
             column="13"/>
     </issue>
 
@@ -2790,7 +2042,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="186"
+            line="119"
             column="13"/>
     </issue>
 
@@ -2801,85 +2053,8 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="187"
+            line="120"
             column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.AppTheme` appears to be unused"
-        errorLine1="    &lt;style name=&quot;AppTheme&quot; parent=&quot;Theme.AppCompat.Light.DarkActionBar&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles.xml"
-            line="3"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.AppTheme_NoActionBar` appears to be unused"
-        errorLine1="    &lt;style name=&quot;AppTheme.NoActionBar&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles.xml"
-            line="10"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.AppTheme_AppBarOverlay` appears to be unused"
-        errorLine1="    &lt;style name=&quot;AppTheme.AppBarOverlay&quot; parent=&quot;ThemeOverlay.AppCompat.Dark.ActionBar&quot; />"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles.xml"
-            line="15"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.AppTheme_PopupOverlay` appears to be unused"
-        errorLine1="    &lt;style name=&quot;AppTheme.PopupOverlay&quot; parent=&quot;ThemeOverlay.AppCompat.Light&quot; />"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/styles.xml"
-            line="17"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.style.Theme_TrigpointingUK_NoActionBar` appears to be unused"
-        errorLine1="    &lt;style name=&quot;Theme.TrigpointingUK.NoActionBar&quot; parent=&quot;Theme.MaterialComponents.Light.NoActionBar&quot;>"
-        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/themes.xml"
-            line="49"
-            column="12"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.toggle_button_background` appears to be unused"
-        errorLine1="&lt;selector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;>"
-        errorLine2="^">
-        <location
-            file="src/main/res/drawable/toggle_button_background.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.color.toggle_button_text` appears to be unused"
-        errorLine1="&lt;selector xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;>"
-        errorLine2="^">
-        <location
-            file="src/main/res/color/toggle_button_text.xml"
-            line="2"
-            column="1"/>
     </issue>
 
     <issue
@@ -2924,22 +2099,11 @@
     <issue
         id="TypographyEllipsis"
         message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;downloadInsertStatus&quot;>Downloading...&lt;/string>"
-        errorLine2="                                        ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="36"
-            column="41"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
         errorLine1="    &lt;string name=&quot;syncToTUK&quot;>Syncing to TUK...&lt;/string>"
         errorLine2="                             ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="47"
+            line="40"
             column="30"/>
     </issue>
 
@@ -2950,7 +2114,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="48"
+            line="41"
             column="36"/>
     </issue>
 
@@ -2961,19 +2125,8 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="49"
+            line="42"
             column="36"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;filterBy&quot;>Filter by...&lt;/string>"
-        errorLine2="                            ~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="98"
-            column="29"/>
     </issue>
 
     <issue
@@ -2983,7 +2136,7 @@
         errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="109"
+            line="60"
             column="38"/>
     </issue>
 
@@ -2994,7 +2147,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="111"
+            line="62"
             column="36"/>
     </issue>
 
@@ -3005,7 +2158,7 @@
         errorLine2="                                            ~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="115"
+            line="66"
             column="45"/>
     </issue>
 
@@ -3016,7 +2169,7 @@
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="120"
+            line="71"
             column="37"/>
     </issue>
 

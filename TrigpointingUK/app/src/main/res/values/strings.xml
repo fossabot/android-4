@@ -30,20 +30,13 @@
         \n- Graeme Paterson
     </string>
 
-    <string name="pref_mapsforge_scale">Map scale factor</string>
-    <string name="pref_mapsforge_scale_summary">Increase the size of map text and symbols. May require app restart.</string>
+
     <string name="downloadIdleStatus">Ready to download</string>
-    <string name="downloadInsertStatus">Downloading...</string>
-    <string name="btnDownload">Download</string>
-    <string name="btnCancel">Cancel</string>
-    <string name="btnDownloadFinished">Download Complete</string>
-    <string name="noUser">No user set</string>
-    <string name="dlgNoTrigs">No trig points found</string>
+
     
     <!-- Missing string resources -->
     <string name="reset">Reset</string>
-    <string name="errorcolour">Error</string>
-    <string name="okcolour">OK</string>
+
     <string name="syncToTUK">Syncing to TUK...</string>
     <string name="syncPhotosToTUK">Syncing photos to TUK...</string>
     <string name="syncLogsFromTUK">Syncing logs from TUK...</string>
@@ -58,52 +51,10 @@
     
     <!-- Photo related strings -->
     <string name="photoThumb">Photo Thumbnail</string>
-    <string name="photoName">Photo Name</string>
-    <string name="photoDescr">Photo Description</string>
-    <string name="photoSubject">Photo Subject</string>
-    <string name="photoIsPublic">Public Photo</string>
-    <string name="photoSave">Save Photo</string>
-    <string name="photoRemove">Remove Photo</string>
     
-    <!-- Log related strings -->
-    <string name="logswitcher">Log Switcher</string>
-    <string name="sendTime">Send Time</string>
-    <string name="logTime">Log Time</string>
-    <string name="logDate">Log Date</string>
-    <string name="logGridref">Grid Reference</string>
-    <string name="locationError">Location Error</string>
-    <string name="logFB">Found By</string>
-    <string name="logCondition">Condition</string>
-    <string name="logScore">Score</string>
-    <string name="logComment">Comment</string>
-    <string name="logAdminFlag">Admin Flag</string>
-    <string name="logUserFlag">User Flag</string>
-    <string name="logGallery">Gallery</string>
-    <string name="logAddPhoto">Add Photo</string>
-    <string name="addLog">Add Log</string>
-    <string name="logDelete">Delete Log</string>
-    <string name="logGetLocation">Get Location</string>
-    <string name="logUploadNow">Upload Now</string>
-    <string name="logSyncLater">Sync Later</string>
+
     
-    <!-- Map related strings -->
-    <string name="mapview">Map View</string>
-    
-    <!-- Display bitmap related strings -->
-    <string name="displaybitmap">Display Bitmap</string>
-    <string name="zoomview">Zoom View</string>
-    
-    <!-- Filter layout strings -->
-    <string name="filter">Filter</string>
-    <string name="filterBy">Filter by...</string>
-    <string name="filterType">Filter Type</string>
-    <string name="filterRadio">Filter Radio</string>
-    
-    <!-- Log photo layout strings -->
-    <string name="logphoto">Log Photo</string>
-    
-    <!-- Log trig layout strings -->
-    <string name="logtrig">Log Trig</string>
+
     
     <!-- Missing string resources for various activities -->
     <string name="downloadingPhotos">Downloading photos...</string>
@@ -146,28 +97,10 @@
     <string name="none">None</string>
     <string name="byLogged">By Logged</string>
     
-    <!-- Tab title strings -->
-    <string name="tab_info">Info</string>
-    <string name="tab_logs">Logs</string>
-    <string name="tab_album">Album</string>
-    <string name="tab_map">Map</string>
-    <string name="tab_mylog">My Log</string>
-    
-    <!-- Trig info strings -->
-    <string name="trig_name">Name</string>
-    <string name="trig_gridref">Grid Reference</string>
-    <string name="trig_condition">Condition</string>
-    <string name="trig_height">Height</string>
-    <string name="trig_type">Type</string>
-    <string name="trig_county">County</string>
-    <string name="trig_country">Country</string>
-    <string name="preferences_name">Settings</string>
+
     <string name="trigdetails_name">Trigpoint Details</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="title_activity_display_trigpoint">DisplayTrigpointActivity</string>
-    <string name="title_activity_settings">Settings</string>
+
     <string name="title_activity_download_maps">Download Maps</string>
     <string name="title_activity_about">About</string>
 
