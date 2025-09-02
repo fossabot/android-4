@@ -437,16 +437,25 @@ public class LeafletMapActivity extends BaseActivity {
             while (cursor.moveToNext()) {
                 JSONObject trig = new JSONObject();
                 
-                trig.put("id", cursor.getLong(cursor.getColumnIndex(DbHelper.TRIG_ID)));
-                trig.put("name", cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_NAME)));
-                trig.put("lat", cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LAT)));
-                trig.put("lon", cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LON)));
-                trig.put("type", cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_TYPE)));
-                trig.put("condition", cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_CONDITION)));
-                trig.put("logged", cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_LOGGED)));
+                int idIndex = cursor.getColumnIndex(DbHelper.TRIG_ID);
+                int nameIndex = cursor.getColumnIndex(DbHelper.TRIG_NAME);
+                int latIndex = cursor.getColumnIndex(DbHelper.TRIG_LAT);
+                int lonIndex = cursor.getColumnIndex(DbHelper.TRIG_LON);
+                int typeIndex = cursor.getColumnIndex(DbHelper.TRIG_TYPE);
+                int conditionIndex = cursor.getColumnIndex(DbHelper.TRIG_CONDITION);
+                int loggedIndex = cursor.getColumnIndex(DbHelper.TRIG_LOGGED);
+                int markedIndex = cursor.getColumnIndex(DbHelper.JOIN_MARKED);
+                
+                if (idIndex >= 0) trig.put("id", cursor.getLong(idIndex));
+                if (nameIndex >= 0) trig.put("name", cursor.getString(nameIndex));
+                if (latIndex >= 0) trig.put("lat", cursor.getDouble(latIndex));
+                if (lonIndex >= 0) trig.put("lon", cursor.getDouble(lonIndex));
+                if (typeIndex >= 0) trig.put("type", cursor.getString(typeIndex));
+                if (conditionIndex >= 0) trig.put("condition", cursor.getString(conditionIndex));
+                if (loggedIndex >= 0) trig.put("logged", cursor.getString(loggedIndex));
                 
                 // Check if flagged/marked
-                String marked = cursor.getString(cursor.getColumnIndex(DbHelper.JOIN_MARKED));
+                String marked = (markedIndex >= 0) ? cursor.getString(markedIndex) : null;
                 trig.put("flagged", marked != null);
                 
                 trigpoints.put(trig);

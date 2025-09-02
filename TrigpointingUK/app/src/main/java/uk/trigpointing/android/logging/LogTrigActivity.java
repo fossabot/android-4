@@ -272,9 +272,13 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		// Fetch trigpoint info
 		Cursor c = mDb.fetchTrigInfo(mTrigId);
 		c.moveToFirst();
-		Double lat = Double.valueOf(c.getString(c.getColumnIndex(DbHelper.TRIG_LAT)));
-		Double lon = Double.valueOf(c.getString(c.getColumnIndex(DbHelper.TRIG_LON)));
-		mTrigLocation = new LatLon(lat, lon);
+		int latIndex = c.getColumnIndex(DbHelper.TRIG_LAT);
+		int lonIndex = c.getColumnIndex(DbHelper.TRIG_LON);
+		if (latIndex >= 0 && lonIndex >= 0) {
+			Double lat = Double.valueOf(c.getString(latIndex));
+			Double lon = Double.valueOf(c.getString(lonIndex));
+			mTrigLocation = new LatLon(lat, lon);
+		}
 		c.close();
 
 
@@ -741,47 +745,82 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	Cursor c = mDb.fetchLog(mTrigId);
     	if (c == null) {return;}
 
+    	// Get column indices
+    	int yearIndex = c.getColumnIndex(DbHelper.LOG_YEAR);
+    	int monthIndex = c.getColumnIndex(DbHelper.LOG_MONTH);
+    	int dayIndex = c.getColumnIndex(DbHelper.LOG_DAY);
+    	int commentIndex = c.getColumnIndex(DbHelper.LOG_COMMENT);
+    	int gridrefIndex = c.getColumnIndex(DbHelper.LOG_GRIDREF);
+
     	// set Date
-    	mDate.init				(c.getInt(c.getColumnIndex(DbHelper.LOG_YEAR)), 
-    							 c.getInt(c.getColumnIndex(DbHelper.LOG_MONTH)),
-    							 c.getInt(c.getColumnIndex(DbHelper.LOG_DAY)), 
-    							 this);
+    	if (yearIndex >= 0 && monthIndex >= 0 && dayIndex >= 0) {
+    		mDate.init(c.getInt(yearIndex), c.getInt(monthIndex), c.getInt(dayIndex), this);
+    	}
 
-
-    	
     	// set Text fields    	
-    	mComment.setText 		(c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)));
-    	String gridref = c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF));
-    	mGridref.setText		(gridref);
-    	mFb.setText 			(c.getString(c.getColumnIndex(DbHelper.LOG_FB)));
+    	if (commentIndex >= 0) {
+    		mComment.setText(c.getString(commentIndex));
+    	}
+    	if (gridrefIndex >= 0) {
+    		String gridref = c.getString(gridrefIndex);
+    		mGridref.setText(gridref);
+    	}
+    	
+    	int fbIndex = c.getColumnIndex(DbHelper.LOG_FB);
+    	if (fbIndex >= 0) {
+    		mFb.setText(c.getString(fbIndex));
+    	}
     	
     	// Pre-populate grid reference with GPS if blank and GPS available
-    	if (gridref == null || gridref.trim().isEmpty()) {
-    		tryPrePopulateGridReference();
+    	if (gridrefIndex >= 0) {
+    		String gridref = c.getString(gridrefIndex);
+    		if (gridref == null || gridref.trim().isEmpty()) {
+    			tryPrePopulateGridReference();
+    		}
     	}
     	
     	// set Time
-    	mSendTime.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);
-    	// Suppress deprecation warnings for TimePicker methods - these still work
-    	@SuppressWarnings("deprecation")
-    	int hour = c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR));
-    	@SuppressWarnings("deprecation")
-    	int minute = c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES));
-    	// Note: setCurrentHour/setCurrentMinute are deprecated but functional
+    	int sendTimeIndex = c.getColumnIndex(DbHelper.LOG_SENDTIME);
+    	if (sendTimeIndex >= 0) {
+    		mSendTime.setChecked(c.getInt(sendTimeIndex) > 0);
+    	}
+    	
+    	int hourIndex = c.getColumnIndex(DbHelper.LOG_HOUR);
+    	int minuteIndex = c.getColumnIndex(DbHelper.LOG_MINUTES);
+    	if (hourIndex >= 0 && minuteIndex >= 0) {
+    		// Suppress deprecation warnings for TimePicker methods - these still work
+    		@SuppressWarnings("deprecation")
+    		int hour = c.getInt(hourIndex);
+    		@SuppressWarnings("deprecation")
+    		int minute = c.getInt(minuteIndex);
+    		// Note: setCurrentHour/setCurrentMinute are deprecated but functional
+    	}
     	updateTimeVisibility();
     	
     	// set Flags
-    	mAdminFlag.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);
-    	mUserFlag.setChecked 	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGUSERS))  > 0);
+    	int adminFlagIndex = c.getColumnIndex(DbHelper.LOG_FLAGADMINS);
+    	int userFlagIndex = c.getColumnIndex(DbHelper.LOG_FLAGUSERS);
+    	if (adminFlagIndex >= 0) {
+    		mAdminFlag.setChecked(c.getInt(adminFlagIndex) > 0);
+    	}
+    	if (userFlagIndex >= 0) {
+    		mUserFlag.setChecked(c.getInt(userFlagIndex) > 0);
+    	}
     	
     	// set Score: stored value is number of half-stars (1..10); convert to 0.5..5.0
-    	int storedScore = c.getInt(c.getColumnIndex(DbHelper.LOG_SCORE));
-    	float stars = Math.max(0.5f, Math.min(5.0f, storedScore / 2f));
-    	mScore.setRating(stars);
+    	int scoreIndex = c.getColumnIndex(DbHelper.LOG_SCORE);
+    	if (scoreIndex >= 0) {
+    		int storedScore = c.getInt(scoreIndex);
+    		float stars = Math.max(0.5f, Math.min(5.0f, storedScore / 2f));
+    		mScore.setRating(stars);
+    	}
     	
     	// set Condition
-    	Condition cond = Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION)));
-    	mCondition.setSelection (Arrays.asList(Condition.values()).indexOf(cond));
+    	int conditionIndex = c.getColumnIndex(DbHelper.LOG_CONDITION);
+    	if (conditionIndex >= 0) {
+    		Condition cond = Condition.fromCode(c.getString(conditionIndex));
+    		mCondition.setSelection(Arrays.asList(Condition.values()).indexOf(cond));
+    	}
 
     	c.close();
     	

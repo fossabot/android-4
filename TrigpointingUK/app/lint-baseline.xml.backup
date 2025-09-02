@@ -245,11 +245,264 @@
     <issue
         id="Range"
         message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;id&quot;, cursor.getLong(cursor.getColumnIndex(DbHelper.TRIG_ID)));"
+        errorLine2="                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="440"
+            column="47"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;name&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_NAME)));"
+        errorLine2="                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="441"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;lat&quot;, cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LAT)));"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="442"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;lon&quot;, cursor.getDouble(cursor.getColumnIndex(DbHelper.TRIG_LON)));"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="443"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;type&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_TYPE)));"
+        errorLine2="                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="444"
+            column="51"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;condition&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_CONDITION)));"
+        errorLine2="                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="445"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                trig.put(&quot;logged&quot;, cursor.getString(cursor.getColumnIndex(DbHelper.TRIG_LOGGED)));"
+        errorLine2="                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="446"
+            column="53"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="                String marked = cursor.getString(cursor.getColumnIndex(DbHelper.JOIN_MARKED));"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java"
+            line="449"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="  Double lat = Double.valueOf(c.getString(c.getColumnIndex(DbHelper.TRIG_LAT)));"
+        errorLine2="                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="275"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="  Double lon = Double.valueOf(c.getString(c.getColumnIndex(DbHelper.TRIG_LON)));"
+        errorLine2="                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="276"
+            column="43"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     mDate.init    (c.getInt(c.getColumnIndex(DbHelper.LOG_YEAR)), "
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="745"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="            c.getInt(c.getColumnIndex(DbHelper.LOG_MONTH)),"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="746"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="            c.getInt(c.getColumnIndex(DbHelper.LOG_DAY)), "
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="747"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     mComment.setText   (c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)));"
+        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="753"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     String gridref = c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF));"
+        errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="754"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     mFb.setText    (c.getString(c.getColumnIndex(DbHelper.LOG_FB)));"
+        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="756"
+            column="34"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     mSendTime.setChecked (c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);"
+        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="764"
+            column="37"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     int hour = c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR));"
+        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="767"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     int minute = c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES));"
+        errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="769"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     mAdminFlag.setChecked (c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);"
+        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="774"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     mUserFlag.setChecked  (c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGUSERS))  > 0);"
+        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="775"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     int storedScore = c.getInt(c.getColumnIndex(DbHelper.LOG_SCORE));"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="778"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
+        errorLine1="     Condition cond = Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION)));"
+        errorLine2="                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
+            line="783"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="Range"
+        message="Value must be ≥ 0 but `getColumnIndex` can be -1"
         errorLine1="                long photoId = c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID));"
         errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="846"
+            line="807"
             column="42"/>
     </issue>
 
@@ -260,7 +513,7 @@
         errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="847"
+            line="808"
             column="46"/>
     </issue>
 
@@ -271,7 +524,7 @@
         errorLine2="                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="848"
+            line="809"
             column="47"/>
     </issue>
 
@@ -282,7 +535,7 @@
         errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="993"
+            line="954"
             column="26"/>
     </issue>
 
@@ -293,7 +546,7 @@
         errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="994"
+            line="955"
             column="26"/>
     </issue>
 
@@ -830,11 +1083,11 @@
         errorLine2=" ~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="313"
+            line="309"
             column="2"/>
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="312"
+            line="308"
             column="2"
             message="Previous line indentation here"/>
     </issue>
@@ -846,11 +1099,11 @@
         errorLine2="  ~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="1040"
+            line="1001"
             column="3"/>
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="1039"
+            line="1000"
             column="3"
             message="Previous line indentation here"/>
     </issue>
@@ -4330,7 +4583,7 @@
         errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="392"
+            line="388"
             column="28"/>
     </issue>
 
@@ -4341,7 +4594,7 @@
         errorLine2="                           ~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="392"
+            line="388"
             column="28"/>
     </issue>
 
@@ -4352,7 +4605,7 @@
         errorLine2="                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="392"
+            line="388"
             column="72"/>
     </issue>
 
@@ -4363,7 +4616,7 @@
         errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="395"
+            line="391"
             column="28"/>
     </issue>
 
@@ -4374,7 +4627,7 @@
         errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="395"
+            line="391"
             column="58"/>
     </issue>
 
@@ -4385,7 +4638,7 @@
         errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="1064"
+            line="1025"
             column="28"/>
     </issue>
 
