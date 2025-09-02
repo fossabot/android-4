@@ -177,4 +177,152 @@
     <!-- Album tab header -->
     <string name="album_header">Photos taken by TrigpointingUK users</string>
 
+    <!-- Common UI strings -->
+    <string name="direction_arrow">Direction arrow</string>
+    <string name="distance_zero">0 m</string>
+    <string name="distance_accuracy">±0 m</string>
+    <string name="bearing_format">Bearing: 000°</string>
+    <string name="compass_calibration">Move your phone in a figure-8 to calibrate the compass</string>
+    <string name="trigpoint_name_placeholder">Trigpoint Name</string>
+    <string name="distance_zero_short">0m</string>
+    
+    <!-- Login dialog strings -->
+    <string name="login_instructions">Please enter your Trigpointing.UK website credentials. It is not currently possible to create an account using this app, only on the website.</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    
+    <!-- Photo metadata dialog strings -->
+    <string name="photo_type_label">Photo Type:</string>
+    <string name="caption_optional">Caption (optional):</string>
+    <string name="caption_hint">Enter a caption for this photo</string>
+    <string name="public_domain_photo">Make this photo public domain</string>
+    <string name="public_domain_explanation">Public domain photos may be used by anyone for any purpose</string>
+    
+    <!-- Filter strings -->
+    <string name="filter_by_logging_status">Filter by logging status:</string>
+    
+    <!-- Menu strings -->
+    <string name="offline_maps">Offline Maps</string>
+    <string name="cache_status">Cache Status</string>
+    <string name="clear_cache_menu">Clear Cache</string>
+    
+    <!-- Map download strings -->
+    <string name="map_name_placeholder">Map Name</string>
+    <string name="map_description_placeholder">Map description goes here.</string>
+    <string name="map_size_format">Size: 0 MB</string>
+    <string name="download_button">Download</string>
+    
+    <!-- Log photo strings -->
+    <string name="photo_thumbnail_desc">Photo Thumbnail</string>
+    <string name="photo_name_hint">Photo Name</string>
+    <string name="photo_description_hint">Photo Description</string>
+    <string name="public_photo">Public Photo</string>
+    <string name="save_photo">Save Photo</string>
+    <string name="remove_photo">Remove Photo</string>
+    
+    <!-- Log trig strings -->
+    <string name="log_this_trigpoint">Log this trigpoint</string>
+    <string name="date_label">Date:</string>
+    <string name="time_label">Time:</string>
+    <string name="log_time_question">Log time?</string>
+    <string name="grid_reference_label">Grid Reference:</string>
+    <string name="grid_reference_hint">Grid Reference</string>
+    <string name="update_button">Update</string>
+    <string name="flush_bracket_hint">Flush Bracket</string>
+    <string name="condition_label">Condition:</string>
+    <string name="score_label">Score:</string>
+    <string name="comment_hint">Comment</string>
+    <string name="admin_flag">Admin Flag</string>
+    <string name="user_flag">User Flag</string>
+    <string name="photos_label">Photos:</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="delete_log">Delete Log</string>
+    <string name="upload_now">Upload Now</string>
+    <string name="sync_later">Sync Later</string>
+    
+    <!-- Main activity strings -->
+    <string name="user_label">User: </string>
+    <string name="not_logged_in">Not logged in</string>
+    <string name="pillars_count">Pillars: 0</string>
+    <string name="fbm_count">FBM: 0</string>
+    <string name="passive_count">Passive: 0</string>
+    <string name="intersected_count">Intersected: 0</string>
+    <string name="unsynced_count">Unsynced: 0</string>
+    <string name="photos_count">Photos: 0</string>
+    <string name="user_activity_map">User activity map</string>
+    <string name="nearest_button">Nearest</string>
+    <string name="map_button">Map</string>
+    <string name="sync_button">Sync</string>
+    
+    <!-- Radar dialog strings -->
+    <string name="radar_confirmation">Are you sure you want to open the radar?</string>
+    
+    <!-- Trigpoint type strings -->
+    <string name="select_trigpoint_types">Select trigpoint types to display:</string>
+    <string name="pillars_only">Pillars Only</string>
+    <string name="pillars_plus_fbm">Pillars + FBM</string>
+    <string name="fbm_only">FBM Only</string>
+    <string name="passive_stations">Passive Stations</string>
+    <string name="intersected_stations">Intersected Stations</string>
+    <string name="all_except_intersected">All except Intersected</string>
+    <string name="all_types">All Types</string>
+    <string name="logged_or_not">Logged or not</string>
+    
+    <!-- Trig info strings -->
+    <string name="mark_trigpoint">Mark this trig point</string>
+    <string name="waypoint_label">Waypoint: </string>
+    <string name="waypoint_placeholder">TR123</string>
+    <string name="condition_label_colon">Condition: </string>
+    <string name="condition_good">Good</string>
+    <string name="grid_ref_label">Grid Ref: </string>
+    <string name="grid_ref_placeholder">SU123456</string>
+    <string name="wgs84_label">WGS84: </string>
+    <string name="coordinates_placeholder">51.123, -1.456</string>
+    <string name="current_label">Current: </string>
+    <string name="current_yes">Yes</string>
+    <string name="historic_label">Historic: </string>
+    <string name="historic_no">No</string>
+    <string name="type_label">Type: </string>
+    <string name="type_pillar">Pillar</string>
+    <string name="flush_bracket_label">Flush Bracket: </string>
+    <string name="flush_bracket_unknown">Unknown</string>
+    <string name="view_on_map">View on map</string>
+    <string name="list_nearby_trigpoints">List nearby trigpoints</string>
+    
+    <!-- Trig list strings -->
+    <string name="location_unknown">Location: Unknown</string>
+    <string name="filter_all">Filter: All</string>
+    <string name="direction_north">N</string>
+    
+    <!-- Trig album row strings -->
+    <string name="photo_name_placeholder">Photo name</string>
+    <string name="date_by_user">Date by User</string>
+    <string name="photo_description_placeholder">Photo description</string>
+    
+    <!-- Trig details strings -->
+    <string name="type_content_desc">Type</string>
+    <string name="condition_content_desc">Condition</string>
+    
+    <!-- Menu action strings -->
+    <string name="open_on_website">Open on trigpointing.uk</string>
+    <string name="navigate_to_trigpoint">Navigate to trigpoint</string>
+    <string name="guide_me_radar">Guide me (radar)</string>
+    
+    <!-- Trig row strings -->
+    <string name="trig_name_placeholder">Trig Name</string>
+    <string name="distance_format">0.0km</string>
+    
+    <!-- Trig log row strings -->
+    <string name="log_entry_text">Log entry text</string>
+    
+    <!-- Trig logs strings -->
+    <string name="no_logs_available">No logs available</string>
+    
+    <!-- Menu strings -->
+    <string name="refresh_maps">Refresh maps</string>
+    
+    <!-- AR activity strings -->
+    <string name="ar_arrow_left">\&lt;\&gt;</string>
+    <string name="ar_arrow_right">\&gt;\&lt;</string>
+
 </resources>

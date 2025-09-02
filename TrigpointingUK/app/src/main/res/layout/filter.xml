@@ -18,31 +18,31 @@
             android:id="@+id/filterAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All" />
+            android:text="@string/filterAll" />
 
         <RadioButton
             android:id="@+id/filterLogged"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logged" />
+            android:text="@string/filterLogged" />
 
         <RadioButton
             android:id="@+id/filterNotLogged"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Not Logged" />
+            android:text="@string/filterNotLogged" />
 
         <RadioButton
             android:id="@+id/filterMarked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marked" />
+            android:text="@string/filterMarked" />
 
         <RadioButton
             android:id="@+id/filterUnsynced"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unsynced" />
+            android:text="@string/filterUnsynced" />
 
     </RadioGroup>
 
