@@ -15,8 +15,8 @@ import uk.trigpointing.android.types.TrigPhoto;
 public class LogTrigGalleryAdapter extends BaseAdapter {
     
     private final TrigPhoto[] mPhotos;
-	private final int mGalleryItemBackground;
-	private final Context mContext;
+    private final int mGalleryItemBackground;
+    private final Context mContext;
     
     public LogTrigGalleryAdapter(Context context, TrigPhoto[] photos) {
         mPhotos=photos;
@@ -40,14 +40,14 @@ public class LogTrigGalleryAdapter extends BaseAdapter {
     }
     
     public View getView(int position, View convertView, ViewGroup parent) {
-		ImageView iv;
-    	if (null == convertView) {
-			iv = new ImageView(mContext);
-		} else {
-			iv = (ImageView) convertView;
-		}
+        ImageView iv;
+        if (null == convertView) {
+            iv = new ImageView(mContext);
+        } else {
+            iv = (ImageView) convertView;
+        }
 
-    	iv.setImageBitmap(BitmapFactory.decodeFile(mPhotos[position].getIconURL()));
+        iv.setImageBitmap(BitmapFactory.decodeFile(mPhotos[position].getIconURL()));
         
         iv.setLayoutParams(new Gallery.LayoutParams(200, 200));
         iv.setScaleType(ImageView.ScaleType.FIT_XY);

@@ -24,8 +24,8 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
     
     private final String[] mUrls;
     public LazyImageLoader imageLoader;
-	private final int mGalleryItemBackground;
-	private final Context mContext;
+    private final int mGalleryItemBackground;
+    private final Context mContext;
     
     public TrigDetailsOSMapAdapter(Context context, String[] urls) {
         mUrls=urls;

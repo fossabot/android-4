@@ -21,27 +21,27 @@ import java.util.Locale;
 
 public class TrigDetailsActivity extends BaseActivity {
 
-	private static final String TAG="TrigDetailsActivity";
+    private static final String TAG="TrigDetailsActivity";
     private static final String STATE_TAB_TAG = "saved_tab_tag";
     private LocalActivityManager mLocalActivityManager;
 
-	public void onCreate(Bundle savedInstanceState) {
-	    try {
-	        android.util.Log.d(TAG, "onCreate called with savedInstanceState: " + (savedInstanceState != null ? "not null" : "null"));
-	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.trigdetails);
-	        
-	        if (getSupportActionBar() != null) {
-	            try {
-	                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-	            } catch (Exception e) {
-	                android.util.Log.w(TAG, "Error setting up action bar: " + e.getMessage());
-	            }
-	        } else {
-	            android.util.Log.w(TAG, "Action bar is null");
-	        }
-	        
-	        // Content positioning is now handled by BaseActivity
+    public void onCreate(Bundle savedInstanceState) {
+        try {
+            android.util.Log.d(TAG, "onCreate called with savedInstanceState: " + (savedInstanceState != null ? "not null" : "null"));
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.trigdetails);
+            
+            if (getSupportActionBar() != null) {
+                try {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                } catch (Exception e) {
+                    android.util.Log.w(TAG, "Error setting up action bar: " + e.getMessage());
+                }
+            } else {
+                android.util.Log.w(TAG, "Action bar is null");
+            }
+            
+            // Content positioning is now handled by BaseActivity
 
             Bundle extras = getIntent().getExtras();
             long ensuredTrigId = getIntent().getLongExtra(DbHelper.TRIG_ID, -1);
@@ -121,7 +121,7 @@ public class TrigDetailsActivity extends BaseActivity {
             showToast("Error initializing trig details");
             finish();
         }
-	}
+    }
 
     private void setupTabs(Bundle extras, Bundle savedInstanceState) {
         android.util.Log.d(TAG, "setupTabs called");
