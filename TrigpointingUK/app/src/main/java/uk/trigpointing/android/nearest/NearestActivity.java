@@ -410,7 +410,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			Log.d(TAG, "Location update count : " + mUpdateCount + " Location count : " + mLocationCount + " " + comment);
 		} else {
 			mStrLocation.setTypeface(null, android.graphics.Typeface.NORMAL);
-			mStrLocation.setText("Location is unknown");
+			mStrLocation.setText(getString(R.string.location_unknown));
 			Log.d(TAG, "Location unknown : " + mUpdateCount + " Location count : " + mLocationCount + " " + comment);
 		}
 	}

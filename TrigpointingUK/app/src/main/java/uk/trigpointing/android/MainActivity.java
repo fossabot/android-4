@@ -382,7 +382,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
                 // Disable the login button and show progress
                 loginButton.setEnabled(false);
-                loginButton.setText("Logging in...");
+                loginButton.setText(getString(R.string.logging_in_status));
 
                 // Authenticate with the new API
                 authApiClient.authenticate(user, pass, new AuthApiClient.AuthCallback() {
@@ -420,7 +420,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
                             
                             // Re-enable the login button
                             loginButton.setEnabled(true);
-                            loginButton.setText("Login");
+                            loginButton.setText(getString(R.string.login_button_text));
                             
                             // Close current dialog and show new one with error
                             dialog.dismiss();
@@ -550,7 +550,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 					isLoggedIn = true;
 				} else {
 					Log.i(TAG, "updateUserDisplay: No authentication found");
-					displayName = "Not logged in";
+					displayName = getString(R.string.not_logged_in_status);
 					isLoggedIn = false;
 				}
 			}
@@ -573,7 +573,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 		} catch (Exception e) {
 			Log.e(TAG, "updateUserDisplay: Error updating user display", e);
 			e.printStackTrace();
-			mUserName.setText("Not logged in");
+			mUserName.setText(getString(R.string.not_logged_in_status));
 		}
 	}
 	

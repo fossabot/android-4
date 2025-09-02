@@ -389,10 +389,10 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			Log.e(TAG, "log " + ll.getOSGB10() + " - " + ll.getWGS());
 			Log.e(TAG, "Gridref " + dist.intValue() + " " + mUnits + " from database location");
 			if (dist >= 50) {
-				mLocationError.setText("Warning: " + dist.intValue() + mStrUnits + " from database location");
+				mLocationError.setText(getString(R.string.location_warning_format, dist.intValue(), mStrUnits));
 				mLocationError.setTextColor(ContextCompat.getColor(this, R.color.errorcolour));
 			} else {
-				mLocationError.setText(dist.intValue() + mStrUnits + " from database location");
+				mLocationError.setText(getString(R.string.location_distance_format, dist.intValue(), mStrUnits));
 				mLocationError.setTextColor(ContextCompat.getColor(this, R.color.okcolour));
 			}
 		} catch (IllegalArgumentException e) {
@@ -1075,7 +1075,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		   container.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
 
 		   mProgressText = new TextView(this);
-		   mProgressText.setText("Getting accurate GPS fix...");
+		   mProgressText.setText(getString(R.string.getting_gps_fix));
 		   container.addView(mProgressText, new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 

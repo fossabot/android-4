@@ -265,24 +265,24 @@ class DownloadMapsActivity : BaseActivity() {
                 mapDescription.text = mapDownload.description
                 val df = DecimalFormat("#.##")
                 val sizeInMB = df.format(mapDownload.fileSize.toDouble() / (1024 * 1024))
-                mapSize.text = "Size: $sizeInMB MB"
+                mapSize.text = itemView.context.getString(R.string.map_size_format, sizeInMB)
 
                 when {
                     progress in 0..99 -> {
                         downloadProgressBar.visibility = View.VISIBLE
                         downloadProgressBar.progress = progress
                         downloadButton.isEnabled = false
-                        downloadButton.text = "Downloading..."
+                        downloadButton.text = itemView.context.getString(R.string.downloading_status)
                     }
                     progress >= 100 -> {
                         downloadProgressBar.visibility = View.GONE
                         downloadButton.isEnabled = false
-                        downloadButton.text = "Downloaded"
+                        downloadButton.text = itemView.context.getString(R.string.downloaded_status)
                     }
                     else -> {
                         downloadProgressBar.visibility = View.GONE
                         downloadButton.isEnabled = true
-                        downloadButton.text = "Download"
+                        downloadButton.text = itemView.context.getString(R.string.download_button)
                     }
                 }
 

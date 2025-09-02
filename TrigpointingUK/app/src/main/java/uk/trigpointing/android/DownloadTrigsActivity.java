@@ -229,7 +229,7 @@ public class DownloadTrigsActivity extends BaseActivity implements SyncListener 
 					mainHandler.postDelayed(this, 1000);
 				} else {
 					// Time to retry now
-					mStatus.setText("Retrying download now...");
+					mStatus.setText(getString(R.string.retrying_download));
 					// Increase delay for the next potential retry (exponential backoff with 300s cap)
 					retryDelaySeconds = Math.min(retryDelaySeconds * 2, 300);
 					// Start the download again

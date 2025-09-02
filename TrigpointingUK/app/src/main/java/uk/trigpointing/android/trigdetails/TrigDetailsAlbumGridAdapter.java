@@ -59,7 +59,7 @@ public class TrigDetailsAlbumGridAdapter extends RecyclerView.Adapter<TrigDetail
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		TrigPhoto tp = mPhotos.get(position);
 		holder.name.setText(tp.getName());
-		holder.dateUser.setText(tp.getDate() + "   " + tp.getUsername());
+		holder.dateUser.setText(mContext.getString(R.string.date_user_format, tp.getDate(), tp.getUsername()));
 		if (tp.getDescr().equals(tp.getName())) {
 			holder.descr.setText("");
 		} else {

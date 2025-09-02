@@ -55,7 +55,7 @@ public class TrigDetailsLoglistAdapter extends ArrayAdapter<TrigLog> {
 			tt.setVisibility(View.GONE);
 		}
 			
-		tu.setText(tl.getDate()+"   "+tl.getUsername());
+		tu.setText(mContext.getString(R.string.date_user_format, tl.getDate(), tl.getUsername()));
 		tc.setImageResource(tl.getCondition().icon());
 		
 		return row;

@@ -601,6 +601,38 @@
     </issue>
 
     <issue
+        id="StringFormatInvalid"
+        message="Format string &apos;`map_size_format`&apos; is not a valid format string so it should not be passed to `String.format`"
+        errorLine1="                mapSize.text = itemView.context.getString(R.string.map_size_format, sizeInMB)"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
+            line="268"
+            column="32"/>
+        <location
+            file="src/main/res/values/strings.xml"
+            line="160"
+            column="5"
+            message="This definition does not require arguments"/>
+    </issue>
+
+    <issue
+        id="StringFormatInvalid"
+        message="Format string &apos;`map_size_format`&apos; is not a valid format string so it should not be passed to `String.format`"
+        errorLine1="                mapSize.text = itemView.context.getString(R.string.map_size_format, sizeInMB)"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
+            line="268"
+            column="32"/>
+        <location
+            file="src/main/res/values/strings.xml"
+            line="160"
+            column="5"
+            message="This definition does not require arguments"/>
+    </issue>
+
+    <issue
         id="PluralsCandidate"
         message="Formatting %d followed by words (&quot;tiles&quot;): This should probably be a plural rather than a string"
         errorLine1="    &lt;string name=&quot;cacheTileCountFormat&quot;>%1$d tiles cached&lt;/string>"
@@ -1504,226 +1536,6 @@
             file="src/main/java/uk/trigpointing/android/common/ZoomableImageView.java"
             line="94"
             column="20"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="                mapSize.text = &quot;Size: $sizeInMB MB&quot;"
-        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="268"
-            column="32"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                mapSize.text = &quot;Size: $sizeInMB MB&quot;"
-        errorLine2="                                ~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="268"
-            column="33"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                mapSize.text = &quot;Size: $sizeInMB MB&quot;"
-        errorLine2="                                               ~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="268"
-            column="48"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                        downloadButton.text = &quot;Downloading...&quot;"
-        errorLine2="                                               ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="275"
-            column="48"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                        downloadButton.text = &quot;Downloaded&quot;"
-        errorLine2="                                               ~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="280"
-            column="48"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                        downloadButton.text = &quot;Download&quot;"
-        errorLine2="                                               ~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="285"
-            column="48"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="     mStatus.setText(&quot;Retrying download now...&quot;);"
-        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/DownloadTrigsActivity.java"
-            line="232"
-            column="22"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="    mLocationError.setText(&quot;Warning: &quot; + dist.intValue() + mStrUnits + &quot; from database location&quot;);"
-        errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="392"
-            column="28"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="    mLocationError.setText(&quot;Warning: &quot; + dist.intValue() + mStrUnits + &quot; from database location&quot;);"
-        errorLine2="                           ~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="392"
-            column="28"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="    mLocationError.setText(&quot;Warning: &quot; + dist.intValue() + mStrUnits + &quot; from database location&quot;);"
-        errorLine2="                                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="392"
-            column="72"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="    mLocationError.setText(dist.intValue() + mStrUnits + &quot; from database location&quot;);"
-        errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="395"
-            column="28"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="    mLocationError.setText(dist.intValue() + mStrUnits + &quot; from database location&quot;);"
-        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="395"
-            column="58"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="     mProgressText.setText(&quot;Getting accurate GPS fix...&quot;);"
-        errorLine2="                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java"
-            line="1078"
-            column="28"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                loginButton.setText(&quot;Logging in...&quot;);"
-        errorLine2="                                    ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/MainActivity.java"
-            line="385"
-            column="37"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="                            loginButton.setText(&quot;Login&quot;);"
-        errorLine2="                                                ~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/MainActivity.java"
-            line="423"
-            column="49"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="   mUserName.setText(&quot;Not logged in&quot;);"
-        errorLine2="                     ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/MainActivity.java"
-            line="576"
-            column="22"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="String literal in `setText` can not be translated. Use Android resources instead."
-        errorLine1="   mStrLocation.setText(&quot;Location is unknown&quot;);"
-        errorLine2="                        ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="413"
-            column="25"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="  tu.setText(tp.getDate()+&quot;   &quot;+tp.getUsername());"
-        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumAdapter.java"
-            line="61"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="  holder.dateUser.setText(tp.getDate() + &quot;   &quot; + tp.getUsername());"
-        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumGridAdapter.java"
-            line="62"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="SetTextI18n"
-        message="Do not concatenate text displayed with `setText`. Use resource string with placeholders."
-        errorLine1="  tu.setText(tl.getDate()+&quot;   &quot;+tl.getUsername());"
-        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsLoglistAdapter.java"
-            line="58"
-            column="14"/>
     </issue>
 
     <issue

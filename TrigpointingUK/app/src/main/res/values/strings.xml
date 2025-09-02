@@ -121,6 +121,18 @@
     <string name="trig_type_icon_content_desc">Trigpoint type icon</string>
     <string name="trig_arrow_content_desc">Direction arrow</string>
     <string name="trig_logged_status_content_desc">Logged status icon</string>
+
+    <!-- Dynamic text strings for Java/Kotlin code -->
+    <string name="downloading_status">Downloading…</string>
+    <string name="downloaded_status">Downloaded</string>
+    <string name="retrying_download">Retrying download now…</string>
+    <string name="location_warning_format">Warning: %1$d%2$s from database location</string>
+    <string name="location_distance_format">%1$d%2$s from database location</string>
+    <string name="getting_gps_fix">Getting accurate GPS fix…</string>
+    <string name="logging_in_status">Logging in…</string>
+    <string name="login_button_text">Login</string>
+    <string name="not_logged_in_status">Not logged in</string>
+    <string name="date_user_format">%1$s   %2$s</string>
     
     <!-- Login dialog strings -->
     <string name="login_instructions">Please enter your Trigpointing.UK website credentials. It is not currently possible to create an account using this app, only on the website.</string>
@@ -145,7 +157,7 @@
     <!-- Map download strings -->
     <string name="map_name_placeholder">Map Name</string>
     <string name="map_description_placeholder">Map description goes here.</string>
-    <string name="map_size_format">Size: 0 MB</string>
+    <string name="map_size_format">Size: %1$s MB</string>
     <string name="download_button">Download</string>
     
     <!-- Log photo strings -->
