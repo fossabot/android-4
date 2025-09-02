@@ -4,22 +4,6 @@
     <issue
         id="SuspiciousIndentation"
         message="The indentation string here is different from on the previous line (`&quot; &quot;` vs `\t`)"
-        errorLine1=" loadBitmap();"
-        errorLine2="~">
-        <location
-            file="src/main/java/uk/trigpointing/android/common/DisplayBitmapActivity.java"
-            line="51"
-            column="1"/>
-        <location
-            file="src/main/java/uk/trigpointing/android/common/DisplayBitmapActivity.java"
-            line="50"
-            column="1"
-            message="Previous line indentation here"/>
-    </issue>
-
-    <issue
-        id="SuspiciousIndentation"
-        message="The indentation string here is different from on the previous line (`&quot; &quot;` vs `\t`)"
         errorLine1="  if (getSupportActionBar() != null) {"
         errorLine2=" ~">
         <location
@@ -259,72 +243,6 @@
             file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsActivity.java"
             line="788"
             column="20"/>
-    </issue>
-
-    <issue
-        id="UseCompatTextViewDrawableXml"
-        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
-        errorLine1="                android:drawableStart=&quot;@drawable/ic_pillar_large&quot;"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="60"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="UseCompatTextViewDrawableXml"
-        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
-        errorLine1="                android:drawableStart=&quot;@drawable/ic_fbm_large&quot;"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="70"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="UseCompatTextViewDrawableXml"
-        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
-        errorLine1="                android:drawableStart=&quot;@drawable/ic_passive_large&quot;"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="80"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="UseCompatTextViewDrawableXml"
-        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
-        errorLine1="                android:drawableStart=&quot;@drawable/ic_intersected_large&quot;"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="90"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="UseCompatTextViewDrawableXml"
-        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
-        errorLine1="                android:drawableStart=&quot;@drawable/ic_refresh_large&quot;"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="100"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="UseCompatTextViewDrawableXml"
-        message="Use `app:drawableStartCompat` instead of `android:drawableStart`"
-        errorLine1="                android:drawableStart=&quot;@drawable/ic_camera_large&quot;"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="110"
-            column="17"/>
     </issue>
 
     <issue
@@ -723,56 +641,12 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.string.pillar_icon_content_desc` appears to be unused"
-        errorLine1="    &lt;string name=&quot;pillar_icon_content_desc&quot;>Pillar trigpoint icon&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="109"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.fbm_icon_content_desc` appears to be unused"
-        errorLine1="    &lt;string name=&quot;fbm_icon_content_desc&quot;>Flush bracket marker icon&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="110"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.passive_icon_content_desc` appears to be unused"
-        errorLine1="    &lt;string name=&quot;passive_icon_content_desc&quot;>Passive station icon&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="111"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.intersected_icon_content_desc` appears to be unused"
-        errorLine1="    &lt;string name=&quot;intersected_icon_content_desc&quot;>Intersected station icon&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="112"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.string.unsynced_icon_content_desc` appears to be unused"
         errorLine1="    &lt;string name=&quot;unsynced_icon_content_desc&quot;>Unsynced data icon&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="113"
+            line="110"
             column="13"/>
     </issue>
 
@@ -783,7 +657,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="114"
+            line="111"
             column="13"/>
     </issue>
 
@@ -796,72 +670,6 @@
             file="src/main/res/layout/logtrig.xml"
             line="13"
             column="6"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;syncToTUK&quot;>Syncing to TUK...&lt;/string>"
-        errorLine2="                             ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="40"
-            column="30"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;syncPhotosToTUK&quot;>Syncing photos to TUK...&lt;/string>"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="41"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;syncLogsFromTUK&quot;>Syncing logs from TUK...&lt;/string>"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="42"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;downloadingPhotos&quot;>Downloading photos...&lt;/string>"
-        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="60"
-            column="38"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;downloadingLogs&quot;>Downloading logs...&lt;/string>"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="62"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;cacheCalculating&quot;>Calculating cache size...&lt;/string>"
-        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="70"
-            column="37"/>
     </issue>
 
     <issue
@@ -897,61 +705,6 @@
         message="Missing density variation folders in `src/main/res`: drawable-hdpi">
         <location
             file="src/main/res"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/logtrig.xml"
-            line="242"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/logtrig.xml"
-            line="252"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/logtrig.xml"
-            line="263"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="            &lt;Button"
-        errorLine2="             ~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="145"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="            &lt;Button"
-        errorLine2="             ~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="156"
-            column="14"/>
     </issue>
 
     <issue

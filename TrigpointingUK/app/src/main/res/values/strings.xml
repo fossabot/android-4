@@ -37,9 +37,9 @@
     <!-- Missing string resources -->
     <string name="reset">Reset</string>
 
-    <string name="syncToTUK">Syncing to TUK...</string>
-    <string name="syncPhotosToTUK">Syncing photos to TUK...</string>
-    <string name="syncLogsFromTUK">Syncing logs from TUK...</string>
+    <string name="syncToTUK">Syncing to TUK…</string>
+    <string name="syncPhotosToTUK">Syncing photos to TUK…</string>
+    <string name="syncLogsFromTUK">Syncing logs from TUK…</string>
     <string name="toastPleaseLogin">Please login for a more personalised experience</string>
     
     <!-- Filter related strings -->
@@ -57,9 +57,9 @@
 
     
     <!-- Missing string resources for various activities -->
-    <string name="downloadingPhotos">Downloading photos...</string>
+    <string name="downloadingPhotos">Downloading photos…</string>
     <string name="noPhotos">No photos available</string>
-    <string name="downloadingLogs">Downloading logs...</string>
+    <string name="downloadingLogs">Downloading logs…</string>
     <string name="noLogs">No logs available</string>
     <string name="radartitle">Radar Dialog</string>
 
@@ -67,7 +67,7 @@
     <string name="cacheUsageFormat">Cache usage: %1$s</string>
     <string name="cacheTileCountFormat">%1$d tiles cached</string>
     <string name="clearCache">Clear cache (via Settings)</string>
-    <string name="cacheCalculating">Calculating cache size...</string>
+    <string name="cacheCalculating">Calculating cache size…</string>
     <string name="arView">AR View</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
