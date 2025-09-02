@@ -846,273 +846,273 @@
         id="UnusedResources"
         message="The resource `R.drawable.arrow_01_nne` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_01_nne.png"/>
+            file="src/main/res/drawable-nodpi/arrow_01_nne.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_02_ne` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_02_ne.png"/>
+            file="src/main/res/drawable-nodpi/arrow_02_ne.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_03_ene` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_03_ene.png"/>
+            file="src/main/res/drawable-nodpi/arrow_03_ene.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_04_e` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_04_e.png"/>
+            file="src/main/res/drawable-nodpi/arrow_04_e.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_05_ese` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_05_ese.png"/>
+            file="src/main/res/drawable-nodpi/arrow_05_ese.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_06_se` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_06_se.png"/>
+            file="src/main/res/drawable-nodpi/arrow_06_se.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_07_sse` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_07_sse.png"/>
+            file="src/main/res/drawable-nodpi/arrow_07_sse.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_08_s` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_08_s.png"/>
+            file="src/main/res/drawable-nodpi/arrow_08_s.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_09_sse` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_09_sse.png"/>
+            file="src/main/res/drawable-nodpi/arrow_09_sse.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_10_sw` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_10_sw.png"/>
+            file="src/main/res/drawable-nodpi/arrow_10_sw.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_11_wsw` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_11_wsw.png"/>
+            file="src/main/res/drawable-nodpi/arrow_11_wsw.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_12_w` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_12_w.png"/>
+            file="src/main/res/drawable-nodpi/arrow_12_w.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_13_wnw` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_13_wnw.png"/>
+            file="src/main/res/drawable-nodpi/arrow_13_wnw.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_14_nw` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_14_nw.png"/>
+            file="src/main/res/drawable-nodpi/arrow_14_nw.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.arrow_15_nnw` appears to be unused">
         <location
-            file="src/main/res/drawable/arrow_15_nnw.png"/>
+            file="src/main/res/drawable-nodpi/arrow_15_nnw.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_fbm_grey` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_fbm_grey.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_fbm_grey.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_fbm_grey_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_fbm_grey_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_fbm_grey_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_fbm_red` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_fbm_red.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_fbm_red.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_fbm_red_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_fbm_red_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_fbm_red_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_fbm_yellow` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_fbm_yellow.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_fbm_yellow.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_fbm_yellow_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_fbm_yellow_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_fbm_yellow_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_intersected_grey` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_intersected_grey.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_intersected_grey.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_intersected_grey_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_intersected_grey_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_intersected_grey_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_intersected_red` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_intersected_red.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_intersected_red.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_intersected_red_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_intersected_red_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_intersected_red_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_intersected_yellow` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_intersected_yellow.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_intersected_yellow.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_intersected_yellow_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_intersected_yellow_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_intersected_yellow_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_passive_grey` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_passive_grey.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_passive_grey.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_passive_grey_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_passive_grey_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_passive_grey_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_passive_red` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_passive_red.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_passive_red.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_passive_red_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_passive_red_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_passive_red_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_passive_yellow` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_passive_yellow.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_passive_yellow.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_passive_yellow_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_passive_yellow_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_passive_yellow_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_pillar_grey` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_pillar_grey.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_pillar_grey.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_pillar_grey_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_pillar_grey_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_pillar_grey_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_pillar_red` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_pillar_red.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_pillar_red.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_pillar_red_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_pillar_red_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_pillar_red_h.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_pillar_yellow` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_pillar_yellow.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_pillar_yellow.png"/>
     </issue>
 
     <issue
         id="UnusedResources"
         message="The resource `R.drawable.mapicon_pillar_yellow_h` appears to be unused">
         <location
-            file="src/main/res/drawable-hdpi/mapicon_pillar_yellow_h.png"/>
+            file="src/main/res/drawable-nodpi/mapicon_pillar_yellow_h.png"/>
     </issue>
 
     <issue
@@ -1229,399 +1229,28 @@
         id="IconColors"
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
-            file="src/main/res/drawable/ic_menu_camera.png"/>
+            file="src/main/res/drawable-nodpi/ic_menu_camera.png"/>
     </issue>
 
     <issue
         id="IconColors"
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
-            file="src/main/res/drawable/ic_menu_directions.png"/>
+            file="src/main/res/drawable-nodpi/ic_menu_directions.png"/>
     </issue>
 
     <issue
         id="IconColors"
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
-            file="src/main/res/drawable/ic_menu_mapmode.png"/>
+            file="src/main/res/drawable-nodpi/ic_menu_mapmode.png"/>
     </issue>
 
     <issue
         id="IconColors"
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
-            file="src/main/res/drawable/ic_menu_view.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_00_n.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_00_n.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_01_nne.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_01_nne.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_02_ne.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_02_ne.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_03_ene.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_03_ene.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_04_e.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_04_e.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_05_ese.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_05_ese.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_06_se.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_06_se.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_07_sse.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_07_sse.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_08_s.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_08_s.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_09_sse.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_09_sse.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_10_sw.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_10_sw.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_11_wsw.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_11_wsw.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_12_w.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_12_w.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_13_wnw.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_13_wnw.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_14_nw.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_14_nw.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_15_nnw.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_15_nnw.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/arrow_x.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/arrow_x.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_damaged.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_damaged.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_definitelymissing.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_definitelymissing.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_good.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_good.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_nolog.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_nolog.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_possiblymissing.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_possiblymissing.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_slightlydamaged.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_slightlydamaged.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_toppled.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_toppled.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_unknown.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_unknown.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/c_unreachablebutvisible.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/c_unreachablebutvisible.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_damaged.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_damaged.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_definitelymissing.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_definitelymissing.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_good.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_good.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_nolog.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_nolog.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_possiblymissing.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_possiblymissing.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_slightlydamaged.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_slightlydamaged.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_toppled.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_toppled.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_unknown.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_unknown.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/cs_unreachablebutvisible.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/cs_unreachablebutvisible.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_camera.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_camera.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_compass.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_compass.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_directions.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_directions.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_mapmode.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_mapmode.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_refresh.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_refresh.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_view.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_view.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/icon.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/icon.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/imageloading.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/imageloading.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/t_fbm.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/t_fbm.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/t_intersected.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/t_intersected.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/t_passive.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/t_passive.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/t_pillar.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/t_pillar.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ts_fbm.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ts_fbm.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ts_intersected.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ts_intersected.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ts_passive.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ts_passive.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ts_pillar.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ts_pillar.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/tuk_logo.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/tuk_logo.png"/>
-    </issue>
-
-    <issue
-        id="IconMissingDensityFolder"
-        message="Missing density variation folders in `src/main/res`: drawable-mdpi, drawable-xhdpi, drawable-xxhdpi">
-        <location
-            file="src/main/res"/>
+            file="src/main/res/drawable-nodpi/ic_menu_view.png"/>
     </issue>
 
     <issue
