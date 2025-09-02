@@ -155,7 +155,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         
         // Check permissions and start
         if (hasPermissions()) {
-            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
             if (hasCamera) {
                 initializeCamera();
             } else {
@@ -186,7 +186,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         }
         
         // Resume camera (only if device has camera)
-        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         if (camera == null && hasPermissions() && hasCamera) {
             initializeCamera();
         }
@@ -240,7 +240,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     
     private boolean hasPermissions() {
         // Check if device has camera hardware
-        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         
         // Location permission is always required
         boolean hasLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
@@ -254,7 +254,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     
     private void requestPermissions() {
         // Check if device has camera hardware
-        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
         
         // Build permission list based on device capabilities
         List<String> permissionsToRequest = new ArrayList<>();
@@ -274,7 +274,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         
         if (requestCode == CAMERA_PERMISSION_REQUEST) {
-            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
             boolean locationGranted = false;
             boolean cameraGranted = !hasCamera; // If no camera, consider "granted"
             

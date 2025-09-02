@@ -57,61 +57,6 @@
     </issue>
 
     <issue
-        id="UnsupportedChromeOsCameraSystemFeature"
-        message="You should look for any camera available on the device, not just the rear"
-        errorLine1="            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
-        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="158"
-            column="33"/>
-    </issue>
-
-    <issue
-        id="UnsupportedChromeOsCameraSystemFeature"
-        message="You should look for any camera available on the device, not just the rear"
-        errorLine1="        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
-        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="189"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="UnsupportedChromeOsCameraSystemFeature"
-        message="You should look for any camera available on the device, not just the rear"
-        errorLine1="        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
-        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="243"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="UnsupportedChromeOsCameraSystemFeature"
-        message="You should look for any camera available on the device, not just the rear"
-        errorLine1="        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
-        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="257"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="UnsupportedChromeOsCameraSystemFeature"
-        message="You should look for any camera available on the device, not just the rear"
-        errorLine1="            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
-        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="277"
-            column="33"/>
-    </issue>
-
-    <issue
         id="DiscouragedApi"
         message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
         errorLine1="            android:screenOrientation=&quot;portrait&quot; />"
@@ -261,7 +206,7 @@
         errorLine2="     ~~~~~~~~~~~~">
         <location
             file="src/main/res/layout/logtrig.xml"
-            line="13"
+            line="14"
             column="6"/>
     </issue>
 
@@ -298,61 +243,6 @@
         message="Missing density variation folders in `src/main/res`: drawable-hdpi">
         <location
             file="src/main/res"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/logtrig.xml"
-            line="243"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/logtrig.xml"
-            line="253"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="        &lt;Button"
-        errorLine2="         ~~~~~~">
-        <location
-            file="src/main/res/layout/logtrig.xml"
-            line="264"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="            &lt;Button"
-        errorLine2="             ~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="147"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="ButtonStyle"
-        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
-        errorLine1="            &lt;Button"
-        errorLine2="             ~~~~~~">
-        <location
-            file="src/main/res/layout/main.xml"
-            line="158"
-            column="14"/>
     </issue>
 
     <issue
