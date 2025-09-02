@@ -101,50 +101,6 @@
     </issue>
 
     <issue
-        id="DrawAllocation"
-        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
-        errorLine1="        List&lt;TrigpointData> sortedTrigpoints = new ArrayList&lt;>(trigpoints);"
-        errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="188"
-            column="48"/>
-    </issue>
-
-    <issue
-        id="DrawAllocation"
-        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
-        errorLine1="            Location loc1 = new Location(&quot;temp&quot;);"
-        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="190"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="DrawAllocation"
-        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
-        errorLine1="            Location loc2 = new Location(&quot;temp&quot;);"
-        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="195"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="DrawAllocation"
-        message="Avoid object allocations during draw/layout operations (preallocate and reuse instead)"
-        errorLine1="            Location trigLocation = new Location(&quot;trigpoint&quot;);"
-        errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="209"
-            column="37"/>
-    </issue>
-
-    <issue
         id="NotifyDataSetChanged"
         message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
         errorLine1="            mGridAdapter.notifyDataSetChanged();"
@@ -208,34 +164,6 @@
             file="src/main/res/layout/logtrig.xml"
             line="14"
             column="6"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable-nodpi/ic_menu_camera.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable-nodpi/ic_menu_directions.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable-nodpi/ic_menu_mapmode.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable-nodpi/ic_menu_view.png"/>
     </issue>
 
     <issue

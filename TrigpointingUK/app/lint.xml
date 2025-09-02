@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <!-- Suppress IconColors warnings for action bar icons that are intentionally multi-colored -->
+    <issue id="IconColors">
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_camera.png" />
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_directions.png" />
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_mapmode.png" />
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_view.png" />
+    </issue>
 </lint>

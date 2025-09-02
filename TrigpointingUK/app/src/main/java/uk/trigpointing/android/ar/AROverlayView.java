@@ -41,6 +41,12 @@ public class AROverlayView extends View {
     private final List<HitTarget> hitTargets = new ArrayList<>();
     private OnTrigpointClickListener clickListener;
     
+    // Pre-allocated objects to avoid DrawAllocation warnings
+    private final List<TrigpointData> sortedTrigpoints = new ArrayList<>();
+    private final Location tempLocation1 = new Location("temp");
+    private final Location tempLocation2 = new Location("temp");
+    private final Location trigLocation = new Location("trigpoint");
+    
     // Field of view (degrees) used for mapping
     // X uses horizontal FOV across screen width; Y uses vertical FOV across screen height
     private float fieldOfViewDegX = 60.0f;
@@ -185,17 +191,16 @@ public class AROverlayView extends View {
         }
         
         // Sort trigpoints by distance (farthest first) so nearest appear on top
-        List<TrigpointData> sortedTrigpoints = new ArrayList<>(trigpoints);
+        sortedTrigpoints.clear();
+        sortedTrigpoints.addAll(trigpoints);
         sortedTrigpoints.sort((t1, t2) -> {
-            Location loc1 = new Location("temp");
-            loc1.setLatitude(t1.getLat());
-            loc1.setLongitude(t1.getLon());
-            float dist1 = currentLocation.distanceTo(loc1);
+            tempLocation1.setLatitude(t1.getLat());
+            tempLocation1.setLongitude(t1.getLon());
+            float dist1 = currentLocation.distanceTo(tempLocation1);
             
-            Location loc2 = new Location("temp");
-            loc2.setLatitude(t2.getLat());
-            loc2.setLongitude(t2.getLon());
-            float dist2 = currentLocation.distanceTo(loc2);
+            tempLocation2.setLatitude(t2.getLat());
+            tempLocation2.setLongitude(t2.getLon());
+            float dist2 = currentLocation.distanceTo(tempLocation2);
             
             return Float.compare(dist2, dist1); // Farthest first (reverse order)
         });
@@ -206,7 +211,6 @@ public class AROverlayView extends View {
 
         for (TrigpointData trig : sortedTrigpoints) {
             // Calculate bearing to trigpoint
-            Location trigLocation = new Location("trigpoint");
             trigLocation.setLatitude(trig.getLat());
             trigLocation.setLongitude(trig.getLon());
             
