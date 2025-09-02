@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_refresh_osmaps"
-        android:title="Refresh maps"
-        android:showAsAction="never" />
+        android:title="@string/refresh_maps"
+        app:showAsAction="never" />
 </menu>
 
 

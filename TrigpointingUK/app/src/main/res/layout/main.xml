@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User: "
+            android:text="@string/user_label"
             android:textStyle="bold"
             android:textSize="16sp"
             android:textColor="@color/black" />
@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Not logged in"
+            android:text="@string/not_logged_in"
             android:textSize="16sp"
             android:textColor="@color/black" />
 
@@ -64,14 +64,15 @@
                     android:id="@+id/countPillarImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_pillar" />
+                    android:src="@drawable/t_pillar"
+                    android:contentDescription="@string/pillar_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countPillarText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pillars: 0" />
+                    android:text="@string/pillars_count" />
 
             </LinearLayout>
 
@@ -86,14 +87,15 @@
                     android:id="@+id/countFbmImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_fbm" />
+                    android:src="@drawable/t_fbm"
+                    android:contentDescription="@string/fbm_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countFbmText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="FBM: 0" />
+                    android:text="@string/fbm_count" />
 
             </LinearLayout>
 
@@ -108,14 +110,15 @@
                     android:id="@+id/countPassiveImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_passive" />
+                    android:src="@drawable/t_passive"
+                    android:contentDescription="@string/passive_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countPassiveText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Passive: 0" />
+                    android:text="@string/passive_count" />
 
             </LinearLayout>
 
@@ -130,14 +133,15 @@
                     android:id="@+id/countIntersectedImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/t_intersected" />
+                    android:src="@drawable/t_intersected"
+                    android:contentDescription="@string/intersected_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countIntersectedText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Intersected: 0" />
+                    android:text="@string/intersected_count" />
 
             </LinearLayout>
 
@@ -152,14 +156,15 @@
                     android:id="@+id/countUnsyncedImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_menu_refresh" />
+                    android:src="@drawable/ic_menu_refresh"
+                    android:contentDescription="@string/unsynced_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countUnsyncedText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Unsynced: 0" />
+                    android:text="@string/unsynced_count" />
 
             </LinearLayout>
 
@@ -174,14 +179,15 @@
                     android:id="@+id/countPhotosImage"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/ic_menu_camera"
+                    android:contentDescription="@string/photos_icon_content_desc" />
 
                 <TextView
                     android:id="@+id/countPhotosText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Photos: 0" />
+                    android:text="@string/photos_count" />
 
             </LinearLayout>
 
@@ -192,10 +198,10 @@
             android:id="@+id/userMapImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:scaleType="centerCrop"
             android:background="#f0f0f0"
-            android:contentDescription="User activity map"
+            android:contentDescription="@string/user_activity_map"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -220,7 +226,7 @@
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
-                android:text="Nearest"
+                android:text="@string/nearest_button"
                 android:textSize="16sp"
                 android:layout_marginEnd="4dp"
                 android:background="@color/colorPrimary"
@@ -231,7 +237,7 @@
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_weight="1"
-                android:text="Map"
+                android:text="@string/map_button"
                 android:textSize="16sp"
                 android:layout_marginStart="4dp"
                 android:background="@color/colorPrimary"
@@ -256,7 +262,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="8dp"
-            android:text="Sync"
+            android:text="@string/sync_button"
             android:textSize="16sp"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorOnPrimary" />

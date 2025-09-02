@@ -18,6 +18,7 @@ import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -460,7 +461,7 @@ public class AROverlayView extends View {
                 // Store text position for comprehensive hit target calculation
                 
                 // Draw distance
-                String distanceText = String.format("%.0fm", distance);
+                String distanceText = String.format(Locale.getDefault(), "%.0fm", distance);
                 textPaint.getTextBounds(distanceText, 0, distanceText.length(), textBounds);
                 float distanceX = x - textBounds.width() / 2;
                 float distanceY = textY + textBounds.height() + 10;

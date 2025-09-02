@@ -11,7 +11,8 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_menu_camera"
-        android:padding="4dp" />
+        android:padding="4dp"
+        android:contentDescription="@string/photo_icon_content_desc" />
 
     <!-- Photo info -->
     <LinearLayout
@@ -26,7 +27,7 @@
             android:id="@+id/photoName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Photo name"
+            android:text="@string/photo_name_placeholder"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -35,7 +36,7 @@
             android:id="@+id/photoDateUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date by User"
+            android:text="@string/date_by_user"
             android:textSize="12sp" />
 
         <!-- Description placeholder -->
@@ -43,7 +44,7 @@
             android:id="@+id/photoDescr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Photo description"
+            android:text="@string/photo_description_placeholder"
             android:textSize="12sp" />
 
     </LinearLayout>

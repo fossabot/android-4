@@ -134,8 +134,17 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		c.moveToFirst();
 		
 		// Get coordinates
-		double lat = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
-		double lon = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
+		int latIndex = c.getColumnIndex(DbHelper.TRIG_LAT);
+		int lonIndex = c.getColumnIndex(DbHelper.TRIG_LON);
+		
+		if (latIndex < 0 || lonIndex < 0) {
+			c.close();
+			Toast.makeText(this, "Invalid trig coordinates in database", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		double lat = c.getDouble(latIndex);
+		double lon = c.getDouble(lonIndex);
 		mLat = lat;
 		mLon = lon;
 		c.close();

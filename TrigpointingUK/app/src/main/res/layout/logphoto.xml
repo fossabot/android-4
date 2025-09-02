@@ -8,19 +8,19 @@
         android:id="@+id/photoThumb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Photo Thumbnail" />
+        android:contentDescription="@string/photo_thumbnail_desc" />
 
     <EditText
         android:id="@+id/photoName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Photo Name" />
+        android:hint="@string/photo_name_hint" />
 
     <EditText
         android:id="@+id/photoDescr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Photo Description" />
+        android:hint="@string/photo_description_hint" />
 
     <Spinner
         android:id="@+id/photoSubject"
@@ -31,18 +31,18 @@
         android:id="@+id/photoIsPublic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Public Photo" />
+        android:text="@string/public_photo" />
 
     <Button
         android:id="@+id/photoSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Photo" />
+        android:text="@string/save_photo" />
 
     <Button
         android:id="@+id/photoRemove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove Photo" />
+        android:text="@string/remove_photo" />
 
 </LinearLayout> 

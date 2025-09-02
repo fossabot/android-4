@@ -25,9 +25,14 @@ class LogTrigViewModel(app: Application) : AndroidViewModel(app) {
                 val c: Cursor? = db.fetchPhotos(trigId)
                 if (c != null) {
                     do {
-                        val id = c.getLong(c.getColumnIndex(uk.trigpointing.android.DbHelper.PHOTO_ID))
-                        val icon = c.getString(c.getColumnIndex(uk.trigpointing.android.DbHelper.PHOTO_ICON))
-                        list.add(UiPhoto(id = id, thumbnailPath = icon))
+                        val idIndex = c.getColumnIndex(uk.trigpointing.android.DbHelper.PHOTO_ID)
+                        val iconIndex = c.getColumnIndex(uk.trigpointing.android.DbHelper.PHOTO_ICON)
+                        
+                        if (idIndex >= 0 && iconIndex >= 0) {
+                            val id = c.getLong(idIndex)
+                            val icon = c.getString(iconIndex)
+                            list.add(UiPhoto(id = id, thumbnailPath = icon))
+                        }
                     } while (c.moveToNext())
                     c.close()
                 }

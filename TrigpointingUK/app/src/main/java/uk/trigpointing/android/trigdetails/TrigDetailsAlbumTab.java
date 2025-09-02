@@ -1,6 +1,7 @@
 package uk.trigpointing.android.trigdetails;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -110,7 +111,7 @@ public class TrigDetailsAlbumTab extends BaseTabActivity {
 		
 		CompletableFuture.<ArrayList<TrigPhoto>>supplyAsync(() -> {
 			ArrayList<TrigPhoto> results = new ArrayList<TrigPhoto>();
-			String url = String.format("https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d", mTrigId);
+			String url = String.format(Locale.getDefault(), "https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d", mTrigId);
 			String list = mStrLoader.getString(url, refresh);
 			if (list == null || list.trim().length()==0) {
 				Log.i(TAG, "No photos for "+mTrigId);            

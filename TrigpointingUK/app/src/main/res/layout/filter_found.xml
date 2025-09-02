@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filter by logging status:"
+        android:text="@string/filter_by_logging_status"
         android:textSize="16sp"
         android:layout_marginBottom="16dp" />
 
@@ -21,31 +21,31 @@
             android:id="@+id/filterAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All" />
+            android:text="@string/filterAll" />
 
         <RadioButton
             android:id="@+id/filterLogged"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Logged" />
+            android:text="@string/filterLogged" />
 
         <RadioButton
             android:id="@+id/filterNotLogged"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Not Logged" />
+            android:text="@string/filterNotLogged" />
 
         <RadioButton
             android:id="@+id/filterMarked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marked" />
+            android:text="@string/filterMarked" />
 
         <RadioButton
             android:id="@+id/filterUnsynced"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unsynced" />
+            android:text="@string/filterUnsynced" />
 
     </RadioGroup>
 

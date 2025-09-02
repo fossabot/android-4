@@ -14,6 +14,8 @@ import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import uk.trigpointing.android.filter.Filter;
 import uk.trigpointing.android.types.Condition;
 import uk.trigpointing.android.types.PhotoSubject;
@@ -374,7 +376,7 @@ public class DbHelper {
 		
 		// Create distance-based ordering using approximate distance formula
 		// (lat-centerLat)^2 + (lon-centerLon)^2 gives relative distance squared
-		String strOrder = String.format("((%s - %f) * (%s - %f) + (%s - %f) * (%s - %f)) limit %s", 
+		String strOrder = String.format(Locale.getDefault(), "((%s - %f) * (%s - %f) + (%s - %f) * (%s - %f)) limit %s", 
 				TRIG_LAT, centerLat, TRIG_LAT, centerLat,
 				TRIG_LON, centerLon, TRIG_LON, centerLon,
 				mPrefs.getString("mapcount", DEFAULT_MAP_COUNT));	

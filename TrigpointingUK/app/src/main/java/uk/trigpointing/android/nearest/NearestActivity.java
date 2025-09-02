@@ -159,10 +159,9 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	
 		// Start off with no location + no trigs
 		mListAdapter = new NearestCursorAdapter(this, R.layout.trigrow, null, new String[]{}, new int[]{}, null);
-						ListView listViewAdapter = findViewById(android.R.id.list);
-				if (listViewAdapter != null) {
-					listViewAdapter.setAdapter(mListAdapter);
-				}
+		if (listView != null) {
+			listView.setAdapter(mListAdapter);
+		}
 
 		// Find a cached location
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -365,7 +364,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		    mHeading = 0;
 		    mCompassArrow.setImageResource(mListAdapter.getArrow(0));
 		    					mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassDisabled));
-        	mListAdapter.setHeading(0);
+		    					mListAdapter.setHeading(0);
         	mListAdapter.notifyDataSetChanged();
 		}
 	}
@@ -410,7 +409,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 			Log.d(TAG, "Location update count : " + mUpdateCount + " Location count : " + mLocationCount + " " + comment);
 		} else {
 			mStrLocation.setTypeface(null, android.graphics.Typeface.NORMAL);
-			mStrLocation.setText("Location is unknown");
+			mStrLocation.setText(getString(R.string.location_unknown));
 			Log.d(TAG, "Location unknown : " + mUpdateCount + " Location count : " + mLocationCount + " " + comment);
 		}
 	}
@@ -725,7 +724,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	        	mHeading = orientation[0] * 180.0/Math.PI; // orientation contains: azimuth[0], pitch[1] and roll[2]
 	        	//Log.d(TAG, "Heading = " + mHeading);
 	        	mListAdapter.setHeading(mHeading);
-				mListAdapter.notifyDataSetChanged();
+	        	mListAdapter.notifyDataSetChanged();
 				mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
 	        }
 	    }

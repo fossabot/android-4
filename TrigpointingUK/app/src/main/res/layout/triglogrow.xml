@@ -11,7 +11,8 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/c_good"
-        android:padding="2dp" />
+        android:padding="2dp"
+        android:contentDescription="@string/log_condition_icon_content_desc" />
 
     <!-- Log info -->
     <LinearLayout
@@ -26,7 +27,7 @@
             android:id="@+id/logDateUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date by User"
+            android:text="@string/date_by_user"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -35,7 +36,7 @@
             android:id="@+id/logText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log entry text"
+            android:text="@string/log_entry_text"
             android:textSize="12sp" />
 
     </LinearLayout>

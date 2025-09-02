@@ -11,7 +11,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@android:drawable/arrow_up_float"
-        android:contentDescription="Direction arrow" />
+        android:contentDescription="@string/direction_arrow" />
 
     <TextView
         android:id="@+id/radar_distance"
@@ -20,14 +20,14 @@
         android:textSize="32sp"
         android:textStyle="bold"
         android:layout_marginTop="24dp"
-        android:text="0 m" />
+        android:text="@string/distance_zero" />
 
     <TextView
         android:id="@+id/radar_accuracy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="±0 m" />
+        android:text="@string/distance_accuracy" />
 
     <TextView
         android:id="@+id/radar_bearing"
@@ -36,7 +36,7 @@
         android:layout_marginTop="8dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Bearing: 000°" />
+        android:text="@string/bearing_format" />
 
     <TextView
         android:id="@+id/radar_calibration"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:textColor="@android:color/holo_orange_dark"
-        android:text="Move your phone in a figure-8 to calibrate the compass"
+        android:text="@string/compass_calibration"
         android:visibility="gone" />
 
 </LinearLayout>

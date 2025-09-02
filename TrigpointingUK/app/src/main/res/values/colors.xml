@@ -14,13 +14,5 @@
     <color name="colorPrimary">#087008</color>
     <color name="colorPrimaryDark">#054d05</color>
     <color name="colorAccent">#087008</color>
-    <color name="colorPrimaryVariant">#054d05</color>
-    <color name="colorSecondary">#087008</color>
-    <color name="colorSecondaryVariant">#054d05</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorBackground">#FFFFFF</color>
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorOnSecondary">#FFFFFF</color>
-    <color name="colorOnSurface">#000000</color>
-    <color name="colorOnBackground">#000000</color>
 </resources> 

@@ -4,12 +4,12 @@
     
     <item
         android:id="@+id/menu_download_tiles"
-        android:title="Offline Maps" />
+        android:title="@string/offline_maps" />
     <item
         android:id="@+id/menu_cache_status"
-        android:title="Cache Status" />
+        android:title="@string/cache_status" />
     <item
         android:id="@+id/menu_clear_cache"
-        android:title="Clear Cache" />
+        android:title="@string/clear_cache_menu" />
         
 </menu>

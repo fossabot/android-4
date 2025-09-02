@@ -12,14 +12,15 @@
         android:layout_width="320dp"
         android:layout_height="320dp"
         android:src="@drawable/t_pillar"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/trigpoint_icon_content_desc" />
 
     <!-- Trigpoint name with background for readability -->
     <TextView
         android:id="@+id/trigpoint_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trigpoint Name"
+        android:text="@string/trigpoint_name_placeholder"
         android:textColor="@android:color/white"
         android:textSize="80sp"
         android:textStyle="bold"
@@ -38,7 +39,7 @@
         android:id="@+id/trigpoint_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0m"
+        android:text="@string/distance_zero_short"
         android:textColor="@android:color/white"
         android:textSize="60sp"
         android:gravity="center"

@@ -45,7 +45,7 @@ public class LogPhotoActivity extends BaseActivity {
 
 		// Enable back button in action bar
 		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
 		Bundle extras = getIntent().getExtras();
@@ -131,7 +131,7 @@ public class LogPhotoActivity extends BaseActivity {
     	Log.i(TAG, "savePhoto");
     	    	
     	// Save the changes to the database
-   		mDb.updatePhoto(mPhotoId,
+    	mDb.updatePhoto(mPhotoId,
    						mTrigId,
    						mName.getText().toString(),
    						mDescr.getText().toString(),

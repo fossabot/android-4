@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Location: Unknown"
+            android:text="@string/location_unknown"
             android:textSize="16sp"
             android:textColor="@color/black" />
 
@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Filter: All"
+            android:text="@string/filter_all"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:clickable="true"
@@ -54,7 +54,7 @@
                 android:id="@+id/north"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="N"
+                android:text="@string/direction_north"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/black" />
@@ -64,7 +64,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/arrow_00_n"
-                android:layout_marginStart="4dp" />
+                android:layout_marginStart="4dp"
+                android:contentDescription="@string/compass_arrow_content_desc" />
 
         </LinearLayout>
 

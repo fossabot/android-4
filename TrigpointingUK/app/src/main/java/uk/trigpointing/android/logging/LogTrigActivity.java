@@ -128,7 +128,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         }
 		
 		// Initialize PhotoManager with a coroutine scope
-		mPhotoManager = new PhotoManager(this, kotlinx.coroutines.GlobalScope.INSTANCE);
+	    mPhotoManager = new PhotoManager(this, kotlinx.coroutines.GlobalScope.INSTANCE);
 		
 		// Note: ActivityResultLauncher doesn't work properly with LocalActivityManager
 		// We'll use the traditional onActivityResult approach instead
@@ -272,9 +272,13 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		// Fetch trigpoint info
 		Cursor c = mDb.fetchTrigInfo(mTrigId);
 		c.moveToFirst();
-		Double lat = Double.valueOf(c.getString(c.getColumnIndex(DbHelper.TRIG_LAT)));
-		Double lon = Double.valueOf(c.getString(c.getColumnIndex(DbHelper.TRIG_LON)));
-		mTrigLocation = new LatLon(lat, lon);
+		int latIndex = c.getColumnIndex(DbHelper.TRIG_LAT);
+		int lonIndex = c.getColumnIndex(DbHelper.TRIG_LON);
+		if (latIndex >= 0 && lonIndex >= 0) {
+			Double lat = Double.valueOf(c.getString(latIndex));
+			Double lon = Double.valueOf(c.getString(lonIndex));
+			mTrigLocation = new LatLon(lat, lon);
+		}
 		c.close();
 
 
@@ -306,7 +310,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			@Override
 			public void onClick(View arg0) {
 	        	Log.i(TAG, "Create Log");
-				createNewLog();
+	        	createNewLog();
 				populateFields();
 	        	mSwitcher.setDisplayedChild(1); // Show form
 	        	mHaveLog = true;
@@ -385,10 +389,10 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			Log.e(TAG, "log " + ll.getOSGB10() + " - " + ll.getWGS());
 			Log.e(TAG, "Gridref " + dist.intValue() + " " + mUnits + " from database location");
 			if (dist >= 50) {
-				mLocationError.setText("Warning: " + dist.intValue() + mStrUnits + " from database location");
+				mLocationError.setText(getString(R.string.location_warning_format, dist.intValue(), mStrUnits));
 				mLocationError.setTextColor(ContextCompat.getColor(this, R.color.errorcolour));
 			} else {
-				mLocationError.setText(dist.intValue() + mStrUnits + " from database location");
+				mLocationError.setText(getString(R.string.location_distance_format, dist.intValue(), mStrUnits));
 				mLocationError.setTextColor(ContextCompat.getColor(this, R.color.okcolour));
 			}
 		} catch (IllegalArgumentException e) {
@@ -741,47 +745,82 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     	Cursor c = mDb.fetchLog(mTrigId);
     	if (c == null) {return;}
 
+    	// Get column indices
+    	int yearIndex = c.getColumnIndex(DbHelper.LOG_YEAR);
+    	int monthIndex = c.getColumnIndex(DbHelper.LOG_MONTH);
+    	int dayIndex = c.getColumnIndex(DbHelper.LOG_DAY);
+    	int commentIndex = c.getColumnIndex(DbHelper.LOG_COMMENT);
+    	int gridrefIndex = c.getColumnIndex(DbHelper.LOG_GRIDREF);
+
     	// set Date
-    	mDate.init				(c.getInt(c.getColumnIndex(DbHelper.LOG_YEAR)), 
-    							 c.getInt(c.getColumnIndex(DbHelper.LOG_MONTH)),
-    							 c.getInt(c.getColumnIndex(DbHelper.LOG_DAY)), 
-    							 this);
+    	if (yearIndex >= 0 && monthIndex >= 0 && dayIndex >= 0) {
+    		mDate.init(c.getInt(yearIndex), c.getInt(monthIndex), c.getInt(dayIndex), this);
+    	}
 
-
-    	
     	// set Text fields    	
-    	mComment.setText 		(c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)));
-    	String gridref = c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF));
-    	mGridref.setText		(gridref);
-    	mFb.setText 			(c.getString(c.getColumnIndex(DbHelper.LOG_FB)));
+    	if (commentIndex >= 0) {
+    		mComment.setText(c.getString(commentIndex));
+    	}
+    	if (gridrefIndex >= 0) {
+    		String gridref = c.getString(gridrefIndex);
+    		mGridref.setText(gridref);
+    	}
+    	
+    	int fbIndex = c.getColumnIndex(DbHelper.LOG_FB);
+    	if (fbIndex >= 0) {
+    		mFb.setText(c.getString(fbIndex));
+    	}
     	
     	// Pre-populate grid reference with GPS if blank and GPS available
-    	if (gridref == null || gridref.trim().isEmpty()) {
-    		tryPrePopulateGridReference();
+    	if (gridrefIndex >= 0) {
+    		String gridref = c.getString(gridrefIndex);
+    		if (gridref == null || gridref.trim().isEmpty()) {
+    			tryPrePopulateGridReference();
+    		}
     	}
     	
     	// set Time
-    	mSendTime.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_SENDTIME)) > 0);
-    	// Suppress deprecation warnings for TimePicker methods - these still work
-    	@SuppressWarnings("deprecation")
-    	int hour = c.getInt(c.getColumnIndex(DbHelper.LOG_HOUR));
-    	@SuppressWarnings("deprecation")
-    	int minute = c.getInt(c.getColumnIndex(DbHelper.LOG_MINUTES));
-    	// Note: setCurrentHour/setCurrentMinute are deprecated but functional
+    	int sendTimeIndex = c.getColumnIndex(DbHelper.LOG_SENDTIME);
+    	if (sendTimeIndex >= 0) {
+    		mSendTime.setChecked(c.getInt(sendTimeIndex) > 0);
+    	}
+    	
+    	int hourIndex = c.getColumnIndex(DbHelper.LOG_HOUR);
+    	int minuteIndex = c.getColumnIndex(DbHelper.LOG_MINUTES);
+    	if (hourIndex >= 0 && minuteIndex >= 0) {
+    		// Suppress deprecation warnings for TimePicker methods - these still work
+    		@SuppressWarnings("deprecation")
+    		int hour = c.getInt(hourIndex);
+    		@SuppressWarnings("deprecation")
+    		int minute = c.getInt(minuteIndex);
+    		// Note: setCurrentHour/setCurrentMinute are deprecated but functional
+    	}
     	updateTimeVisibility();
     	
     	// set Flags
-    	mAdminFlag.setChecked	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)) > 0);
-    	mUserFlag.setChecked 	(c.getInt(c.getColumnIndex(DbHelper.LOG_FLAGUSERS))  > 0);
+    	int adminFlagIndex = c.getColumnIndex(DbHelper.LOG_FLAGADMINS);
+    	int userFlagIndex = c.getColumnIndex(DbHelper.LOG_FLAGUSERS);
+    	if (adminFlagIndex >= 0) {
+    		mAdminFlag.setChecked(c.getInt(adminFlagIndex) > 0);
+    	}
+    	if (userFlagIndex >= 0) {
+    		mUserFlag.setChecked(c.getInt(userFlagIndex) > 0);
+    	}
     	
     	// set Score: stored value is number of half-stars (1..10); convert to 0.5..5.0
-    	int storedScore = c.getInt(c.getColumnIndex(DbHelper.LOG_SCORE));
-    	float stars = Math.max(0.5f, Math.min(5.0f, storedScore / 2f));
-    	mScore.setRating(stars);
+    	int scoreIndex = c.getColumnIndex(DbHelper.LOG_SCORE);
+    	if (scoreIndex >= 0) {
+    		int storedScore = c.getInt(scoreIndex);
+    		float stars = Math.max(0.5f, Math.min(5.0f, storedScore / 2f));
+    		mScore.setRating(stars);
+    	}
     	
     	// set Condition
-    	Condition cond = Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION)));
-    	mCondition.setSelection (Arrays.asList(Condition.values()).indexOf(cond));
+    	int conditionIndex = c.getColumnIndex(DbHelper.LOG_CONDITION);
+    	if (conditionIndex >= 0) {
+    		Condition cond = Condition.fromCode(c.getString(conditionIndex));
+    		mCondition.setSelection(Arrays.asList(Condition.values()).indexOf(cond));
+    	}
 
     	c.close();
     	
@@ -804,9 +843,17 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             int count = 0;
             do {
                 TrigPhoto photo = new TrigPhoto();
-                long photoId = c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID));
-                String iconUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
-                String photoUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO));
+                int photoIdIndex = c.getColumnIndex(DbHelper.PHOTO_ID);
+                int iconUrlIndex = c.getColumnIndex(DbHelper.PHOTO_ICON);
+                int photoUrlIndex = c.getColumnIndex(DbHelper.PHOTO_PHOTO);
+                
+                if (photoIdIndex < 0 || iconUrlIndex < 0 || photoUrlIndex < 0) {
+                    continue; // Skip this photo if columns are missing
+                }
+                
+                long photoId = c.getLong(photoIdIndex);
+                String iconUrl = c.getString(iconUrlIndex);
+                String photoUrl = c.getString(photoUrlIndex);
                 // Only include photos that have valid thumbnail and photo paths
                 if (iconUrl != null && !iconUrl.trim().isEmpty() && new File(iconUrl).exists()) {
                     photo.setLogID(photoId);
@@ -951,8 +998,14 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		Cursor c = mDb.fetchPhotos(mTrigId);
 		if (c!=null) {
 			do {
-				new File(c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO))).delete();
-				new File(c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON))).delete();
+				int photoIndex = c.getColumnIndex(DbHelper.PHOTO_PHOTO);
+				int iconIndex = c.getColumnIndex(DbHelper.PHOTO_ICON);
+				if (photoIndex >= 0) {
+					new File(c.getString(photoIndex)).delete();
+				}
+				if (iconIndex >= 0) {
+					new File(c.getString(iconIndex)).delete();
+				}
 			} while (c.moveToNext());
 		}
     	// delete photo records from DB
@@ -998,7 +1051,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	
 	   private void getLocation() {
 		    Log.i(TAG, "Start location listener and put up dialog box");
-			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		    mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		    
 		    if (!mLocationManager.isProviderEnabled (LocationManager.GPS_PROVIDER)) {
 				Log.w(TAG, "GPS not enabled in system settings!");
@@ -1022,7 +1075,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		   container.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
 
 		   mProgressText = new TextView(this);
-		   mProgressText.setText("Getting accurate GPS fix...");
+		   mProgressText.setText(getString(R.string.getting_gps_fix));
 		   container.addView(mProgressText, new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 

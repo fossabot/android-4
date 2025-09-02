@@ -15,7 +15,8 @@
         android:layout_height="24dp"
         android:src="@drawable/c_good"
         android:padding="2dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/trig_condition_icon_content_desc" />
 
     <!-- Trig type (left side) -->
     <ImageView
@@ -24,7 +25,8 @@
         android:layout_height="24dp"
         android:src="@drawable/t_pillar"
         android:padding="2dp"
-        android:layout_marginEnd="12dp" />
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@string/trig_type_icon_content_desc" />
 
     <!-- Trig name (center, takes remaining space) -->
     <TextView
@@ -32,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Trig Name"
+        android:text="@string/trig_name_placeholder"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -50,7 +52,7 @@
             android:id="@+id/trigDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0.0km"
+            android:text="@string/distance_format"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:layout_marginEnd="4dp" />
@@ -62,7 +64,8 @@
             android:layout_height="24dp"
             android:src="@drawable/arrow_00_n"
             android:padding="2dp"
-            android:layout_marginEnd="4dp" />
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/trig_arrow_content_desc" />
 
         <!-- Trig logged status -->
         <ImageView
@@ -70,7 +73,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/c_good"
-            android:padding="2dp" />
+            android:padding="2dp"
+            android:contentDescription="@string/trig_logged_status_content_desc" />
 
     </LinearLayout>
 

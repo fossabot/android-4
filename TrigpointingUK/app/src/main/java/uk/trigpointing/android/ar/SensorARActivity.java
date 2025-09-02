@@ -155,7 +155,13 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         
         // Check permissions and start
         if (hasPermissions()) {
-            initializeCamera();
+            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+            if (hasCamera) {
+                initializeCamera();
+            } else {
+                // Device has no camera - show message and continue with location-only AR
+                Toast.makeText(this, "Device has no camera - AR will work with location and compass only", Toast.LENGTH_LONG).show();
+            }
             startLocationServices();
         } else {
             requestPermissions();
@@ -179,8 +185,9 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             }
         }
         
-        // Resume camera
-        if (camera == null && hasPermissions()) {
+        // Resume camera (only if device has camera)
+        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        if (camera == null && hasPermissions() && hasCamera) {
             initializeCamera();
         }
     }
@@ -232,13 +239,33 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     }
     
     private boolean hasPermissions() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-               ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        // Check if device has camera hardware
+        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        
+        // Location permission is always required
+        boolean hasLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        
+        // Camera permission only required if device has camera
+        boolean hasCameraPermission = !hasCamera || 
+            ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        
+        return hasLocation && hasCameraPermission;
     }
     
     private void requestPermissions() {
+        // Check if device has camera hardware
+        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+        
+        // Build permission list based on device capabilities
+        List<String> permissionsToRequest = new ArrayList<>();
+        permissionsToRequest.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        
+        if (hasCamera) {
+            permissionsToRequest.add(Manifest.permission.CAMERA);
+        }
+        
         ActivityCompat.requestPermissions(this,
-            new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION},
+            permissionsToRequest.toArray(new String[0]),
             CAMERA_PERMISSION_REQUEST);
     }
     
@@ -247,11 +274,32 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         
         if (requestCode == CAMERA_PERMISSION_REQUEST) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initializeCamera();
+            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+            boolean locationGranted = false;
+            boolean cameraGranted = !hasCamera; // If no camera, consider "granted"
+            
+            // Check which permissions were granted
+            for (int i = 0; i < permissions.length; i++) {
+                if (permissions[i].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    locationGranted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                } else if (permissions[i].equals(Manifest.permission.CAMERA)) {
+                    cameraGranted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                }
+            }
+            
+            if (locationGranted && cameraGranted) {
+                if (hasCamera) {
+                    initializeCamera();
+                } else {
+                    // Device has no camera - show message and continue with location-only AR
+                    Toast.makeText(this, "Device has no camera - AR will work with location and compass only", Toast.LENGTH_LONG).show();
+                }
                 startLocationServices();
             } else {
-                Toast.makeText(this, "Camera and location permissions are required for AR", Toast.LENGTH_LONG).show();
+                String message = hasCamera ? 
+                    "Location and camera permissions are required for AR" : 
+                    "Location permission is required for AR";
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
                 finish();
             }
         }

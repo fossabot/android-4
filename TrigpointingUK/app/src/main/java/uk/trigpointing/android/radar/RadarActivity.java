@@ -17,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import java.util.Locale;
+
 import uk.trigpointing.android.common.BaseActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -217,14 +220,14 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
         distanceView.setText(formatDistance(distance));
 
         float acc = Math.max(lastLocation.getAccuracy(), 3f);
-        accuracyView.setText(String.format("±%.0f m", acc));
+        accuracyView.setText(String.format(Locale.getDefault(), "±%.0f m", acc));
 
         // Calculate magnetic bearing (true bearing minus declination)
         float magneticBearing = bearingTo - field.getDeclination();
         // Normalize to 0-360 degrees
         while (magneticBearing < 0) magneticBearing += 360f;
         while (magneticBearing >= 360) magneticBearing -= 360f;
-        bearingView.setText(String.format("Bearing: %03.0f°", magneticBearing));
+        bearingView.setText(String.format(Locale.getDefault(), "Bearing: %03.0f°", magneticBearing));
 
         // Haptic feedback when aligned and close
         if (distance < 20 && Math.abs(delta) < 5) {
@@ -236,11 +239,11 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
 
     private String formatDistance(float meters) {
         if (meters >= 1000f) {
-            return String.format("%.2f km", meters / 1000f);
+            return String.format(Locale.getDefault(), "%.2f km", meters / 1000f);
         } else if (meters >= 100f) {
-            return String.format("%.0f m", meters);
+            return String.format(Locale.getDefault(), "%.0f m", meters);
         } else {
-            return String.format("%.1f m", meters);
+            return String.format(Locale.getDefault(), "%.1f m", meters);
         }
     }
 
