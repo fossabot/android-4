@@ -601,38 +601,6 @@
     </issue>
 
     <issue
-        id="StringFormatInvalid"
-        message="Format string &apos;`map_size_format`&apos; is not a valid format string so it should not be passed to `String.format`"
-        errorLine1="                mapSize.text = itemView.context.getString(R.string.map_size_format, sizeInMB)"
-        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="268"
-            column="32"/>
-        <location
-            file="src/main/res/values/strings.xml"
-            line="160"
-            column="5"
-            message="This definition does not require arguments"/>
-    </issue>
-
-    <issue
-        id="StringFormatInvalid"
-        message="Format string &apos;`map_size_format`&apos; is not a valid format string so it should not be passed to `String.format`"
-        errorLine1="                mapSize.text = itemView.context.getString(R.string.map_size_format, sizeInMB)"
-        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="268"
-            column="32"/>
-        <location
-            file="src/main/res/values/strings.xml"
-            line="160"
-            column="5"
-            message="This definition does not require arguments"/>
-    </issue>
-
-    <issue
         id="PluralsCandidate"
         message="Formatting %d followed by words (&quot;tiles&quot;): This should probably be a plural rather than a string"
         errorLine1="    &lt;string name=&quot;cacheTileCountFormat&quot;>%1$d tiles cached&lt;/string>"
@@ -1327,6 +1295,61 @@
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
             file="src/main/res/drawable-nodpi/ic_menu_view.png"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/logtrig.xml"
+            line="240"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/logtrig.xml"
+            line="250"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="        &lt;Button"
+        errorLine2="         ~~~~~~">
+        <location
+            file="src/main/res/layout/logtrig.xml"
+            line="261"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="            &lt;Button"
+        errorLine2="             ~~~~~~">
+        <location
+            file="src/main/res/layout/main.xml"
+            line="224"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="ButtonStyle"
+        message="Buttons in button bars should be borderless; use `style=&quot;?android:attr/buttonBarButtonStyle&quot;` (and `?android:attr/buttonBarStyle` on the parent)"
+        errorLine1="            &lt;Button"
+        errorLine2="             ~~~~~~">
+        <location
+            file="src/main/res/layout/main.xml"
+            line="235"
+            column="14"/>
     </issue>
 
     <issue

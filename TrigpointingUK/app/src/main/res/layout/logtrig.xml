@@ -235,8 +235,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="16dp"
-        style="?android:attr/buttonBarStyle">
+        android:layout_marginTop="16dp">
 
         <Button
             android:id="@+id/logDelete"
@@ -245,7 +244,8 @@
             android:layout_weight="1"
             android:text="@string/delete_log"
             android:layout_marginEnd="8dp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorOnPrimary" />
 
         <Button
             android:id="@+id/logUploadNow"
@@ -255,7 +255,8 @@
             android:text="@string/upload_now"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorOnPrimary" />
 
         <Button
             android:id="@+id/logSyncLater"
@@ -264,7 +265,8 @@
             android:layout_weight="1"
             android:text="@string/sync_later"
             android:layout_marginStart="8dp"
-            style="?android:attr/buttonBarButtonStyle" />
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorOnPrimary" />
 
     </LinearLayout>
 
