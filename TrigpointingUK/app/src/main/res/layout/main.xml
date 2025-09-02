@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -57,7 +58,7 @@
                 android:id="@+id/countPillarText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_pillar_large"
+                app:drawableStartCompat="@drawable/ic_pillar_large"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/pillars_count" />
@@ -67,7 +68,7 @@
                 android:id="@+id/countFbmText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_fbm_large"
+                app:drawableStartCompat="@drawable/ic_fbm_large"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/fbm_count" />
@@ -77,7 +78,7 @@
                 android:id="@+id/countPassiveText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_passive_large"
+                app:drawableStartCompat="@drawable/ic_passive_large"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/passive_count" />
@@ -87,7 +88,7 @@
                 android:id="@+id/countIntersectedText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_intersected_large"
+                app:drawableStartCompat="@drawable/ic_intersected_large"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/intersected_count" />
@@ -97,7 +98,7 @@
                 android:id="@+id/countUnsyncedText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_refresh_large"
+                app:drawableStartCompat="@drawable/ic_refresh_large"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/unsynced_count" />
@@ -107,7 +108,7 @@
                 android:id="@+id/countPhotosText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_camera_large"
+                app:drawableStartCompat="@drawable/ic_camera_large"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:text="@string/photos_count" />

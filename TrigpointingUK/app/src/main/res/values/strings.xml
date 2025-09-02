@@ -106,10 +106,7 @@
     <string name="compass_calibration">Move your phone in a figure-8 to calibrate the compass</string>
 
     <string name="photo_preview_content_desc">Photo preview</string>
-    <string name="pillar_icon_content_desc">Pillar trigpoint icon</string>
-    <string name="fbm_icon_content_desc">Flush bracket marker icon</string>
-    <string name="passive_icon_content_desc">Passive station icon</string>
-    <string name="intersected_icon_content_desc">Intersected station icon</string>
+
     <string name="unsynced_icon_content_desc">Unsynced data icon</string>
     <string name="photos_icon_content_desc">Photos icon</string>
     <string name="photo_icon_content_desc">Photo icon</string>
