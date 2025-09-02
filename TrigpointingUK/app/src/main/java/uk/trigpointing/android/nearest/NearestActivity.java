@@ -364,7 +364,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 		    mHeading = 0;
 		    mCompassArrow.setImageResource(mListAdapter.getArrow(0));
 		    					mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassDisabled));
-        	mListAdapter.setHeading(0);
+		    					mListAdapter.setHeading(0);
         	mListAdapter.notifyDataSetChanged();
 		}
 	}
@@ -724,7 +724,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	        	mHeading = orientation[0] * 180.0/Math.PI; // orientation contains: azimuth[0], pitch[1] and roll[2]
 	        	//Log.d(TAG, "Heading = " + mHeading);
 	        	mListAdapter.setHeading(mHeading);
-				mListAdapter.notifyDataSetChanged();
+	        	mListAdapter.notifyDataSetChanged();
 				mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
 	        }
 	    }

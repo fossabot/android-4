@@ -128,7 +128,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         }
 		
 		// Initialize PhotoManager with a coroutine scope
-		mPhotoManager = new PhotoManager(this, kotlinx.coroutines.GlobalScope.INSTANCE);
+	    mPhotoManager = new PhotoManager(this, kotlinx.coroutines.GlobalScope.INSTANCE);
 		
 		// Note: ActivityResultLauncher doesn't work properly with LocalActivityManager
 		// We'll use the traditional onActivityResult approach instead
@@ -310,7 +310,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 			@Override
 			public void onClick(View arg0) {
 	        	Log.i(TAG, "Create Log");
-				createNewLog();
+	        	createNewLog();
 				populateFields();
 	        	mSwitcher.setDisplayedChild(1); // Show form
 	        	mHaveLog = true;
@@ -1051,7 +1051,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 	
 	   private void getLocation() {
 		    Log.i(TAG, "Start location listener and put up dialog box");
-			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		    mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		    
 		    if (!mLocationManager.isProviderEnabled (LocationManager.GPS_PROVIDER)) {
 				Log.w(TAG, "GPS not enabled in system settings!");

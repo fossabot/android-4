@@ -68,7 +68,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
             Toast.makeText(this, "Unable to load trig details", Toast.LENGTH_LONG).show();
             return;
         }
-		Log.i("TrigInfo", "Trig_id = "+mTrigId);
+        Log.i("TrigInfo", "Trig_id = "+mTrigId);
 
 		// get application preferences
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);

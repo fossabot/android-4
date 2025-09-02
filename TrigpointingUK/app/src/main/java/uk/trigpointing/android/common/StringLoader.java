@@ -88,7 +88,7 @@ public class StringLoader {
 	    } catch (Exception e) {
 	    	e.printStackTrace();
 	    }
-		Log.i(TAG, "FAILED to get "+url);
+	    Log.i(TAG, "FAILED to get "+url);
 		return null;
 	}
 

@@ -48,7 +48,7 @@ public class DisplayBitmapActivity extends BaseActivity {
         // Set loading image
         mZoomableImageView.setImageResource(R.drawable.imageloading);
         mBitmapLoader = new BitmapLoader(this);
-		loadBitmap();
+        loadBitmap();
     
     }
 
