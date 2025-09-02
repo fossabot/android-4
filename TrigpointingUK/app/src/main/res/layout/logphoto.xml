@@ -14,13 +14,17 @@
         android:id="@+id/photoName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/photo_name_hint" />
+        android:hint="@string/photo_name_hint"
+        android:inputType="text"
+        android:autofillHints="name" />
 
     <EditText
         android:id="@+id/photoDescr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/photo_description_hint" />
+        android:hint="@string/photo_description_hint"
+        android:inputType="textCapSentences|textMultiLine"
+        android:autofillHints="description" />
 
     <Spinner
         android:id="@+id/photoSubject"

@@ -24,8 +24,8 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
     
     private final String[] mUrls;
     public LazyImageLoader imageLoader;
-	private final int mGalleryItemBackground;
-	private final Context mContext;
+    private final int mGalleryItemBackground;
+    private final Context mContext;
     
     public TrigDetailsOSMapAdapter(Context context, String[] urls) {
         mUrls=urls;
@@ -34,6 +34,7 @@ public class TrigDetailsOSMapAdapter extends RecyclerView.Adapter<TrigDetailsOSM
         
         TypedArray attr = context.obtainStyledAttributes(R.styleable.TrigpointingUK);
         mGalleryItemBackground = attr.getResourceId(R.styleable.TrigpointingUK_android_galleryItemBackground, 0);
+        attr.recycle();
     }
     
     public void setOnItemClickListener(OnItemClickListener listener) {

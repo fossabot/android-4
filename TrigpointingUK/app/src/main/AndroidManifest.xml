@@ -40,7 +40,7 @@
         
 
         
-        <activity android:label="@string/app_name" android:name="uk.trigpointing.android.MainActivity" android:exported="true">
+        <activity android:name="uk.trigpointing.android.MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -54,8 +54,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:parentActivityName="uk.trigpointing.android.MainActivity" />
         <activity 
-            android:name=".SettingsActivity"
-            android:label="@string/app_name" >
+            android:name=".SettingsActivity" >
         </activity>
 
         <activity
@@ -131,5 +130,6 @@
             android:name="uk.trigpointing.android.ar.SensorARActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+            <!-- AR View intentionally locked to portrait for optimal camera experience -->
     </application>
 </manifest>

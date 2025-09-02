@@ -31,7 +31,7 @@ public class Utils {
     }
     
     
-	public static Bitmap decodeUri(Context ctx, Uri selectedImage, int requiredSize) throws FileNotFoundException {
+    public static Bitmap decodeUri(Context ctx, Uri selectedImage, int requiredSize) throws FileNotFoundException {
 
         // Decode image size
         BitmapFactory.Options o = new BitmapFactory.Options();
@@ -55,30 +55,30 @@ public class Utils {
 
     }
 
-	
-	public static void saveBitmapToFile(String fileName, Bitmap bmp, Integer quality) throws IOException
-	{
-	    File f = new File(fileName);
-	    f.createNewFile();
-	    FileOutputStream fOut = null;
-	    try {
-	        fOut = new FileOutputStream(f);
-	    } catch (FileNotFoundException e) {
-	        e.printStackTrace();
-	    }
+    
+    public static void saveBitmapToFile(String fileName, Bitmap bmp, Integer quality) throws IOException
+    {
+        File f = new File(fileName);
+        f.createNewFile();
+        FileOutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
-	    bmp.compress(Bitmap.CompressFormat.JPEG, quality, fOut);
-	    try {
-	        fOut.flush();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	    try {
-	        fOut.close();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	}
+        bmp.compress(Bitmap.CompressFormat.JPEG, quality, fOut);
+        try {
+            fOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     
 }

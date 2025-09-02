@@ -167,6 +167,9 @@ dependencies {
     // Fragments and lifecycle
     implementation 'androidx.fragment:fragment-ktx:1.8.9'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2'
+    
+    // Core KTX for extension functions
+    implementation 'androidx.core:core-ktx:1.15.0'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'

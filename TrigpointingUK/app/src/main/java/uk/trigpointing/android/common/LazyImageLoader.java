@@ -25,7 +25,7 @@ import uk.trigpointing.android.R;
 // Code from https://github.com/thest1/LazyList
 
 public class LazyImageLoader {
-	private static final String TAG = "BitmapLoader";
+    private static final String TAG = "BitmapLoader";
 
     final int stub_id=R.drawable.imageloading;
 
@@ -88,7 +88,7 @@ public class LazyImageLoader {
         //from SD cache
         Bitmap b = decodeFile(f);
         if(b!=null) {
-        	Log.i(TAG, "Got "+url+" from SD cache");
+            Log.i(TAG, "Got "+url+" from SD cache");
             return b;
         }
         
@@ -219,8 +219,8 @@ public class LazyImageLoader {
         Bitmap bitmap;
         ImageView imageView;
         public BitmapDisplayer(Bitmap b, ImageView i){
-        	bitmap=b;
-        	imageView=i;
+            bitmap=b;
+            imageView=i;
         }
         public void run()
         {

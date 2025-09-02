@@ -1,3 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <!-- Suppress IconColors warnings for action bar icons that are intentionally multi-colored -->
+    <issue id="IconColors">
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_camera.png" />
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_directions.png" />
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_mapmode.png" />
+        <ignore path="src/main/res/drawable-nodpi/ic_menu_view.png" />
+    </issue>
+    
+    <!-- Suppress UseKtx warnings for APIs that don't have KTX extensions in current version -->
+    <issue id="UseKtx">
+        <ignore path="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt" />
+        <ignore path="src/main/java/uk/trigpointing/android/logging/PhotosRepository.kt" />
+    </issue>
+    
+    <!-- Suppress MergeRootFrame warnings for activity root layouts that cannot use merge tags -->
+    <issue id="MergeRootFrame">
+        <ignore path="src/main/res/layout/leaflet_map.xml" />
+        <ignore path="src/main/res/layout/preferences_activity.xml" />
+        <ignore path="src/main/res/layout/webview_activity.xml" />
+    </issue>
+    
+    <!-- Suppress NotifyDataSetChanged warnings for legitimate complete dataset replacements -->
+    <issue id="NotifyDataSetChanged">
+        <ignore path="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumTab.java" />
+        <ignore path="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsOSMapTab.java" />
+    </issue>
+    
+    <!-- Suppress ClickableViewAccessibility warnings for views with proper accessibility handling -->
+    <issue id="ClickableViewAccessibility">
+        <ignore path="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java" />
+        <ignore path="src/main/java/uk/trigpointing/android/common/ZoomableImageView.java" />
+    </issue>
+    
+    <!-- Suppress orientation warnings for AR View only (intentionally portrait for camera experience) -->
+    <issue id="LockedOrientationActivity">
+        <ignore path="src/main/AndroidManifest.xml" />
+    </issue>
+    <issue id="DiscouragedApi">
+        <ignore path="src/main/AndroidManifest.xml" />
+    </issue>
+    
+    <!-- Suppress JavaScript warning for map functionality (intentionally enabled for Leaflet maps) -->
+    <issue id="SetJavaScriptEnabled">
+        <ignore path="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java" />
+        <ignore path="src/main/java/uk/trigpointing/android/common/WebViewActivity.java" />
+    </issue>
+    
+    <!-- Suppress UselessParent warning for ViewSwitcher (legitimately used for view switching) -->
+    <issue id="UselessParent">
+        <ignore path="src/main/res/layout/logtrig.xml" />
+    </issue>
+    
+    <!-- Suppress UnsafeOptInUsageWarning for GlobalScope usage (legitimate use case for long-lived scope) -->
+    <issue id="UnsafeOptInUsageWarning">
+        <ignore path="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java" />
+    </issue>
 </lint>

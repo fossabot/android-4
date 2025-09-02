@@ -14,52 +14,52 @@ import uk.trigpointing.android.R;
 import uk.trigpointing.android.types.TrigLog;
 
 public class TrigDetailsLoglistAdapter extends ArrayAdapter<TrigLog> {
-	private final ArrayList<TrigLog>   mLogs;
-	private final Context 			 mContext;
-	
-	public TrigDetailsLoglistAdapter(Context context, int rowResourceId, ArrayList<TrigLog> logs) {
-		super(context, rowResourceId, logs);
-    	mContext = context;
+    private final ArrayList<TrigLog>   mLogs;
+    private final Context              mContext;
+    
+    public TrigDetailsLoglistAdapter(Context context, int rowResourceId, ArrayList<TrigLog> logs) {
+        super(context, rowResourceId, logs);
+        mContext = context;
         mLogs=logs;
-	}
+    }
 
     public int getCount() {
         return mLogs.size();
     }
     
-	@Override
-	public TrigLog getItem(int position) {
-		return mLogs.get(position);
-	}
+    @Override
+    public TrigLog getItem(int position) {
+        return mLogs.get(position);
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View row;
-		 
-		if (null == convertView) {
-			row = LayoutInflater.from(mContext).inflate(R.layout.triglogrow, parent, false);
-		} else {
-			row = convertView;
-		}
-		 		
-		TextView  tu = row.findViewById(R.id.logDateUser);
-		TextView  tt = row.findViewById(R.id.logText);
-		ImageView tc = row.findViewById(R.id.trigLogCondition);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row;
+         
+        if (null == convertView) {
+            row = LayoutInflater.from(mContext).inflate(R.layout.triglogrow, parent, false);
+        } else {
+            row = convertView;
+        }
+                 
+        TextView  tu = row.findViewById(R.id.logDateUser);
+        TextView  tt = row.findViewById(R.id.logText);
+        ImageView tc = row.findViewById(R.id.trigLogCondition);
 
-		TrigLog tl = getItem(position);
-		if (tl.getText() != null && !tl.getText().equals("")) {
-			tt.setText(tl.getText());
-			tt.setVisibility(View.VISIBLE);
-		} else {
-			tt.setText("");
-			tt.setVisibility(View.GONE);
-		}
-			
-		tu.setText(mContext.getString(R.string.date_user_format, tl.getDate(), tl.getUsername()));
-		tc.setImageResource(tl.getCondition().icon());
-		
-		return row;
-	}
+        TrigLog tl = getItem(position);
+        if (tl.getText() != null && !tl.getText().equals("")) {
+            tt.setText(tl.getText());
+            tt.setVisibility(View.VISIBLE);
+        } else {
+            tt.setText("");
+            tt.setVisibility(View.GONE);
+        }
+            
+        tu.setText(mContext.getString(R.string.date_user_format, tl.getDate(), tl.getUsername()));
+        tc.setImageResource(tl.getCondition().icon());
+        
+        return row;
+    }
 
-	
+    
 }

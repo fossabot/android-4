@@ -37,9 +37,9 @@
     <!-- Missing string resources -->
     <string name="reset">Reset</string>
 
-    <string name="syncToTUK">Syncing to TUK...</string>
-    <string name="syncPhotosToTUK">Syncing photos to TUK...</string>
-    <string name="syncLogsFromTUK">Syncing logs from TUK...</string>
+    <string name="syncToTUK">Syncing to TUK…</string>
+    <string name="syncPhotosToTUK">Syncing photos to TUK…</string>
+    <string name="syncLogsFromTUK">Syncing logs from TUK…</string>
     <string name="toastPleaseLogin">Please login for a more personalised experience</string>
     
     <!-- Filter related strings -->
@@ -57,17 +57,16 @@
 
     
     <!-- Missing string resources for various activities -->
-    <string name="downloadingPhotos">Downloading photos...</string>
+    <string name="downloadingPhotos">Downloading photos…</string>
     <string name="noPhotos">No photos available</string>
-    <string name="downloadingLogs">Downloading logs...</string>
+    <string name="downloadingLogs">Downloading logs…</string>
     <string name="noLogs">No logs available</string>
     <string name="radartitle">Radar Dialog</string>
 
     <string name="downloadMapsExplanation">The app automatically caches any map tiles that you view whilst online, providing basic offline coverage for areas you\'ve explored.\n\nFor better offline availability, you can bulk download UK-wide maps at various scale ranges below. This ensures comprehensive coverage even when you\'re completely offline.\n\n⚠️ Warning: Some of these files are very large (several hundred MB), so avoid downloading on a metered connection unless necessary.</string>
     <string name="cacheUsageFormat">Cache usage: %1$s</string>
-    <string name="cacheTileCountFormat">%1$d tiles cached</string>
     <string name="clearCache">Clear cache (via Settings)</string>
-    <string name="cacheCalculating">Calculating cache size...</string>
+    <string name="cacheCalculating">Calculating cache size…</string>
     <string name="arView">AR View</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -104,16 +103,10 @@
     <string name="distance_accuracy">±0 m</string>
     <string name="bearing_format">Bearing: 000°</string>
     <string name="compass_calibration">Move your phone in a figure-8 to calibrate the compass</string>
-    <string name="trigpoint_name_placeholder">Trigpoint Name</string>
-    <string name="distance_zero_short">0m</string>
-    <string name="trigpoint_icon_content_desc">Trigpoint icon</string>
+
     <string name="photo_preview_content_desc">Photo preview</string>
-    <string name="pillar_icon_content_desc">Pillar trigpoint icon</string>
-    <string name="fbm_icon_content_desc">Flush bracket marker icon</string>
-    <string name="passive_icon_content_desc">Passive station icon</string>
-    <string name="intersected_icon_content_desc">Intersected station icon</string>
-    <string name="unsynced_icon_content_desc">Unsynced data icon</string>
-    <string name="photos_icon_content_desc">Photos icon</string>
+
+
     <string name="photo_icon_content_desc">Photo icon</string>
     <string name="compass_arrow_content_desc">Compass direction arrow</string>
     <string name="log_condition_icon_content_desc">Log condition icon</string>

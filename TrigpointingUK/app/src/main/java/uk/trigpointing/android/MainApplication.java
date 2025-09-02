@@ -14,9 +14,9 @@ import android.util.Log;
 
 
 public class MainApplication extends Application {
-	private static final String TAG = "MainApplication";
+    private static final String TAG = "MainApplication";
 
-	    @Override
+        @Override
     public void onCreate() {
         super.onCreate();
         
@@ -24,18 +24,18 @@ public class MainApplication extends Application {
         
         // This has been removed from the permissions and the preferences, so set to false for any legacy installations
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor editor = prefs.edit();
-		editor.putBoolean("acra.syslog.enable", false);
-		
-		// Mark that the app is starting fresh - this will trigger logging status filter reset
-		editor.putBoolean("app_fresh_start", true);
-		
-		// Reset map load flag so first map visit uses user preference
-		editor.putBoolean("is_first_map_load", true);
-		
-		editor.apply();
-		
-		Log.i(TAG, "Marked app as fresh start for filter reset and map preference loading");  
+        Editor editor = prefs.edit();
+        editor.putBoolean("acra.syslog.enable", false);
+        
+        // Mark that the app is starting fresh - this will trigger logging status filter reset
+        editor.putBoolean("app_fresh_start", true);
+        
+        // Reset map load flag so first map visit uses user preference
+        editor.putBoolean("is_first_map_load", true);
+        
+        editor.apply();
+        
+        Log.i(TAG, "Marked app as fresh start for filter reset and map preference loading");  
         
         // Crashlytics removed during package migration; re-add if needed later
 

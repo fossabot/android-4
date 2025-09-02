@@ -52,26 +52,21 @@ import coil.ImageLoader;
 import coil.request.ImageRequest;
 
 public class MainActivity extends BaseActivity implements SyncListener {
-    public static final String 	TAG ="MainActivity";
-	private static final String RUNBEFORE = "RUNBEFORE";
-	private static final String AUTO_SYNC_RUN = "AUTO_SYNC_RUN";
-    private SharedPreferences 	mPrefs;
-    private ImageView			mPillarIcon;
-    private ImageView			mFbmIcon;
-    private ImageView			mPassiveIcon;
-    private ImageView			mIntersectedIcon;
-    private ImageView			mUnsyncedIcon;
-    private ImageView			mPhotosIcon;
-    private TextView			mPillarCount;
-    private TextView			mFbmCount;
-    private TextView			mPassiveCount;
-    private TextView			mIntersectedCount;
-    private TextView			mUnsyncedCount;
-    private TextView			mPhotosCount;
-    private Button				mSyncBtn;
-    private Button				mARViewBtn;
-    private TextView			mUserName;
-    private ImageView			mUserMapImage;
+    public static final String     TAG ="MainActivity";
+    private static final String RUNBEFORE = "RUNBEFORE";
+    private static final String AUTO_SYNC_RUN = "AUTO_SYNC_RUN";
+    private SharedPreferences     mPrefs;
+
+    private TextView            mPillarCount;
+    private TextView            mFbmCount;
+    private TextView            mPassiveCount;
+    private TextView            mIntersectedCount;
+    private TextView            mUnsyncedCount;
+    private TextView            mPhotosCount;
+    private Button                mSyncBtn;
+    private Button                mARViewBtn;
+    private TextView            mUserName;
+    private ImageView            mUserMapImage;
     
     // API authentication components
     private AuthApiClient authApiClient;
@@ -82,25 +77,19 @@ public class MainActivity extends BaseActivity implements SyncListener {
     private ActivityResultLauncher<Intent> mapLauncher;
     private ActivityResultLauncher<Intent> preferencesLauncher;
     
- 	@Override
+     @Override
     public void onCreate(Bundle savedInstanceState) {
-		Log.i(TAG, "onCreate: Starting MainActivity");
+        Log.i(TAG, "onCreate: Starting MainActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
         Log.i(TAG, "onCreate: Setting up UI components");
         // Set up UI components
-        mPillarIcon = findViewById(R.id.countPillarImage);
         mPillarCount = findViewById(R.id.countPillarText);
-        mFbmIcon = findViewById(R.id.countFbmImage);
         mFbmCount = findViewById(R.id.countFbmText);
-        mPassiveIcon = findViewById(R.id.countPassiveImage);
         mPassiveCount = findViewById(R.id.countPassiveText);
-        mIntersectedIcon = findViewById(R.id.countIntersectedImage);
         mIntersectedCount = findViewById(R.id.countIntersectedText);
-        mUnsyncedIcon = findViewById(R.id.countUnsyncedImage);
         mUnsyncedCount = findViewById(R.id.countUnsyncedText);
-        mPhotosIcon = findViewById(R.id.countPhotosImage);
         mPhotosCount = findViewById(R.id.countPhotosText);
         mSyncBtn = findViewById(R.id.btnSync);
         mARViewBtn = findViewById(R.id.btnARView);
@@ -253,21 +242,21 @@ public class MainActivity extends BaseActivity implements SyncListener {
     }
 
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putBoolean(RUNBEFORE, true);
-		super.onSaveInstanceState(outState);
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (executor != null && !executor.isShutdown()) {
-			executor.shutdown();
-		}
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(RUNBEFORE, true);
+        super.onSaveInstanceState(outState);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (executor != null && !executor.isShutdown()) {
+            executor.shutdown();
+        }
+    }
 
-	@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.mainmenu, menu);
 
@@ -459,326 +448,318 @@ public class MainActivity extends BaseActivity implements SyncListener {
  
     
     
-	@Override
-	protected void onResume() {
-		Log.i(TAG, "onResume: Refreshing counts and user display");
-		super.onResume();
-		invalidateOptionsMenu();
-		updateUserDisplay();
-		populateCounts();
-		checkAndPopulateDatabase();
-		checkAndPerformAutoSync();
-	}
+    @Override
+    protected void onResume() {
+        Log.i(TAG, "onResume: Refreshing counts and user display");
+        super.onResume();
+        invalidateOptionsMenu();
+        updateUserDisplay();
+        populateCounts();
+        checkAndPopulateDatabase();
+        checkAndPerformAutoSync();
+    }
 
 
     private void doSync() {
-		Log.i(TAG, "doSync");
-		new SyncTask(MainActivity.this, MainActivity.this).execute(false);
+        Log.i(TAG, "doSync");
+        new SyncTask(MainActivity.this, MainActivity.this).execute(false);
     }
     
 
-	@Override
-	public void onSynced(int status) {
-		Log.i(TAG, "onSynced");
-		populateCounts();
-	}
-	
-	/**
-	 * Reset logging status filter to "Logged or not" on fresh app start.
-	 * This preserves the filter during session navigation but resets it when the app is truly restarted.
-	 */
-	private void resetLoggingStatusFilterOnAppStart() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean isFreshStart = prefs.getBoolean("app_fresh_start", false);
-		
-		if (isFreshStart) {
-			Log.i(TAG, "Fresh app start detected - resetting logging status filter to default");
-			
-			// Reset logging status filter to "Logged or not" (0)
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Filter.FILTERRADIO, 0); // Reset to "Logged or not"
-			editor.putString(Filter.FILTERRADIOTEXT, "Logged or not"); // Update text for consistency
-			editor.putString("leaflet_filter_found", "all"); // Update JavaScript compatibility value
-			
-			// Clear the fresh start flag so subsequent activity navigations don't reset the filter
-			editor.putBoolean("app_fresh_start", false);
-			editor.apply();
-			
-			Log.i(TAG, "Logging status filter reset to 'Logged or not' and fresh start flag cleared");
-		} else {
-			Log.d(TAG, "Not a fresh start - preserving current logging status filter");
-		}
-	}
+    @Override
+    public void onSynced(int status) {
+        Log.i(TAG, "onSynced");
+        populateCounts();
+    }
+    
+    /**
+     * Reset logging status filter to "Logged or not" on fresh app start.
+     * This preserves the filter during session navigation but resets it when the app is truly restarted.
+     */
+    private void resetLoggingStatusFilterOnAppStart() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFreshStart = prefs.getBoolean("app_fresh_start", false);
+        
+        if (isFreshStart) {
+            Log.i(TAG, "Fresh app start detected - resetting logging status filter to default");
+            
+            // Reset logging status filter to "Logged or not" (0)
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(Filter.FILTERRADIO, 0); // Reset to "Logged or not"
+            editor.putString(Filter.FILTERRADIOTEXT, "Logged or not"); // Update text for consistency
+            editor.putString("leaflet_filter_found", "all"); // Update JavaScript compatibility value
+            
+            // Clear the fresh start flag so subsequent activity navigations don't reset the filter
+            editor.putBoolean("app_fresh_start", false);
+            editor.apply();
+            
+            Log.i(TAG, "Logging status filter reset to 'Logged or not' and fresh start flag cleared");
+        } else {
+            Log.d(TAG, "Not a fresh start - preserving current logging status filter");
+        }
+    }
 
 
 
 
 
-	private final ExecutorService executor = Executors.newSingleThreadExecutor();
-	
-	private void updateUserDisplay() {
-		Log.i(TAG, "updateUserDisplay: Updating user display");
-		try {
-			View countSection = findViewById(R.id.count_section);
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			boolean devMode = prefs.getBoolean("dev_mode", false);
-			
-			String displayName;
-			boolean isLoggedIn = false;
-			
-			// Check if we have API authentication data first
-			if (authPreferences.isLoggedIn()) {
-				Log.i(TAG, "updateUserDisplay: User is logged in via API");
-				
-				if (devMode) {
-					displayName = authPreferences.getDisplayNameWithId();
-					Log.i(TAG, "updateUserDisplay: Developer mode - showing name with ID: " + displayName);
-				} else {
-					displayName = authPreferences.getDisplayName();
-					Log.i(TAG, "updateUserDisplay: Normal mode - showing name: " + displayName);
-				}
-				isLoggedIn = true;
-			} else {
-				// Fallback to legacy username for backward compatibility
-				String legacyUsername = prefs.getString("username", "");
-				if (!legacyUsername.trim().isEmpty()) {
-					Log.i(TAG, "updateUserDisplay: Using legacy username: " + legacyUsername);
-					displayName = legacyUsername;
-					if (devMode) {
-						displayName += " (legacy)";
-					}
-					isLoggedIn = true;
-				} else {
-					Log.i(TAG, "updateUserDisplay: No authentication found");
-					displayName = getString(R.string.not_logged_in_status);
-					isLoggedIn = false;
-				}
-			}
-			
-			mUserName.setText(displayName);
-			
-			if (isLoggedIn) {
-				countSection.setVisibility(View.VISIBLE);
-				mSyncBtn.setVisibility(View.VISIBLE);
-				updateUserMap();
-			} else {
-				countSection.setVisibility(View.INVISIBLE);
-				mSyncBtn.setVisibility(View.INVISIBLE);
-				mUserMapImage.setVisibility(View.GONE);
-			}
-			
-					// AR View is available to all users
-		mARViewBtn.setVisibility(View.VISIBLE);
-			
-		} catch (Exception e) {
-			Log.e(TAG, "updateUserDisplay: Error updating user display", e);
-			e.printStackTrace();
-			mUserName.setText(getString(R.string.not_logged_in_status));
-		}
-	}
-	
-	private void updateUserMap() {
-		Log.i(TAG, "updateUserMap: Updating user map image");
-		try {
-			// Load map if we have a persisted user id, even if token has expired
-			int userId = authPreferences.getUserId();
-			if (userId > 0) {
-				String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
-				Log.i(TAG, "updateUserMap: Loading map for user ID " + userId + " from URL: " + mapUrl);
-				
-				// Load the image using Coil
-				ImageRequest request = new ImageRequest.Builder(this)
-						.data(mapUrl)
-						.target(mUserMapImage)
-						.placeholder(android.R.drawable.ic_menu_mapmode) // Show placeholder while loading
-						.error(android.R.drawable.ic_dialog_alert) // Show error icon if loading fails
-						.build();
-				
-				// Show the ImageView and load the image
-				mUserMapImage.setVisibility(View.VISIBLE);
-				ImageLoader imageLoader = Coil.imageLoader(this);
-				imageLoader.enqueue(request);
-				
-				// Add click listener to open full map view
-				mUserMapImage.setOnClickListener(v -> {
-					String fullMapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
-					android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(fullMapUrl));
-					startActivity(intent);
-				});
-			} else {
-				Log.i(TAG, "updateUserMap: No persisted user ID, hiding map");
-				mUserMapImage.setVisibility(View.GONE);
-			}
-		} catch (Exception e) {
-			Log.e(TAG, "updateUserMap: Error updating user map", e);
-			e.printStackTrace();
-			mUserMapImage.setVisibility(View.GONE);
-		}
-	}
-	
-	private void populateCounts() {
-		Log.i(TAG, "populateCounts: Starting count population");
-		// Show loading state
-		runOnUiThread(() -> {
-			try {
-				Log.i(TAG, "populateCounts: Setting loading state");
-				mPillarIcon.setImageResource(R.drawable.t_pillar);
-				mPillarCount.setText("");
-				mFbmIcon.setImageResource(R.drawable.t_fbm);
-				mFbmCount.setText("");
-				mPassiveIcon.setImageResource(R.drawable.t_passive);
-				mPassiveCount.setText("");
-				mIntersectedIcon.setImageResource(R.drawable.t_intersected);
-				mIntersectedCount.setText("");
-				mUnsyncedIcon.setVisibility(View.INVISIBLE);
-				mUnsyncedCount.setText("");
-				mPhotosIcon.setVisibility(View.INVISIBLE);
-				mPhotosCount.setText("");
-				                mSyncBtn.setTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light));
-			} catch (NotFoundException e) {
-				Log.e(TAG, "populateCounts: Error setting loading state", e);
-				e.printStackTrace();
-			}
-		});
-		
-		// Run database operations in background
-		CompletableFuture.supplyAsync(() -> {
-			Log.i(TAG, "populateCounts: Starting database operations");
-			DbHelper mDb = new DbHelper(MainActivity.this);
-			try {
-				Log.i(TAG, "populateCounts: Opening database");
-				mDb.open();
-				Log.i(TAG, "populateCounts: Counting pillars");
-				int nPillar = mDb.countLoggedPillars();
-				Log.i(TAG, "populateCounts: Counting FBMs");
-				int nFbm = mDb.countLoggedFbms();
-				Log.i(TAG, "populateCounts: Counting passives");
-				int nPassive = mDb.countLoggedPassives();
-				Log.i(TAG, "populateCounts: Counting intersected");
-				int nIntersected = mDb.countLoggedIntersecteds();
-				Log.i(TAG, "populateCounts: Counting unsynced");
-				int nUnsynced = mDb.countUnsynced();
-				Log.i(TAG, "populateCounts: Counting photos");
-				int nPhotos = mDb.countPhotos();
-				Log.i(TAG, "populateCounts: Closing database");
-				mDb.close();
-				
-				Log.i(TAG, "populateCounts: Database counts - Pillars: " + nPillar + ", FBMs: " + nFbm + ", Passives: " + nPassive + ", Intersected: " + nIntersected + ", Unsynced: " + nUnsynced + ", Photos: " + nPhotos);
-				return new int[]{nPillar, nFbm, nPassive, nIntersected, nUnsynced, nPhotos};
-			} catch (SQLException e) {
-				Log.e(TAG, "populateCounts: SQLException during database operations", e);
-				e.printStackTrace();
-				return new int[]{0, 0, 0, 0, 0, 0};
-			} catch (Exception e) {
-				Log.e(TAG, "populateCounts: Unexpected exception during database operations", e);
-				e.printStackTrace();
-				return new int[]{0, 0, 0, 0, 0, 0};
-			}
-		}, executor).thenAcceptAsync(counts -> {
-			// Update UI on main thread
-			runOnUiThread(() -> {
-				try {
-					Log.i(TAG, "populateCounts: Updating UI with counts");
-					int nPillar = counts[0];
-					int nFbm = counts[1];
-					int nPassive = counts[2];
-					int nIntersected = counts[3];
-					int nUnsynced = counts[4];
-					int nPhotos = counts[5];
-					
-					mPillarCount.setText(String.valueOf(nPillar));
-					mFbmCount.setText(String.valueOf(nFbm));
-					mPassiveCount.setText(String.valueOf(nPassive));
-					mIntersectedCount.setText(String.valueOf(nIntersected));
-					
-					if (nUnsynced > 0) {
-						mUnsyncedIcon.setVisibility(View.VISIBLE);
-						mUnsyncedCount.setText(String.valueOf(nUnsynced));
-						                mSyncBtn.setTextColor(ContextCompat.getColor(this, R.color.syncNow));
-					}
-					
-					if (nPhotos > 0) {
-						mPhotosIcon.setVisibility(View.VISIBLE);
-						mPhotosCount.setText(String.valueOf(nPhotos));
-					}
-					
-					Log.i(TAG, "populateCounts: UI update complete");
-				} catch (Exception e) {
-					Log.e(TAG, "populateCounts: Error updating UI", e);
-					e.printStackTrace();
-				}
-			});
-		}).exceptionally(throwable -> {
-			Log.e(TAG, "populateCounts: Exception in async operation", throwable);
-			throwable.printStackTrace();
-			return null;
-		});
-	}
-	
-	private void checkAndPopulateDatabase() {
-		Log.i(TAG, "checkAndPopulateDatabase: Checking if database needs population");
-		
-		CompletableFuture.supplyAsync(() -> {
-			DbHelper mDb = new DbHelper(MainActivity.this);
-			try {
-				// Open read-only to avoid SQLITE_BUSY when another writer exists
-				mDb.openReadable();
-				boolean isPopulated = mDb.isTrigTablePopulated();
-				mDb.close();
-				return isPopulated;
-			} catch (android.database.sqlite.SQLiteDatabaseLockedException locked) {
-				Log.w(TAG, "checkAndPopulateDatabase: Database locked, will treat as populated for now to avoid contention");
-				return true; // avoid kicking off population while locked
-			} catch (Exception e) {
-				Log.e(TAG, "checkAndPopulateDatabase: Error checking database", e);
-				return false;
-			}
-		}, executor).thenAcceptAsync(isPopulated -> {
-			if (!isPopulated) {
-				Log.i(TAG, "checkAndPopulateDatabase: Database is empty, starting automatic population");
-				runOnUiThread(() -> {
-					Toast.makeText(MainActivity.this, "Database is empty. Starting automatic download...", Toast.LENGTH_LONG).show();
-					Intent intent = new Intent(MainActivity.this, DownloadTrigsActivity.class);
-					startActivity(intent);
-				});
-			} else {
-				Log.i(TAG, "checkAndPopulateDatabase: Database is already populated");
-			}
-		});
-	}
-	
-	private void checkAndPerformAutoSync() {
-		Log.i(TAG, "checkAndPerformAutoSync: Checking if auto sync is enabled");
-		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean autoSyncEnabled = prefs.getBoolean("auto_sync", false);
-		boolean autoSyncAlreadyRun = prefs.getBoolean(AUTO_SYNC_RUN, false);
-		
-		Log.i(TAG, "checkAndPerformAutoSync: Auto sync enabled: " + autoSyncEnabled + ", already run: " + autoSyncAlreadyRun);
-		
-		if (autoSyncEnabled && !autoSyncAlreadyRun) {
-			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled and not yet run, starting sync");
-			// Check if user has credentials
-			String username = prefs.getString("username", "");
-			String password = prefs.getString("plaintextpassword", "");
-			
-			if (!username.trim().isEmpty() && !password.trim().isEmpty()) {
-				Log.i(TAG, "checkAndPerformAutoSync: Credentials found, performing auto sync");
-				// Mark that auto sync has been run
-				prefs.edit().putBoolean(AUTO_SYNC_RUN, true).apply();
-				new SyncTask(MainActivity.this, MainActivity.this).execute(false);
-			} else {
-				Log.i(TAG, "checkAndPerformAutoSync: No credentials found, skipping auto sync");
-			}
-		} else if (autoSyncEnabled) {
-			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled but already run this session");
-		} else {
-			Log.i(TAG, "checkAndPerformAutoSync: Auto sync is disabled");
-		}
-	}
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    private void updateUserDisplay() {
+        Log.i(TAG, "updateUserDisplay: Updating user display");
+        try {
+            View countSection = findViewById(R.id.count_section);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean devMode = prefs.getBoolean("dev_mode", false);
+            
+            String displayName;
+            boolean isLoggedIn = false;
+            
+            // Check if we have API authentication data first
+            if (authPreferences.isLoggedIn()) {
+                Log.i(TAG, "updateUserDisplay: User is logged in via API");
+                
+                if (devMode) {
+                    displayName = authPreferences.getDisplayNameWithId();
+                    Log.i(TAG, "updateUserDisplay: Developer mode - showing name with ID: " + displayName);
+                } else {
+                    displayName = authPreferences.getDisplayName();
+                    Log.i(TAG, "updateUserDisplay: Normal mode - showing name: " + displayName);
+                }
+                isLoggedIn = true;
+            } else {
+                // Fallback to legacy username for backward compatibility
+                String legacyUsername = prefs.getString("username", "");
+                if (!legacyUsername.trim().isEmpty()) {
+                    Log.i(TAG, "updateUserDisplay: Using legacy username: " + legacyUsername);
+                    displayName = legacyUsername;
+                    if (devMode) {
+                        displayName += " (legacy)";
+                    }
+                    isLoggedIn = true;
+                } else {
+                    Log.i(TAG, "updateUserDisplay: No authentication found");
+                    displayName = getString(R.string.not_logged_in_status);
+                    isLoggedIn = false;
+                }
+            }
+            
+            mUserName.setText(displayName);
+            
+            if (isLoggedIn) {
+                countSection.setVisibility(View.VISIBLE);
+                mSyncBtn.setVisibility(View.VISIBLE);
+                updateUserMap();
+            } else {
+                countSection.setVisibility(View.INVISIBLE);
+                mSyncBtn.setVisibility(View.INVISIBLE);
+                mUserMapImage.setVisibility(View.GONE);
+            }
+            
+                    // AR View is available to all users
+        mARViewBtn.setVisibility(View.VISIBLE);
+            
+        } catch (Exception e) {
+            Log.e(TAG, "updateUserDisplay: Error updating user display", e);
+            e.printStackTrace();
+            mUserName.setText(getString(R.string.not_logged_in_status));
+        }
+    }
+    
+    private void updateUserMap() {
+        Log.i(TAG, "updateUserMap: Updating user map image");
+        try {
+            // Load map if we have a persisted user id, even if token has expired
+            int userId = authPreferences.getUserId();
+            if (userId > 0) {
+                String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
+                Log.i(TAG, "updateUserMap: Loading map for user ID " + userId + " from URL: " + mapUrl);
+                
+                // Load the image using Coil
+                ImageRequest request = new ImageRequest.Builder(this)
+                        .data(mapUrl)
+                        .target(mUserMapImage)
+                        .placeholder(android.R.drawable.ic_menu_mapmode) // Show placeholder while loading
+                        .error(android.R.drawable.ic_dialog_alert) // Show error icon if loading fails
+                        .build();
+                
+                // Show the ImageView and load the image
+                mUserMapImage.setVisibility(View.VISIBLE);
+                ImageLoader imageLoader = Coil.imageLoader(this);
+                imageLoader.enqueue(request);
+                
+                // Add click listener to open full map view
+                mUserMapImage.setOnClickListener(v -> {
+                    String fullMapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
+                    android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(fullMapUrl));
+                    startActivity(intent);
+                });
+            } else {
+                Log.i(TAG, "updateUserMap: No persisted user ID, hiding map");
+                mUserMapImage.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "updateUserMap: Error updating user map", e);
+            e.printStackTrace();
+            mUserMapImage.setVisibility(View.GONE);
+        }
+    }
+    
+    private void populateCounts() {
+        Log.i(TAG, "populateCounts: Starting count population");
+        // Show loading state
+        runOnUiThread(() -> {
+            try {
+                Log.i(TAG, "populateCounts: Setting loading state");
+                mPillarCount.setText("");
+                mFbmCount.setText("");
+                mPassiveCount.setText("");
+                mIntersectedCount.setText("");
+                mUnsyncedCount.setText("");
+                mPhotosCount.setText("");
+                                mSyncBtn.setTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light));
+            } catch (NotFoundException e) {
+                Log.e(TAG, "populateCounts: Error setting loading state", e);
+                e.printStackTrace();
+            }
+        });
+        
+        // Run database operations in background
+        CompletableFuture.supplyAsync(() -> {
+            Log.i(TAG, "populateCounts: Starting database operations");
+            DbHelper mDb = new DbHelper(MainActivity.this);
+            try {
+                Log.i(TAG, "populateCounts: Opening database");
+                mDb.open();
+                Log.i(TAG, "populateCounts: Counting pillars");
+                int nPillar = mDb.countLoggedPillars();
+                Log.i(TAG, "populateCounts: Counting FBMs");
+                int nFbm = mDb.countLoggedFbms();
+                Log.i(TAG, "populateCounts: Counting passives");
+                int nPassive = mDb.countLoggedPassives();
+                Log.i(TAG, "populateCounts: Counting intersected");
+                int nIntersected = mDb.countLoggedIntersecteds();
+                Log.i(TAG, "populateCounts: Counting unsynced");
+                int nUnsynced = mDb.countUnsynced();
+                Log.i(TAG, "populateCounts: Counting photos");
+                int nPhotos = mDb.countPhotos();
+                Log.i(TAG, "populateCounts: Closing database");
+                mDb.close();
+                
+                Log.i(TAG, "populateCounts: Database counts - Pillars: " + nPillar + ", FBMs: " + nFbm + ", Passives: " + nPassive + ", Intersected: " + nIntersected + ", Unsynced: " + nUnsynced + ", Photos: " + nPhotos);
+                return new int[]{nPillar, nFbm, nPassive, nIntersected, nUnsynced, nPhotos};
+            } catch (SQLException e) {
+                Log.e(TAG, "populateCounts: SQLException during database operations", e);
+                e.printStackTrace();
+                return new int[]{0, 0, 0, 0, 0, 0};
+            } catch (Exception e) {
+                Log.e(TAG, "populateCounts: Unexpected exception during database operations", e);
+                e.printStackTrace();
+                return new int[]{0, 0, 0, 0, 0, 0};
+            }
+        }, executor).thenAcceptAsync(counts -> {
+            // Update UI on main thread
+            runOnUiThread(() -> {
+                try {
+                    Log.i(TAG, "populateCounts: Updating UI with counts");
+                    int nPillar = counts[0];
+                    int nFbm = counts[1];
+                    int nPassive = counts[2];
+                    int nIntersected = counts[3];
+                    int nUnsynced = counts[4];
+                    int nPhotos = counts[5];
+                    
+                    mPillarCount.setText(String.valueOf(nPillar));
+                    mFbmCount.setText(String.valueOf(nFbm));
+                    mPassiveCount.setText(String.valueOf(nPassive));
+                    mIntersectedCount.setText(String.valueOf(nIntersected));
+                    
+                    if (nUnsynced > 0) {
+                        mUnsyncedCount.setText(String.valueOf(nUnsynced));
+                                        mSyncBtn.setTextColor(ContextCompat.getColor(this, R.color.syncNow));
+                    }
+                    
+                    if (nPhotos > 0) {
+                        mPhotosCount.setText(String.valueOf(nPhotos));
+                    }
+                    
+                    Log.i(TAG, "populateCounts: UI update complete");
+                } catch (Exception e) {
+                    Log.e(TAG, "populateCounts: Error updating UI", e);
+                    e.printStackTrace();
+                }
+            });
+        }).exceptionally(throwable -> {
+            Log.e(TAG, "populateCounts: Exception in async operation", throwable);
+            throwable.printStackTrace();
+            return null;
+        });
+    }
+    
+    private void checkAndPopulateDatabase() {
+        Log.i(TAG, "checkAndPopulateDatabase: Checking if database needs population");
+        
+        CompletableFuture.supplyAsync(() -> {
+            DbHelper mDb = new DbHelper(MainActivity.this);
+            try {
+                // Open read-only to avoid SQLITE_BUSY when another writer exists
+                mDb.openReadable();
+                boolean isPopulated = mDb.isTrigTablePopulated();
+                mDb.close();
+                return isPopulated;
+            } catch (android.database.sqlite.SQLiteDatabaseLockedException locked) {
+                Log.w(TAG, "checkAndPopulateDatabase: Database locked, will treat as populated for now to avoid contention");
+                return true; // avoid kicking off population while locked
+            } catch (Exception e) {
+                Log.e(TAG, "checkAndPopulateDatabase: Error checking database", e);
+                return false;
+            }
+        }, executor).thenAcceptAsync(isPopulated -> {
+            if (!isPopulated) {
+                Log.i(TAG, "checkAndPopulateDatabase: Database is empty, starting automatic population");
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivity.this, "Database is empty. Starting automatic download...", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, DownloadTrigsActivity.class);
+                    startActivity(intent);
+                });
+            } else {
+                Log.i(TAG, "checkAndPopulateDatabase: Database is already populated");
+            }
+        });
+    }
+    
+    private void checkAndPerformAutoSync() {
+        Log.i(TAG, "checkAndPerformAutoSync: Checking if auto sync is enabled");
+        
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean autoSyncEnabled = prefs.getBoolean("auto_sync", false);
+        boolean autoSyncAlreadyRun = prefs.getBoolean(AUTO_SYNC_RUN, false);
+        
+        Log.i(TAG, "checkAndPerformAutoSync: Auto sync enabled: " + autoSyncEnabled + ", already run: " + autoSyncAlreadyRun);
+        
+        if (autoSyncEnabled && !autoSyncAlreadyRun) {
+            Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled and not yet run, starting sync");
+            // Check if user has credentials
+            String username = prefs.getString("username", "");
+            String password = prefs.getString("plaintextpassword", "");
+            
+            if (!username.trim().isEmpty() && !password.trim().isEmpty()) {
+                Log.i(TAG, "checkAndPerformAutoSync: Credentials found, performing auto sync");
+                // Mark that auto sync has been run
+                prefs.edit().putBoolean(AUTO_SYNC_RUN, true).apply();
+                new SyncTask(MainActivity.this, MainActivity.this).execute(false);
+            } else {
+                Log.i(TAG, "checkAndPerformAutoSync: No credentials found, skipping auto sync");
+            }
+        } else if (autoSyncEnabled) {
+            Log.i(TAG, "checkAndPerformAutoSync: Auto sync is enabled but already run this session");
+        } else {
+            Log.i(TAG, "checkAndPerformAutoSync: Auto sync is disabled");
+        }
+    }
 
 
 }
 
-	
-	
+    
+    

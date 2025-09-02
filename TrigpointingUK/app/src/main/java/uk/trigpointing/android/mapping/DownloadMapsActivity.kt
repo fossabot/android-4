@@ -322,7 +322,7 @@ class DownloadMapsActivity : BaseActivity() {
         cacheUsageText.text = cacheText
         
         // Update the second line with tile count
-        val tileCountText = getString(R.string.cacheTileCountFormat, fileCount.toInt())
+        val tileCountText = resources.getQuantityString(R.plurals.cacheTileCountFormat, fileCount.toInt(), fileCount.toInt())
         cacheTileCountText.text = tileCountText
         
         // Show both lines and clear cache link if there are tiles to clear
