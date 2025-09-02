@@ -13,35 +13,13 @@
     </issue>
 
     <issue
-        id="RedundantLabel"
-        message="Redundant label can be removed"
-        errorLine1="        &lt;activity android:label=&quot;@string/app_name&quot; android:name=&quot;uk.trigpointing.android.MainActivity&quot; android:exported=&quot;true&quot;>"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="43"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="RedundantLabel"
-        message="Redundant label can be removed"
-        errorLine1="            android:label=&quot;@string/app_name&quot; >"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="58"
-            column="13"/>
-    </issue>
-
-    <issue
         id="LockedOrientationActivity"
         message="Expecting `android:screenOrientation=&quot;unspecified&quot;` or `&quot;fullSensor&quot;` for this activity so the user can use the application in any orientation and provide a great experience on Chrome OS devices"
         errorLine1="            android:screenOrientation=&quot;portrait&quot; />"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="133"
+            line="132"
             column="13"/>
     </issue>
 
@@ -63,7 +41,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="133"
+            line="132"
             column="13"/>
     </issue>
 
@@ -101,61 +79,6 @@
     </issue>
 
     <issue
-        id="NotifyDataSetChanged"
-        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
-        errorLine1="            mGridAdapter.notifyDataSetChanged();"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumTab.java"
-            line="157"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="NotifyDataSetChanged"
-        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
-        errorLine1="        mAdapter.notifyDataSetChanged();"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsOSMapTab.java"
-            line="169"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="MergeRootFrame"
-        message="This `&lt;FrameLayout>` can be replaced with a `&lt;merge>` tag"
-        errorLine1="&lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/layout/leaflet_map.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="MergeRootFrame"
-        message="This `&lt;FrameLayout>` can be replaced with a `&lt;merge>` tag"
-        errorLine1="&lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/layout/preferences_activity.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
-        id="MergeRootFrame"
-        message="This `&lt;FrameLayout>` can be replaced with a `&lt;merge>` tag"
-        errorLine1="&lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
-        errorLine2="^">
-        <location
-            file="src/main/res/layout/webview_activity.xml"
-            line="2"
-            column="1"/>
-    </issue>
-
-    <issue
         id="UselessParent"
         message="This `ViewSwitcher` layout or its `LinearLayout` parent is possibly unnecessary"
         errorLine1="    &lt;ViewSwitcher"
@@ -171,61 +94,6 @@
         message="Missing density variation folders in `src/main/res`: drawable-hdpi">
         <location
             file="src/main/res"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `String.toUri` instead?"
-        errorLine1="            intent.data = Uri.parse(&quot;package:$packageName&quot;)"
-        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="361"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `String.toUri` instead?"
-        errorLine1="            intent.data = Uri.parse(&quot;package:$packageName&quot;)"
-        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt"
-            line="361"
-            column="27"/>
-    </issue>
-
-    <issue
-        id="UseKtx"
-        message="Use the KTX extension function `Bitmap.scale` instead?"
-        errorLine1="        val thumb = Bitmap.createScaledBitmap(full, 100.coerceAtMost(full.width), (full.height * (100f / full.width)).toInt().coerceAtLeast(1), true)"
-        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/PhotosRepository.kt"
-            line="46"
-            column="21"/>
-    </issue>
-
-    <issue
-        id="ClickableViewAccessibility"
-        message="Custom view ``Button`` has `setOnTouchListener` called on it but does not override `performClick`"
-        errorLine1="        button.setOnTouchListener((v, event) -> {"
-        errorLine2="        ^">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="541"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="ClickableViewAccessibility"
-        message="`ZoomableImageView#onTouchEvent` should call `ZoomableImageView#performClick` when a click is detected"
-        errorLine1="    public boolean onTouchEvent(MotionEvent event) {"
-        errorLine2="                   ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/common/ZoomableImageView.java"
-            line="94"
-            column="20"/>
     </issue>
 
 </issues>

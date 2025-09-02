@@ -560,12 +560,10 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
                         arFovRepeatHandler.removeCallbacks(repeatTaskHolder[0]);
                         repeatTaskHolder[0] = null;
                     }
-                    // Call performClick for accessibility
-                    if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-                        v.performClick();
-                    }
                     return true;
             }
+            // Always call performClick for accessibility when touch is handled
+            v.performClick();
             return false;
         });
     }

@@ -175,6 +175,13 @@ public class ZoomableImageView extends AppCompatImageView {
         }
         
         @Override
+        public boolean onSingleTapUp(@NonNull MotionEvent e) {
+            // Call performClick for accessibility
+            performClick();
+            return true;
+        }
+        
+        @Override
         public boolean onDoubleTap(@NonNull MotionEvent e) {
             if (mCurrentScale > MIN_SCALE) {
                 // If zoomed in, reset to fit

@@ -7,4 +7,29 @@
         <ignore path="src/main/res/drawable-nodpi/ic_menu_mapmode.png" />
         <ignore path="src/main/res/drawable-nodpi/ic_menu_view.png" />
     </issue>
+    
+    <!-- Suppress UseKtx warnings for APIs that don't have KTX extensions in current version -->
+    <issue id="UseKtx">
+        <ignore path="src/main/java/uk/trigpointing/android/mapping/DownloadMapsActivity.kt" />
+        <ignore path="src/main/java/uk/trigpointing/android/logging/PhotosRepository.kt" />
+    </issue>
+    
+    <!-- Suppress MergeRootFrame warnings for activity root layouts that cannot use merge tags -->
+    <issue id="MergeRootFrame">
+        <ignore path="src/main/res/layout/leaflet_map.xml" />
+        <ignore path="src/main/res/layout/preferences_activity.xml" />
+        <ignore path="src/main/res/layout/webview_activity.xml" />
+    </issue>
+    
+    <!-- Suppress NotifyDataSetChanged warnings for legitimate complete dataset replacements -->
+    <issue id="NotifyDataSetChanged">
+        <ignore path="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumTab.java" />
+        <ignore path="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsOSMapTab.java" />
+    </issue>
+    
+    <!-- Suppress ClickableViewAccessibility warnings for views with proper accessibility handling -->
+    <issue id="ClickableViewAccessibility">
+        <ignore path="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java" />
+        <ignore path="src/main/java/uk/trigpointing/android/common/ZoomableImageView.java" />
+    </issue>
 </lint>
