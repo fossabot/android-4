@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
 import uk.trigpointing.android.types.Condition;
@@ -111,7 +113,7 @@ public class NearestCursorAdapter extends SimpleCursorAdapter {
 			double adjustedBearing = bearing - mHeading;
 			int arrowResource = getArrow(adjustedBearing);
 			
-			td.setText(String.format("%3.1f", distance));
+			td.setText(String.format(Locale.getDefault(), "%3.1f", distance));
 			
 			// Debug: Check if ImageView is null
 			if (ta == null) {

@@ -2,236 +2,6 @@
 <issues format="6" by="lint 8.11.1" type="baseline" client="gradle" dependencies="false" name="AGP (8.11.1)" variant="all" version="8.11.1">
 
     <issue
-        id="UseGetLayoutInflater"
-        message="Use of LayoutInflater.from(Context) detected. Consider using layoutInflater instead"
-        errorLine1="        val inflater = LayoutInflater.from(requireContext())"
-        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/logging/PhotoMetadataDialog.kt"
-            line="61"
-            column="24"/>
-    </issue>
-
-    <issue
-        id="CutPasteId"
-        message="The id `android.R.id.list` has already been looked up in this method; possible cut &amp; paste error?"
-        errorLine1="      ListView listViewAdapter = findViewById(android.R.id.list);"
-        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="162"
-            column="34"/>
-        <location
-            file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="150"
-            column="23"
-            message="First usage here"/>
-    </issue>
-
-    <issue
-        id="CutPasteId"
-        message="The id `android.R.id.tabhost` has already been looked up in this method; possible cut &amp; paste error?"
-        errorLine1="                    TabHost tabHost = findViewById(android.R.id.tabhost);"
-        errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsActivity.java"
-            line="473"
-            column="39"/>
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsActivity.java"
-            line="452"
-            column="36"
-            message="First usage here"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="                String distanceText = String.format(&quot;%.0fm&quot;, distance);"
-        errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="463"
-            column="39"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="  String strOrder = String.format(&quot;((%s - %f) * (%s - %f) + (%s - %f) * (%s - %f)) limit %s&quot;, "
-        errorLine2="                    ^">
-        <location
-            file="src/main/java/uk/trigpointing/android/DbHelper.java"
-            line="377"
-            column="21"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `toUpperCase(Locale)` instead. For strings meant to be internal use `Locale.ROOT`, otherwise `Locale.getDefault()`."
-        errorLine1="  Matcher matcher = pattern.matcher(osgbGridref.toUpperCase());"
-        errorLine2="                                                ~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/types/LatLon.java"
-            line="58"
-            column="49"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="     return String.format(&quot;(%2.2f,%3.2f)&quot;, mLat, mLon);"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/types/LatLon.java"
-            line="214"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="  return String.format(&quot;%s%02d %02.3f  %s%03d %02.3f&quot;, mLat>0?&quot;N&quot;:&quot;S&quot;, latDegs, latMins, mLon>0?&quot;E&quot;:&quot;W&quot;, lonDegs, LonMins );"
-        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/types/LatLon.java"
-            line="222"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="  return String.format(&quot;%s%s %05d %05d&quot;, firstLetter, secondLetter, e, n);"
-        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/types/LatLon.java"
-            line="256"
-            column="10"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="   td.setText(String.format(&quot;%3.1f&quot;, distance));"
-        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/nearest/NearestCursorAdapter.java"
-            line="114"
-            column="15"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="        accuracyView.setText(String.format(&quot;±%.0f m&quot;, acc));"
-        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/radar/RadarActivity.java"
-            line="220"
-            column="30"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="        bearingView.setText(String.format(&quot;Bearing: %03.0f°&quot;, magneticBearing));"
-        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/radar/RadarActivity.java"
-            line="227"
-            column="29"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="            return String.format(&quot;%.2f km&quot;, meters / 1000f);"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/radar/RadarActivity.java"
-            line="239"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="            return String.format(&quot;%.0f m&quot;, meters);"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/radar/RadarActivity.java"
-            line="241"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="            return String.format(&quot;%.1f m&quot;, meters);"
-        errorLine2="                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/radar/RadarActivity.java"
-            line="243"
-            column="20"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="                        String nav = String.format(&quot;google.navigation:q=%f,%f&quot;, lat, lon);"
-        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsActivity.java"
-            line="649"
-            column="38"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="   String url = String.format(&quot;https://trigpointing.uk/trigs/down-android-trigphotos.php?t=%d&quot;, mTrigId);"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumTab.java"
-            line="113"
-            column="17"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="  mNavUrl   = Uri.parse( String.format(&quot;google.navigation:ll=%3.5f,%3.5f&quot;,mLatitude, mLongitude)); "
-        errorLine2="                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsInfoTab.java"
-            line="181"
-            column="26"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="  mWaypoint = String.format(&quot;TP%04d&quot;, c.getLong(idIndex));"
-        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsInfoTab.java"
-            line="182"
-            column="15"/>
-    </issue>
-
-    <issue
-        id="DefaultLocale"
-        message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
-        errorLine1="   String url = String.format(&quot;https://trigpointing.uk/trigs/down-android-triglogs.php?t=%d&quot;, mTrigId);"
-        errorLine2="                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsLoglistTab.java"
-            line="99"
-            column="17"/>
-    </issue>
-
-    <issue
         id="DefaultLocale"
         message="Implicitly using the default locale is a common source of bugs: Use `String.format(Locale, ...)` instead"
         errorLine1="    String fileName = String.format(&quot;trig_%d_%s_z%d.png&quot;, trigId, config.name, zoom);"
@@ -345,11 +115,11 @@
         errorLine2="~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="368"
+            line="367"
             column="1"/>
         <location
             file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="367"
+            line="366"
             column="1"
             message="Previous line indentation here"/>
     </issue>
@@ -361,11 +131,11 @@
         errorLine2=" ~~~">
         <location
             file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="728"
+            line="727"
             column="2"/>
         <location
             file="src/main/java/uk/trigpointing/android/nearest/NearestActivity.java"
-            line="727"
+            line="726"
             column="2"
             message="Previous line indentation here"/>
     </issue>
@@ -393,68 +163,13 @@
         errorLine2="~~">
         <location
             file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsInfoTab.java"
-            line="69"
+            line="71"
             column="1"/>
         <location
             file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsInfoTab.java"
-            line="64"
+            line="66"
             column="1"
             message="Previous line indentation here"/>
-    </issue>
-
-    <issue
-        id="AppCompatResource"
-        message="Should use `app:showAsAction` with the appcompat library with `xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;`"
-        errorLine1="        android:showAsAction=&quot;never&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/menu/trigdetails_actions.xml"
-            line="6"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="AppCompatResource"
-        message="Should use `app:showAsAction` with the appcompat library with `xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;`"
-        errorLine1="        android:showAsAction=&quot;never&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/menu/trigdetails_actions.xml"
-            line="11"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="AppCompatResource"
-        message="Should use `app:showAsAction` with the appcompat library with `xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;`"
-        errorLine1="        android:showAsAction=&quot;never&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/menu/trigdetails_actions.xml"
-            line="16"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="AppCompatResource"
-        message="Should use `app:showAsAction` with the appcompat library with `xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;`"
-        errorLine1="        android:showAsAction=&quot;never&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/menu/trigdetails_actions.xml"
-            line="20"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="AppCompatResource"
-        message="Should use `app:showAsAction` with the appcompat library with `xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;`"
-        errorLine1="        android:showAsAction=&quot;never&quot; />"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/menu/trigosmap_menu.xml"
-            line="6"
-            column="9"/>
     </issue>
 
     <issue
@@ -464,7 +179,7 @@
         errorLine2="                                             ~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/nearest/NearestCursorAdapter.java"
-            line="157"
+            line="159"
             column="46"/>
     </issue>
 
@@ -629,7 +344,7 @@
         errorLine2="                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="187"
+            line="188"
             column="48"/>
     </issue>
 
@@ -640,7 +355,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="189"
+            line="190"
             column="29"/>
     </issue>
 
@@ -651,7 +366,7 @@
         errorLine2="                            ~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="194"
+            line="195"
             column="29"/>
     </issue>
 
@@ -662,7 +377,7 @@
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/ar/AROverlayView.java"
-            line="208"
+            line="209"
             column="37"/>
     </issue>
 
@@ -673,7 +388,7 @@
         errorLine2="   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/uk/trigpointing/android/trigdetails/TrigDetailsAlbumTab.java"
-            line="156"
+            line="157"
             column="4"/>
     </issue>
 

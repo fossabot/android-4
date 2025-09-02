@@ -58,8 +58,7 @@ class PhotoMetadataDialog : DialogFragment() {
     }
     
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = LayoutInflater.from(requireContext())
-        val view = inflater.inflate(R.layout.dialog_photo_metadata, null)
+        val view = layoutInflater.inflate(R.layout.dialog_photo_metadata, null)
         
         setupViews(view)
         loadPhotoData()

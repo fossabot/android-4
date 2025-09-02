@@ -159,10 +159,9 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 	
 		// Start off with no location + no trigs
 		mListAdapter = new NearestCursorAdapter(this, R.layout.trigrow, null, new String[]{}, new int[]{}, null);
-						ListView listViewAdapter = findViewById(android.R.id.list);
-				if (listViewAdapter != null) {
-					listViewAdapter.setAdapter(mListAdapter);
-				}
+		if (listView != null) {
+			listView.setAdapter(mListAdapter);
+		}
 
 		// Find a cached location
 		mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

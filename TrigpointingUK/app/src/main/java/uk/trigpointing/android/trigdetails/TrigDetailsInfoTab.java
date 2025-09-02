@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
 import uk.trigpointing.android.mapping.LeafletMapActivity;
@@ -178,8 +180,8 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		mLongitude = c.getDouble(lonIndex);
 		
 		mTUKUrl   = Uri.parse( "https://trigpointing.uk/trigs/trig-details.php?t="+c.getLong(idIndex) );
-		mNavUrl   = Uri.parse( String.format("google.navigation:ll=%3.5f,%3.5f",mLatitude, mLongitude)); 
-		mWaypoint = String.format("TP%04d", c.getLong(idIndex));
+		mNavUrl   = Uri.parse( String.format(Locale.getDefault(), "google.navigation:ll=%3.5f,%3.5f",mLatitude, mLongitude)); 
+		mWaypoint = String.format(Locale.getDefault(), "TP%04d", c.getLong(idIndex));
 		
 		TextView tv;
 		ImageView iv;

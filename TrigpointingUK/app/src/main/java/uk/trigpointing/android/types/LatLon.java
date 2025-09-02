@@ -1,6 +1,7 @@
 package uk.trigpointing.android.types;
 
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +56,7 @@ public class LatLon implements Serializable {
         
         osgbGridref = Pattern.compile("\\s").matcher(osgbGridref).replaceAll("");
         Pattern pattern = Pattern.compile("(\\w\\w)(\\d{6,10})", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(osgbGridref.toUpperCase());
+		Matcher matcher = pattern.matcher(osgbGridref.toUpperCase(Locale.ROOT));
 		
 		if (!matcher.matches()) {
 			throw new IllegalArgumentException("Gridref : invalid format");
@@ -211,7 +212,7 @@ public class LatLon implements Serializable {
  	}
  	
 	public String toString() {
-	    return String.format("(%2.2f,%3.2f)", mLat, mLon);
+	    return String.format(Locale.getDefault(), "(%2.2f,%3.2f)", mLat, mLon);
 	}	
 	
 	public String getWGS() {
@@ -219,7 +220,7 @@ public class LatLon implements Serializable {
 		Double latMins = (Math.abs(mLat)-latDegs)*60;
 		int lonDegs = (int) Math.floor(Math.abs(mLon));
 		Double LonMins = (Math.abs(mLon)-lonDegs)*60;
-		return String.format("%s%02d %02.3f  %s%03d %02.3f", mLat>0?"N":"S", latDegs, latMins, mLon>0?"E":"W", lonDegs, LonMins );
+		return String.format(Locale.getDefault(), "%s%02d %02.3f  %s%03d %02.3f", mLat>0?"N":"S", latDegs, latMins, mLon>0?"E":"W", lonDegs, LonMins );
 	}
 	
 	public String getOSGB10 () {
@@ -253,7 +254,7 @@ public class LatLon implements Serializable {
 		int e = (int) Math.floor(mEastings - (100000 * hundredkmE));
 		int n = (int) Math.floor(mNorthings - (100000 * hundredkmN));
 
-		return String.format("%s%s %05d %05d", firstLetter, secondLetter, e, n);
+		return String.format(Locale.getDefault(), "%s%s %05d %05d", firstLetter, secondLetter, e, n);
 	}
 	
 	public String getOSGB6 () {

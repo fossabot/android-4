@@ -1,6 +1,7 @@
 package uk.trigpointing.android.trigdetails;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -96,7 +97,7 @@ public class TrigDetailsLoglistTab extends BaseTabActivity {
 			mTrigLogs.clear();
 			
 			// get triglogs from T:UK, refresh if requested
-			String url = String.format("https://trigpointing.uk/trigs/down-android-triglogs.php?t=%d", mTrigId);
+			String url = String.format(Locale.getDefault(), "https://trigpointing.uk/trigs/down-android-triglogs.php?t=%d", mTrigId);
 			String list = mStrLoader.getString(url, refresh);
 			if (list == null || list.trim().length()==0) {
 				Log.i(TAG, "No logs for "+mTrigId);        	

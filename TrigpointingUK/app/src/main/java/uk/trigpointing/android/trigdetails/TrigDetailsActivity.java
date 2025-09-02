@@ -17,6 +17,8 @@ import androidx.activity.OnBackPressedCallback;
 import android.widget.Toast;
 import android.database.Cursor;
 
+import java.util.Locale;
+
 public class TrigDetailsActivity extends BaseActivity {
 
 	private static final String TAG="TrigDetailsActivity";
@@ -448,8 +450,9 @@ public class TrigDetailsActivity extends BaseActivity {
         try {
             // Capture current tab tag to restore after recreation
             String currentTag = null;
+            TabHost existing = null;
             try {
-                TabHost existing = findViewById(android.R.id.tabhost);
+                existing = findViewById(android.R.id.tabhost);
                 if (existing != null) {
                     currentTag = existing.getCurrentTabTag();
                 }
@@ -468,13 +471,10 @@ public class TrigDetailsActivity extends BaseActivity {
             Bundle savedInstanceState = null; // No need to pass savedInstanceState here, it's handled by onRestoreInstanceState
             setupTabs(extras, savedInstanceState);
             // Reapply previously selected tab if we captured it
-            if (currentTag != null) {
+            if (currentTag != null && existing != null) {
                 try {
-                    TabHost tabHost = findViewById(android.R.id.tabhost);
-                    if (tabHost != null) {
-                        tabHost.setCurrentTabByTag(currentTag);
-                        android.util.Log.d(TAG, "Reapplied tab tag after recreation: " + currentTag);
-                    }
+                    existing.setCurrentTabByTag(currentTag);
+                    android.util.Log.d(TAG, "Reapplied tab tag after recreation: " + currentTag);
                 } catch (Exception e) {
                     android.util.Log.w(TAG, "Failed to reapply tab tag after recreation: " + e.getMessage());
                 }
@@ -646,7 +646,7 @@ public class TrigDetailsActivity extends BaseActivity {
             } else if (id == R.id.action_navigate) {
                 if (lat != 0d || lon != 0d) {
                     try {
-                        String nav = String.format("google.navigation:q=%f,%f", lat, lon);
+                        String nav = String.format(Locale.getDefault(), "google.navigation:q=%f,%f", lat, lon);
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(nav));
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivity(Intent.createChooser(intent, "Navigate to trigpoint"));
