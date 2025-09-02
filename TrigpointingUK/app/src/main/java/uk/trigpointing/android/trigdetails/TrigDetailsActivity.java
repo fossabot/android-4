@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.content.res.Resources;
 import android.os.Bundle;
+import androidx.core.content.res.ResourcesCompat;
 import android.widget.TabHost;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -785,7 +786,7 @@ public class TrigDetailsActivity extends BaseActivity {
      */
     private android.graphics.drawable.Drawable getDrawableSafely(Resources res, int drawableId) {
         try {
-            return res.getDrawable(drawableId);
+            return ResourcesCompat.getDrawable(res, drawableId, null);
         } catch (Exception e) {
             android.util.Log.w(TAG, "Failed to load drawable " + drawableId + ": " + e.getMessage());
             return null;

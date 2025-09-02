@@ -130,5 +130,6 @@
             android:name="uk.trigpointing.android.ar.SensorARActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+            <!-- AR View intentionally locked to portrait for optimal camera experience -->
     </application>
 </manifest>

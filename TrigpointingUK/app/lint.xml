@@ -32,4 +32,28 @@
         <ignore path="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java" />
         <ignore path="src/main/java/uk/trigpointing/android/common/ZoomableImageView.java" />
     </issue>
+    
+    <!-- Suppress orientation warnings for AR View only (intentionally portrait for camera experience) -->
+    <issue id="LockedOrientationActivity">
+        <ignore path="src/main/AndroidManifest.xml" />
+    </issue>
+    <issue id="DiscouragedApi">
+        <ignore path="src/main/AndroidManifest.xml" />
+    </issue>
+    
+    <!-- Suppress JavaScript warning for map functionality (intentionally enabled for Leaflet maps) -->
+    <issue id="SetJavaScriptEnabled">
+        <ignore path="src/main/java/uk/trigpointing/android/mapping/LeafletMapActivity.java" />
+        <ignore path="src/main/java/uk/trigpointing/android/common/WebViewActivity.java" />
+    </issue>
+    
+    <!-- Suppress UselessParent warning for ViewSwitcher (legitimately used for view switching) -->
+    <issue id="UselessParent">
+        <ignore path="src/main/res/layout/logtrig.xml" />
+    </issue>
+    
+    <!-- Suppress UnsafeOptInUsageWarning for GlobalScope usage (legitimate use case for long-lived scope) -->
+    <issue id="UnsafeOptInUsageWarning">
+        <ignore path="src/main/java/uk/trigpointing/android/logging/LogTrigActivity.java" />
+    </issue>
 </lint>

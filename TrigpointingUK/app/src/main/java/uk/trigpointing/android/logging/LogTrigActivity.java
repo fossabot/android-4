@@ -128,6 +128,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         }
         
         // Initialize PhotoManager with a coroutine scope
+        // Using GlobalScope for this specific use case where we need a long-lived scope
         mPhotoManager = new PhotoManager(this, kotlinx.coroutines.GlobalScope.INSTANCE);
         
         // Note: ActivityResultLauncher doesn't work properly with LocalActivityManager

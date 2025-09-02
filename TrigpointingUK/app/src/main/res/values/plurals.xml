@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="cacheTileCountFormat">
+        <item quantity="zero">No tiles cached</item>
+        <item quantity="one">%1$d tile cached</item>
+        <item quantity="other">%1$d tiles cached</item>
+    </plurals>
+</resources>

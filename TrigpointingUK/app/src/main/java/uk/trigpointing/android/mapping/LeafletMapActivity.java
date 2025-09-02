@@ -85,6 +85,8 @@ public class LeafletMapActivity extends BaseActivity {
 
         webView = findViewById(R.id.leafletWebView);
         WebSettings ws = webView.getSettings();
+        // Intentionally enabling JavaScript for Leaflet map functionality
+        // The map tiles and interactions require JavaScript to work properly
         ws.setJavaScriptEnabled(true);
         ws.setDomStorageEnabled(true);
         ws.setBuiltInZoomControls(true);
