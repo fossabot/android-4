@@ -198,7 +198,7 @@
             android:id="@+id/userMapImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:scaleType="centerCrop"
             android:background="#f0f0f0"
             android:contentDescription="@string/user_activity_map"

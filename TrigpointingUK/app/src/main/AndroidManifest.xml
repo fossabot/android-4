@@ -29,7 +29,7 @@
         android:allowBackup="true"
         android:theme="@style/Theme.TrigpointingUK"
         android:networkSecurityConfig="@xml/network_security_config"
-        >
+        android:supportsRtl="true">
         <!-- Ensure Crashlytics is enabled in all builds unless overridden -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
