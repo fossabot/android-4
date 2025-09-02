@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        style="?android:attr/buttonBarStyle">
 
         <!-- Yes button -->
         <Button
@@ -27,7 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/yes"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            style="?android:attr/buttonBarButtonStyle" />
 
         <!-- No button -->
         <Button
@@ -35,7 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>
 
