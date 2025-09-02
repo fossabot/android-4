@@ -24,6 +24,7 @@ public class LogTrigGalleryAdapter extends BaseAdapter {
  
         TypedArray attr = context.obtainStyledAttributes(R.styleable.TrigpointingUK);
         mGalleryItemBackground = attr.getResourceId(R.styleable.TrigpointingUK_android_galleryItemBackground, 0);
+        attr.recycle();
     }
 
     public int getCount() {

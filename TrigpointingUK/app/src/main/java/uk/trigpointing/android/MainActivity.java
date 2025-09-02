@@ -56,12 +56,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
 	private static final String RUNBEFORE = "RUNBEFORE";
 	private static final String AUTO_SYNC_RUN = "AUTO_SYNC_RUN";
     private SharedPreferences 	mPrefs;
-    private ImageView			mPillarIcon;
-    private ImageView			mFbmIcon;
-    private ImageView			mPassiveIcon;
-    private ImageView			mIntersectedIcon;
-    private ImageView			mUnsyncedIcon;
-    private ImageView			mPhotosIcon;
+
     private TextView			mPillarCount;
     private TextView			mFbmCount;
     private TextView			mPassiveCount;
@@ -90,17 +85,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
         
         Log.i(TAG, "onCreate: Setting up UI components");
         // Set up UI components
-        mPillarIcon = findViewById(R.id.countPillarImage);
         mPillarCount = findViewById(R.id.countPillarText);
-        mFbmIcon = findViewById(R.id.countFbmImage);
         mFbmCount = findViewById(R.id.countFbmText);
-        mPassiveIcon = findViewById(R.id.countPassiveImage);
         mPassiveCount = findViewById(R.id.countPassiveText);
-        mIntersectedIcon = findViewById(R.id.countIntersectedImage);
         mIntersectedCount = findViewById(R.id.countIntersectedText);
-        mUnsyncedIcon = findViewById(R.id.countUnsyncedImage);
         mUnsyncedCount = findViewById(R.id.countUnsyncedText);
-        mPhotosIcon = findViewById(R.id.countPhotosImage);
         mPhotosCount = findViewById(R.id.countPhotosText);
         mSyncBtn = findViewById(R.id.btnSync);
         mARViewBtn = findViewById(R.id.btnARView);
@@ -622,17 +611,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
 		runOnUiThread(() -> {
 			try {
 				Log.i(TAG, "populateCounts: Setting loading state");
-				mPillarIcon.setImageResource(R.drawable.t_pillar);
 				mPillarCount.setText("");
-				mFbmIcon.setImageResource(R.drawable.t_fbm);
 				mFbmCount.setText("");
-				mPassiveIcon.setImageResource(R.drawable.t_passive);
 				mPassiveCount.setText("");
-				mIntersectedIcon.setImageResource(R.drawable.t_intersected);
 				mIntersectedCount.setText("");
-				mUnsyncedIcon.setVisibility(View.INVISIBLE);
 				mUnsyncedCount.setText("");
-				mPhotosIcon.setVisibility(View.INVISIBLE);
 				mPhotosCount.setText("");
 				                mSyncBtn.setTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light));
 			} catch (NotFoundException e) {
@@ -692,13 +675,11 @@ public class MainActivity extends BaseActivity implements SyncListener {
 					mIntersectedCount.setText(String.valueOf(nIntersected));
 					
 					if (nUnsynced > 0) {
-						mUnsyncedIcon.setVisibility(View.VISIBLE);
 						mUnsyncedCount.setText(String.valueOf(nUnsynced));
 						                mSyncBtn.setTextColor(ContextCompat.getColor(this, R.color.syncNow));
 					}
 					
 					if (nPhotos > 0) {
-						mPhotosIcon.setVisibility(View.VISIBLE);
 						mPhotosCount.setText(String.valueOf(nPhotos));
 					}
 					

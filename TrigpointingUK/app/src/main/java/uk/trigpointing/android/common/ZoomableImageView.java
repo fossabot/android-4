@@ -98,6 +98,13 @@ public class ZoomableImageView extends AppCompatImageView {
         return scaleResult || gestureResult || super.onTouchEvent(event);
     }
     
+    @Override
+    public boolean performClick() {
+        // Call the parent implementation to handle accessibility
+        super.performClick();
+        return true;
+    }
+    
     /**
      * Reset zoom to fit image to screen
      */

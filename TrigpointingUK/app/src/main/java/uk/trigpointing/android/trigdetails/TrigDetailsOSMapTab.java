@@ -1,5 +1,6 @@
 package uk.trigpointing.android.trigdetails;
 
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -205,7 +206,7 @@ public class TrigDetailsOSMapTab extends BaseTabActivity {
 		return CompletableFuture.supplyAsync(() -> {
 			try {
 				// Check if cached file already exists
-				String fileName = String.format("trig_%d_%s_z%d.png", trigId, config.name, zoom);
+				String fileName = String.format(Locale.US, "trig_%d_%s_z%d.png", trigId, config.name, zoom);
 				File cacheDir = new File(getCacheDir(), "map_images");
 				if (!cacheDir.exists()) {
 					cacheDir.mkdirs();

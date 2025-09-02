@@ -104,9 +104,7 @@
     <string name="distance_accuracy">±0 m</string>
     <string name="bearing_format">Bearing: 000°</string>
     <string name="compass_calibration">Move your phone in a figure-8 to calibrate the compass</string>
-    <string name="trigpoint_name_placeholder">Trigpoint Name</string>
-    <string name="distance_zero_short">0m</string>
-    <string name="trigpoint_icon_content_desc">Trigpoint icon</string>
+
     <string name="photo_preview_content_desc">Photo preview</string>
     <string name="pillar_icon_content_desc">Pillar trigpoint icon</string>
     <string name="fbm_icon_content_desc">Flush bracket marker icon</string>

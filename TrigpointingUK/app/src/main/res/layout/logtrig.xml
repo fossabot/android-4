@@ -128,7 +128,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:hint="@string/grid_reference_hint"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:inputType="textCapCharacters"
+            android:autofillHints="postalCode" />
 
         <Button
             android:id="@+id/logGetLocation"
@@ -152,7 +154,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/flush_bracket_hint"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:inputType="text"
+        android:autofillHints="name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -188,6 +192,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/comment_hint"
         android:minLines="3"
+        android:inputType="textCapSentences|textMultiLine"
+        android:autofillHints="comment"
         android:gravity="top"
         android:layout_marginBottom="8dp" />
 

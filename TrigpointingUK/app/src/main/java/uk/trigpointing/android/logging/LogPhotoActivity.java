@@ -45,7 +45,7 @@ public class LogPhotoActivity extends BaseActivity {
 
 		// Enable back button in action bar
 		if (getSupportActionBar() != null) {
-		    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
 		Bundle extras = getIntent().getExtras();

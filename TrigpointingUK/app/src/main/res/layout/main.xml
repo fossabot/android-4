@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@color/white">
+    android:padding="24dp">
 
     <!-- User info section -->
     <LinearLayout
@@ -54,142 +53,64 @@
             android:orientation="vertical">
 
             <!-- Pillar count -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/countPillarText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/countPillarImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/t_pillar"
-                    android:contentDescription="@string/pillar_icon_content_desc" />
-
-                <TextView
-                    android:id="@+id/countPillarText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/pillars_count" />
-
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_pillar_large"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/pillars_count" />
 
             <!-- FBM count -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/countFbmText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/countFbmImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/t_fbm"
-                    android:contentDescription="@string/fbm_icon_content_desc" />
-
-                <TextView
-                    android:id="@+id/countFbmText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/fbm_count" />
-
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_fbm_large"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/fbm_count" />
 
             <!-- Passive count -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/countPassiveText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/countPassiveImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/t_passive"
-                    android:contentDescription="@string/passive_icon_content_desc" />
-
-                <TextView
-                    android:id="@+id/countPassiveText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/passive_count" />
-
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_passive_large"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/passive_count" />
 
             <!-- Intersected count -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/countIntersectedText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/countIntersectedImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/t_intersected"
-                    android:contentDescription="@string/intersected_icon_content_desc" />
-
-                <TextView
-                    android:id="@+id/countIntersectedText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/intersected_count" />
-
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_intersected_large"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/intersected_count" />
 
             <!-- Unsynced count -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/countUnsyncedText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/countUnsyncedImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_menu_refresh"
-                    android:contentDescription="@string/unsynced_icon_content_desc" />
-
-                <TextView
-                    android:id="@+id/countUnsyncedText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/unsynced_count" />
-
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_refresh_large"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/unsynced_count" />
 
             <!-- Photos count -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/countPhotosText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/countPhotosImage"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_menu_camera"
-                    android:contentDescription="@string/photos_icon_content_desc" />
-
-                <TextView
-                    android:id="@+id/countPhotosText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/photos_count" />
-
-            </LinearLayout>
+                android:drawableStart="@drawable/ic_camera_large"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/photos_count" />
 
         </LinearLayout>
 
