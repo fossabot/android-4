@@ -11,7 +11,9 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     
-
+    <!-- Camera is optional - only needed for AR View feature -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     
     <!-- Photo picker permissions - Android 13+ photo picker requires NO permissions! -->
     <!-- Only needed for Android 10 and below when using ACTION_GET_CONTENT -->

@@ -475,7 +475,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="41"
+            line="43"
             column="19"/>
     </issue>
 
@@ -486,7 +486,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="56"
+            line="58"
             column="13"/>
     </issue>
 
@@ -508,7 +508,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="131"
+            line="133"
             column="13"/>
     </issue>
 
@@ -524,13 +524,68 @@
     </issue>
 
     <issue
+        id="UnsupportedChromeOsCameraSystemFeature"
+        message="You should look for any camera available on the device, not just the rear"
+        errorLine1="            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
+            line="158"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UnsupportedChromeOsCameraSystemFeature"
+        message="You should look for any camera available on the device, not just the rear"
+        errorLine1="        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
+            line="189"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UnsupportedChromeOsCameraSystemFeature"
+        message="You should look for any camera available on the device, not just the rear"
+        errorLine1="        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
+            line="243"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UnsupportedChromeOsCameraSystemFeature"
+        message="You should look for any camera available on the device, not just the rear"
+        errorLine1="        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
+            line="257"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UnsupportedChromeOsCameraSystemFeature"
+        message="You should look for any camera available on the device, not just the rear"
+        errorLine1="            boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);"
+        errorLine2="                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
+            line="277"
+            column="33"/>
+    </issue>
+
+    <issue
         id="DiscouragedApi"
         message="Fixed screen orientations will be ignored in most cases, starting from Android 16. Android is moving toward a model where apps are expected to adapt to various orientations, display sizes, and aspect ratios."
         errorLine1="            android:screenOrientation=&quot;portrait&quot; />"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="131"
+            line="133"
             column="13"/>
     </issue>
 
@@ -554,17 +609,6 @@
             file="src/main/res/values/strings.xml"
             line="68"
             column="5"/>
-    </issue>
-
-    <issue
-        id="PermissionImpliesUnsupportedChromeOsHardware"
-        message="Permission exists without corresponding hardware `&lt;uses-feature android:name=&quot;android.hardware.camera&quot; required=&quot;false&quot;>` tag"
-        errorLine1="    &lt;uses-permission android:name=&quot;android.permission.CAMERA&quot; />"
-        errorLine2="     ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/AndroidManifest.xml"
-            line="12"
-            column="6"/>
     </issue>
 
     <issue
@@ -1513,7 +1557,7 @@
         errorLine2="        ^">
         <location
             file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="493"
+            line="541"
             column="9"/>
     </issue>
 
@@ -1524,7 +1568,7 @@
         errorLine2="                                  ^">
         <location
             file="src/main/java/uk/trigpointing/android/ar/SensorARActivity.java"
-            line="493"
+            line="541"
             column="35"/>
     </issue>
 
