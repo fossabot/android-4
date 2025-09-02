@@ -843,9 +843,17 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             int count = 0;
             do {
                 TrigPhoto photo = new TrigPhoto();
-                long photoId = c.getLong(c.getColumnIndex(DbHelper.PHOTO_ID));
-                String iconUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
-                String photoUrl = c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO));
+                int photoIdIndex = c.getColumnIndex(DbHelper.PHOTO_ID);
+                int iconUrlIndex = c.getColumnIndex(DbHelper.PHOTO_ICON);
+                int photoUrlIndex = c.getColumnIndex(DbHelper.PHOTO_PHOTO);
+                
+                if (photoIdIndex < 0 || iconUrlIndex < 0 || photoUrlIndex < 0) {
+                    continue; // Skip this photo if columns are missing
+                }
+                
+                long photoId = c.getLong(photoIdIndex);
+                String iconUrl = c.getString(iconUrlIndex);
+                String photoUrl = c.getString(photoUrlIndex);
                 // Only include photos that have valid thumbnail and photo paths
                 if (iconUrl != null && !iconUrl.trim().isEmpty() && new File(iconUrl).exists()) {
                     photo.setLogID(photoId);
@@ -990,8 +998,14 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 		Cursor c = mDb.fetchPhotos(mTrigId);
 		if (c!=null) {
 			do {
-				new File(c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO))).delete();
-				new File(c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON))).delete();
+				int photoIndex = c.getColumnIndex(DbHelper.PHOTO_PHOTO);
+				int iconIndex = c.getColumnIndex(DbHelper.PHOTO_ICON);
+				if (photoIndex >= 0) {
+					new File(c.getString(photoIndex)).delete();
+				}
+				if (iconIndex >= 0) {
+					new File(c.getString(iconIndex)).delete();
+				}
 			} while (c.moveToNext());
 		}
     	// delete photo records from DB

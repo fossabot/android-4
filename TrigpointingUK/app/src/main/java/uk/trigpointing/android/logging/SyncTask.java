@@ -299,7 +299,10 @@ public class SyncTask implements ProgressListener {
 		// whiz through the cursor, totalling file sizes 
 		int totalBytes=0;
 		do {
-			totalBytes += new File(c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO))).length();
+			int photoIndex = c.getColumnIndex(DbHelper.PHOTO_PHOTO);
+			if (photoIndex >= 0) {
+				totalBytes += new File(c.getString(photoIndex)).length();
+			}
 		} while (c.moveToNext());
 		// reset cursor
 		c.moveToFirst();
@@ -326,26 +329,50 @@ public class SyncTask implements ProgressListener {
 	Integer sendLogToTUK(Cursor c) {
 		Log.i(TAG, "sendLogToTUK");
 		
-		long trigId = c.getInt(c.getColumnIndex(DbHelper.LOG_ID));
+		int logIdIndex = c.getColumnIndex(DbHelper.LOG_ID);
+		if (logIdIndex < 0) return ERROR;
+		long trigId = c.getInt(logIdIndex);
 		
-        // Build form body
+        // Build form body - get all column indices first
+        int yearIndex = c.getColumnIndex(DbHelper.LOG_YEAR);
+        int monthIndex = c.getColumnIndex(DbHelper.LOG_MONTH);
+        int dayIndex = c.getColumnIndex(DbHelper.LOG_DAY);
+        int sendtimeIndex = c.getColumnIndex(DbHelper.LOG_SENDTIME);
+        int hourIndex = c.getColumnIndex(DbHelper.LOG_HOUR);
+        int minutesIndex = c.getColumnIndex(DbHelper.LOG_MINUTES);
+        int commentIndex = c.getColumnIndex(DbHelper.LOG_COMMENT);
+        int gridrefIndex = c.getColumnIndex(DbHelper.LOG_GRIDREF);
+        int fbIndex = c.getColumnIndex(DbHelper.LOG_FB);
+        int adminflagIndex = c.getColumnIndex(DbHelper.LOG_FLAGADMINS);
+        int userflagIndex = c.getColumnIndex(DbHelper.LOG_FLAGUSERS);
+        int scoreIndex = c.getColumnIndex(DbHelper.LOG_SCORE);
+        int conditionIndex = c.getColumnIndex(DbHelper.LOG_CONDITION);
+        
+        // Check if any required columns are missing
+        if (yearIndex < 0 || monthIndex < 0 || dayIndex < 0 || sendtimeIndex < 0 || 
+            hourIndex < 0 || minutesIndex < 0 || commentIndex < 0 || gridrefIndex < 0 || 
+            fbIndex < 0 || adminflagIndex < 0 || userflagIndex < 0 || scoreIndex < 0 || 
+            conditionIndex < 0) {
+            return ERROR;
+        }
+        
         FormBody formBody = new FormBody.Builder(StandardCharsets.UTF_8)
                 .add("username", mUsername)
                 .add("password", mPassword)
-                .add("id", c.getString(c.getColumnIndex(DbHelper.LOG_ID)))
-                .add("year", c.getString(c.getColumnIndex(DbHelper.LOG_YEAR)))
-                .add("month", c.getString(c.getColumnIndex(DbHelper.LOG_MONTH)))
-                .add("day", c.getString(c.getColumnIndex(DbHelper.LOG_DAY)))
-                .add("sendtime", c.getString(c.getColumnIndex(DbHelper.LOG_SENDTIME)))
-                .add("hour", c.getString(c.getColumnIndex(DbHelper.LOG_HOUR)))
-                .add("minutes", c.getString(c.getColumnIndex(DbHelper.LOG_MINUTES)))
-                .add("comment", c.getString(c.getColumnIndex(DbHelper.LOG_COMMENT)))
-                .add("gridref", c.getString(c.getColumnIndex(DbHelper.LOG_GRIDREF)))
-                .add("fb", c.getString(c.getColumnIndex(DbHelper.LOG_FB)))
-                .add("adminflag", c.getString(c.getColumnIndex(DbHelper.LOG_FLAGADMINS)))
-                .add("userflag", c.getString(c.getColumnIndex(DbHelper.LOG_FLAGUSERS)))
-                .add("score", c.getString(c.getColumnIndex(DbHelper.LOG_SCORE)))
-                .add("condition", c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION)))
+                .add("id", c.getString(logIdIndex))
+                .add("year", c.getString(yearIndex))
+                .add("month", c.getString(monthIndex))
+                .add("day", c.getString(dayIndex))
+                .add("sendtime", c.getString(sendtimeIndex))
+                .add("hour", c.getString(hourIndex))
+                .add("minutes", c.getString(minutesIndex))
+                .add("comment", c.getString(commentIndex))
+                .add("gridref", c.getString(gridrefIndex))
+                .add("fb", c.getString(fbIndex))
+                .add("adminflag", c.getString(adminflagIndex))
+                .add("userflag", c.getString(userflagIndex))
+                .add("score", c.getString(scoreIndex))
+                .add("condition", c.getString(conditionIndex))
                 .add("sendemail", String.valueOf(mPrefs.getBoolean("sendLogEmails", false)))
                 .add("appversion", String.valueOf(mAppVersion))
                 .build();
@@ -384,7 +411,9 @@ public class SyncTask implements ProgressListener {
 				// update photos for this trig with log id from T:UK
 				mDb.updatePhotos(trigId, logId);
 				// update local logged condition
-				mDb.updateTrigLog(trigId, Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.LOG_CONDITION))));
+				if (conditionIndex >= 0) {
+					mDb.updateTrigLog(trigId, Condition.fromCode(c.getString(conditionIndex)));
+				}
 			} catch (JSONException e1) {
 				e1.printStackTrace();
 				return ERROR;
@@ -405,9 +434,17 @@ public class SyncTask implements ProgressListener {
 	Integer sendPhotoToTUK(Cursor c) {
 		Log.i(TAG, "sendPhotoToTUK");
 		
-		Long	photoId 	= c.getLong  (c.getColumnIndex(DbHelper.PHOTO_ID));
-    	String 	photoPath 	= c.getString(c.getColumnIndex(DbHelper.PHOTO_PHOTO));
-    	String 	thumbPath 	= c.getString(c.getColumnIndex(DbHelper.PHOTO_ICON));
+		int photoIdIndex = c.getColumnIndex(DbHelper.PHOTO_ID);
+		int photoPathIndex = c.getColumnIndex(DbHelper.PHOTO_PHOTO);
+		int thumbPathIndex = c.getColumnIndex(DbHelper.PHOTO_ICON);
+		
+		if (photoIdIndex < 0 || photoPathIndex < 0 || thumbPathIndex < 0) {
+			return ERROR;
+		}
+		
+		Long	photoId 	= c.getLong  (photoIdIndex);
+    	String 	photoPath 	= c.getString(photoPathIndex);
+    	String 	thumbPath 	= c.getString(thumbPathIndex);
 
 		try {
             OkHttpClient client = new OkHttpClient();
@@ -416,17 +453,30 @@ public class SyncTask implements ProgressListener {
             File photoFile = new File(photoPath);
             RequestBody photoBody = new ProgressRequestBody(photoFile, JPEG, this);
 
+            // Get all photo column indices
+            int tuklogIdIndex = c.getColumnIndex(DbHelper.PHOTO_TUKLOGID);
+            int trigIndex = c.getColumnIndex(DbHelper.PHOTO_TRIG);
+            int nameIndex = c.getColumnIndex(DbHelper.PHOTO_NAME);
+            int descrIndex = c.getColumnIndex(DbHelper.PHOTO_DESCR);
+            int subjectIndex = c.getColumnIndex(DbHelper.PHOTO_SUBJECT);
+            int ispublicIndex = c.getColumnIndex(DbHelper.PHOTO_ISPUBLIC);
+            
+            if (tuklogIdIndex < 0 || trigIndex < 0 || nameIndex < 0 || descrIndex < 0 || 
+                subjectIndex < 0 || ispublicIndex < 0) {
+                return ERROR;
+            }
+            
             MultipartBody.Builder mb = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("username", mUsername)
                     .addFormDataPart("password", mPassword)
                     .addFormDataPart("photoid", photoId.toString())
-                    .addFormDataPart("tlog_id", c.getString(c.getColumnIndex(DbHelper.PHOTO_TUKLOGID)))
-                    .addFormDataPart("trig", c.getString(c.getColumnIndex(DbHelper.PHOTO_TRIG)))
-                    .addFormDataPart("name", c.getString(c.getColumnIndex(DbHelper.PHOTO_NAME)))
-                    .addFormDataPart("descr", c.getString(c.getColumnIndex(DbHelper.PHOTO_DESCR)))
-                    .addFormDataPart("subject", c.getString(c.getColumnIndex(DbHelper.PHOTO_SUBJECT)))
-                    .addFormDataPart("ispublic", c.getString(c.getColumnIndex(DbHelper.PHOTO_ISPUBLIC)))
+                    .addFormDataPart("tlog_id", c.getString(tuklogIdIndex))
+                    .addFormDataPart("trig", c.getString(trigIndex))
+                    .addFormDataPart("name", c.getString(nameIndex))
+                    .addFormDataPart("descr", c.getString(descrIndex))
+                    .addFormDataPart("subject", c.getString(subjectIndex))
+                    .addFormDataPart("ispublic", c.getString(ispublicIndex))
                     .addFormDataPart("appversion", String.valueOf(mAppVersion))
                     .addFormDataPart("photo", photoFile.getName(), photoBody);
 

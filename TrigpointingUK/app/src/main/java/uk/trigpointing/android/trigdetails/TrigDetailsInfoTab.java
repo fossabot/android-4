@@ -157,12 +157,29 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
             return;
         }
 
-		mLatitude  = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT));
-		mLongitude = c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON));
+		int latIndex = c.getColumnIndex(DbHelper.TRIG_LAT);
+		int lonIndex = c.getColumnIndex(DbHelper.TRIG_LON);
+		int idIndex = c.getColumnIndex(DbHelper.TRIG_ID);
+		int conditionIndex = c.getColumnIndex(DbHelper.TRIG_CONDITION);
+		int nameIndex = c.getColumnIndex(DbHelper.TRIG_NAME);
+		int currentIndex = c.getColumnIndex(DbHelper.TRIG_CURRENT);
+		int historicIndex = c.getColumnIndex(DbHelper.TRIG_HISTORIC);
+		int typeIndex = c.getColumnIndex(DbHelper.TRIG_TYPE);
+		int fbIndex = c.getColumnIndex(DbHelper.TRIG_FB);
 		
-		mTUKUrl   = Uri.parse( "https://trigpointing.uk/trigs/trig-details.php?t="+c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)) );
+		if (latIndex < 0 || lonIndex < 0 || idIndex < 0 || conditionIndex < 0 || 
+		    nameIndex < 0 || currentIndex < 0 || historicIndex < 0 || typeIndex < 0 || fbIndex < 0) {
+			if (c != null) c.close();
+			Toast.makeText(this, "Invalid trig data in database", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		mLatitude  = c.getDouble(latIndex);
+		mLongitude = c.getDouble(lonIndex);
+		
+		mTUKUrl   = Uri.parse( "https://trigpointing.uk/trigs/trig-details.php?t="+c.getLong(idIndex) );
 		mNavUrl   = Uri.parse( String.format("google.navigation:ll=%3.5f,%3.5f",mLatitude, mLongitude)); 
-		mWaypoint = String.format("TP%04d", c.getLong(c.getColumnIndex(DbHelper.TRIG_ID)));
+		mWaypoint = String.format("TP%04d", c.getLong(idIndex));
 		
 		TextView tv;
 		ImageView iv;
@@ -171,11 +188,11 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		tv.setText(mWaypoint);
 
 		tv = findViewById(R.id.triginfo_condition);
-		tv.setText(Condition.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CONDITION))).toString());
+		tv.setText(Condition.fromCode(c.getString(conditionIndex)).toString());
 
-		LatLon ll = new LatLon(c.getDouble(c.getColumnIndex(DbHelper.TRIG_LAT)), c.getDouble(c.getColumnIndex(DbHelper.TRIG_LON)));
+		LatLon ll = new LatLon(c.getDouble(latIndex), c.getDouble(lonIndex));
 
-		mName = c.getString(c.getColumnIndex(DbHelper.TRIG_NAME));
+		mName = c.getString(nameIndex);
 
 		tv = findViewById(R.id.triginfo_gridref);
 		tv.setText(ll.getOSGB10());
@@ -184,16 +201,16 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
 		tv.setText(ll.getWGS());
 		
 		tv = findViewById(R.id.triginfo_current);
-		tv.setText(Trig.Current.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_CURRENT))).toString());
+		tv.setText(Trig.Current.fromCode(c.getString(currentIndex)).toString());
 
 		tv = findViewById(R.id.triginfo_historic);
-		tv.setText(Trig.Historic.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_HISTORIC))).toString());
+		tv.setText(Trig.Historic.fromCode(c.getString(historicIndex)).toString());
 
 		tv = findViewById(R.id.triginfo_type);
-		tv.setText(Trig.Physical.fromCode(c.getString(c.getColumnIndex(DbHelper.TRIG_TYPE))).toString());
+		tv.setText(Trig.Physical.fromCode(c.getString(typeIndex)).toString());
 
 		tv = findViewById(R.id.triginfo_fb);
-		tv.setText(c.getString(c.getColumnIndex(DbHelper.TRIG_FB)));
+		tv.setText(c.getString(fbIndex));
 
 		c.close();
 
