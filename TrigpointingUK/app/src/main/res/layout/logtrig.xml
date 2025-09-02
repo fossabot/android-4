@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginEnd="4dp">
+            android:layout_marginEnd="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,7 +68,9 @@
                 android:layout_height="160dp"
                 android:datePickerMode="spinner"
                 android:calendarViewShown="false"
-                android:spinnersShown="true" />
+                android:spinnersShown="true"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
 
         </LinearLayout>
 
@@ -78,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginStart="4dp">
+            android:layout_marginStart="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,7 +98,9 @@
                     android:id="@+id/logTime"
                     android:layout_width="match_parent"
                     android:layout_height="160dp"
-                    android:timePickerMode="spinner" />
+                    android:timePickerMode="spinner"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
 
                 <CheckBox
                     android:id="@+id/sendTime"
