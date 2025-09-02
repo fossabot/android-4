@@ -62,8 +62,7 @@
     <string name="downloadingLogs">Downloading logs...</string>
     <string name="noLogs">No logs available</string>
     <string name="radartitle">Radar Dialog</string>
-    <string name="downloadMapsIdleStatus">Ready to download maps</string>
-    <string name="downloadMapsInsertStatus">Downloading maps...</string>
+
     <string name="downloadMapsExplanation">The app automatically caches any map tiles that you view whilst online, providing basic offline coverage for areas you\'ve explored.\n\nFor better offline availability, you can bulk download UK-wide maps at various scale ranges below. This ensures comprehensive coverage even when you\'re completely offline.\n\n⚠️ Warning: Some of these files are very large (several hundred MB), so avoid downloading on a metered connection unless necessary.</string>
     <string name="cacheUsageFormat">Cache usage: %1$s</string>
     <string name="cacheTileCountFormat">%1$d tiles cached</string>
@@ -79,20 +78,9 @@
     <string name="browser">Browser</string>
     <string name="radar">Radar</string>
     <string name="map">Map</string>
-    <string name="heading">Heading</string>
-    <string name="downloadmaps">Download Maps</string>
-    <string name="location">Location</string>
-    <string name="compass">Compass</string>
+
     
-    <!-- Tile source strings -->
-    <string name="cloudmade">Cloudmade</string>
-    <string name="cyclemap">Cycle Map</string>
-    <string name="mapnik">Mapnik</string>
-    <string name="mapquest">MapQuest</string>
-    <string name="bingaerial">Bing Aerial</string>
-    <string name="bingaeriallabels">Bing Aerial Labels</string>
-    <string name="bingroad">Bing Road</string>
-    <string name="bingosgb">Bing OSGB</string>
+
     <string name="byCondition">By Condition</string>
     <string name="none">None</string>
     <string name="byLogged">By Logged</string>

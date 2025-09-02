@@ -1085,7 +1085,7 @@
         errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="69"
+            line="68"
             column="5"/>
     </issue>
 
@@ -1377,50 +1377,6 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.array.trigpoint_type_names` appears to be unused"
-        errorLine1="    &lt;string-array name=&quot;trigpoint_type_names&quot;>"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/arrays.xml"
-            line="8"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.array.trigpoint_type_values` appears to be unused"
-        errorLine1="    &lt;string-array name=&quot;trigpoint_type_values&quot;>"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/arrays.xml"
-            line="18"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.array.filter_found_names` appears to be unused"
-        errorLine1="    &lt;string-array name=&quot;filter_found_names&quot;>"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/arrays.xml"
-            line="29"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.array.filter_found_values` appears to be unused"
-        errorLine1="    &lt;string-array name=&quot;filter_found_values&quot;>"
-        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/arrays.xml"
-            line="37"
-            column="19"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.drawable.arrow_01_nne` appears to be unused">
         <location
             file="src/main/res/drawable/arrow_01_nne.png"/>
@@ -1522,153 +1478,6 @@
         message="The resource `R.drawable.arrow_15_nnw` appears to be unused">
         <location
             file="src/main/res/drawable/arrow_15_nnw.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.banner_logo` appears to be unused">
-        <location
-            file="src/main/res/drawable/banner_logo.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.center` appears to be unused">
-        <location
-            file="src/main/res/drawable/center.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.direction_arrow` appears to be unused">
-        <location
-            file="src/main/res/drawable/direction_arrow.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.gpsstatus` appears to be unused">
-        <location
-            file="src/main/res/drawable/gpsstatus.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_add` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_add.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_camera_h` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_camera_h.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_delete` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_delete.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_gallery` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_gallery.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_goto` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_goto.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_help` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_help.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_info_details` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_info_details.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_mapstyle` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_mapstyle.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_more` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_more.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_mylocation` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_mylocation.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_myplaces` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_myplaces.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_offline` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_offline.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_preferences` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_preferences.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_save` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_save.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_search` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_search.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_star` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_star.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.ic_menu_trigonmap` appears to be unused">
-        <location
-            file="src/main/res/drawable/ic_menu_trigonmap.png"/>
     </issue>
 
     <issue
@@ -1841,208 +1650,12 @@
 
     <issue
         id="UnusedResources"
-        message="The resource `R.drawable.marker_default` appears to be unused">
-        <location
-            file="src/main/res/drawable/marker_default.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.marker_default_focused_base` appears to be unused">
-        <location
-            file="src/main/res/drawable/marker_default_focused_base.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.navto_small` appears to be unused">
-        <location
-            file="src/main/res/drawable/navto_small.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.next` appears to be unused">
-        <location
-            file="src/main/res/drawable/next.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.person` appears to be unused">
-        <location
-            file="src/main/res/drawable/person.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.previous` appears to be unused">
-        <location
-            file="src/main/res/drawable/previous.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.downloadMapsIdleStatus` appears to be unused"
-        errorLine1="    &lt;string name=&quot;downloadMapsIdleStatus&quot;>Ready to download maps&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="65"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.downloadMapsInsertStatus` appears to be unused"
-        errorLine1="    &lt;string name=&quot;downloadMapsInsertStatus&quot;>Downloading maps...&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="66"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.heading` appears to be unused"
-        errorLine1="    &lt;string name=&quot;heading&quot;>Heading&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="82"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.downloadmaps` appears to be unused"
-        errorLine1="    &lt;string name=&quot;downloadmaps&quot;>Download Maps&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="83"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.location` appears to be unused"
-        errorLine1="    &lt;string name=&quot;location&quot;>Location&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="84"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.compass` appears to be unused"
-        errorLine1="    &lt;string name=&quot;compass&quot;>Compass&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="85"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.cloudmade` appears to be unused"
-        errorLine1="    &lt;string name=&quot;cloudmade&quot;>Cloudmade&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="88"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.cyclemap` appears to be unused"
-        errorLine1="    &lt;string name=&quot;cyclemap&quot;>Cycle Map&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="89"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.mapnik` appears to be unused"
-        errorLine1="    &lt;string name=&quot;mapnik&quot;>Mapnik&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="90"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.mapquest` appears to be unused"
-        errorLine1="    &lt;string name=&quot;mapquest&quot;>MapQuest&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="91"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.bingaerial` appears to be unused"
-        errorLine1="    &lt;string name=&quot;bingaerial&quot;>Bing Aerial&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="92"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.bingaeriallabels` appears to be unused"
-        errorLine1="    &lt;string name=&quot;bingaeriallabels&quot;>Bing Aerial Labels&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="93"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.bingroad` appears to be unused"
-        errorLine1="    &lt;string name=&quot;bingroad&quot;>Bing Road&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="94"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.bingosgb` appears to be unused"
-        errorLine1="    &lt;string name=&quot;bingosgb&quot;>Bing OSGB&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="95"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
         message="The resource `R.string.trigpoint_name_placeholder` appears to be unused"
         errorLine1="    &lt;string name=&quot;trigpoint_name_placeholder&quot;>Trigpoint Name&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="119"
+            line="107"
             column="13"/>
     </issue>
 
@@ -2053,36 +1666,8 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="120"
+            line="108"
             column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.trig_pillar` appears to be unused">
-        <location
-            file="src/main/res/drawable/trig_pillar.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.trig_pillar_fill` appears to be unused">
-        <location
-            file="src/main/res/drawable/trig_pillar_fill.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.zoom_in` appears to be unused">
-        <location
-            file="src/main/res/drawable/zoom_in.png"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.drawable.zoom_out` appears to be unused">
-        <location
-            file="src/main/res/drawable/zoom_out.png"/>
     </issue>
 
     <issue
@@ -2154,22 +1739,11 @@
     <issue
         id="TypographyEllipsis"
         message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
-        errorLine1="    &lt;string name=&quot;downloadMapsInsertStatus&quot;>Downloading maps...&lt;/string>"
-        errorLine2="                                            ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="66"
-            column="45"/>
-    </issue>
-
-    <issue
-        id="TypographyEllipsis"
-        message="Replace &quot;...&quot; with ellipsis character (…, &amp;#8230;) ?"
         errorLine1="    &lt;string name=&quot;cacheCalculating&quot;>Calculating cache size...&lt;/string>"
         errorLine2="                                    ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/res/values/strings.xml"
-            line="71"
+            line="70"
             column="37"/>
     </issue>
 
@@ -2184,20 +1758,6 @@
         id="IconColors"
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
-            file="src/main/res/drawable/ic_menu_camera_h.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_delete.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
             file="src/main/res/drawable/ic_menu_directions.png"/>
     </issue>
 
@@ -2205,77 +1765,7 @@
         id="IconColors"
         message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
         <location
-            file="src/main/res/drawable/ic_menu_help.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_info_details.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
             file="src/main/res/drawable/ic_menu_mapmode.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_mapstyle.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_more.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_mylocation.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_offline.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_save.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_search.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_star.png"/>
-    </issue>
-
-    <issue
-        id="IconColors"
-        message="Action Bar icons should use a single gray color (`#333333` for light themes (with 60%/30% opacity for enabled/disabled), and `#FFFFFF` with opacity 80%/30% for dark themes">
-        <location
-            file="src/main/res/drawable/ic_menu_trigonmap.png"/>
     </issue>
 
     <issue
@@ -2406,13 +1896,6 @@
 
     <issue
         id="IconLocation"
-        message="Found bitmap drawable `res/drawable/banner_logo.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/banner_logo.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
         message="Found bitmap drawable `res/drawable/c_damaged.png` in densityless folder">
         <location
             file="src/main/res/drawable/c_damaged.png"/>
@@ -2472,13 +1955,6 @@
         message="Found bitmap drawable `res/drawable/c_unreachablebutvisible.png` in densityless folder">
         <location
             file="src/main/res/drawable/c_unreachablebutvisible.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/center.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/center.png"/>
     </issue>
 
     <issue
@@ -2546,37 +2022,9 @@
 
     <issue
         id="IconLocation"
-        message="Found bitmap drawable `res/drawable/direction_arrow.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/direction_arrow.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/gpsstatus.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/gpsstatus.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_add.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_add.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
         message="Found bitmap drawable `res/drawable/ic_menu_camera.png` in densityless folder">
         <location
             file="src/main/res/drawable/ic_menu_camera.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_camera_h.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_camera_h.png"/>
     </issue>
 
     <issue
@@ -2588,44 +2036,9 @@
 
     <issue
         id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_delete.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_delete.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
         message="Found bitmap drawable `res/drawable/ic_menu_directions.png` in densityless folder">
         <location
             file="src/main/res/drawable/ic_menu_directions.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_gallery.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_gallery.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_goto.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_goto.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_help.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_help.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_info_details.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_info_details.png"/>
     </issue>
 
     <issue
@@ -2637,79 +2050,9 @@
 
     <issue
         id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_mapstyle.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_mapstyle.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_more.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_more.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_mylocation.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_mylocation.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_myplaces.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_myplaces.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_offline.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_offline.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_preferences.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_preferences.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
         message="Found bitmap drawable `res/drawable/ic_menu_refresh.png` in densityless folder">
         <location
             file="src/main/res/drawable/ic_menu_refresh.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_save.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_save.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_search.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_search.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_star.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_star.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/ic_menu_trigonmap.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/ic_menu_trigonmap.png"/>
     </issue>
 
     <issue
@@ -2731,48 +2074,6 @@
         message="Found bitmap drawable `res/drawable/imageloading.png` in densityless folder">
         <location
             file="src/main/res/drawable/imageloading.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/marker_default.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/marker_default.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/marker_default_focused_base.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/marker_default_focused_base.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/navto_small.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/navto_small.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/next.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/next.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/person.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/person.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/previous.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/previous.png"/>
     </issue>
 
     <issue
@@ -2801,20 +2102,6 @@
         message="Found bitmap drawable `res/drawable/t_pillar.png` in densityless folder">
         <location
             file="src/main/res/drawable/t_pillar.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/trig_pillar.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/trig_pillar.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/trig_pillar_fill.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/trig_pillar_fill.png"/>
     </issue>
 
     <issue
@@ -2850,29 +2137,6 @@
         message="Found bitmap drawable `res/drawable/tuk_logo.png` in densityless folder">
         <location
             file="src/main/res/drawable/tuk_logo.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/zoom_in.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/zoom_in.png"/>
-    </issue>
-
-    <issue
-        id="IconLocation"
-        message="Found bitmap drawable `res/drawable/zoom_out.png` in densityless folder">
-        <location
-            file="src/main/res/drawable/zoom_out.png"/>
-    </issue>
-
-    <issue
-        id="IconDuplicates"
-        message="The following unrelated icon files have identical contents: ic_menu_mapmode.png, ic_menu_mapstyle.png">
-        <location
-            file="src/main/res/drawable/ic_menu_mapstyle.png"/>
-        <location
-            file="src/main/res/drawable/ic_menu_mapmode.png"/>
     </issue>
 
     <issue
