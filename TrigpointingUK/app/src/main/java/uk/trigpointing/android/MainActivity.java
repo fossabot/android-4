@@ -227,18 +227,35 @@ public class MainActivity extends BaseActivity implements SyncListener {
     }
     
     private void setupBackButtonHandling() {
-        // Handle back button press to prevent app from closing on main activity
+        // Handle back button press to show exit confirmation dialog
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // Show a toast to inform user that back button is disabled on main page
-                Toast.makeText(MainActivity.this, "Press home button to minimize app", Toast.LENGTH_SHORT).show();
-                Log.i(TAG, "Back button pressed on main activity - staying on main page");
-                // Do nothing - this prevents the default back behavior (closing the app)
+                showExitConfirmationDialog();
+                Log.i(TAG, "Back button pressed on main activity - showing exit confirmation");
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
         Log.i(TAG, "setupBackButtonHandling: Back button handling configured");
+    }
+    
+    private void showExitConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit Application");
+        builder.setMessage("Are you sure you want to exit the application?");
+        
+        builder.setPositiveButton("Exit", (dialog, which) -> {
+            Log.i(TAG, "User confirmed exit - finishing activity");
+            finish();
+        });
+        
+        builder.setNegativeButton("Stay", (dialog, which) -> {
+            Log.i(TAG, "User chose to stay in the application");
+            dialog.dismiss();
+        });
+        
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 
