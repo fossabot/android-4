@@ -1,6 +1,8 @@
 package uk.trigpointing.android.compass;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ import uk.trigpointing.android.compass.skins.RedPointerCompassFragment;
 public class CompassActivity extends BaseActivity implements CompassDataManager.CompassDataListener {
     
     private static final int REQ_LOCATION = 1001;
+    private static final String PREFS_NAME = "compass_prefs";
+    private static final String KEY_LAST_SKIN_INDEX = "last_skin_index";
     
     private ViewPager2 viewPager;
     private CompassSkinAdapter adapter;
@@ -73,16 +78,24 @@ public class CompassActivity extends BaseActivity implements CompassDataManager.
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                updatePageIndicators(position);
-                updateSkinNameDisplay(position);
-                notifySkinsOfVisibilityChange(position);
+                int actualSkinIndex = adapter.getActualSkinIndex(position);
+                updatePageIndicators(actualSkinIndex);
+                updateSkinNameDisplay(actualSkinIndex);
+                notifySkinsOfVisibilityChange(actualSkinIndex);
+                
+                // Save the last used skin index
+                saveLastSkinIndex(actualSkinIndex);
             }
         });
         
-        // Initialize with first skin
+        // Initialize with last used skin or first skin
+        int lastSkinIndex = getLastSkinIndex();
+        int initialViewPagerPosition = adapter.getViewPagerPosition(lastSkinIndex);
+        viewPager.setCurrentItem(initialViewPagerPosition, false);
+        
         if (!skins.isEmpty()) {
-            updateSkinNameDisplay(0);
-            skins.get(0).onSkinVisible();
+            updateSkinNameDisplay(lastSkinIndex);
+            skins.get(lastSkinIndex).onSkinVisible();
         }
     }
     
@@ -165,9 +178,11 @@ public class CompassActivity extends BaseActivity implements CompassDataManager.
     
     @Override
     public void onCompassDataUpdated(CompassData data) {
-        // Update all compass skins with new data
-        for (CompassSkinFragment skin : skins) {
-            skin.updateCompassData(data);
+        // Update the currently visible compass skin with new data
+        int currentPosition = viewPager.getCurrentItem();
+        CompassSkinFragment currentFragment = adapter.getFragmentInstance(currentPosition);
+        if (currentFragment != null) {
+            currentFragment.updateCompassData(data);
         }
     }
     
@@ -202,5 +217,26 @@ public class CompassActivity extends BaseActivity implements CompassDataManager.
                 onLocationPermissionDenied();
             }
         }
+    }
+    
+    /**
+     * Save the last used skin index to SharedPreferences
+     */
+    private void saveLastSkinIndex(int skinIndex) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putInt(KEY_LAST_SKIN_INDEX, skinIndex).apply();
+    }
+    
+    /**
+     * Get the last used skin index from SharedPreferences
+     */
+    private int getLastSkinIndex() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        int lastIndex = prefs.getInt(KEY_LAST_SKIN_INDEX, 0);
+        // Ensure the index is valid
+        if (lastIndex < 0 || lastIndex >= skins.size()) {
+            return 0;
+        }
+        return lastIndex;
     }
 }
