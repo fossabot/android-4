@@ -53,8 +53,6 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
 
     private Vibrator vibrator;
 
-    private final float ALPHA = 0.15f; // low-pass smoothing
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +177,13 @@ public class RadarActivity extends BaseActivity implements SensorEventListener {
             if (headingDeg < 0) headingDeg += 360f;
             
             // low-pass filter for smoother arrow
-            currentAzimuthDeg = currentAzimuthDeg + ALPHA * (headingDeg - currentAzimuthDeg);
+            // low-pass smoothing with proper angle difference handling
+            float ALPHA = 0.15f;
+            float angleDiff = normalizeDegrees(headingDeg - currentAzimuthDeg);
+            currentAzimuthDeg = currentAzimuthDeg + ALPHA * angleDiff;
+            // Ensure currentAzimuthDeg stays within 0-360° range
+            while (currentAzimuthDeg < 0) currentAzimuthDeg += 360f;
+            while (currentAzimuthDeg >= 360) currentAzimuthDeg -= 360f;
             updateUi();
         }
     }
