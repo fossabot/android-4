@@ -486,10 +486,26 @@ public class TrigDetailsActivity extends BaseActivity {
         builder.setNegativeButton("Sync Later", (dialog, which) -> {
             android.util.Log.i(TAG, "User chose to sync later");
             dialog.dismiss();
+            switchToInfoTab();
         });
         
         android.app.AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Switch to the info tab
+     */
+    public void switchToInfoTab() {
+        try {
+            TabHost tabHost = findViewById(android.R.id.tabhost);
+            if (tabHost != null) {
+                tabHost.setCurrentTabByTag("info");
+                android.util.Log.d(TAG, "Switched to info tab");
+            }
+        } catch (Exception e) {
+            android.util.Log.e(TAG, "Error switching to info tab: " + e.getMessage(), e);
+        }
     }
 
     /**

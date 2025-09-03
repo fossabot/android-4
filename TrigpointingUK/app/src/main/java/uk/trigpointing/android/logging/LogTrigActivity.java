@@ -354,12 +354,12 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             }
         });    
 
-        // Setup button to sync the log later (ie do nothing!)
+        // Setup button to sync the log later (switch to info tab)
         Button syncLaterBtn = findViewById(R.id.logSyncLater);
         syncLaterBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                finish();
+                switchToInfoTab();
             }
         });    
 
@@ -410,6 +410,22 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
     }
     
     /**
+     * Switch to the info tab in the parent TrigDetailsActivity
+     */
+    private void switchToInfoTab() {
+        try {
+            android.app.Activity parent = getParent();
+            if (parent instanceof uk.trigpointing.android.trigdetails.TrigDetailsActivity) {
+                ((uk.trigpointing.android.trigdetails.TrigDetailsActivity) parent).switchToInfoTab();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error switching to info tab: " + e.getMessage(), e);
+            // Fallback to finish if we can't switch tabs
+            finish();
+        }
+    }
+    
+    /**
      * Show confirmation dialog when navigating away from log form with unsaved changes
      */
     private void showNavigationConfirmationDialog() {
@@ -435,6 +451,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         builder.setNegativeButton("Sync Later", (dialog, which) -> {
             Log.i(TAG, "User chose to sync later");
             dialog.dismiss();
+            switchToInfoTab();
         });
         
         AlertDialog dialog = builder.create();
