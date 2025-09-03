@@ -468,6 +468,7 @@ public class TrigDetailsActivity extends BaseActivity {
             } catch (Exception e) {
                 android.util.Log.e(TAG, "Error deleting log: " + e.getMessage(), e);
             }
+            android.widget.Toast.makeText(TrigDetailsActivity.this, "Log deleted", android.widget.Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             switchToInfoTab();
         });
@@ -490,6 +491,7 @@ public class TrigDetailsActivity extends BaseActivity {
         
         builder.setNegativeButton("Sync Later", (dialog, which) -> {
             android.util.Log.i(TAG, "User chose to sync later");
+            android.widget.Toast.makeText(TrigDetailsActivity.this, "Log will be synced later", android.widget.Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             switchToInfoTab();
         });

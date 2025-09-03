@@ -329,6 +329,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
                 mSwitcher.setDisplayedChild(0); // Show button
                 mHaveLog = false;
                 if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
+                Toast.makeText(LogTrigActivity.this, "Log deleted", Toast.LENGTH_SHORT).show();
                 switchToInfoTab();
             }
         });    
@@ -361,6 +362,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         syncLaterBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                Toast.makeText(LogTrigActivity.this, "Log will be synced later", Toast.LENGTH_SHORT).show();
                 switchToInfoTab();
             }
         });    
@@ -441,6 +443,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             mSwitcher.setDisplayedChild(0); // Show button
             mHaveLog = false;
             if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
+            Toast.makeText(LogTrigActivity.this, "Log deleted", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             switchToInfoTab();
         });
@@ -454,6 +457,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
         
         builder.setNegativeButton("Sync Later", (dialog, which) -> {
             Log.i(TAG, "User chose to sync later");
+            Toast.makeText(LogTrigActivity.this, "Log will be synced later", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             switchToInfoTab();
         });
