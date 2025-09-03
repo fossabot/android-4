@@ -10,11 +10,7 @@
         android:title="@string/navigate_to_trigpoint"
         android:icon="@android:drawable/ic_menu_directions"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_radar"
-        android:title="@string/guide_me_radar"
-        android:icon="@android:drawable/ic_menu_compass"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/action_compass"
         android:title="@string/guide_me_compass"

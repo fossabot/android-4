@@ -99,9 +99,7 @@
         <activity 
             android:name="uk.trigpointing.android.common.WebViewActivity"
             android:exported="false" />
-        <activity
-            android:name="uk.trigpointing.android.radar.RadarActivity"
-            android:exported="false" />
+
         <activity
             android:name="uk.trigpointing.android.compass.CompassActivity"
             android:exported="false" />

@@ -61,7 +61,7 @@
     <string name="noPhotos">No photos available</string>
     <string name="downloadingLogs">Downloading logs…</string>
     <string name="noLogs">No logs available</string>
-    <string name="radartitle">Radar Dialog</string>
+
 
     <string name="downloadMapsExplanation">The app automatically caches any map tiles that you view whilst online, providing basic offline coverage for areas you\'ve explored.\n\nFor better offline availability, you can bulk download UK-wide maps at various scale ranges below. This ensures comprehensive coverage even when you\'re completely offline.\n\n⚠️ Warning: Some of these files are very large (several hundred MB), so avoid downloading on a metered connection unless necessary.</string>
     <string name="cacheUsageFormat">Cache usage: %1$s</string>
@@ -75,7 +75,7 @@
     <string name="refresh">Refresh</string>
     <string name="directions">Directions</string>
     <string name="browser">Browser</string>
-    <string name="radar">Radar</string>
+
     <string name="map">Map</string>
 
     
@@ -195,8 +195,7 @@
     <string name="map_button">Map</string>
     <string name="sync_button">Sync</string>
     
-    <!-- Radar dialog strings -->
-    <string name="radar_confirmation">Are you sure you want to open the radar?</string>
+
     
     <!-- Trigpoint type strings -->
     <string name="select_trigpoint_types">Select trigpoint types to display:</string>
@@ -247,7 +246,7 @@
     <!-- Menu action strings -->
     <string name="open_on_website">Open on trigpointing.uk</string>
     <string name="navigate_to_trigpoint">Navigate to trigpoint</string>
-    <string name="guide_me_radar">Guide me (radar)</string>
+
     <string name="guide_me_compass">Guide me (compass)</string>
     
     <!-- Trig row strings -->

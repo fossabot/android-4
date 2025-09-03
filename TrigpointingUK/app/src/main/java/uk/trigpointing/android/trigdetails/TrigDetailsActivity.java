@@ -722,13 +722,7 @@ public class TrigDetailsActivity extends BaseActivity {
             if (getMenuInflater() != null) {
                 getMenuInflater().inflate(R.menu.trigdetails_actions, menu);
                 
-                // Show compass option only in developer mode
-                android.content.SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this);
-                boolean devMode = prefs.getBoolean("dev_mode", false);
-                MenuItem compassItem = menu.findItem(R.id.action_compass);
-                if (compassItem != null) {
-                    compassItem.setVisible(devMode);
-                }
+
                 
                 return true;
             } else {
@@ -825,22 +819,7 @@ public class TrigDetailsActivity extends BaseActivity {
                     showToast("Unable to get trigpoint coordinates");
                 }
                 return true;
-            } else if (id == R.id.action_radar) {
-                if (lat != 0d || lon != 0d) {
-                    try {
-                        Intent intent = new Intent(this, uk.trigpointing.android.radar.RadarActivity.class);
-                        intent.putExtra(DbHelper.TRIG_ID, trigId);
-                        intent.putExtra(DbHelper.TRIG_LAT, lat);
-                        intent.putExtra(DbHelper.TRIG_LON, lon);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        android.util.Log.e(TAG, "Error creating radar intent: " + e.getMessage(), e);
-                        showToast("Error opening radar");
-                    }
-                } else {
-                    showToast("Unable to get trigpoint coordinates");
-                }
-                return true;
+
             } else if (id == R.id.action_compass) {
                 if (lat != 0d || lon != 0d) {
                     try {

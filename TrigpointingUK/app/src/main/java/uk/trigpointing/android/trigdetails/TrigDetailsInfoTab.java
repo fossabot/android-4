@@ -47,7 +47,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
     private SharedPreferences mPrefs;
 
     
-    private static final int RADAR = 1;
+
     
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,18 +249,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
                 Toast.makeText(this, "Unable to launch browser", Toast.LENGTH_LONG).show();
             }
             return true;
-        } else if (itemId == R.id.radar) {
-            Log.i(TAG, "radar");
-            try {
-                Intent i = new Intent("com.google.android.radar.SHOW_RADAR") ;
-                i.putExtra("latitude",  (float) mLatitude);
-                i.putExtra("longitude", (float) mLongitude);
-                i.putExtra("name", mWaypoint);
-                startActivity(i);
-            } catch (ActivityNotFoundException e) {
-                showDialog(RADAR);
-            } 
-            return true;         
+         
         } else if (itemId == R.id.map) {
             Log.i(TAG, "map");
             // remove existing map bounding box preferences
@@ -290,28 +279,7 @@ public class TrigDetailsInfoTab extends BaseTabActivity {
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
         switch(id) {
-        case RADAR:
-            dialog = new Dialog(this);
-            dialog.setContentView(R.layout.radardialog);
-            dialog.setTitle(R.string.radartitle);
-            Button yes = dialog.findViewById(R.id.yes);
-            yes.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismissDialog(RADAR);
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse("market://details?id=com.eclipsim.gpsstatus2"));
-                    startActivity(intent);
-                }
-            });
-            Button no = dialog.findViewById(R.id.no);
-            no.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dismissDialog(RADAR);
-                }
-            });
-            break;
+
         default:
             dialog = null;
         }
