@@ -113,7 +113,7 @@ class DownloadMapsActivity : BaseActivity() {
                 val response = client.newCall(request).execute()
                 val body = response.body
 
-                if (response.isSuccessful && body != null) {
+                if (response.isSuccessful) {
                     val totalSize = body.contentLength()
                     var downloadedBytes = 0L
                     var extractedFileCount = 0
