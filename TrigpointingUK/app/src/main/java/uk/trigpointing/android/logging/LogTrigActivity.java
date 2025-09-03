@@ -329,6 +329,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
                 mSwitcher.setDisplayedChild(0); // Show button
                 mHaveLog = false;
                 if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
+                switchToInfoTab();
             }
         });    
 
@@ -351,6 +352,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             @Override
             public void onClick(View arg0) {
                 uploadLog();
+                switchToInfoTab();
             }
         });    
 
@@ -440,12 +442,14 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
             mHaveLog = false;
             if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
             dialog.dismiss();
+            switchToInfoTab();
         });
         
         builder.setNeutralButton("Upload Now", (dialog, which) -> {
             Log.i(TAG, "User chose to upload log now");
             uploadLog();
             dialog.dismiss();
+            switchToInfoTab();
         });
         
         builder.setNegativeButton("Sync Later", (dialog, which) -> {

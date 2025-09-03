@@ -25,6 +25,7 @@ public class TrigDetailsActivity extends BaseActivity {
     private static final String TAG="TrigDetailsActivity";
     private static final String STATE_TAB_TAG = "saved_tab_tag";
     private LocalActivityManager mLocalActivityManager;
+    private boolean mIsProgrammaticTabChange = false;
 
     public void onCreate(Bundle savedInstanceState) {
         try {
@@ -250,10 +251,12 @@ public class TrigDetailsActivity extends BaseActivity {
                 @Override
                 public void onTabChanged(String tabId) {
                     android.util.Log.d(TAG, "Tab changed to: " + tabId);
-                    // Check if we're navigating away from the mylog tab and if there are unsaved changes
-                    if (!"mylog".equals(tabId)) {
+                    // Only check for unsaved changes if this is not a programmatic tab change
+                    if (!mIsProgrammaticTabChange && !"mylog".equals(tabId)) {
                         checkForUnsavedLogChanges();
                     }
+                    // Reset the flag after handling the tab change
+                    mIsProgrammaticTabChange = false;
                 }
             });
 
@@ -466,6 +469,7 @@ public class TrigDetailsActivity extends BaseActivity {
                 android.util.Log.e(TAG, "Error deleting log: " + e.getMessage(), e);
             }
             dialog.dismiss();
+            switchToInfoTab();
         });
         
         builder.setNeutralButton("Upload Now", (dialog, which) -> {
@@ -481,6 +485,7 @@ public class TrigDetailsActivity extends BaseActivity {
                 android.util.Log.e(TAG, "Error uploading log: " + e.getMessage(), e);
             }
             dialog.dismiss();
+            switchToInfoTab();
         });
         
         builder.setNegativeButton("Sync Later", (dialog, which) -> {
@@ -500,6 +505,7 @@ public class TrigDetailsActivity extends BaseActivity {
         try {
             TabHost tabHost = findViewById(android.R.id.tabhost);
             if (tabHost != null) {
+                mIsProgrammaticTabChange = true; // Set flag to prevent dialog from showing
                 tabHost.setCurrentTabByTag("info");
                 android.util.Log.d(TAG, "Switched to info tab");
             }
