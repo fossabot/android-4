@@ -21,6 +21,8 @@ import android.os.Looper;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.net.Uri;
@@ -66,11 +68,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
     TextView                        mNorthText;
     ImageView                        mCompassArrow;
     private SharedPreferences       mPrefs;
-    private float[]                 mGravity;
-    private float[]                 mGeomagnetic;
     private SensorManager             mSensorManager;
-    private Sensor                     accelerometer;
-    private Sensor                     magnetometer;
+    private Sensor                     rotationVector;
     private int mOrientation;
     private boolean mUsingCompass;
     private boolean mRelativeMode = false;
@@ -168,12 +167,11 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
 
         // Initialize sensors early so onResume/useCompass never sees nulls even if we return early
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        accelerometer = mSensorManager != null ? mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) : null;
-        magnetometer = mSensorManager != null ? mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) : null;
+        rotationVector = mSensorManager != null ? mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) : null;
         
         // Define a listener that responds to location updates (init early so it's never null)
         mLocationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged(@NonNull Location location) {
                 mLocationCount++;
                 updateLocationHeader("listener");
                 if (isBetterLocation(location, mCurrentLocation)) {
@@ -182,8 +180,8 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
                 }
             }
             public void onStatusChanged(String provider, int status, Bundle extras) {}
-            public void onProviderEnabled(String provider) {}
-            public void onProviderDisabled(String provider) {}
+            public void onProviderEnabled(@NonNull String provider) {}
+            public void onProviderDisabled(@NonNull String provider) {}
         };
         
         // Check for location permissions
@@ -356,16 +354,17 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
         mUsingCompass = use;
         mListAdapter.setUsingCompass(use);
         if (mUsingCompass) {
-            mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-                                mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassEnabled));
+            if (rotationVector != null) {
+                mSensorManager.registerListener(this, rotationVector, SensorManager.SENSOR_DELAY_GAME);
+            }
+            mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassEnabled));
         } else {
             mSensorManager.unregisterListener(this);
             mHeading = 0;
             mCompassArrow.setImageResource(mListAdapter.getArrow(0));
             mCompassArrow.setRotation(mListAdapter.getArrowRotation(0));
-                                mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassDisabled));
-                                mListAdapter.setHeading(0);
+            mNorthText.setTextColor(ContextCompat.getColor(this, R.color.compassDisabled));
+            mListAdapter.setHeading(0);
             mListAdapter.notifyDataSetChanged();
         }
     }
@@ -704,31 +703,41 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}    
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
-        case Sensor.TYPE_ACCELEROMETER:
-            mGravity = event.values;
-            break;
-        case Sensor.TYPE_MAGNETIC_FIELD:
-            mGeomagnetic = event.values;
-            break;
-        }
-
         if (!mUsingCompass) {return;}
         
-        if (mGravity != null && mGeomagnetic != null) {
-            float[] R = new float[9];
-            float[] I = new float[9];
-            boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-            if (success) {
-                float[] orientation = new float[3];
-                SensorManager.getOrientation(R, orientation);
-                mHeading = orientation[0] * 180.0/Math.PI; // orientation contains: azimuth[0], pitch[1] and roll[2]
-                //Log.d(TAG, "Heading = " + mHeading);
-                mListAdapter.setHeading(mHeading);
-                mListAdapter.notifyDataSetChanged();
-                            mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+            float[] rotationMatrix = new float[9];
+            SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
+
+            // Calculate hybrid direction: 45 degrees between screen normal and phone vertical axis
+            // This works well for both horizontal and vertical phone orientations
+            
+            // Screen normal (camera direction): device -Z axis in world coordinates
+            // rotationMatrix is row-major: [0..2; 3..5; 6..8]
+            float screenNormalX = -rotationMatrix[2];  // world X component of screen normal
+            float screenNormalY = -rotationMatrix[5];  // world Y component of screen normal
+            float screenNormalZ = -rotationMatrix[8];  // world Z component of screen normal
+            
+            // Phone vertical axis: device +Y axis in world coordinates
+            float phoneVerticalX = rotationMatrix[1];  // world X component of phone vertical
+            float phoneVerticalY = rotationMatrix[4];  // world Y component of phone vertical
+            float phoneVerticalZ = rotationMatrix[7];  // world Z component of phone vertical
+            
+            // Calculate 45-degree hybrid vector between screen normal and phone vertical
+            // Use equal weighting (cos(45°) ≈ 0.707) for both vectors
+            float hybridX = 0.707f * screenNormalX + 0.707f * phoneVerticalX;
+            float hybridY = 0.707f * screenNormalY + 0.707f * phoneVerticalY;
+            
+            // Calculate heading from hybrid vector (ignore Z component for compass bearing)
+            float headingRad = (float) Math.atan2(hybridX, hybridY);
+            float headingDeg = (float) Math.toDegrees(headingRad);
+            if (headingDeg < 0) headingDeg += 360f;
+            
+            mHeading = headingDeg;
+            mListAdapter.setHeading(mHeading);
+            mListAdapter.notifyDataSetChanged();
+            mCompassArrow.setImageResource(mListAdapter.getArrow(-mHeading));
             mCompassArrow.setRotation(mListAdapter.getArrowRotation(-mHeading));
-        }
         }
     }
 
