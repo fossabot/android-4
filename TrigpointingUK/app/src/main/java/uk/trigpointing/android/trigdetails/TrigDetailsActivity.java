@@ -427,6 +427,43 @@ public class TrigDetailsActivity extends BaseActivity {
     }
 
     /**
+     * Check if we're currently on the logging tab and if there are unsaved changes
+     */
+    private boolean isOnLoggingTabWithUnsavedChanges() {
+        try {
+            TabHost tabHost = findViewById(android.R.id.tabhost);
+            if (tabHost != null) {
+                String currentTab = tabHost.getCurrentTabTag();
+                if ("mylog".equals(currentTab) && mLocalActivityManager != null) {
+                    android.app.Activity logActivity = mLocalActivityManager.getActivity("mylog");
+                    if (logActivity instanceof uk.trigpointing.android.logging.LogTrigActivity) {
+                        return ((uk.trigpointing.android.logging.LogTrigActivity) logActivity).hasUnsavedChanges();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e(TAG, "Error checking logging tab status: " + e.getMessage(), e);
+        }
+        return false;
+    }
+    
+    /**
+     * Check if we're currently on the logging tab (regardless of unsaved changes)
+     */
+    private boolean isOnLoggingTab() {
+        try {
+            TabHost tabHost = findViewById(android.R.id.tabhost);
+            if (tabHost != null) {
+                String currentTab = tabHost.getCurrentTabTag();
+                return "mylog".equals(currentTab);
+            }
+        } catch (Exception e) {
+            android.util.Log.e(TAG, "Error checking current tab: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    /**
      * Check if there are unsaved changes in the LogTrigActivity and show confirmation dialog if needed
      */
     private void checkForUnsavedLogChanges() {
@@ -703,8 +740,20 @@ public class TrigDetailsActivity extends BaseActivity {
         }
         
         if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+            // Handle action bar back button with context-aware behavior
+            if (isOnLoggingTabWithUnsavedChanges()) {
+                // On logging tab with unsaved changes - show confirmation dialog
+                showLogNavigationConfirmationDialog();
+                return true;
+            } else if (isOnLoggingTab()) {
+                // On logging tab without unsaved changes - go to info tab
+                switchToInfoTab();
+                return true;
+            } else {
+                // On any other tab - go back to main activity (default behavior)
+                finish();
+                return true;
+            }
         }
         
         // Check if LocalActivityManager is in a valid state
