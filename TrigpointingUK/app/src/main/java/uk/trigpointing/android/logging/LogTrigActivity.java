@@ -48,6 +48,7 @@ import android.widget.EditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.activity.OnBackPressedCallback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 // Removed unused Fragment-related imports; using getSupportFragmentManager directly
@@ -378,7 +379,66 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
                     checkDistance();
                 }
             }
-        });        
+        });
+        
+        // Set up back button handling to show confirmation dialog
+        setupBackButtonHandling();
+    }
+    
+    /**
+     * Set up back button handling to show confirmation dialog when navigating away
+     */
+    private void setupBackButtonHandling() {
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (hasUnsavedChanges()) {
+                    showNavigationConfirmationDialog();
+                } else {
+                    // No unsaved changes, allow normal back navigation
+                    finish();
+                }
+            }
+        });
+    }
+    
+    /**
+     * Check if there are unsaved changes (i.e., if the user has started logging)
+     */
+    public boolean hasUnsavedChanges() {
+        return mHaveLog;
+    }
+    
+    /**
+     * Show confirmation dialog when navigating away from log form with unsaved changes
+     */
+    private void showNavigationConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Unsaved Changes");
+        builder.setMessage("You have unsaved changes to your log. What would you like to do?");
+        
+        builder.setPositiveButton("Delete Log", (dialog, which) -> {
+            Log.i(TAG, "User chose to delete log");
+            deleteLog();
+            mSwitcher.setDisplayedChild(0); // Show button
+            mHaveLog = false;
+            if (mScroll != null) { mScroll.fullScroll(View.FOCUS_UP); }
+            dialog.dismiss();
+        });
+        
+        builder.setNeutralButton("Upload Now", (dialog, which) -> {
+            Log.i(TAG, "User chose to upload log now");
+            uploadLog();
+            dialog.dismiss();
+        });
+        
+        builder.setNegativeButton("Sync Later", (dialog, which) -> {
+            Log.i(TAG, "User chose to sync later");
+            dialog.dismiss();
+        });
+        
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void checkDistance() {
@@ -992,7 +1052,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
                 0);
     }
     
-    private void deleteLog() {
+    public void deleteLog() {
         // delete log records from DB
         mDb.deleteLog(mTrigId);
         // delete image files from filesystem
@@ -1015,7 +1075,7 @@ public class LogTrigActivity extends BaseTabActivity implements OnDateChangedLis
 
     
     
-    private void uploadLog() {
+    public void uploadLog() {
         Log.i(TAG, "uploadLog");
         
         // check for login credentials in prefs

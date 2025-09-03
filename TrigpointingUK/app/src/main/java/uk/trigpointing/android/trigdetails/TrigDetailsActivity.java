@@ -245,6 +245,18 @@ public class TrigDetailsActivity extends BaseActivity {
                 }
             }
 
+            // Add tab change listener to handle navigation away from mylog tab
+            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+                @Override
+                public void onTabChanged(String tabId) {
+                    android.util.Log.d(TAG, "Tab changed to: " + tabId);
+                    // Check if we're navigating away from the mylog tab and if there are unsaved changes
+                    if (!"mylog".equals(tabId)) {
+                        checkForUnsavedLogChanges();
+                    }
+                }
+            });
+
             try {
                 // Restore previously selected tab if provided
                 if (savedInstanceState != null) {
@@ -409,6 +421,75 @@ public class TrigDetailsActivity extends BaseActivity {
         } catch (Exception e) {
             android.util.Log.e(TAG, "Error in onRestoreInstanceState: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Check if there are unsaved changes in the LogTrigActivity and show confirmation dialog if needed
+     */
+    private void checkForUnsavedLogChanges() {
+        try {
+            if (mLocalActivityManager != null) {
+                android.app.Activity logActivity = mLocalActivityManager.getActivity("mylog");
+                if (logActivity instanceof uk.trigpointing.android.logging.LogTrigActivity) {
+                    uk.trigpointing.android.logging.LogTrigActivity logTrigActivity = 
+                        (uk.trigpointing.android.logging.LogTrigActivity) logActivity;
+                    
+                    // Check if the log form has been started (user pressed "Log this trigpoint")
+                    if (logTrigActivity.hasUnsavedChanges()) {
+                        showLogNavigationConfirmationDialog();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e(TAG, "Error checking for unsaved log changes: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Show confirmation dialog when navigating away from log form with unsaved changes
+     */
+    private void showLogNavigationConfirmationDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Unsaved Changes");
+        builder.setMessage("You have unsaved changes to your log. What would you like to do?");
+        
+        builder.setPositiveButton("Delete Log", (dialog, which) -> {
+            android.util.Log.i(TAG, "User chose to delete log");
+            try {
+                if (mLocalActivityManager != null) {
+                    android.app.Activity logActivity = mLocalActivityManager.getActivity("mylog");
+                    if (logActivity instanceof uk.trigpointing.android.logging.LogTrigActivity) {
+                        ((uk.trigpointing.android.logging.LogTrigActivity) logActivity).deleteLog();
+                    }
+                }
+            } catch (Exception e) {
+                android.util.Log.e(TAG, "Error deleting log: " + e.getMessage(), e);
+            }
+            dialog.dismiss();
+        });
+        
+        builder.setNeutralButton("Upload Now", (dialog, which) -> {
+            android.util.Log.i(TAG, "User chose to upload log now");
+            try {
+                if (mLocalActivityManager != null) {
+                    android.app.Activity logActivity = mLocalActivityManager.getActivity("mylog");
+                    if (logActivity instanceof uk.trigpointing.android.logging.LogTrigActivity) {
+                        ((uk.trigpointing.android.logging.LogTrigActivity) logActivity).uploadLog();
+                    }
+                }
+            } catch (Exception e) {
+                android.util.Log.e(TAG, "Error uploading log: " + e.getMessage(), e);
+            }
+            dialog.dismiss();
+        });
+        
+        builder.setNegativeButton("Sync Later", (dialog, which) -> {
+            android.util.Log.i(TAG, "User chose to sync later");
+            dialog.dismiss();
+        });
+        
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     /**
