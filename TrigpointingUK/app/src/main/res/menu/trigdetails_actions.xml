@@ -16,6 +16,11 @@
         android:icon="@android:drawable/ic_menu_compass"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_compass"
+        android:title="@string/guide_me_compass"
+        android:icon="@android:drawable/ic_menu_compass"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_refresh"
         android:title="@string/refresh"
         app:showAsAction="never" />

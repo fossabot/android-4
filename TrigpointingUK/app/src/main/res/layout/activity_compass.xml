@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- ViewPager2 for different compass skins -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/compass_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Bottom indicator area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:color/black"
+        android:alpha="0.8">
+
+        <!-- Page indicators (dots) -->
+        <LinearLayout
+            android:id="@+id/page_indicators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Skin name display -->
+        <TextView
+            android:id="@+id/skin_name_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Compass Skin"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textAlignment="center"
+            android:alpha="0.7" />
+
+    </LinearLayout>
+
+</LinearLayout>

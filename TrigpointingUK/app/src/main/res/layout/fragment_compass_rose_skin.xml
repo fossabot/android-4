@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- Compass Rose - Top Right, rotated to point North -->
+    <ImageView
+        android:id="@+id/compass_rose"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/compass_rose"
+        android:contentDescription="Compass rose pointing north" />
+
+    <!-- Hand Pointer - Center bottom, rotated to point to trigpoint -->
+    <ImageView
+        android:id="@+id/hand_pointer"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/hand"
+        android:contentDescription="Hand pointing to trigpoint"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent" />
+
+    <!-- Trigpoint Icon - On circle around center point -->
+    <ImageView
+        android:id="@+id/trigpoint_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_pillar_large"
+        android:contentDescription="Trigpoint location indicator" />
+
+    <!-- Distance Display - Bottom center -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="24dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:background="@android:color/black"
+        android:alpha="0.8"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/compass_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:text="0.0 m" />
+
+        <TextView
+            android:id="@+id/compass_bearing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:text="Bearing: 000°" />
+
+        <TextView
+            android:id="@+id/compass_accuracy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textSize="12sp"
+            android:textColor="@android:color/holo_orange_light"
+            android:text="±0 m" />
+
+    </LinearLayout>
+
+    <!-- Calibration Warning -->
+    <TextView
+        android:id="@+id/compass_calibration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="32dp"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="14sp"
+        android:text="Move device in figure-8 to calibrate compass"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:padding="8dp"
+        android:background="@android:color/black"
+        android:alpha="0.7" />
+
+</FrameLayout>
