@@ -68,6 +68,6 @@ public class RedPointerCompassFragment extends CompassSkinFragment {
     
     @Override
     public String getSkinName() {
-        return "Red Pointer";
+        return "Dark mode";
     }
 }

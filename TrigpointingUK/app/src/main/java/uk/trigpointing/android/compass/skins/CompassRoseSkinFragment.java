@@ -123,6 +123,6 @@ public class CompassRoseSkinFragment extends CompassSkinFragment {
     
     @Override
     public String getSkinName() {
-        return "Compass Rose";
+        return "Pointer";
     }
 }
