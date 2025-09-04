@@ -62,6 +62,7 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     private static final String TAG = "SensorARActivity";
     private static final int CAMERA_PERMISSION_REQUEST = 1001;
     private static final int LOCATION_PERMISSION_REQUEST = 1002;
+    private static final int COMBINED_PERMISSION_REQUEST = 1003;
     private static final double MAX_DISTANCE_METERS = 5000; // 5km max distance
     
     // Camera components
@@ -264,16 +265,17 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
             permissionsToRequest.add(Manifest.permission.CAMERA);
         }
         
+        // Use combined request code since we're requesting multiple permissions
         ActivityCompat.requestPermissions(this,
             permissionsToRequest.toArray(new String[0]),
-            CAMERA_PERMISSION_REQUEST);
+            COMBINED_PERMISSION_REQUEST);
     }
     
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         
-        if (requestCode == CAMERA_PERMISSION_REQUEST) {
+        if (requestCode == COMBINED_PERMISSION_REQUEST) {
             boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
             boolean locationGranted = false;
             boolean cameraGranted = !hasCamera; // If no camera, consider "granted"
@@ -326,27 +328,72 @@ public class SensorARActivity extends BaseActivity implements SensorEventListene
     private void startLocationServices() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         
-        if (locationManager != null) {
-            try {
-                // Request location updates
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (locationManager == null) {
+            Log.e(TAG, "LocationManager is not available");
+            return;
+        }
+        
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Location permission not granted");
+            return;
+        }
+        
+        try {
+            // Check which providers are available and enabled
+            boolean gpsAvailable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean networkAvailable = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            
+            Log.i(TAG, "GPS provider available: " + gpsAvailable + ", Network provider available: " + networkAvailable);
+            
+            // Request location updates from available providers
+            if (gpsAvailable) {
+                try {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, this);
-                    
-                    // Try to get last known location
-                    Location lastKnown = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (lastKnown == null) {
-                        lastKnown = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    }
-                    if (lastKnown != null) {
-                        onLocationChanged(lastKnown);
-                    }
-                    
-                    Log.i(TAG, "Location services started");
+                    Log.i(TAG, "GPS location updates requested");
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, "GPS provider not available: " + e.getMessage());
                 }
-            } catch (SecurityException e) {
-                Log.e(TAG, "Location permission denied", e);
             }
+            
+            if (networkAvailable) {
+                try {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, this);
+                    Log.i(TAG, "Network location updates requested");
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, "Network provider not available: " + e.getMessage());
+                }
+            }
+            
+            // Try to get last known location from available providers
+            Location lastKnown = null;
+            if (gpsAvailable) {
+                try {
+                    lastKnown = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, "GPS provider not available for last known location: " + e.getMessage());
+                }
+            }
+            
+            if (lastKnown == null && networkAvailable) {
+                try {
+                    lastKnown = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                } catch (IllegalArgumentException e) {
+                    Log.w(TAG, "Network provider not available for last known location: " + e.getMessage());
+                }
+            }
+            
+            if (lastKnown != null) {
+                onLocationChanged(lastKnown);
+            } else {
+                Log.i(TAG, "No last known location available");
+            }
+            
+            Log.i(TAG, "Location services started successfully");
+            
+        } catch (SecurityException e) {
+            Log.e(TAG, "Location permission denied", e);
+        } catch (Exception e) {
+            Log.e(TAG, "Unexpected error starting location services", e);
         }
     }
     
