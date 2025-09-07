@@ -37,6 +37,8 @@ import uk.trigpointing.android.DbHelper;
 import uk.trigpointing.android.R;
 import uk.trigpointing.android.common.CountingMultipartEntity.ProgressListener;
 import uk.trigpointing.android.common.ProgressRequestBody;
+import uk.trigpointing.android.api.AuthApiClient;
+import uk.trigpointing.android.api.AuthPreferences;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -195,6 +197,9 @@ public class SyncTask implements ProgressListener {
                 return ERROR;
             }
             mLock = true;
+
+            // Refresh bearer token if needed before sync
+            refreshBearerTokenIfNeeded();
 
             // Open database connection
             mDb = new DbHelper(mCtx);
@@ -667,4 +672,83 @@ public class SyncTask implements ProgressListener {
 
 
 
+    /**
+     * Refresh bearer token if needed before sync operations
+     */
+    private void refreshBearerTokenIfNeeded() {
+        try {
+            AuthPreferences authPreferences = new AuthPreferences(mCtx);
+            
+            if (!authPreferences.isLoggedIn() || !authPreferences.shouldRefreshToken()) {
+                Log.d(TAG, "refreshBearerTokenIfNeeded: No refresh needed");
+                return;
+            }
+
+            Log.i(TAG, "refreshBearerTokenIfNeeded: Token needs refresh");
+            
+            String username = mPrefs.getString("username", "");
+            String password = mPrefs.getString("plaintextpassword", "");
+            
+            if (username.trim().isEmpty() || password.trim().isEmpty()) {
+                Log.w(TAG, "refreshBearerTokenIfNeeded: No credentials available");
+                return;
+            }
+
+            AuthApiClient authApiClient = new AuthApiClient();
+            java.util.concurrent.CountDownLatch latch = new java.util.concurrent.CountDownLatch(1);
+            final boolean[] refreshSuccess = {false};
+            final String[] errorMessage = {null};
+            
+            authApiClient.refreshToken(username, password, new AuthApiClient.AuthCallback() {
+                @Override
+                public void onSuccess(uk.trigpointing.android.api.AuthResponse authResponse) {
+                    Log.i(TAG, "refreshBearerTokenIfNeeded: Token refresh successful");
+                    authPreferences.storeAuthData(authResponse);
+                    refreshSuccess[0] = true;
+                    latch.countDown();
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.w(TAG, "refreshBearerTokenIfNeeded: Token refresh failed: " + error);
+                    errorMessage[0] = error;
+                    refreshSuccess[0] = false;
+                    latch.countDown();
+                }
+            });
+
+            try {
+                boolean completed = latch.await(10, java.util.concurrent.TimeUnit.SECONDS);
+                if (!completed) {
+                    Log.w(TAG, "refreshBearerTokenIfNeeded: Token refresh timed out");
+                }
+            } catch (InterruptedException e) {
+                Log.w(TAG, "refreshBearerTokenIfNeeded: Token refresh interrupted", e);
+            }
+
+            if (!refreshSuccess[0]) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
+                boolean devMode = prefs.getBoolean("dev_mode", false);
+                
+                if (devMode) {
+                    String error = errorMessage[0] != null ? errorMessage[0] : "Token refresh failed";
+                    mainHandler.post(() -> {
+                        Toast.makeText(mCtx, "Token refresh failed: " + error, Toast.LENGTH_LONG).show();
+                    });
+                }
+            }
+            
+        } catch (Exception e) {
+            Log.e(TAG, "refreshBearerTokenIfNeeded: Unexpected error", e);
+            
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mCtx);
+            boolean devMode = prefs.getBoolean("dev_mode", false);
+            
+            if (devMode) {
+                mainHandler.post(() -> {
+                    Toast.makeText(mCtx, "Token refresh error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
+        }
+    }
 }

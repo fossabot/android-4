@@ -105,6 +105,19 @@ public class AuthApiClient {
     }
 
     /**
+     * Refresh authentication token using stored credentials
+     * @param username The username or email
+     * @param password The user's password
+     * @param callback Callback to handle success or error
+     */
+    public void refreshToken(String username, String password, AuthCallback callback) {
+        Log.i(TAG, "refreshToken: Refreshing token for user: " + username);
+        
+        // Use the same authentication method as initial login
+        authenticate(username, password, callback);
+    }
+
+    /**
      * Helper class to hold authentication results
      */
     private static class AuthResult {

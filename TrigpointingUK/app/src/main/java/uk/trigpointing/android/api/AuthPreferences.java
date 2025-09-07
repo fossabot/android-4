@@ -168,4 +168,36 @@ public class AuthPreferences {
         // Fallback to legacy username if API user data is not available
         return preferences.getString("username", "");
     }
+
+    /**
+     * Check if the token should be refreshed (expires within 5 minutes)
+     * In developer mode, always returns true to allow testing of token refresh
+     */
+    public boolean shouldRefreshToken() {
+        String token = getAccessToken();
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        // Check if developer mode is enabled
+        boolean devMode = preferences.getBoolean("dev_mode", false);
+        if (devMode) {
+            return true; // Always refresh in developer mode for testing
+        }
+
+        long loginTime = getLoginTimestamp();
+        int expiresIn = getExpiresIn();
+        
+        if (loginTime > 0 && expiresIn > 0) {
+            long currentTime = System.currentTimeMillis();
+            long expirationTime = loginTime + (expiresIn * 1000L); // Convert seconds to milliseconds
+            long fiveMinutesFromNow = currentTime + (5 * 60 * 1000L); // 5 minutes in milliseconds
+            
+            // Refresh if token expires within 5 minutes
+            return fiveMinutesFromNow >= expirationTime;
+        }
+
+        // If we don't have expiration info, don't refresh
+        return false;
+    }
 }
