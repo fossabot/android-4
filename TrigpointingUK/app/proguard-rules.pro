@@ -72,3 +72,49 @@
 
 # Defensive: ensure AndroidX BundleCompat is not altered in a way that breaks reflection
 -keep class androidx.core.os.BundleCompat { *; }
+
+# --- Jackson + reflection friendly rules ---
+# Keep Jackson annotations and generic signatures
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+
+# Keep Jackson core classes
+-keep class com.fasterxml.jackson.** { *; }
+-keep class com.fasterxml.jackson.databind.** { *; }
+-keep class com.fasterxml.jackson.dataformat.** { *; }
+
+# Keep Jackson ObjectMapper and related classes
+-keep class com.fasterxml.jackson.databind.ObjectMapper { *; }
+-keep class com.fasterxml.jackson.dataformat.yaml.YAMLFactory { *; }
+-keep class com.fasterxml.jackson.dataformat.yaml.YAMLGenerator { *; }
+-keep class com.fasterxml.jackson.dataformat.yaml.YAMLParser { *; }
+
+# Keep Jackson deserializers and serializers
+-keep class * implements com.fasterxml.jackson.databind.JsonDeserializer
+-keep class * implements com.fasterxml.jackson.databind.JsonSerializer
+-keep class * extends com.fasterxml.jackson.databind.deser.std.StdDeserializer
+-keep class * extends com.fasterxml.jackson.databind.ser.std.StdSerializer
+
+# Keep Jackson type information
+-keep class com.fasterxml.jackson.databind.type.** { *; }
+-keep class com.fasterxml.jackson.databind.jsontype.** { *; }
+
+# Keep fields annotated with Jackson annotations
+-keepclassmembers class * {
+    @com.fasterxml.jackson.annotation.* <fields>;
+    @com.fasterxml.jackson.annotation.* <methods>;
+}
+
+# Keep MapDownload classes used by Jackson
+-keep class uk.trigpointing.android.mapping.MapDownload { *; }
+-keep class uk.trigpointing.android.mapping.MapDownload$MapDownloadsList { *; }
+
+# Keep Kotlin coroutines and related classes that might be used by Jackson
+-keep class kotlin.coroutines.** { *; }
+-keep class kotlinx.coroutines.** { *; }
+
+# Suppress warnings for missing Java classes that Jackson depends on
+-dontwarn java.beans.ConstructorProperties
+-dontwarn java.beans.Transient

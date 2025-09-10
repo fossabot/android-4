@@ -45,6 +45,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import uk.trigpointing.android.api.AuthApiClient;
 import uk.trigpointing.android.api.AuthPreferences;
+import uk.trigpointing.android.api.Auth0Config;
 import uk.trigpointing.android.api.User;
 import uk.trigpointing.android.filter.Filter;
 import coil.Coil;
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
     // API authentication components
     private AuthApiClient authApiClient;
     private AuthPreferences authPreferences;
+    private Auth0Config auth0Config;
     
     // Modern activity result launchers
     private ActivityResultLauncher<Intent> nearestLauncher;
@@ -105,6 +107,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
         // Initialize API authentication components
         authApiClient = new AuthApiClient();
         authPreferences = new AuthPreferences(this);
+        auth0Config = new Auth0Config(this);
         
         // Reset auto sync flag on app startup
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -291,6 +294,12 @@ public class MainActivity extends BaseActivity implements SyncListener {
         menu.findItem(R.id.action_refresh).setVisible(devMode);
         menu.findItem(R.id.action_clearcache).setVisible(devMode);
         menu.findItem(R.id.action_exit).setVisible(devMode);
+        
+        // Auth0 items are only visible in developer mode
+        menu.findItem(R.id.action_auth0_login).setVisible(devMode);
+        menu.findItem(R.id.action_auth0_user).setVisible(devMode);
+        menu.findItem(R.id.action_auth0_api).setVisible(devMode);
+        menu.findItem(R.id.action_auth0_logout).setVisible(devMode);
 
         menu.findItem(R.id.action_login).setVisible(!loggedIn);
         menu.findItem(R.id.action_logout).setVisible(loggedIn);
@@ -322,6 +331,18 @@ public class MainActivity extends BaseActivity implements SyncListener {
             return true;
         } else if (itemId == R.id.action_exit) {
             finish();
+            return true;
+        } else if (itemId == R.id.action_auth0_login) {
+            startAuth0Login();
+            return true;
+        } else if (itemId == R.id.action_auth0_user) {
+            showAuth0UserDebug();
+            return true;
+        } else if (itemId == R.id.action_auth0_api) {
+            callAuth0Api();
+            return true;
+        } else if (itemId == R.id.action_auth0_logout) {
+            performAuth0Logout();
             return true;
         }
 
@@ -469,11 +490,30 @@ public class MainActivity extends BaseActivity implements SyncListener {
     protected void onResume() {
         Log.i(TAG, "onResume: Refreshing counts and user display");
         super.onResume();
+        
+        // Handle Auth0 callback if present
+        if (getIntent().getData() != null) {
+            Log.i(TAG, "onResume: Handling Auth0 callback with data: " + getIntent().getData());
+            handleAuth0Callback(getIntent().getData());
+        }
+        
         invalidateOptionsMenu();
         updateUserDisplay();
         populateCounts();
         checkAndPopulateDatabase();
         checkAndPerformAutoSync();
+    }
+    
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i(TAG, "onNewIntent: Received new intent with data: " + intent.getData());
+        
+        // Handle Auth0 callback
+        if (intent.getData() != null) {
+            Log.i(TAG, "onNewIntent: Handling Auth0 callback with data: " + intent.getData());
+            handleAuth0Callback(intent.getData());
+        }
     }
 
 
@@ -521,6 +561,263 @@ public class MainActivity extends BaseActivity implements SyncListener {
 
 
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    // Auth0 Methods
+    
+    /**
+     * Handle Auth0 callback from browser redirect
+     */
+    private void handleAuth0Callback(android.net.Uri data) {
+        Log.i(TAG, "handleAuth0Callback: Processing Auth0 callback with data: " + data);
+        
+        try {
+            // Check if this is an Auth0 callback
+            if (data.getScheme() != null && data.getScheme().equals("uk.trigpointing.android") &&
+                data.getHost() != null && data.getHost().equals("trigpointing.eu.auth0.com")) {
+                
+                Log.i(TAG, "handleAuth0Callback: Valid Auth0 callback detected");
+                
+                // Create an Intent with the data and use WebAuthProvider.resume() to handle the callback
+                Intent intent = new Intent();
+                intent.setData(data);
+                com.auth0.android.provider.WebAuthProvider.resume(intent);
+                
+                Log.i(TAG, "handleAuth0Callback: Auth0 callback processed successfully");
+                // Prevent re-processing the same callback on future resumes
+                try {
+                    getIntent().setData(null);
+                } catch (Exception ignore) {
+                }
+            } else {
+                Log.w(TAG, "handleAuth0Callback: Not an Auth0 callback, ignoring");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "handleAuth0Callback: Error processing Auth0 callback", e);
+            Toast.makeText(this, "Error processing Auth0 callback: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    /**
+     * Start Auth0 universal login flow
+     */
+    private void startAuth0Login() {
+        Log.i(TAG, "Starting Auth0 universal login");
+        
+        try {
+            auth0Config.login(new Auth0Config.Auth0Callback() {
+                @Override
+                public void onSuccess(com.auth0.android.result.Credentials credentials, com.auth0.android.result.UserProfile userProfile) {
+                    runOnUiThread(() -> {
+                        try {
+                            String userName = "Unknown";
+                            if (userProfile != null && userProfile.getName() != null) {
+                                userName = userProfile.getName();
+                            }
+                            Log.i(TAG, "Auth0 login successful for user: " + userName);
+                            
+                            // Store the Auth0 authentication data
+                            authPreferences.storeAuth0Data(credentials, userProfile);
+                            
+                            // Update UI
+                            updateUserDisplay();
+                            invalidateOptionsMenu();
+                            
+                            Toast.makeText(MainActivity.this, "Auth0 login successful!", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error in Auth0 login success callback", e);
+                            Toast.makeText(MainActivity.this, "Auth0 login error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                
+                @Override
+                public void onError(com.auth0.android.authentication.AuthenticationException error) {
+                    runOnUiThread(() -> {
+                        try {
+                            Log.e(TAG, "Auth0 login failed", error);
+                            Toast.makeText(MainActivity.this, "Auth0 login failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error in Auth0 login error callback", e);
+                            Toast.makeText(MainActivity.this, "Auth0 login error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Error starting Auth0 login", e);
+            Toast.makeText(this, "Error starting Auth0 login: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    /**
+     * Show Auth0 user debug information
+     */
+    private void showAuth0UserDebug() {
+        Log.i(TAG, "Showing Auth0 user debug information");
+        
+        try {
+            if (!authPreferences.isAuth0LoggedIn()) {
+                Toast.makeText(this, "Not logged in with Auth0", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        
+        com.auth0.android.result.UserProfile userProfile = authPreferences.getAuth0UserProfile();
+        String accessToken = authPreferences.getAuth0AccessToken();
+        String idToken = authPreferences.getAuth0IdToken();
+        String refreshToken = authPreferences.getAuth0RefreshToken();
+        String tokenType = authPreferences.getAuth0TokenType();
+        long expiresIn = authPreferences.getAuth0ExpiresIn();
+        long loginTimestamp = authPreferences.getAuth0LoginTimestamp();
+        
+        StringBuilder debugInfo = new StringBuilder();
+        debugInfo.append("Auth0 User Debug Information\n\n");
+        
+        if (userProfile != null) {
+            debugInfo.append("User Profile:\n");
+            debugInfo.append("  ID: ").append(userProfile.getId()).append("\n");
+            debugInfo.append("  Name: ").append(userProfile.getName()).append("\n");
+            debugInfo.append("  Email: ").append(userProfile.getEmail()).append("\n");
+            debugInfo.append("  Nickname: ").append(userProfile.getNickname()).append("\n");
+            debugInfo.append("  Picture: ").append(userProfile.getPictureURL()).append("\n");
+            debugInfo.append("  Created: ").append(userProfile.getCreatedAt()).append("\n");
+            debugInfo.append("  Updated: ").append("N/A").append("\n");
+            debugInfo.append("  Email Verified: ").append(userProfile.isEmailVerified()).append("\n");
+            debugInfo.append("  User Metadata: ").append(userProfile.getUserMetadata()).append("\n");
+            debugInfo.append("  App Metadata: ").append(userProfile.getAppMetadata()).append("\n");
+            debugInfo.append("\n");
+        }
+        
+        debugInfo.append("Tokens:\n");
+        debugInfo.append("  Access Token: ").append(accessToken != null ? accessToken.substring(0, Math.min(50, accessToken.length())) + "..." : "null").append("\n");
+        debugInfo.append("  ID Token: ").append(idToken != null ? idToken.substring(0, Math.min(50, idToken.length())) + "..." : "null").append("\n");
+        debugInfo.append("  Refresh Token: ").append(refreshToken != null ? refreshToken.substring(0, Math.min(50, refreshToken.length())) + "..." : "null").append("\n");
+        debugInfo.append("  Token Type: ").append(tokenType).append("\n");
+        debugInfo.append("  Expires In: ").append(expiresIn).append(" seconds\n");
+        debugInfo.append("  Login Timestamp: ").append(new java.util.Date(loginTimestamp)).append("\n");
+
+        // Decode JWT access token (header/payload) for debugging audience/issuer
+        if (accessToken != null && accessToken.contains(".")) {
+            try {
+                String[] parts = accessToken.split("\\.");
+                if (parts.length >= 2) {
+                    java.util.Base64.Decoder urlDecoder = java.util.Base64.getUrlDecoder();
+                    String headerJson = new String(urlDecoder.decode(parts[0]), java.nio.charset.StandardCharsets.UTF_8);
+                    String payloadJson = new String(urlDecoder.decode(parts[1]), java.nio.charset.StandardCharsets.UTF_8);
+                    debugInfo.append("\nAccess Token Claims (decoded):\n");
+                    debugInfo.append(payloadJson).append("\n");
+                    debugInfo.append("Header: ").append(headerJson).append("\n");
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Failed to decode access token payload", e);
+            }
+        }
+        
+        // Show in a dialog
+        new AlertDialog.Builder(this)
+                .setTitle("Auth0 User Debug")
+                .setMessage(debugInfo.toString())
+                .setPositiveButton("OK", null)
+                .show();
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing Auth0 user debug", e);
+            Toast.makeText(this, "Error showing Auth0 user debug: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    /**
+     * Call Auth0 API endpoint
+     */
+    private void callAuth0Api() {
+        Log.i(TAG, "Calling Auth0 API endpoint");
+        
+        try {
+            if (!authPreferences.isAuth0LoggedIn()) {
+                Toast.makeText(this, "Not logged in with Auth0", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        
+        String accessToken = authPreferences.getAuth0AccessToken();
+        if (accessToken == null) {
+            Toast.makeText(this, "No Auth0 access token available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // TODO: Remove this log before release. It prints sensitive token data.
+        Log.i(TAG, "Auth0 access token (plaintext): " + accessToken);
+        
+        // Show progress
+        Toast.makeText(this, "Calling Auth0 API...", Toast.LENGTH_SHORT).show();
+        
+        executor.execute(() -> {
+            try {
+                OkHttpClient client = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url("https://fastapi.trigpointing.uk/api/v1/user/me")
+                        .addHeader("Authorization", "Bearer " + accessToken)
+                        .build();
+                
+                try (Response response = client.newCall(request).execute()) {
+                    String responseBody = response.body().string();
+                    
+                    runOnUiThread(() -> {
+                        Log.i(TAG, "Auth0 API call completed with code: " + response.code());
+                        
+                        StringBuilder result = new StringBuilder();
+                        result.append("Auth0 API Call Result\n\n");
+                        result.append("Status Code: ").append(response.code()).append("\n");
+                        result.append("Response Body:\n").append(responseBody);
+                        
+                        new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Auth0 API Response")
+                                .setMessage(result.toString())
+                                .setPositiveButton("OK", null)
+                                .show();
+                    });
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Auth0 API call failed", e);
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivity.this, "Auth0 API call failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+        } catch (Exception e) {
+            Log.e(TAG, "Error calling Auth0 API", e);
+            Toast.makeText(this, "Error calling Auth0 API: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    /**
+     * Perform Auth0 logout
+     */
+    private void performAuth0Logout() {
+        Log.i(TAG, "Performing Auth0 logout");
+        
+        auth0Config.logout(new Auth0Config.LogoutCallback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(() -> {
+                    Log.i(TAG, "Auth0 logout successful");
+                    
+                    // Clear Auth0 data
+                    authPreferences.clearAuth0Data();
+                    
+                    // Update UI
+                    updateUserDisplay();
+                    invalidateOptionsMenu();
+                    
+                    Toast.makeText(MainActivity.this, "Auth0 logout successful", Toast.LENGTH_SHORT).show();
+                });
+            }
+            
+            @Override
+            public void onError(com.auth0.android.authentication.AuthenticationException error) {
+                runOnUiThread(() -> {
+                    Log.e(TAG, "Auth0 logout failed", error);
+                    Toast.makeText(MainActivity.this, "Auth0 logout failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
+        });
+    }
     
     private void updateUserDisplay() {
         Log.i(TAG, "updateUserDisplay: Updating user display");

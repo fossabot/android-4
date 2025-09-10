@@ -13,6 +13,8 @@ public class User {
     private String email_valid;
     private String admin_ind;
     private String public_ind;
+    private String auth0_user_id;
+    private String auth0_username;
 
     // Default constructor required for deserialization
     public User() {}
@@ -90,6 +92,22 @@ public class User {
         this.public_ind = public_ind;
     }
 
+    public String getAuth0UserId() {
+        return auth0_user_id;
+    }
+
+    public void setAuth0UserId(String auth0_user_id) {
+        this.auth0_user_id = auth0_user_id;
+    }
+
+    public String getAuth0Username() {
+        return auth0_username;
+    }
+
+    public void setAuth0Username(String auth0_username) {
+        this.auth0_username = auth0_username;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -99,6 +117,8 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", admin_ind='" + admin_ind + '\'' +
+                ", auth0_user_id='" + auth0_user_id + '\'' +
+                ", auth0_username='" + auth0_username + '\'' +
                 '}';
     }
 }

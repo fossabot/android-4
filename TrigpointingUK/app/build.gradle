@@ -32,6 +32,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
         buildConfigField "String", "BUILD_TIME", "\"${buildTime}\""
+        
+        // Auth0 manifest placeholders
+        manifestPlaceholders = [
+            auth0Domain: "trigpointing.eu.auth0.com",
+            auth0Scheme: "uk.trigpointing.android"
+        ]
     }
     
 
@@ -187,6 +193,9 @@ dependencies {
     
     // JSON parsing
     implementation 'com.google.code.gson:gson:2.11.0'
+    
+    // Auth0 Android SDK
+    implementation 'com.auth0.android:auth0:2.10.2'
     
     // Logging - replacing slf4j-android-1.6.1-RC1.jar
     implementation 'org.slf4j:slf4j-android:1.7.36'

@@ -38,12 +38,46 @@
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
         
+        <!-- Auth0 configuration -->
+        <meta-data
+            android:name="com.auth0.android.auto_verify"
+            android:value="false" />
+        <meta-data
+            android:name="com.auth0.android.auto_verify_connection"
+            android:value="false" />
+        
 
         
         <activity android:name="uk.trigpointing.android.MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- Auth0 RedirectActivity to handle the authentication callback -->
+        <activity
+            android:name="com.auth0.android.provider.RedirectActivity"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="${auth0Scheme}"
+                    android:host="${auth0Domain}"
+                    android:pathPrefix="/android/${applicationId}/callback" />
+            </intent-filter>
+            <!-- Also handle the release package callback to support debug builds using release-style redirect URI -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="${auth0Scheme}"
+                    android:host="${auth0Domain}"
+                    android:pathPrefix="/android/uk.trigpointing.android/callback" />
             </intent-filter>
         </activity>
         <activity 
