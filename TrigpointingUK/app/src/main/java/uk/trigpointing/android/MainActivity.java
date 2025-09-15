@@ -751,7 +751,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
             try {
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url("https://fastapi.trigpointing.uk/api/v1/user/me")
+                        .url("https://api.trigpointing.uk/api/v1/user/me")
                         .addHeader("Authorization", "Bearer " + accessToken)
                         .build();
                 

@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class AuthApiClient {
     private static final String TAG = "AuthApiClient";
-    private static final String API_BASE_URL = "https://fastapi.trigpointing.uk/api/v1";
+    private static final String API_BASE_URL = "https://api.trigpointing.uk/api/v1";
     private static final String LOGIN_ENDPOINT = "/auth/login";
 
     private final OkHttpClient httpClient;

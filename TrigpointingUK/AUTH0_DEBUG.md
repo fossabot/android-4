@@ -4,7 +4,7 @@
 - **Domain**: trigpointing.eu.auth0.com
 - **Client ID**: IEBodjQvHMuDTS5vNVeve5j8YKQcYBN3
 - **Redirect URI**: uk.trigpointing.android://trigpointing.eu.auth0.com/android/uk.trigpointing.android.debug/callback
-- **Audience**: https://fastapi.trigpointing.uk/api/v1/
+- **Audience**: https://api.trigpointing.uk/api/v1/
 
 ## Auth0 Dashboard Checklist
 
@@ -24,7 +24,7 @@
   ```
 - [ ] Allowed Web Origins:
   ```
-  https://fastapi.trigpointing.uk
+  https://api.trigpointing.uk
   ```
 
 ### 3. Advanced Settings
@@ -55,7 +55,7 @@
 ## Testing Steps
 
 1. **Test Auth0 Universal Login directly**:
-   - Go to: https://trigpointing.eu.auth0.com/authorize?client_id=IEBodjQvHMuDTS5vNVeve5j8YKQcYBN3&response_type=code&redirect_uri=uk.trigpointing.android://trigpointing.eu.auth0.com/android/uk.trigpointing.android.debug/callback&scope=openid%20profile%20email&audience=https://fastapi.trigpointing.uk/api/v1/
+   - Go to: https://trigpointing.eu.auth0.com/authorize?client_id=IEBodjQvHMuDTS5vNVeve5j8YKQcYBN3&response_type=code&redirect_uri=uk.trigpointing.android://trigpointing.eu.auth0.com/android/uk.trigpointing.android.debug/callback&scope=openid%20profile%20email&audience=https://api.trigpointing.uk/api/v1/
 
 2. **Check Auth0 Logs**:
    - Go to Auth0 Dashboard > Monitoring > Logs

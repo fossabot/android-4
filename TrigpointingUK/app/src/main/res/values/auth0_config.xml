@@ -3,5 +3,5 @@
     <string name="auth0_domain">trigpointing.eu.auth0.com</string>
     <string name="auth0_client_id">IEBodjQvHMuDTS5vNVeve5j8YKQcYBN3</string>
     <string name="auth0_redirect_uri">uk.trigpointing.android://trigpointing.eu.auth0.com/android/uk.trigpointing.android/callback</string>
-    <string name="auth0_audience">https://fastapi.trigpointing.uk/api/v1/</string>
+    <string name="auth0_audience">https://api.trigpointing.uk/api/v1/</string>
 </resources>

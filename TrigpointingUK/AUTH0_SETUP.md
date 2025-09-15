@@ -31,7 +31,7 @@ The `User` class has been extended with two new fields:
    - **Token Endpoint Authentication Method**: None (for public clients)
    - **Allowed Callback URLs**: `uk.trigpointing.android://your-tenant.auth0.com/android/uk.trigpointing.android/callback`
    - **Allowed Logout URLs**: `uk.trigpointing.android://your-tenant.auth0.com/android/uk.trigpointing.android/callback`
-   - **Allowed Web Origins**: `https://fastapi.trigpointing.uk`
+   - **Allowed Web Origins**: `https://api.trigpointing.uk`
 
 ### 2. Update Configuration Files
 
@@ -43,7 +43,7 @@ Edit `/app/src/main/res/values/auth0_config.xml` and replace the placeholder val
     <string name="auth0_domain">your-actual-tenant.auth0.com</string>
     <string name="auth0_client_id">your_actual_client_id</string>
     <string name="auth0_redirect_uri">uk.trigpointing.android://your-actual-tenant.auth0.com/android/uk.trigpointing.android/callback</string>
-    <string name="auth0_audience">https://fastapi.trigpointing.uk/api/v1</string>
+    <string name="auth0_audience">https://api.trigpointing.uk/api/v1</string>
 </resources>
 ```
 
