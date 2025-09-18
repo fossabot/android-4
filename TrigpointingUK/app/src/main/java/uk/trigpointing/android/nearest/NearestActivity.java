@@ -328,7 +328,7 @@ public class NearestActivity extends BaseActivity implements SensorEventListener
         try {
             // Always try GPS provider (most accurate, available on all devices)
             if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*300, 250, mLocationListener);
+                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*10, 50, mLocationListener);
                 Log.d(TAG, "Requested location updates from GPS provider");
             }
             
