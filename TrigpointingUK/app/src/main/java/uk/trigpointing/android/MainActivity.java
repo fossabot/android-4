@@ -51,6 +51,11 @@ import uk.trigpointing.android.filter.Filter;
 import coil.Coil;
 import coil.ImageLoader;
 import coil.request.ImageRequest;
+import coil.request.ImageResult;
+import coil.target.Target;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import android.graphics.drawable.Drawable;
 
 public class MainActivity extends BaseActivity implements SyncListener {
     public static final String     TAG ="MainActivity";
@@ -411,7 +416,16 @@ public class MainActivity extends BaseActivity implements SyncListener {
                 loginButton.setEnabled(false);
                 loginButton.setText(getString(R.string.logging_in_status));
 
-                // Authenticate with the new API
+                // Store legacy credentials first (always store regardless of API success)
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("username", user);
+                editor.putString("plaintextpassword", pass);
+                editor.apply();
+                
+                Log.i(TAG, "Stored legacy credentials for user: " + user);
+
+                // Authenticate with the new API (non-blocking)
                 authApiClient.authenticate(user, pass, new AuthApiClient.AuthCallback() {
                     @Override
                     public void onSuccess(uk.trigpointing.android.api.AuthResponse authResponse) {
@@ -421,13 +435,6 @@ public class MainActivity extends BaseActivity implements SyncListener {
                             // Store the API authentication data
                             authPreferences.storeAuthData(authResponse);
                             
-                            // Also store legacy credentials for backward compatibility
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("username", user);
-                            editor.putString("plaintextpassword", pass);
-                            editor.apply();
-
                             // Update UI and close dialog
                             updateUserDisplay();
                             invalidateOptionsMenu();
@@ -445,13 +452,30 @@ public class MainActivity extends BaseActivity implements SyncListener {
                         runOnUiThread(() -> {
                             Log.w(TAG, "API authentication failed: " + errorMessage);
                             
+                            // Check if developer mode is enabled to show error messages
+                            boolean devMode = prefs.getBoolean("dev_mode", false);
+                            if (devMode) {
+                                // Show error only in developer mode
+                                Toast.makeText(MainActivity.this, "API authentication failed: " + errorMessage, Toast.LENGTH_LONG).show();
+                                Log.w(TAG, "Developer mode: API authentication error shown to user: " + errorMessage);
+                            } else {
+                                Log.i(TAG, "Normal mode: API authentication error logged but not shown to user");
+                            }
+                            
                             // Re-enable the login button
                             loginButton.setEnabled(true);
                             loginButton.setText(getString(R.string.login_button_text));
                             
-                            // Close current dialog and show new one with error
+                            // Update UI and close dialog (allow user to proceed with legacy functionality)
+                            updateUserDisplay();
+                            invalidateOptionsMenu();
                             dialog.dismiss();
-                            showLoginDialog(errorMessage);
+                            
+                            // Start sync with legacy credentials
+                            doSync();
+                            
+                            // Show success message (user can still use the app)
+                            Toast.makeText(MainActivity.this, "Login successful! (Legacy mode)", Toast.LENGTH_SHORT).show();
                         });
                     }
                 });
@@ -751,7 +775,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
             try {
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder()
-                        .url("https://api.trigpointing.uk/api/v1/user/me")
+                        .url("https://api.trigpointing.uk/v1/users/me")
                         .addHeader("Authorization", "Bearer " + accessToken)
                         .build();
                 
@@ -886,21 +910,26 @@ public class MainActivity extends BaseActivity implements SyncListener {
             // Load map if we have a persisted user id, even if token has expired
             int userId = authPreferences.getUserId();
             if (userId > 0) {
-                String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y";
+                String mapUrl = "https://trigpointing.uk/pics/make_map.php?u=" + userId + "&v=y&t=" + System.currentTimeMillis();
                 Log.i(TAG, "updateUserMap: Loading map for user ID " + userId + " from URL: " + mapUrl);
                 
-                // Load the image using Coil
+                // Load the image using Coil - simplest approach
                 ImageRequest request = new ImageRequest.Builder(this)
                         .data(mapUrl)
-                        .target(mUserMapImage)
+                        .target(mUserMapImage) // Use ImageView directly as target - Coil will handle setting the drawable
                         .placeholder(android.R.drawable.ic_menu_mapmode) // Show placeholder while loading
                         .error(android.R.drawable.ic_dialog_alert) // Show error icon if loading fails
                         .build();
                 
-                // Show the ImageView and load the image
+                // Make ImageView visible and load the image
                 mUserMapImage.setVisibility(View.VISIBLE);
+                mUserMapImage.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                
+                // Load the image
                 ImageLoader imageLoader = Coil.imageLoader(this);
                 imageLoader.enqueue(request);
+                
+                Log.d(TAG, "updateUserMap: Image loading initiated for URL: " + mapUrl);
                 
                 // Add click listener to open full map view
                 mUserMapImage.setOnClickListener(v -> {
@@ -915,6 +944,7 @@ public class MainActivity extends BaseActivity implements SyncListener {
         } catch (Exception e) {
             Log.e(TAG, "updateUserMap: Error updating user map", e);
             e.printStackTrace();
+            // Hide map on any error - this is non-fatal
             mUserMapImage.setVisibility(View.GONE);
         }
     }
