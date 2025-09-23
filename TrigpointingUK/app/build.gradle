@@ -48,6 +48,11 @@ android {
             versionNameSuffix "-debug"
             enableUnitTestCoverage true
             enableAndroidTestCoverage true
+            // Override Auth0 manifest placeholders for debug build
+            manifestPlaceholders = [
+                auth0Domain: "trigpointing.eu.auth0.com",
+                auth0Scheme: "uk.trigpointing.android.debug"
+            ]
         }
         release {
             minifyEnabled true
